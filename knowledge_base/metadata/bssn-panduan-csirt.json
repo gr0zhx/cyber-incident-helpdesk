@@ -1,0 +1,9 @@
+{
+  "doc_id": "bssn-panduan-csirt",
+  "doc_title": "Panduan Pembentukan dan Pengelolaan CSIRT",
+  "source_framework": "BSSN",
+  "version": "2021",
+  "language": "id",
+  "filename": "bssn-panduan-csirt.pdf",
+  "incident_types": ["phishing", "malware", "ransomware", "web_defacement", "ddos", "akses_tidak_sah", "kebocoran_data", "general"]
+}

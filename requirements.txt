@@ -36,3 +36,4 @@ structlog==25.*
 # Testing
 pytest==8.*
 pytest-asyncio==0.26.*
+

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from sqlalchemy import (
     Boolean, Column, Integer, JSON, Numeric, String, Text, DateTime, BigInteger
 )
@@ -43,8 +43,8 @@ class IncidentTicket(Base):
     escalation_level = Column(String(20))
     assigned_to = Column(String(100))
 
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
     reviewed_at = Column(DateTime)
     resolved_at = Column(DateTime)
     closed_at = Column(DateTime)
@@ -63,7 +63,7 @@ class AuditLog(Base):
     __tablename__ = "audit_logs"
 
     log_id = Column(BigInt, primary_key=True, autoincrement=True)
-    timestamp = Column(DateTime, default=datetime.utcnow)
+    timestamp = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     event_type = Column(String(50), nullable=False)
     session_id = Column(String(50))
     user_id = Column(String(50))

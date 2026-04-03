@@ -335,3 +335,33 @@ async def test_llm_timeout_returns_fallback():
 
     assert result["rag_confidence"] == 0.0
     assert "CSIRT" in result["mitigation_recommendation"] or "timeout" in result["mitigation_recommendation"].lower()
+
+
+@pytest.mark.asyncio
+async def test_all_citations_fail_validation_returns_fallback():
+    """Semua langkah LLM punya sitasi palsu → fallback, bukan state tidak konsisten."""
+    chunks = [_make_chunk("1", "Panduan NIST.", "NIST SP 800-61", "Bagian 3", score=0.8)]
+    llm_resp = _make_llm_response(
+        steps=[
+            {"step": 1, "action": "Tindakan A.", "source": "Buku Karangan Sendiri Vol. 1"},
+            {"step": 2, "action": "Tindakan B.", "source": "Blog Random 2023"},
+        ]
+    )
+    agent = _make_agent(llm_response=llm_resp, chunks=chunks)
+
+    result = await agent.generate_mitigation("Insiden terjadi", "Phishing", "Tinggi")
+
+    # Semua sitasi palsu → harus fallback, rag_confidence harus 0.0 (bukan nilai chunk)
+    assert result["rag_confidence"] == 0.0
+    assert result["citations"] == []
+    assert "CSIRT" in result["mitigation_recommendation"]
+
+
+def test_validate_citations_rejects_short_generic_word():
+    """Kata pendek (<5 karakter) tidak boleh memicu false positive di has_match."""
+    chunks = [_make_chunk("1", "konten", "NIST SP 800-61 Panduan Resmi", "Bab A")]
+    steps = [
+        {"step": 1, "action": "Tindakan.", "source": "SOP"},  # terlalu pendek, bukan standar dikenal
+    ]
+    valid = _validate_citations(steps, chunks)
+    assert len(valid) == 0

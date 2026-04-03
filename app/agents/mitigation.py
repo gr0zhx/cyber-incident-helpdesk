@@ -117,21 +117,21 @@ def _validate_citations(steps: list[dict], chunks: list[dict]) -> list[dict]:
 
     valid_steps = []
     for step in steps:
-        source_claim = str(step.get("source", "")).lower()
+        source_claim = str(step.get("source", "")).strip().lower()
         if not source_claim:
             logger.warning("Langkah '%s' tidak memiliki sitasi, dihapus.", step.get("action", "")[:50])
             continue
 
-        # Accept if any available source keyword appears in the claim
+        # Accept if any retrieved source name appears in the claim (forward direction only)
         has_match = any(
-            avail_word in source_claim or source_claim in avail_word
+            avail_word in source_claim
             for avail_word in available_sources
-            if avail_word
+            if len(avail_word) >= 5  # Hindari false positive dari kata pendek
         )
         # Also accept well-known standard references (they may not be in chunks but are trustworthy)
         is_known_standard = any(
             kw in source_claim
-            for kw in ["nist", "mitre", "att&ck", "iso", "bssn", "kominfo", "peraturan"]
+            for kw in ["nist", "mitre", "att&ck", "iso 270", "bssn", "kominfo", "peraturan"]
         )
 
         if has_match or is_known_standard:
@@ -248,6 +248,14 @@ class MitigationAdvisorAgent:
 
                 steps = parsed.get("mitigation_steps", [])
                 valid_steps = _validate_citations(steps, top_chunks)
+
+                # Fail-closed: jika semua langkah gagal validasi sitasi → fallback
+                if not valid_steps:
+                    logger.warning(
+                        "Semua %d langkah gagal validasi sitasi, gunakan fallback.", len(steps)
+                    )
+                    return {**_FALLBACK_RESULT, "retrieved_chunks": top_chunks}
+
                 citations = _build_citations(valid_steps)
                 rag_confidence = _compute_rag_confidence(top_chunks)
 
@@ -264,10 +272,8 @@ class MitigationAdvisorAgent:
                 if escalation:
                     recommendation_parts.append(f"Catatan eskalasi: {escalation}")
 
-                mitigation_recommendation = "\n".join(recommendation_parts) if recommendation_parts else _FALLBACK_RESULT["mitigation_recommendation"]
-
                 return {
-                    "mitigation_recommendation": mitigation_recommendation,
+                    "mitigation_recommendation": "\n".join(recommendation_parts),
                     "citations": citations,
                     "retrieved_chunks": top_chunks,
                     "rag_confidence": rag_confidence,

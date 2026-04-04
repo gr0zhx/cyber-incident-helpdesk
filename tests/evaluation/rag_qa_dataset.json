@@ -1,0 +1,134 @@
+[
+  {
+    "id": "QA-001",
+    "question": "Apa langkah pertama yang harus dilakukan saat menerima email phishing?",
+    "ground_truth": "Jangan klik link atau lampiran apapun. Segera laporkan ke tim IT/CSIRT dan tandai email sebagai phishing.",
+    "context_source": "NIST SP 800-61"
+  },
+  {
+    "id": "QA-002",
+    "question": "Bagaimana cara mengisolasi sistem yang terinfeksi ransomware?",
+    "ground_truth": "Segera putuskan koneksi jaringan (cabut kabel LAN atau matikan WiFi), jangan matikan komputer, dan hubungi tim CSIRT segera.",
+    "context_source": "NIST SP 800-61"
+  },
+  {
+    "id": "QA-003",
+    "question": "Apa yang harus dilakukan jika menemukan data sensitif bocor ke publik?",
+    "ground_truth": "Laporkan segera ke tim CSIRT, dokumentasikan bukti, identifikasi sumber kebocoran, dan patuhi prosedur notifikasi insiden sesuai regulasi.",
+    "context_source": "NIST SP 800-61"
+  },
+  {
+    "id": "QA-004",
+    "question": "Bagaimana cara mendeteksi serangan DDoS pada server?",
+    "ground_truth": "Pantau lonjakan trafik yang tidak normal, periksa log server untuk pola permintaan berulang dari banyak IP, dan gunakan tools monitoring jaringan.",
+    "context_source": "NIST SP 800-61"
+  },
+  {
+    "id": "QA-005",
+    "question": "Apa langkah mitigasi awal untuk serangan malware pada workstation?",
+    "ground_truth": "Isolasi perangkat dari jaringan, jalankan full scan antivirus, dokumentasikan proses mencurigakan yang berjalan, dan laporkan ke CSIRT.",
+    "context_source": "NIST SP 800-61"
+  },
+  {
+    "id": "QA-006",
+    "question": "Bagaimana prosedur response saat akun admin dikompromis?",
+    "ground_truth": "Segera nonaktifkan akun yang dikompromis, reset semua kredensial terkait, audit log akses, dan investigasi sumber kompromi.",
+    "context_source": "NIST SP 800-61"
+  },
+  {
+    "id": "QA-007",
+    "question": "Apa indikator kompromi (IoC) yang umum pada serangan phishing?",
+    "ground_truth": "Email dari domain mirip tapi berbeda, link menuju URL yang tidak sesuai, permintaan kredensial mendesak, dan lampiran berekstensi tidak biasa.",
+    "context_source": "NIST SP 800-61"
+  },
+  {
+    "id": "QA-008",
+    "question": "Bagaimana cara memulihkan sistem setelah serangan ransomware?",
+    "ground_truth": "Jangan bayar tebusan. Restore dari backup bersih yang terverifikasi, scan sistem sebelum reconnect ke jaringan, dan laporkan ke penegak hukum.",
+    "context_source": "NIST SP 800-61"
+  },
+  {
+    "id": "QA-009",
+    "question": "Apa perbedaan antara incident response dan disaster recovery?",
+    "ground_truth": "Incident response fokus pada mengatasi ancaman keamanan aktif, sedangkan disaster recovery fokus pada pemulihan sistem dan data setelah insiden selesai.",
+    "context_source": "NIST SP 800-61"
+  },
+  {
+    "id": "QA-010",
+    "question": "Bagaimana cara mengamankan akun dari serangan brute force?",
+    "ground_truth": "Aktifkan multi-factor authentication, terapkan kebijakan lockout akun setelah beberapa kali gagal login, dan gunakan password yang kuat dan unik.",
+    "context_source": "NIST SP 800-53"
+  },
+  {
+    "id": "QA-011",
+    "question": "Apa yang dimaksud dengan privilege escalation dan bagaimana mencegahnya?",
+    "ground_truth": "Privilege escalation adalah upaya penyerang mendapatkan hak akses lebih tinggi. Pencegahan: prinsip least privilege, patch reguler, dan monitoring aktivitas akun.",
+    "context_source": "MITRE ATT&CK"
+  },
+  {
+    "id": "QA-012",
+    "question": "Bagaimana cara mengamankan server web dari serangan defacement?",
+    "ground_truth": "Terapkan patch keamanan rutin, gunakan WAF (Web Application Firewall), batasi akses file sistem, aktifkan monitoring integritas file, dan backup berkala.",
+    "context_source": "NIST SP 800-44"
+  },
+  {
+    "id": "QA-013",
+    "question": "Apa langkah investigasi digital forensik awal setelah insiden keamanan?",
+    "ground_truth": "Amankan barang bukti digital tanpa mengubahnya, buat image forensik, catat chain of custody, dan jangan jalankan program apapun di sistem yang dikompromis.",
+    "context_source": "NIST SP 800-86"
+  },
+  {
+    "id": "QA-014",
+    "question": "Bagaimana cara mendeteksi lateral movement dalam jaringan?",
+    "ground_truth": "Monitor log autentikasi untuk login dari akun yang tidak biasa, pantau koneksi jaringan internal yang tidak normal, dan gunakan SIEM untuk korelasi log.",
+    "context_source": "MITRE ATT&CK"
+  },
+  {
+    "id": "QA-015",
+    "question": "Apa saja best practice untuk keamanan email organisasi?",
+    "ground_truth": "Implementasikan SPF, DKIM, dan DMARC, gunakan email gateway dengan filtering, latih pengguna mengenali phishing, dan aktifkan MFA untuk akses email.",
+    "context_source": "NIST SP 800-177"
+  },
+  {
+    "id": "QA-016",
+    "question": "Bagaimana cara menangani insiden kebocoran data pribadi pegawai?",
+    "ground_truth": "Identifikasi scope kebocoran, notifikasi individu yang terdampak sesuai regulasi, laporkan ke otoritas terkait jika diperlukan, dan perbaiki celah keamanan.",
+    "context_source": "NIST SP 800-122"
+  },
+  {
+    "id": "QA-017",
+    "question": "Apa itu supply chain attack dan bagaimana mitigasinya?",
+    "ground_truth": "Serangan melalui pihak ketiga atau software vendor. Mitigasi: verifikasi integritas software, audit vendor keamanan, gunakan software signing, dan zero-trust architecture.",
+    "context_source": "MITRE ATT&CK"
+  },
+  {
+    "id": "QA-018",
+    "question": "Bagaimana cara mengamankan VPN dari akses tidak sah?",
+    "ground_truth": "Gunakan MFA untuk autentikasi VPN, terapkan certificate-based authentication, monitor log koneksi VPN, dan batasi akses berdasarkan IP dan jadwal.",
+    "context_source": "NIST SP 800-77"
+  },
+  {
+    "id": "QA-019",
+    "question": "Apa yang harus dilaporkan dalam tiket insiden keamanan siber?",
+    "ground_truth": "Waktu kejadian, deskripsi insiden, sistem yang terdampak, tindakan yang sudah dilakukan, tingkat keparahan estimasi, dan kontak pelapor.",
+    "context_source": "NIST SP 800-61"
+  },
+  {
+    "id": "QA-020",
+    "question": "Bagaimana cara mengidentifikasi apakah sistem terkena keylogger?",
+    "ground_truth": "Periksa proses yang berjalan di background, scan dengan antimalware, monitor aktivitas jaringan tidak biasa, dan periksa startup programs untuk program mencurigakan.",
+    "context_source": "MITRE ATT&CK"
+  },
+  {
+    "id": "QA-021",
+    "question": "Apa perbedaan antara vulnerability dan exploit?",
+    "ground_truth": "Vulnerability adalah kelemahan di sistem yang bisa dieksploitasi. Exploit adalah kode atau teknik yang memanfaatkan vulnerability tersebut untuk tujuan berbahaya.",
+    "context_source": "NIST SP 800-40"
+  },
+  {
+    "id": "QA-022",
+    "question": "Bagaimana strategi backup yang baik untuk mencegah kehilangan data akibat ransomware?",
+    "ground_truth": "Terapkan strategi 3-2-1: 3 salinan data, 2 media berbeda, 1 offsite. Uji restore secara berkala dan pastikan backup tidak terhubung langsung ke jaringan utama.",
+    "context_source": "NIST SP 800-34"
+  }
+]

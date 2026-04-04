@@ -6,6 +6,10 @@ from typing import Any
 from langgraph.graph import END, StateGraph
 
 from app.agents.state import IncidentState
+from app.security.guardrails import run_input_guardrails
+from app.security.validator import OutputValidator
+
+_output_validator = OutputValidator()
 
 logger = logging.getLogger(__name__)
 
@@ -26,6 +30,66 @@ def _trace(state: IncidentState, agent: str, status: str, **extra: Any) -> None:
 
 def _error(state: IncidentState, msg: str) -> None:
     state["processing_errors"].append(msg)
+
+
+# ---------------------------------------------------------------------------
+# Security node functions (stateless — no injected agents needed)
+# ---------------------------------------------------------------------------
+
+async def guardrails_node(state: IncidentState) -> IncidentState:
+    """Node 1: sanitasi input + deteksi injeksi + redaksi PII."""
+    try:
+        result = run_input_guardrails(state["raw_input"])
+        if result.blocked:
+            _error(state, result.block_reason)
+            # Tandai sebagai needs_clarification agar pipeline berhenti
+            state["intent"] = "needs_clarification"
+            state["requires_clarification"] = True
+            state["clarification_message"] = (
+                "Input Anda tidak dapat diproses karena terdeteksi konten yang tidak diizinkan. "
+                "Silakan ulangi dengan menjelaskan insiden keamanan siber secara langsung."
+            )
+            _trace(state, "guardrails", "blocked", reason=result.block_reason)
+        else:
+            state["sanitized_input"] = result.sanitized_input
+            _trace(state, "guardrails", "success", pii_redacted=len(result.pii_mapping))
+    except Exception as exc:
+        logger.exception("Guardrails node error: %s", exc)
+        _error(state, f"Guardrails error: {type(exc).__name__}")
+        # Fail-closed: blokir jika guardrails sendiri crash
+        state["intent"] = "needs_clarification"
+        state["requires_clarification"] = True
+        state["clarification_message"] = "Terjadi kesalahan saat memproses input. Silakan coba lagi."
+        _trace(state, "guardrails", "fallback")
+    return state
+
+
+def make_validate_output_node():
+    """Node antara mitigation dan ticket: validasi output LLM."""
+    async def validate_output_node(state: IncidentState) -> IncidentState:
+        try:
+            validation = _output_validator.validate(
+                output=state.get("mitigation_recommendation", ""),
+                retrieved_chunks=state.get("retrieved_chunks", []),
+            )
+            if not validation["is_valid"]:
+                logger.warning("Output LLM tidak lolos validasi: %s", validation["issues"])
+                for issue in validation["issues"]:
+                    _error(state, f"Output validation: {issue}")
+                # Jika ada isu PII — hapus output
+                if any("PII" in i for i in validation["issues"]):
+                    state["mitigation_recommendation"] = (
+                        "Rekomendasi tidak dapat ditampilkan karena terdeteksi data sensitif. "
+                        "Silakan hubungi tim CSIRT secara langsung."
+                    )
+            _trace(state, "output_validator", "success" if validation["is_valid"] else "issues_found",
+                   issues=validation["issues"])
+        except Exception as exc:
+            logger.exception("Output validator node error: %s", exc)
+            _error(state, f"Output validator error: {type(exc).__name__}")
+            _trace(state, "output_validator", "fallback")
+        return state
+    return validate_output_node
 
 
 # ---------------------------------------------------------------------------
@@ -161,43 +225,59 @@ def build_helpdesk_graph(
     ticket_manager,
     notifier,
 ):
-    """Build dan compile LangGraph helpdesk pipeline.
+    """Build dan compile LangGraph helpdesk pipeline dengan lapisan keamanan.
 
-    Alur:
-      classify_intent
-        ├─ report_incident → identify_incident → generate_mitigation
-        │                                        → create_ticket → send_notification → END
-        ├─ needs_clarification → END
-        ├─ query_status        → END  (Fase 7+)
-        └─ general_help        → END  (Fase 7+)
+    Alur lengkap:
+      guardrails (sanitize + injection check + PII redact)
+        ├─ blocked → END
+        └─ ok → classify_intent
+                  ├─ report_incident → identify_incident → generate_mitigation
+                  │                    → validate_output → create_ticket
+                  │                    → send_notification → END
+                  ├─ needs_clarification → END
+                  ├─ query_status        → END  (Fase 8+)
+                  └─ general_help        → END  (Fase 8+)
     """
     graph = StateGraph(IncidentState)
 
     # Tambahkan node
+    graph.add_node("guardrails", guardrails_node)
     graph.add_node("classify_intent", make_orchestrator_node(orchestrator))
     graph.add_node("identify_incident", make_identifier_node(identifier))
     graph.add_node("generate_mitigation", make_mitigation_node(mitigation_advisor))
+    graph.add_node("validate_output", make_validate_output_node())
     graph.add_node("create_ticket", make_ticket_node(ticket_manager))
     graph.add_node("send_notification", make_notifier_node(notifier))
 
-    # Entry point
-    graph.set_entry_point("classify_intent")
+    # Entry point: guardrails dulu
+    graph.set_entry_point("guardrails")
+
+    # Setelah guardrails: lanjut atau berhenti
+    graph.add_conditional_edges(
+        "guardrails",
+        lambda s: "blocked" if s.get("requires_clarification") else "ok",
+        {
+            "blocked": END,
+            "ok": "classify_intent",
+        },
+    )
 
     # Routing kondisional dari orchestrator
     graph.add_conditional_edges(
         "classify_intent",
         route_by_intent,
         {
-            "report_incident":    "identify_incident",
+            "report_incident":     "identify_incident",
             "needs_clarification": END,
             "query_status":        END,
             "general_help":        END,
         },
     )
 
-    # Pipeline insiden
+    # Pipeline insiden (dengan validate_output setelah mitigation)
     graph.add_edge("identify_incident", "generate_mitigation")
-    graph.add_edge("generate_mitigation", "create_ticket")
+    graph.add_edge("generate_mitigation", "validate_output")
+    graph.add_edge("validate_output", "create_ticket")
     graph.add_edge("create_ticket", "send_notification")
     graph.add_edge("send_notification", END)
 

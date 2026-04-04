@@ -163,9 +163,9 @@ async def test_pipeline_report_incident_full_flow():
     # Notifier
     assert result["notification_sent"] is True
 
-    # Trace: semua 5 agen harus ada
+    # Trace: semua 7 node harus ada
     agents_traced = {t["agent"] for t in result["agent_trace"]}
-    assert agents_traced == {"orchestrator", "identifier", "mitigation_advisor", "ticket_manager", "notifier"}
+    assert agents_traced == {"guardrails", "orchestrator", "identifier", "mitigation_advisor", "output_validator", "ticket_manager", "notifier"}
 
     # Tidak ada error
     assert result["processing_errors"] == []
@@ -264,7 +264,7 @@ async def test_pipeline_agent_trace_populated():
     state = _make_initial_state("Ransomware terdeteksi.")
     result = await graph.ainvoke(state)
 
-    assert len(result["agent_trace"]) == 5
+    assert len(result["agent_trace"]) == 7  # guardrails + orchestrator + identifier + mitigation + output_validator + ticket + notifier
     for entry in result["agent_trace"]:
         assert "agent" in entry
         assert "timestamp" in entry

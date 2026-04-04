@@ -2,7 +2,6 @@
 import logging
 import os
 from datetime import datetime, timezone
-from typing import Optional
 
 from app.telegram.templates import format_csirt_alert, format_reporter_confirmation
 

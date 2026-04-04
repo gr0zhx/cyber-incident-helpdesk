@@ -1,6 +1,5 @@
 """Ticket Manager Agent — merangkai IncidentState menjadi tiket dan menyimpan ke database."""
 import logging
-from typing import Optional
 
 from app.database.repository import TicketRepository
 

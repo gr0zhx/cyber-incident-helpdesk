@@ -17,6 +17,7 @@ env/
 # Data
 data/
 knowledge_base/documents/
+knowledge_base/enterprise-attack.json
 
 # IDE
 .vscode/

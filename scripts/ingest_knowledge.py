@@ -2,9 +2,14 @@
 Script ingesti dokumen ke Qdrant.
 
 Penggunaan:
-    python scripts/ingest_knowledge.py \
-        --docs-dir knowledge_base/documents/ \
-        --metadata-dir knowledge_base/metadata/
+    # Ingest PDF saja
+    python scripts/ingest_knowledge.py
+
+    # Ingest PDF + MITRE ATT&CK STIX
+    python scripts/ingest_knowledge.py --stix-file knowledge_base/enterprise-attack.json
+
+    # Ingest STIX saja (skip PDF)
+    python scripts/ingest_knowledge.py --stix-only --stix-file knowledge_base/enterprise-attack.json
 """
 import argparse
 import sys
@@ -19,7 +24,7 @@ from qdrant_client import QdrantClient
 from app.config import get_settings
 from app.rag.chunker import chunk_documents
 from app.rag.embedder import embed_chunks, get_embedder, upload_chunks
-from app.rag.ingestion import ingest_directory
+from app.rag.ingestion import ingest_attack_stix, ingest_directory
 
 
 def parse_args() -> argparse.Namespace:
@@ -34,6 +39,16 @@ def parse_args() -> argparse.Namespace:
         default="knowledge_base/metadata/",
         help="Direktori berisi file metadata JSON",
     )
+    parser.add_argument(
+        "--stix-file",
+        default=None,
+        help="Path ke file STIX JSON ATT&CK (misal: knowledge_base/enterprise-attack.json)",
+    )
+    parser.add_argument(
+        "--stix-only",
+        action="store_true",
+        help="Hanya ingest STIX, skip PDF",
+    )
     return parser.parse_args()
 
 
@@ -42,20 +57,40 @@ def main() -> None:
     args = parse_args()
     settings = get_settings()
 
-    # --- 1. Ingesti ---
-    print("Membaca dokumen...")
-    documents = ingest_directory(args.docs_dir, args.metadata_dir)
-    if not documents:
-        print("Tidak ada dokumen yang berhasil dibaca. Pastikan PDF sudah ada di docs-dir.")
-        sys.exit(1)
-    print(f"Total halaman dibaca: {len(documents)}")
+    all_documents = []
 
-    # --- 2. Chunking ---
+    # --- 1. Ingesti PDF ---
+    if not args.stix_only:
+        print("Membaca dokumen PDF...")
+        pdf_docs = ingest_directory(args.docs_dir, args.metadata_dir)
+        if pdf_docs:
+            print(f"Total halaman PDF dibaca: {len(pdf_docs)}")
+            all_documents.extend(pdf_docs)
+        else:
+            print("[INFO] Tidak ada PDF yang berhasil dibaca (pastikan PDF ada di docs-dir).")
+
+    # --- 2. Ingesti MITRE ATT&CK STIX ---
+    if args.stix_file:
+        stix_path = Path(args.stix_file)
+        if not stix_path.exists():
+            print(f"[ERROR] File STIX tidak ditemukan: {stix_path}")
+            sys.exit(1)
+        print(f"\nMemproses MITRE ATT&CK STIX: {stix_path.name} ...")
+        stix_docs = ingest_attack_stix(stix_path)
+        all_documents.extend(stix_docs)
+
+    if not all_documents:
+        print("\nTidak ada dokumen untuk diingest. Gunakan --stix-file atau pastikan PDF tersedia.")
+        sys.exit(1)
+
+    print(f"\nTotal dokumen akan diproses: {len(all_documents)}")
+
+    # --- 3. Chunking ---
     print("\nChunking dokumen...")
-    chunks = chunk_documents(documents)
+    chunks = chunk_documents(all_documents)
     print(f"Chunking: {len(chunks)} chunks dihasilkan")
 
-    # --- 3. Embedding ---
+    # --- 4. Embedding ---
     print("\nEmbedding chunks...")
     embedder = get_embedder(
         api_key=settings.openai_api_key,
@@ -64,7 +99,7 @@ def main() -> None:
     vectors = embed_chunks(chunks, embedder)
     print(f"Embedding: {len(vectors)} chunks di-embed")
 
-    # --- 4. Upload ke Qdrant ---
+    # --- 5. Upload ke Qdrant ---
     print("\nUpload ke Qdrant...")
     client = QdrantClient(url=settings.qdrant_url)
     uploaded = upload_chunks(client, chunks, vectors)

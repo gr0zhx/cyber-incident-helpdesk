@@ -61,9 +61,10 @@ def _assemble_context(chunks: list[dict]) -> str:
 
 
 def _check_adequacy(chunks: list[dict]) -> bool:
-    """Return True if at least one chunk has a score above threshold."""
+    """Return True if at least one chunk has cosine score above threshold."""
     for chunk in chunks:
-        score = chunk.get("final_score", chunk.get("rrf_score", chunk.get("score", 0.0)))
+        # Pakai cosine score (0–1) karena final_score/rrf_score skala RRF (~0.01–0.05)
+        score = chunk.get("score", chunk.get("final_score", chunk.get("rrf_score", 0.0)))
         if score >= RETRIEVAL_SCORE_THRESHOLD:
             return True
     return False

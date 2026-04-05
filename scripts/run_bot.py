@@ -20,8 +20,6 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from dotenv import load_dotenv
-from langchain_openai import OpenAIEmbeddings
-from openai import AsyncOpenAI
 from qdrant_client import QdrantClient
 
 from app.agents.graph import build_helpdesk_graph
@@ -33,6 +31,7 @@ from app.agents.ticket_manager import TicketManagerAgent
 from app.rag.retriever import HybridRetriever
 from app.rag.reranker import rerank
 from app.telegram.bot import build_bot_application
+from app.utils.llm_client import create_embedder, create_llm_client
 
 logging.basicConfig(
     level=logging.INFO,
@@ -42,7 +41,11 @@ logger = logging.getLogger(__name__)
 
 
 def _check_env() -> None:
-    missing = [k for k in ("TELEGRAM_BOT_TOKEN", "OPENAI_API_KEY") if not os.getenv(k)]
+    missing = []
+    if not os.getenv("TELEGRAM_BOT_TOKEN"):
+        missing.append("TELEGRAM_BOT_TOKEN")
+    if not os.getenv("OPENAI_API_KEY") and not os.getenv("GITHUB_TOKEN"):
+        missing.append("OPENAI_API_KEY atau GITHUB_TOKEN")
     if missing:
         logger.error("Variabel lingkungan tidak ditemukan: %s", ", ".join(missing))
         sys.exit(1)
@@ -53,12 +56,8 @@ def main() -> None:
     _check_env()
 
     token = os.environ["TELEGRAM_BOT_TOKEN"]
-    llm = AsyncOpenAI(api_key=os.environ["OPENAI_API_KEY"])
-
-    embedder = OpenAIEmbeddings(
-        model="text-embedding-3-small",
-        openai_api_key=os.environ["OPENAI_API_KEY"],
-    )
+    llm = create_llm_client()
+    embedder = create_embedder()
     qdrant_url = os.getenv("QDRANT_URL", "http://localhost:6333")
     qdrant_key = os.getenv("QDRANT_API_KEY")
     qdrant = QdrantClient(url=qdrant_url, api_key=qdrant_key)

@@ -1,10 +1,7 @@
 """FastAPI dependency injection — pipeline & DB."""
-import os
 from functools import lru_cache
 from typing import Generator
 
-from langchain_openai import OpenAIEmbeddings
-from openai import AsyncOpenAI
 from qdrant_client import QdrantClient
 from sqlalchemy.orm import Session
 
@@ -18,16 +15,14 @@ from app.database.connection import get_db as _get_db
 from app.database.repository import AuditRepository, TicketRepository
 from app.rag.retriever import HybridRetriever
 from app.rag.reranker import rerank
+from app.utils.llm_client import create_embedder, create_llm_client
 
 
 @lru_cache
 def _build_pipeline():
     """Inisialisasi pipeline sekali saat startup (singleton)."""
-    llm = AsyncOpenAI(api_key=os.environ["OPENAI_API_KEY"])
-    embedder = OpenAIEmbeddings(
-        model="text-embedding-3-small",
-        openai_api_key=os.environ["OPENAI_API_KEY"],
-    )
+    llm = create_llm_client()
+    embedder = create_embedder()
     qdrant = QdrantClient(
         url=os.getenv("QDRANT_URL", "http://localhost:6333"),
         api_key=os.getenv("QDRANT_API_KEY"),

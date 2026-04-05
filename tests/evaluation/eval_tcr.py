@@ -27,8 +27,6 @@ from datetime import datetime, timezone
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from dotenv import load_dotenv
-from langchain_openai import OpenAIEmbeddings
-from openai import AsyncOpenAI
 from qdrant_client import QdrantClient
 
 from app.agents.graph import build_helpdesk_graph
@@ -39,6 +37,7 @@ from app.agents.orchestrator import OrchestratorAgent
 from app.agents.ticket_manager import TicketManagerAgent
 from app.rag.retriever import HybridRetriever
 from app.rag.reranker import rerank
+from app.utils.llm_client import create_embedder, create_llm_client
 
 
 def _build_pipeline(llm, retriever):
@@ -124,15 +123,12 @@ def _evaluate_scenario(scenario: dict, result: dict) -> dict:
 async def run_evaluation(scenarios_path: str, output_path: str | None = None) -> dict:
     load_dotenv()
 
-    if not os.getenv("OPENAI_API_KEY"):
-        print("[ERROR] OPENAI_API_KEY tidak ditemukan")
+    try:
+        llm = create_llm_client()
+        embedder = create_embedder()
+    except EnvironmentError as e:
+        print(f"[ERROR] {e}")
         sys.exit(1)
-
-    llm = AsyncOpenAI(api_key=os.environ["OPENAI_API_KEY"])
-    embedder = OpenAIEmbeddings(
-        model="text-embedding-3-small",
-        openai_api_key=os.environ["OPENAI_API_KEY"],
-    )
     qdrant = QdrantClient(
         url=os.getenv("QDRANT_URL", "http://localhost:6333"),
         api_key=os.getenv("QDRANT_API_KEY"),

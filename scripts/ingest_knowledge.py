@@ -23,8 +23,9 @@ from qdrant_client import QdrantClient
 
 from app.config import get_settings
 from app.rag.chunker import chunk_documents
-from app.rag.embedder import embed_chunks, get_embedder, upload_chunks
+from app.rag.embedder import embed_chunks, upload_chunks
 from app.rag.ingestion import ingest_attack_stix, ingest_directory
+from app.utils.llm_client import create_embedder
 
 
 def parse_args() -> argparse.Namespace:
@@ -92,10 +93,7 @@ def main() -> None:
 
     # --- 4. Embedding ---
     print("\nEmbedding chunks...")
-    embedder = get_embedder(
-        api_key=settings.openai_api_key,
-        model=settings.embedding_model,
-    )
+    embedder = create_embedder()
     vectors = embed_chunks(chunks, embedder)
     print(f"Embedding: {len(vectors)} chunks di-embed")
 

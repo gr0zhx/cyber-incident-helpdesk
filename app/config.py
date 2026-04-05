@@ -1,10 +1,14 @@
-from pydantic_settings import BaseSettings
 from functools import lru_cache
+from typing import Optional
+
+from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    # LLM
-    openai_api_key: str
+    # LLM — gunakan OPENAI_API_KEY (produksi) atau GITHUB_TOKEN (development)
+    openai_api_key: Optional[str] = None
+    github_token: Optional[str] = None
+    openai_base_url: Optional[str] = None  # set ke GitHub Models URL saat dev
     openai_model: str = "gpt-4o"
     embedding_model: str = "text-embedding-3-small"
 
@@ -16,6 +20,7 @@ class Settings(BaseSettings):
 
     # Qdrant
     qdrant_url: str = "http://localhost:6333"
+    qdrant_api_key: Optional[str] = None
 
     # Telegram
     telegram_bot_token: str = ""

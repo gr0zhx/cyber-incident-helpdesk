@@ -1,9 +1,0 @@
-{
-  "doc_id": "mitre-attack-enterprise",
-  "doc_title": "MITRE ATT&CK Enterprise Matrix",
-  "source_framework": "MITRE",
-  "version": "v14",
-  "language": "en",
-  "filename": "mitre-attack-enterprise.pdf",
-  "incident_types": ["malware", "ransomware", "akses_tidak_sah", "web_defacement", "ddos", "general"]
-}

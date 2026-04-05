@@ -4,6 +4,6 @@
   "source_framework": "NIST",
   "version": "Rev. 2",
   "language": "en",
-  "filename": "nist-800-61-rev2.pdf",
+  "filename": "nist.sp.800-61r2.pdf",
   "incident_types": ["phishing", "malware", "ransomware", "akses_tidak_sah", "kebocoran_data", "general"]
 }

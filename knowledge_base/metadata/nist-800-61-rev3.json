@@ -1,0 +1,9 @@
+{
+  "doc_id": "nist-800-61-rev3",
+  "doc_title": "Incident Response Recommendations and Considerations for Cybersecurity Risk Management",
+  "source_framework": "NIST",
+  "version": "Rev. 3",
+  "language": "en",
+  "filename": "NIST.SP.800-61r3.pdf",
+  "incident_types": ["phishing", "malware", "ransomware", "akses_tidak_sah", "kebocoran_data", "ddos", "web_defacement", "general"]
+}

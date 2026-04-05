@@ -73,5 +73,5 @@ def format_reporter_confirmation(
         incident_type=incident_type,
         severity=severity,
         confidence=confidence_pct,
-        mitigation_steps=mitigation_steps[:500] if mitigation_steps else "Hubungi tim CSIRT secara langsung.",
+        mitigation_steps=mitigation_steps[:2000] if mitigation_steps else "Hubungi tim CSIRT secara langsung.",
     )

@@ -1,3 +1,4 @@
+"""Incident Identifier Agent — klasifikasi jenis dan keparahan insiden."""
 import json
 import logging
 from pathlib import Path

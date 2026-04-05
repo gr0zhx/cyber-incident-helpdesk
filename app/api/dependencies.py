@@ -1,4 +1,5 @@
 """FastAPI dependency injection — pipeline & DB."""
+import os
 from functools import lru_cache
 from typing import Generator
 

@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 
 from app.api.dependencies import get_db, get_helpdesk_graph, get_orchestrator
 from app.api.schemas import HealthResponse, ReportRequest, ReportResponse, TicketOut
+from app.database.models import IncidentTicket
 from app.database.repository import TicketRepository
 from app.agents.orchestrator import OrchestratorAgent
 
@@ -98,7 +99,6 @@ def list_tickets(
         tickets = repo.get_tickets_by_reporter(reporter_id)
     else:
         # Ambil semua — batasi 100 untuk prototipe
-        from app.database.models import IncidentTicket
         tickets = (
             db.query(IncidentTicket)
             .order_by(IncidentTicket.created_at.desc())

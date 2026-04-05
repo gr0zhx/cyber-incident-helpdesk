@@ -15,6 +15,7 @@ RETRIEVAL_SCORE_THRESHOLD = 0.3
 MAX_ITERATIONS = 3
 TOP_K_RETRIEVAL = 20
 TOP_K_RERANK = 5
+_MIN_SOURCE_MATCH_LENGTH = 5
 
 _FALLBACK_RESULT = {
     "mitigation_recommendation": (
@@ -130,7 +131,7 @@ def _validate_citations(steps: list[dict], chunks: list[dict]) -> list[dict]:
         has_match = any(
             avail_word in source_claim
             for avail_word in available_sources
-            if len(avail_word) >= 5  # Hindari false positive dari kata pendek
+            if len(avail_word) >= _MIN_SOURCE_MATCH_LENGTH
         )
         # Also accept well-known standard references (they may not be in chunks but are trustworthy)
         is_known_standard = any(

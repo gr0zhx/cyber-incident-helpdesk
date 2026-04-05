@@ -1,6 +1,7 @@
+"""Hybrid Retriever — semantic + keyword search via Qdrant, merged dengan RRF."""
 from langchain_openai import OpenAIEmbeddings
 from qdrant_client import QdrantClient
-from qdrant_client.models import Filter, FieldCondition, MatchValue, MatchText, ScrollRequest
+from qdrant_client.models import Filter, FieldCondition, MatchValue, MatchText
 
 from app.rag.embedder import COLLECTION_NAME
 

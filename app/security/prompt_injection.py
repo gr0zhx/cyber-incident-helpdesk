@@ -41,6 +41,9 @@ _COMPILED: list[tuple[re.Pattern, str]] = [
 # Pola base64 heuristik: string panjang tanpa spasi yang terlihat seperti base64
 _BASE64_RE = re.compile(r"(?<!\w)[A-Za-z0-9+/]{40,}={0,2}(?!\w)")
 
+_REGEX_CONFIDENCE = 0.95
+_BASE64_CONFIDENCE = 0.80
+
 
 def _check_base64(text: str) -> bool:
     """Cek apakah ada base64 yang terlihat, dan coba decode untuk isi berbahaya."""
@@ -76,10 +79,10 @@ class PromptInjectionDetector:
         # Layer 1: regex
         for pattern, label in _COMPILED:
             if pattern.search(text):
-                return {"is_injection": True, "confidence": 0.95, "matched_pattern": label}
+                return {"is_injection": True, "confidence": _REGEX_CONFIDENCE, "matched_pattern": label}
 
         # Layer 2: base64
         if _check_base64(text):
-            return {"is_injection": True, "confidence": 0.80, "matched_pattern": "encoding_obfuscation"}
+            return {"is_injection": True, "confidence": _BASE64_CONFIDENCE, "matched_pattern": "encoding_obfuscation"}
 
         return {"is_injection": False, "confidence": 0.0, "matched_pattern": ""}

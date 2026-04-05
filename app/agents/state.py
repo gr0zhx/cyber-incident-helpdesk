@@ -1,4 +1,5 @@
-from typing import TypedDict, Optional
+"""IncidentState — shared state schema untuk komunikasi antar agen."""
+from typing import TypedDict
 
 
 class IncidentState(TypedDict):

@@ -5,7 +5,6 @@ import uuid
 from typing import Any
 
 from telegram import Update
-from telegram.constants import ParseMode
 from telegram.ext import (
     Application,
     CommandHandler,

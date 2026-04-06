@@ -1,5 +1,9 @@
 """Hybrid Retriever — semantic + keyword search via Qdrant, merged dengan RRF."""
+import logging
+
 from langchain_openai import OpenAIEmbeddings
+
+logger = logging.getLogger(__name__)
 from qdrant_client import QdrantClient
 from qdrant_client.models import Filter, FieldCondition, MatchValue, MatchText
 
@@ -126,5 +130,6 @@ class HybridRetriever:
                 }
                 for point in results
             ]
-        except Exception:
+        except Exception as exc:
+            logger.warning("Keyword search gagal, fallback ke kosong: %s", exc)
             return []

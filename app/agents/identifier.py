@@ -1,13 +1,12 @@
 """Incident Identifier Agent — klasifikasi jenis dan keparahan insiden."""
-import json
 import logging
-from pathlib import Path
 
 from openai import AsyncOpenAI, APITimeoutError
 
-logger = logging.getLogger(__name__)
+from app.utils.llm_parser import parse_llm_json
+from app.utils.prompt_loader import load_prompt
 
-_PROMPT_PATH = Path(__file__).resolve().parents[2] / "config" / "prompts" / "identifier.txt"
+logger = logging.getLogger(__name__)
 
 VALID_TYPES = [
     "Phishing",
@@ -30,29 +29,6 @@ _FALLBACK_RESULT = {
     "requires_review": True,
 }
 
-
-def _load_prompt() -> str:
-    return _PROMPT_PATH.read_text(encoding="utf-8")
-
-
-def _parse_llm_response(raw: str) -> dict | None:
-    """Try to extract a valid JSON object from LLM response text."""
-    # Try direct parse first
-    try:
-        return json.loads(raw.strip())
-    except json.JSONDecodeError:
-        pass
-
-    # Try to extract JSON block from surrounding text
-    start = raw.find("{")
-    end = raw.rfind("}") + 1
-    if start != -1 and end > start:
-        try:
-            return json.loads(raw[start:end])
-        except json.JSONDecodeError:
-            pass
-
-    return None
 
 
 def _validate_and_normalize(parsed: dict) -> dict:
@@ -90,7 +66,7 @@ class IncidentIdentifierAgent:
     def __init__(self, llm_client: AsyncOpenAI, model: str = "gpt-4o") -> None:
         self.llm = llm_client
         self.model = model
-        self._prompt_template = _load_prompt()
+        self._prompt_template = load_prompt("identifier")
 
     def _build_messages(self, sanitized_input: str) -> list[dict]:
         prompt = self._prompt_template.replace("{sanitized_input}", sanitized_input)
@@ -113,7 +89,7 @@ class IncidentIdentifierAgent:
                     response_format={"type": "json_object"},
                 )
                 raw = response.choices[0].message.content or ""
-                parsed = _parse_llm_response(raw)
+                parsed = parse_llm_json(raw)
 
                 if parsed is None:
                     logger.error("Tidak bisa parse JSON dari LLM (attempt %d): %s", attempt + 1, raw[:200])

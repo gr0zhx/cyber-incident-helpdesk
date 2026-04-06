@@ -14,10 +14,10 @@ from app.agents.mitigation import (
     _compute_rag_confidence,
     _expand_query,
     _merge_results,
-    _parse_llm_response,
     _validate_citations,
     _FALLBACK_RESULT,
 )
+from app.utils.llm_parser import parse_llm_json as _parse_llm_response
 
 
 # ---------------------------------------------------------------------------

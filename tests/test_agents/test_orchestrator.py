@@ -6,10 +6,10 @@ import pytest
 
 from app.agents.orchestrator import (
     OrchestratorAgent,
-    _parse_llm_response,
     _validate_intent,
     VALID_INTENTS,
 )
+from app.utils.llm_parser import parse_llm_json as _parse_llm_response
 
 
 # ---------------------------------------------------------------------------

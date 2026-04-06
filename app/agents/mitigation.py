@@ -1,15 +1,13 @@
 """Mitigation Advisor Agent — Agentic RAG dengan sitasi terverifikasi."""
-import json
 import logging
-from pathlib import Path
 
 from openai import AsyncOpenAI, APITimeoutError
 
 from app.rag.reranker import rerank
+from app.utils.llm_parser import parse_llm_json
+from app.utils.prompt_loader import load_prompt
 
 logger = logging.getLogger(__name__)
-
-_PROMPT_PATH = Path(__file__).resolve().parents[2] / "config" / "prompts" / "mitigation.txt"
 
 RETRIEVAL_SCORE_THRESHOLD = 0.3
 MAX_ITERATIONS = 3
@@ -27,26 +25,6 @@ _FALLBACK_RESULT = {
     "rag_confidence": 0.0,
 }
 
-
-def _load_prompt() -> str:
-    return _PROMPT_PATH.read_text(encoding="utf-8")
-
-
-def _parse_llm_response(raw: str) -> dict | None:
-    try:
-        return json.loads(raw.strip())
-    except json.JSONDecodeError:
-        pass
-
-    start = raw.find("{")
-    end = raw.rfind("}") + 1
-    if start != -1 and end > start:
-        try:
-            return json.loads(raw[start:end])
-        except json.JSONDecodeError:
-            pass
-
-    return None
 
 
 def _assemble_context(chunks: list[dict]) -> str:
@@ -175,7 +153,7 @@ class MitigationAdvisorAgent:
         self.retriever = retriever
         self.reranker_fn = reranker_fn or rerank
         self.model = model
-        self._prompt_template = _load_prompt()
+        self._prompt_template = load_prompt("mitigation")
 
     def _build_messages(self, context: str, incident_type: str, severity: str, sanitized_input: str) -> list[dict]:
         prompt = (
@@ -243,7 +221,7 @@ class MitigationAdvisorAgent:
                     response_format={"type": "json_object"},
                 )
                 raw = response.choices[0].message.content or ""
-                parsed = _parse_llm_response(raw)
+                parsed = parse_llm_json(raw)
 
                 if parsed is None:
                     logger.error("Tidak bisa parse JSON dari LLM (attempt %d): %s", attempt + 1, raw[:200])

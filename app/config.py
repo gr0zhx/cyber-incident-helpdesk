@@ -1,6 +1,7 @@
 from functools import lru_cache
 from typing import Optional
 
+from pydantic import model_validator
 from pydantic_settings import BaseSettings
 
 
@@ -28,6 +29,14 @@ class Settings(BaseSettings):
 
     # Logging
     log_level: str = "INFO"
+
+    @model_validator(mode="after")
+    def _require_api_key(self) -> "Settings":
+        if not self.openai_api_key and not self.github_token:
+            raise ValueError(
+                "Harus set salah satu: OPENAI_API_KEY (OpenAI) atau GITHUB_TOKEN (GitHub Models)."
+            )
+        return self
 
     class Config:
         env_file = ".env"

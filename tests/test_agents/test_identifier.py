@@ -11,9 +11,9 @@ from app.agents.identifier import (
     VALID_SEVERITIES,
     VALID_TYPES,
     IncidentIdentifierAgent,
-    _parse_llm_response,
     _validate_and_normalize,
 )
+from app.utils.llm_parser import parse_llm_json as _parse_llm_response
 
 
 # ---------------------------------------------------------------------------

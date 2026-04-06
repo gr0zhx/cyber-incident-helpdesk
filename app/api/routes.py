@@ -1,16 +1,22 @@
 """FastAPI route handlers untuk helpdesk API."""
 import logging
+import os
 import uuid
+from datetime import datetime, timezone
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
 from app.api.dependencies import get_db, get_helpdesk_graph, get_orchestrator
-from app.api.schemas import HealthResponse, ReportRequest, ReportResponse, TicketOut
+from app.api.schemas import (
+    HealthResponse, ReportRequest, ReportResponse,
+    StatsResponse, TicketOut, TicketUpdateRequest,
+)
 from app.database.models import IncidentTicket
 from app.database.repository import TicketRepository
 from app.agents.orchestrator import OrchestratorAgent
+from app.telegram.templates import format_status_update
 
 logger = logging.getLogger(__name__)
 
@@ -75,6 +81,15 @@ async def create_report(
     )
 
 
+@router.get("/tickets/stats", response_model=StatsResponse)
+def get_ticket_stats(
+    db: Annotated[Session, Depends(get_db)],
+) -> StatsResponse:
+    """Statistik ringkasan tiket untuk dashboard admin."""
+    repo = TicketRepository(db)
+    return StatsResponse(**repo.get_stats())
+
+
 @router.get("/tickets/{ticket_id}", response_model=TicketOut)
 def get_ticket(
     ticket_id: str,
@@ -86,6 +101,65 @@ def get_ticket(
     if ticket is None:
         raise HTTPException(status_code=404, detail=f"Tiket {ticket_id} tidak ditemukan.")
     return TicketOut.model_validate(ticket)
+
+
+@router.patch("/tickets/{ticket_id}", response_model=TicketOut)
+async def update_ticket(
+    ticket_id: str,
+    body: TicketUpdateRequest,
+    db: Annotated[Session, Depends(get_db)],
+) -> TicketOut:
+    """Update status/assignment tiket dan (opsional) kirim notifikasi ke pelapor."""
+    repo = TicketRepository(db)
+    ticket = repo.get_ticket_by_id(ticket_id.upper())
+    if ticket is None:
+        raise HTTPException(status_code=404, detail=f"Tiket {ticket_id} tidak ditemukan.")
+
+    updates: dict = {}
+    if body.status is not None:
+        updates["status"] = body.status
+    if body.assigned_to is not None:
+        updates["assigned_to"] = body.assigned_to
+    if body.escalation_level is not None:
+        updates["escalation_level"] = body.escalation_level
+
+    if not updates:
+        raise HTTPException(status_code=422, detail="Tidak ada field yang diupdate.")
+
+    updated = repo.update_ticket(ticket_id.upper(), updates)
+    if updated is None:
+        raise HTTPException(status_code=500, detail="Gagal memperbarui tiket.")
+
+    # Kirim notifikasi Telegram ke pelapor jika diminta
+    if body.notify_reporter and body.status and updated.reporter_id:
+        await _notify_reporter_status(
+            reporter_id=updated.reporter_id,
+            ticket_id=updated.ticket_id,
+            new_status=updated.status,
+        )
+
+    return TicketOut.model_validate(updated)
+
+
+async def _notify_reporter_status(reporter_id: str, ticket_id: str, new_status: str) -> None:
+    """Kirim pesan Telegram ke pelapor saat status tiket berubah."""
+    token = os.getenv("TELEGRAM_BOT_TOKEN", "")
+    if not token:
+        logger.warning("TELEGRAM_BOT_TOKEN tidak ada, notifikasi status dilewati.")
+        return
+    try:
+        from telegram import Bot
+        message = format_status_update(
+            ticket_id=ticket_id,
+            new_status=new_status,
+            updated_at=datetime.now(timezone.utc).strftime("%d %b %Y %H:%M UTC"),
+        )
+        bot = Bot(token=token)
+        async with bot:
+            await bot.send_message(chat_id=reporter_id, text=message)
+        logger.info("Notifikasi status dikirim ke reporter %s (tiket %s)", reporter_id, ticket_id)
+    except Exception as exc:
+        logger.warning("Gagal kirim notifikasi status ke %s: %s", reporter_id, exc)
 
 
 @router.get("/tickets", response_model=list[TicketOut])

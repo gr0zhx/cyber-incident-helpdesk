@@ -54,6 +54,22 @@ class TicketOut(BaseModel):
     model_config = {"from_attributes": True}
 
 
+class TicketUpdateRequest(BaseModel):
+    status: str | None = None
+    assigned_to: str | None = None
+    escalation_level: str | None = None
+    notify_reporter: bool = True
+
+    model_config = {"extra": "forbid"}
+
+
+class StatsResponse(BaseModel):
+    total: int
+    by_status: dict[str, int]
+    by_severity: dict[str, int]
+    by_type: dict[str, int]
+
+
 class HealthResponse(BaseModel):
     status: str
     service: str

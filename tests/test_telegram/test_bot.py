@@ -273,11 +273,15 @@ async def test_status_no_repo_returns_fallback_message():
 async def test_status_ticket_found():
     mock_ticket = MagicMock()
     mock_ticket.status = "PENDING_REVIEW"
+    mock_ticket.incident_type = "Phishing"
+    mock_ticket.severity = "Tinggi"
     mock_ticket.escalation_level = "Mendesak"
+    mock_ticket.assigned_to = None
     mock_ticket.created_at = None
+    mock_ticket.updated_at = None
 
     mock_repo = MagicMock()
-    mock_repo.get_by_ticket_id = MagicMock(return_value=mock_ticket)
+    mock_repo.get_ticket_by_id = MagicMock(return_value=mock_ticket)
 
     update = _make_update()
     context = _make_context(bot_data={"ticket_repository": mock_repo})
@@ -285,13 +289,14 @@ async def test_status_ticket_found():
 
     await status_handler(update, context)
     call_text = update.message.reply_text.call_args[0][0]
-    assert "PENDING_REVIEW" in call_text
+    # Status ditampilkan sebagai label bahasa Indonesia
+    assert "Menunggu Tinjauan" in call_text
 
 
 @pytest.mark.asyncio
 async def test_status_ticket_not_found():
     mock_repo = MagicMock()
-    mock_repo.get_by_ticket_id = MagicMock(return_value=None)
+    mock_repo.get_ticket_by_id = MagicMock(return_value=None)
 
     update = _make_update()
     context = _make_context(bot_data={"ticket_repository": mock_repo})

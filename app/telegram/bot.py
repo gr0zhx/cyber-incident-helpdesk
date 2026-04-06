@@ -189,17 +189,32 @@ async def status_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         return
 
     try:
-        ticket = ticket_repo.get_by_ticket_id(ticket_id)
+        ticket = ticket_repo.get_ticket_by_id(ticket_id)
         if ticket:
+            status_labels = {
+                "PENDING_REVIEW": "⏳ Menunggu Tinjauan",
+                "IN_PROGRESS":    "🔄 Sedang Ditangani",
+                "RESOLVED":       "✅ Terselesaikan",
+                "CLOSED":         "🔒 Ditutup",
+            }
+            status_label = status_labels.get(ticket.status, ticket.status)
+            created = str(ticket.created_at)[:19] if ticket.created_at else "-"
+            updated = str(ticket.updated_at)[:19] if ticket.updated_at else "-"
+            assigned = ticket.assigned_to or "Belum ditugaskan"
+
             await update.message.reply_text(
                 f"📋 Status Tiket: {ticket_id}\n\n"
-                f"Status : {ticket.status}\n"
-                f"Eskalasi: {ticket.escalation_level or '-'}\n"
-                f"Dibuat : {str(ticket.created_at)[:19] if ticket.created_at else '-'}"
+                f"Status   : {status_label}\n"
+                f"Jenis    : {ticket.incident_type}\n"
+                f"Keparahan: {ticket.severity}\n"
+                f"Ditugaskan: {assigned}\n"
+                f"Dibuat   : {created}\n"
+                f"Diperbarui: {updated}"
             )
         else:
             await update.message.reply_text(
-                f"Tiket {ticket_id} tidak ditemukan. Pastikan nomor tiket benar."
+                f"Tiket {ticket_id} tidak ditemukan. Pastikan nomor tiket benar.\n"
+                f"Contoh format: /status TICKET-2026-0001"
             )
     except Exception as exc:
         logger.exception("Error mengambil tiket %s: %s", ticket_id, exc)

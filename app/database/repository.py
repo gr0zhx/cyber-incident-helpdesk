@@ -58,6 +58,72 @@ class TicketRepository:
         self.db.refresh(ticket)
         return ticket
 
+    def update_ticket(self, ticket_id: str, updates: dict) -> Optional[IncidentTicket]:
+        """Update beberapa field tiket sekaligus (untuk admin dashboard).
+
+        Field yang bisa diupdate: status, assigned_to, modified_by.
+        Field timestamp reviewed_at/resolved_at/closed_at diisi otomatis.
+        """
+        ticket = self.get_ticket_by_id(ticket_id)
+        if ticket is None:
+            return None
+
+        now = datetime.now(timezone.utc)
+        allowed_fields = {"status", "assigned_to", "modified_by", "escalation_level"}
+        for field, value in updates.items():
+            if field in allowed_fields:
+                setattr(ticket, field, value)
+
+        # Set timestamp berdasarkan status
+        new_status = updates.get("status", ticket.status)
+        if new_status == "IN_PROGRESS" and ticket.reviewed_at is None:
+            ticket.reviewed_at = now
+        elif new_status == "RESOLVED" and ticket.resolved_at is None:
+            ticket.resolved_at = now
+        elif new_status == "CLOSED" and ticket.closed_at is None:
+            ticket.closed_at = now
+
+        ticket.updated_at = now
+        self.db.commit()
+        self.db.refresh(ticket)
+        return ticket
+
+    def get_all_tickets(self, limit: int = 200) -> list[IncidentTicket]:
+        """Ambil semua tiket terbaru (untuk dashboard admin)."""
+        return (
+            self.db.query(IncidentTicket)
+            .order_by(IncidentTicket.created_at.desc())
+            .limit(limit)
+            .all()
+        )
+
+    def get_stats(self) -> dict:
+        """Statistik ringkasan tiket untuk dashboard."""
+        from sqlalchemy import case
+
+        total = self.db.query(func.count(IncidentTicket.ticket_id)).scalar() or 0
+        by_status = (
+            self.db.query(IncidentTicket.status, func.count(IncidentTicket.ticket_id))
+            .group_by(IncidentTicket.status)
+            .all()
+        )
+        by_severity = (
+            self.db.query(IncidentTicket.severity, func.count(IncidentTicket.ticket_id))
+            .group_by(IncidentTicket.severity)
+            .all()
+        )
+        by_type = (
+            self.db.query(IncidentTicket.incident_type, func.count(IncidentTicket.ticket_id))
+            .group_by(IncidentTicket.incident_type)
+            .all()
+        )
+        return {
+            "total": total,
+            "by_status": {s: c for s, c in by_status},
+            "by_severity": {s: c for s, c in by_severity},
+            "by_type": {t: c for t, c in by_type},
+        }
+
     def check_duplicate(
         self, reporter_id: str, description: str, hours: int = 24
     ) -> Optional[IncidentTicket]:

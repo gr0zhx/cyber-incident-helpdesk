@@ -401,6 +401,9 @@ def main() -> None:
         auto_refresh = st.checkbox("Auto-refresh (30 detik)", value=st.session_state.auto_refresh)
         st.session_state.auto_refresh = auto_refresh
 
+        st.divider()
+        st.page_link("rag_manager.py", label="📚 Kelola Knowledge Base RAG", icon="📚")
+
     # --- Render halaman ---
     if page == "Ringkasan":
         page_ringkasan()

@@ -55,7 +55,10 @@ async def create_report(
         result = await graph.ainvoke(state)
     except Exception as exc:
         logger.exception("Pipeline error saat memproses laporan: %s", exc)
-        raise HTTPException(status_code=500, detail="Terjadi kesalahan internal. Coba lagi.")
+        raise HTTPException(
+            status_code=500,
+            detail=f"[{session_id[:8]}] Terjadi kesalahan internal. Coba lagi.",
+        )
 
     citations = [
         {"source": c.get("source", ""), "section": c.get("section", ""),

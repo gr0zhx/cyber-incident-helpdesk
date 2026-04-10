@@ -184,7 +184,10 @@ class MitigationAdvisorAgent:
                 current_query = query if iteration == 1 else _expand_query(query, incident_type, iteration)
                 new_chunks = self.retriever.retrieve(current_query, incident_type=incident_type, top_k=TOP_K_RETRIEVAL)
             except Exception as exc:
-                logger.error("Retrieval gagal pada iterasi %d: %s", iteration, exc)
+                logger.warning(
+                    "Retrieval gagal pada iterasi %d (query=%r): %s",
+                    iteration, current_query, exc,
+                )
                 new_chunks = []
 
             all_chunks = _merge_results(all_chunks, new_chunks)

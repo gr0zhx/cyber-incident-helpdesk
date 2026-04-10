@@ -1,4 +1,5 @@
 """LangGraph helpdesk pipeline — menyatukan semua agen dalam satu graf."""
+import asyncio
 import logging
 from datetime import datetime, timezone
 from typing import Any
@@ -39,7 +40,7 @@ def _error(state: IncidentState, msg: str) -> None:
 async def guardrails_node(state: IncidentState) -> IncidentState:
     """Node 1: sanitasi input + deteksi injeksi + redaksi PII."""
     try:
-        result = run_input_guardrails(state["raw_input"])
+        result = await asyncio.to_thread(run_input_guardrails, state["raw_input"])
         if result.blocked:
             _error(state, result.block_reason)
             # Tandai sebagai needs_clarification agar pipeline berhenti

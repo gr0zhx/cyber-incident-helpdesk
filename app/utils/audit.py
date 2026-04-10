@@ -1,4 +1,5 @@
 """Audit trail — catat setiap event pipeline ke tabel audit_logs."""
+import asyncio
 import logging
 import time
 from datetime import datetime, timezone
@@ -48,7 +49,7 @@ async def log_audit_event(
         "extra_metadata": extra_metadata or {},
     }
     try:
-        audit_repository.log_event(event_data)
+        await asyncio.to_thread(audit_repository.log_event, event_data)
     except Exception as exc:
         logger.warning("Gagal menyimpan audit log: %s", exc)
 

@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from typing import Optional
+from typing import Any, Optional
 
 from sqlalchemy import func
 from sqlalchemy.orm import Session
@@ -58,7 +58,7 @@ class TicketRepository:
         self.db.refresh(ticket)
         return ticket
 
-    def update_ticket(self, ticket_id: str, updates: dict) -> Optional[IncidentTicket]:
+    def update_ticket(self, ticket_id: str, updates: dict[str, Any]) -> Optional[IncidentTicket]:
         """Update beberapa field tiket sekaligus (untuk admin dashboard).
 
         Field yang bisa diupdate: status, assigned_to, modified_by.

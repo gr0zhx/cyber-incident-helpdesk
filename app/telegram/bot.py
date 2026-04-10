@@ -14,6 +14,7 @@ from telegram.ext import (
     filters,
 )
 
+from app.constants import STATUS_LABEL_TELEGRAM
 from app.telegram.templates import format_csirt_alert, format_reporter_confirmation
 
 logger = logging.getLogger(__name__)
@@ -191,13 +192,7 @@ async def status_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     try:
         ticket = ticket_repo.get_ticket_by_id(ticket_id)
         if ticket:
-            status_labels = {
-                "PENDING_REVIEW": "⏳ Menunggu Tinjauan",
-                "IN_PROGRESS":    "🔄 Sedang Ditangani",
-                "RESOLVED":       "✅ Terselesaikan",
-                "CLOSED":         "🔒 Ditutup",
-            }
-            status_label = status_labels.get(ticket.status, ticket.status)
+            status_label = STATUS_LABEL_TELEGRAM.get(ticket.status, ticket.status)
             created = str(ticket.created_at)[:19] if ticket.created_at else "-"
             updated = str(ticket.updated_at)[:19] if ticket.updated_at else "-"
             assigned = ticket.assigned_to or "Belum ditugaskan"

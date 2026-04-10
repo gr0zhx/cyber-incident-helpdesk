@@ -111,38 +111,26 @@ def ingest_directory(
 # MITRE ATT&CK STIX ingestion
 # ---------------------------------------------------------------------------
 
-def ingest_attack_stix(stix_path: str | Path) -> list[Document]:
-    """Ekstrak mitigasi (M1xxx) dan teknik serangan dari STIX bundle ATT&CK.
-
-    Menghasilkan dua jenis Document:
-    - Mitigation document: setiap course-of-action M1xxx beserta teknik yang dimitigasi
-    - Technique document: setiap attack-pattern dengan deskripsi dan taktiknya
+def _parse_mitigations(
+    bundle_objects: list[dict],
+    objects_by_id: dict[str, dict],
+    coa_to_techniques: dict[str, list[str]],
+    doc_id: str,
+) -> list[Document]:
+    """Ekstrak mitigation documents (M1xxx course-of-action) dari bundle ATT&CK.
 
     Args:
-        stix_path: Path ke file STIX JSON (misal: knowledge_base/enterprise-attack.json)
+        bundle_objects: Daftar semua objek STIX dari bundle.
+        objects_by_id: Indeks objek STIX berdasarkan id.
+        coa_to_techniques: Mapping course-of-action id → list attack-pattern id.
+        doc_id: ID unik dokumen untuk metadata Qdrant.
 
     Returns:
-        List of Document siap dichunk dan diembed.
+        List of Document untuk setiap mitigasi M1xxx.
     """
-    stix_path = Path(stix_path)
-    bundle = json.loads(stix_path.read_text(encoding="utf-8"))
-    objects_by_id: dict[str, dict] = {obj["id"]: obj for obj in bundle["objects"]}
-
-    # --- Kumpulkan relasi mitigates: course-of-action → attack-pattern ---
-    coa_to_techniques: dict[str, list[str]] = {}
-    for obj in bundle["objects"]:
-        if (
-            obj.get("type") == "relationship"
-            and obj.get("relationship_type") == "mitigates"
-        ):
-            coa_id = obj["source_ref"]
-            tgt_id = obj["target_ref"]
-            coa_to_techniques.setdefault(coa_id, []).append(tgt_id)
-
     documents: list[Document] = []
 
-    # --- 1. Mitigation documents (M1xxx course-of-action) ---
-    for obj in bundle["objects"]:
+    for obj in bundle_objects:
         if obj.get("type") != "course-of-action":
             continue
         ext_id = _get_external_id(obj)
@@ -182,7 +170,7 @@ def ingest_attack_stix(stix_path: str | Path) -> list[Document]:
             Document(
                 page_content="\n".join(content_parts),
                 metadata={
-                    "doc_id": "mitre-attack-enterprise",
+                    "doc_id": doc_id,
                     "doc_title": "MITRE ATT&CK Enterprise",
                     "source": f"MITRE ATT&CK, {name} ({ext_id})",
                     "source_framework": "MITRE",
@@ -195,14 +183,29 @@ def ingest_attack_stix(stix_path: str | Path) -> list[Document]:
             )
         )
 
-    # --- 2. Technique documents (attack-pattern) ---
-    for obj in bundle["objects"]:
+    return documents
+
+
+def _parse_techniques(bundle_objects: list[dict], doc_id: str) -> list[Document]:
+    """Ekstrak technique documents (attack-pattern) dari bundle ATT&CK.
+
+    Subteknik (external_id mengandung ".") dilewati untuk mengurangi noise.
+
+    Args:
+        bundle_objects: Daftar semua objek STIX dari bundle.
+        doc_id: ID unik dokumen untuk metadata Qdrant.
+
+    Returns:
+        List of Document untuk setiap teknik serangan utama.
+    """
+    documents: list[Document] = []
+
+    for obj in bundle_objects:
         if obj.get("type") != "attack-pattern":
             continue
-        # Skip subtechniques untuk mengurangi noise (fokus ke teknik utama)
         ext_id = _get_external_id(obj)
         if "." in ext_id:
-            continue
+            continue  # skip subtechniques
 
         name = obj.get("name", "")
         description = _strip_html(obj.get("description", ""))
@@ -223,7 +226,7 @@ def ingest_attack_stix(stix_path: str | Path) -> list[Document]:
             Document(
                 page_content=content,
                 metadata={
-                    "doc_id": "mitre-attack-enterprise",
+                    "doc_id": doc_id,
                     "doc_title": "MITRE ATT&CK Enterprise",
                     "source": f"MITRE ATT&CK, {name} ({ext_id})",
                     "source_framework": "MITRE",
@@ -236,7 +239,46 @@ def ingest_attack_stix(stix_path: str | Path) -> list[Document]:
             )
         )
 
+    return documents
+
+
+def ingest_attack_stix(
+    stix_path: str | Path,
+    doc_id: str = "mitre-attack-enterprise",
+) -> list[Document]:
+    """Ekstrak mitigasi (M1xxx) dan teknik serangan dari STIX bundle ATT&CK.
+
+    Menghasilkan dua jenis Document:
+    - Mitigation document: setiap course-of-action M1xxx beserta teknik yang dimitigasi
+    - Technique document: setiap attack-pattern dengan deskripsi dan taktiknya
+
+    Args:
+        stix_path: Path ke file STIX JSON (misal: knowledge_base/enterprise-attack.json)
+        doc_id: ID unik dokumen untuk Qdrant (default: "mitre-attack-enterprise")
+
+    Returns:
+        List of Document siap dichunk dan diembed.
+    """
+    stix_path = Path(stix_path)
+    bundle = json.loads(stix_path.read_text(encoding="utf-8"))
+    bundle_objects: list[dict] = bundle["objects"]
+    objects_by_id: dict[str, dict] = {obj["id"]: obj for obj in bundle_objects}
+
+    # Kumpulkan relasi mitigates: course-of-action → attack-pattern
+    coa_to_techniques: dict[str, list[str]] = {}
+    for obj in bundle_objects:
+        if (
+            obj.get("type") == "relationship"
+            and obj.get("relationship_type") == "mitigates"
+        ):
+            coa_to_techniques.setdefault(obj["source_ref"], []).append(obj["target_ref"])
+
+    documents = (
+        _parse_mitigations(bundle_objects, objects_by_id, coa_to_techniques, doc_id)
+        + _parse_techniques(bundle_objects, doc_id)
+    )
+
     mitigations = sum(1 for d in documents if d.metadata.get("object_type") == "mitigation")
-    techniques = sum(1 for d in documents if d.metadata.get("object_type") == "technique")
+    techniques  = sum(1 for d in documents if d.metadata.get("object_type") == "technique")
     print(f"[MITRE ATT&CK] {mitigations} mitigasi + {techniques} teknik = {len(documents)} dokumen")
     return documents

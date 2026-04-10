@@ -23,14 +23,18 @@ from app.dashboard.rag_client import (
     delete_chunks_by_doc_id,
     delete_metadata,
     delete_pdf,
+    delete_stix,
     get_chunks_sample,
     get_collection_info,
     get_collection_stats_by_source,
     list_metadata_documents,
     list_pdf_files,
+    list_stix_files,
     reingest_document,
+    reingest_stix,
     save_metadata,
     save_pdf,
+    save_stix,
     search_chunks,
 )
 
@@ -77,11 +81,17 @@ def _load_pdfs() -> list[dict]:
     return list_pdf_files()
 
 
+@st.cache_data(ttl=30)
+def _load_stix() -> list[dict]:
+    return list_stix_files()
+
+
 def _clear_cache() -> None:
     _load_collection_info.clear()
     _load_stats.clear()
     _load_docs.clear()
     _load_pdfs.clear()
+    _load_stix.clear()
 
 
 # ---------------------------------------------------------------------------
@@ -152,10 +162,11 @@ def page_status() -> None:
 def page_kelola_dokumen() -> None:
     st.title("📁 Kelola Dokumen Knowledge Base")
 
-    tab_list, tab_add, tab_pdf = st.tabs([
+    tab_list, tab_add, tab_pdf, tab_stix = st.tabs([
         "📋 Daftar Dokumen Terdaftar",
         "➕ Tambah Dokumen Baru",
         "📂 File PDF di Server",
+        "🔷 File STIX / ATT&CK",
     ])
 
     # ── Tab: Daftar Dokumen ──────────────────────────────────────────────────
@@ -369,6 +380,157 @@ def page_kelola_dokumen() -> None:
             else:
                 st.info("Semua PDF sudah terdaftar di metadata.")
 
+    # ── Tab: File STIX ───────────────────────────────────────────────────────
+    with tab_stix:
+        st.subheader("File STIX / MITRE ATT&CK")
+        st.caption(
+            "File STIX JSON (misal: `enterprise-attack.json`) disimpan di root `knowledge_base/`. "
+            "Setiap file di-parse menjadi chunks teknik + mitigasi dan diupload ke Qdrant."
+        )
+
+        # --- Daftar file STIX yang ada ---
+        try:
+            stix_files = _load_stix()
+        except Exception as exc:
+            st.error(f"Gagal memuat daftar STIX: {exc}")
+            stix_files = []
+
+        if not stix_files:
+            st.info("Belum ada file STIX di `knowledge_base/`. Upload file di bawah.")
+        else:
+            for sf in stix_files:
+                with st.expander(
+                    f"🔷 **{sf['filename']}** — {sf['size_mb']} MB — Doc ID: `{sf['doc_id']}`",
+                    expanded=True,
+                ):
+                    col_info, col_act = st.columns([3, 1])
+
+                    with col_info:
+                        st.markdown(f"""
+| Field | Nilai |
+|---|---|
+| **Nama File** | `{sf['filename']}` |
+| **Ukuran** | {sf['size_mb']} MB |
+| **Doc ID di Qdrant** | `{sf['doc_id']}` |
+| **Framework** | MITRE ATT&CK |
+""")
+                        # Tampilkan chunk count dari Qdrant
+                        try:
+                            from qdrant_client.models import Filter, FieldCondition, MatchValue
+                            from app.dashboard.rag_client import _get_qdrant
+                            from app.rag.embedder import COLLECTION_NAME
+                            client_q = _get_qdrant()
+                            count_res = client_q.count(
+                                collection_name=COLLECTION_NAME,
+                                count_filter=Filter(
+                                    must=[FieldCondition(
+                                        key="doc_id",
+                                        match=MatchValue(value=sf["doc_id"])
+                                    )]
+                                ),
+                                exact=True,
+                            )
+                            chunk_count = count_res.count
+                            if chunk_count > 0:
+                                st.success(f"✅ **{chunk_count:,} chunks** tersimpan di Qdrant")
+                            else:
+                                st.warning("⚠️ Belum ada chunks di Qdrant — lakukan Ingest")
+                        except Exception:
+                            st.info("Tidak bisa cek status Qdrant.")
+
+                    with col_act:
+                        st.caption("Aksi")
+
+                        # Re-ingest
+                        reingest_key = f"reingest_stix_{sf['filename']}"
+                        if st.button("🔄 Ingest / Re-ingest", key=reingest_key, type="primary"):
+                            st.session_state[f"confirm_reingest_stix_{sf['filename']}"] = True
+
+                        if st.session_state.get(f"confirm_reingest_stix_{sf['filename']}"):
+                            st.warning(
+                                f"⚠️ Proses ini akan embed **ribuan chunks** dan membutuhkan waktu lama "
+                                f"serta memanggil API embedding. Lanjutkan?"
+                            )
+                            col_yes, col_no = st.columns(2)
+                            if col_yes.button("Ya, mulai", key=f"yes_stix_{sf['filename']}", type="primary"):
+                                st.session_state.pop(f"confirm_reingest_stix_{sf['filename']}", None)
+                                with st.spinner(
+                                    f"Memproses {sf['filename']}... (bisa beberapa menit)"
+                                ):
+                                    result = reingest_stix(sf["filename"])
+                                if "error" in result:
+                                    st.error(result["error"])
+                                else:
+                                    st.success(
+                                        f"✅ Selesai!\n\n"
+                                        f"Dihapus: {result['deleted']} chunk lama\n\n"
+                                        f"Diupload: {result['uploaded']} chunk baru"
+                                    )
+                                    _clear_cache()
+                                    st.rerun()
+                            if col_no.button("Batal", key=f"no_stix_{sf['filename']}"):
+                                st.session_state.pop(f"confirm_reingest_stix_{sf['filename']}", None)
+                                st.rerun()
+
+                        st.divider()
+
+                        # Hapus chunks dari Qdrant saja
+                        if st.button("🗑️ Hapus dari Qdrant", key=f"del_stix_vec_{sf['filename']}"):
+                            st.session_state[f"confirm_del_stix_{sf['filename']}"] = True
+
+                        if st.session_state.get(f"confirm_del_stix_{sf['filename']}"):
+                            st.warning("Semua chunks akan dihapus dari Qdrant (file tetap ada).")
+                            col_yes2, col_no2 = st.columns(2)
+                            if col_yes2.button("Ya, hapus", key=f"yes_del_stix_{sf['filename']}", type="primary"):
+                                n = delete_chunks_by_doc_id(sf["doc_id"])
+                                st.success(f"{n} chunks dihapus dari Qdrant.")
+                                _clear_cache()
+                                st.session_state.pop(f"confirm_del_stix_{sf['filename']}", None)
+                                st.rerun()
+                            if col_no2.button("Batal", key=f"no_del_stix_{sf['filename']}"):
+                                st.session_state.pop(f"confirm_del_stix_{sf['filename']}", None)
+                                st.rerun()
+
+        st.divider()
+
+        # --- Upload STIX baru ---
+        st.subheader("Upload File STIX Baru")
+        st.caption(
+            "Upload file STIX JSON dari MITRE ATT&CK Navigator atau TAXII. "
+            "Nama file standar: `enterprise-attack.json`, `mobile-attack.json`, `ics-attack.json`."
+        )
+
+        uploaded_stix = st.file_uploader(
+            "Pilih file STIX JSON",
+            type=["json"],
+            accept_multiple_files=False,
+            key="stix_uploader",
+        )
+
+        if uploaded_stix is not None:
+            st.info(f"File dipilih: **{uploaded_stix.name}** ({uploaded_stix.size / 1024 / 1024:.1f} MB)")
+            col_save, col_ingest = st.columns(2)
+
+            if col_save.button("💾 Simpan File Saja", use_container_width=True):
+                save_stix(uploaded_stix.name, uploaded_stix.getvalue())
+                st.success(f"File `{uploaded_stix.name}` disimpan. Lakukan Ingest dari panel di atas.")
+                _clear_cache()
+                st.rerun()
+
+            if col_ingest.button("🚀 Simpan & Ingest Sekarang", type="primary", use_container_width=True):
+                save_stix(uploaded_stix.name, uploaded_stix.getvalue())
+                with st.spinner("Memproses STIX... (bisa beberapa menit)"):
+                    result = reingest_stix(uploaded_stix.name)
+                if "error" in result:
+                    st.error(result["error"])
+                else:
+                    st.success(
+                        f"✅ **{uploaded_stix.name}** berhasil diingest!\n\n"
+                        f"Chunks diupload ke Qdrant: **{result['uploaded']}**"
+                    )
+                    _clear_cache()
+                    st.rerun()
+
 
 # ---------------------------------------------------------------------------
 # Halaman: Edit Metadata
@@ -524,7 +686,7 @@ def main() -> None:
         st.caption("Qdrant URL: " + __import__("os").getenv("QDRANT_URL", "http://localhost:6333"))
 
         st.divider()
-        st.page_link("main.py", label="← Kembali ke Dashboard Tiket", icon="🛡️")
+        st.markdown("🛡️ [← Kembali ke Dashboard Tiket](http://localhost:8501)")
 
     if page == "Status Collection":
         page_status()

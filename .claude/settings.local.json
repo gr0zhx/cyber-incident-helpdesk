@@ -24,7 +24,9 @@
       "Bash(DATABASE_URL=postgresql://postgres:password@localhost:5432/helpdesk python -m alembic upgrade head)",
       "Bash(ls /e/Kuliah/TA/Kode/pusdatin-help/*.ini /e/Kuliah/TA/Kode/pusdatin-help/*.toml /e/Kuliah/TA/Kode/pusdatin-help/*.cfg)",
       "Bash(dir \"e:\\\\Kuliah\\\\TA\\\\Kode\\\\pusdatin-help\\\\config\\\\prompts\")",
-      "Bash(pip show:*)"
+      "Bash(pip show:*)",
+      "Bash(alembic upgrade:*)",
+      "Bash(DATABASE_URL=postgresql://postgres:password@localhost:5432/helpdesk alembic upgrade head)"
     ]
   }
 }

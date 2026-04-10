@@ -19,8 +19,9 @@ from app.rag.embedder import COLLECTION_NAME
 _KB_ROOT = Path(__file__).resolve().parents[2] / "knowledge_base"
 _DOCS_DIR = _KB_ROOT / "documents"
 _META_DIR = _KB_ROOT / "metadata"
+_STIX_DIR = _KB_ROOT  # STIX JSON files di-simpan di root knowledge_base
 
-ALLOWED_EXTENSIONS = {".pdf"}
+ALLOWED_EXTENSIONS = {".pdf", ".json"}
 
 
 def _get_qdrant() -> QdrantClient:
@@ -40,8 +41,8 @@ def get_collection_info() -> dict:
         info = client.get_collection(COLLECTION_NAME)
         return {
             "name": COLLECTION_NAME,
-            "total_vectors": info.vectors_count,
-            "indexed_vectors": info.indexed_vectors_count,
+            "total_vectors": info.vectors_count or 0,
+            "indexed_vectors": info.indexed_vectors_count or 0,
             "status": str(info.status),
             "on_disk": info.config.params.vectors.on_disk if info.config.params.vectors else False,
         }
@@ -279,6 +280,99 @@ def reingest_document(meta_filename: str) -> dict:
     return {
         "doc_id": doc_id,
         "doc_title": meta["doc_title"],
+        "deleted": deleted,
+        "uploaded": uploaded,
+    }
+
+
+# ---------------------------------------------------------------------------
+# Manajemen file STIX (ATT&CK)
+# ---------------------------------------------------------------------------
+
+def _stix_filename_to_doc_id(filename: str) -> str:
+    """Konversi nama file STIX ke doc_id Qdrant.
+
+    Contoh: enterprise-attack.json → mitre-attack-enterprise
+    """
+    stem = Path(filename).stem  # enterprise-attack
+    if stem == "enterprise-attack":
+        return "mitre-attack-enterprise"
+    if stem == "mobile-attack":
+        return "mitre-attack-mobile"
+    if stem == "ics-attack":
+        return "mitre-attack-ics"
+    # Fallback: prefix mitre-
+    return f"mitre-{stem}"
+
+
+def list_stix_files() -> list[dict]:
+    """Daftar semua file STIX JSON di root knowledge_base."""
+    result = []
+    for f in sorted(_STIX_DIR.glob("*.json")):
+        doc_id = _stix_filename_to_doc_id(f.name)
+        result.append({
+            "filename": f.name,
+            "size_mb": round(f.stat().st_size / 1024 / 1024, 1),
+            "doc_id": doc_id,
+        })
+    return result
+
+
+def save_stix(filename: str, file_bytes: bytes) -> Path:
+    """Simpan file STIX JSON ke direktori knowledge_base root."""
+    dest = _STIX_DIR / filename
+    dest.write_bytes(file_bytes)
+    return dest
+
+
+def delete_stix(filename: str) -> bool:
+    """Hapus file STIX dari direktori knowledge_base."""
+    path = _STIX_DIR / filename
+    if path.exists():
+        path.unlink()
+        return True
+    return False
+
+
+def reingest_stix(filename: str) -> dict:
+    """Re-ingest satu file STIX: hapus chunks lama, parse ulang, embed, upload.
+
+    Returns:
+        {"doc_id": ..., "filename": ..., "deleted": N, "uploaded": N, "error": ...}
+    """
+    from app.rag.chunker import chunk_documents
+    from app.rag.embedder import embed_chunks, upload_chunks
+    from app.rag.ingestion import ingest_attack_stix
+    from app.utils.llm_client import create_embedder
+
+    stix_path = _STIX_DIR / filename
+    if not stix_path.exists():
+        return {"error": f"File STIX tidak ditemukan: {filename}"}
+
+    doc_id = _stix_filename_to_doc_id(filename)
+
+    # 1. Hapus chunks lama
+    deleted = delete_chunks_by_doc_id(doc_id)
+
+    # 2. Parse STIX → Documents
+    docs = ingest_attack_stix(stix_path, doc_id=doc_id)
+    if not docs:
+        return {"error": "Tidak ada dokumen yang berhasil di-parse dari file STIX."}
+
+    # 3. Chunk
+    chunks = chunk_documents(docs)
+
+    # 4. Embed
+    embedder = create_embedder()
+    vectors = embed_chunks(chunks, embedder)
+
+    # 5. Upload
+    client = _get_qdrant()
+    uploaded = upload_chunks(client, chunks, vectors)
+
+    return {
+        "doc_id": doc_id,
+        "filename": filename,
         "deleted": deleted,
         "uploaded": uploaded,
     }

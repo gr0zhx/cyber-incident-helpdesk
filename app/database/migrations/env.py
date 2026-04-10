@@ -1,6 +1,8 @@
 import os
 from logging.config import fileConfig
+from pathlib import Path
 
+from dotenv import load_dotenv
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
@@ -8,14 +10,21 @@ from alembic import context
 
 from app.database.models import Base
 
+# Load .env dari root proyek agar DATABASE_URL tersedia
+load_dotenv(Path(__file__).resolve().parents[3] / ".env")
+
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
 
-# Override sqlalchemy.url from environment variable if set
+# Override sqlalchemy.url dari environment variable
 database_url = os.environ.get("DATABASE_URL")
 if database_url:
     config.set_main_option("sqlalchemy.url", database_url)
+elif not config.get_main_option("sqlalchemy.url", fallback=None):
+    raise RuntimeError(
+        "DATABASE_URL tidak ditemukan. Set di .env atau environment variable."
+    )
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.

@@ -2,7 +2,6 @@ import json
 import re
 from pathlib import Path
 
-from langchain_community.document_loaders import PyPDFLoader
 from langchain_core.documents import Document
 
 # ---------------------------------------------------------------------------
@@ -63,6 +62,7 @@ def load_metadata(metadata_path: str | Path) -> dict:
 
 def ingest_document(pdf_path: str | Path, metadata: dict) -> list[Document]:
     """Load a PDF and return one Document per page with enriched metadata."""
+    from langchain_community.document_loaders import PyPDFLoader
     loader = PyPDFLoader(str(pdf_path))
     pages = loader.load()
 
@@ -278,7 +278,12 @@ def ingest_attack_stix(
         + _parse_techniques(bundle_objects, doc_id)
     )
 
-    mitigations = sum(1 for d in documents if d.metadata.get("object_type") == "mitigation")
-    techniques  = sum(1 for d in documents if d.metadata.get("object_type") == "technique")
+    mitigations = techniques = 0
+    for d in documents:
+        t = d.metadata.get("object_type")
+        if t == "mitigation":
+            mitigations += 1
+        elif t == "technique":
+            techniques += 1
     print(f"[MITRE ATT&CK] {mitigations} mitigasi + {techniques} teknik = {len(documents)} dokumen")
     return documents

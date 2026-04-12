@@ -1,5 +1,12 @@
 """Template pesan Telegram untuk notifikasi CSIRT, konfirmasi pelapor, dan update status."""
 
+from app.constants import (
+    STATUS_PENDING_REVIEW,
+    STATUS_IN_PROGRESS,
+    STATUS_RESOLVED,
+    STATUS_CLOSED,
+)
+
 SEVERITY_EMOJI = {
     "Kritis": "🔴",
     "Tinggi": "🟠",
@@ -22,10 +29,10 @@ CSIRT_ALERT_TEMPLATE = """\
 🔧 Rekomendasi Awal:
 {mitigation_short}
 
-📎 Detail lengkap tersedia di sistem tiket."""
+📎 Detail lengkap tersedia di sistem tiket"""
 
 REPORTER_CONFIRMATION_TEMPLATE = """\
-✅ Laporan Anda telah diterima.
+✅ Laporan Anda telah diterima
 
 📌 Tiket: {ticket_id}
 📋 Jenis Insiden: {incident_type} (Kepercayaan: {confidence}%)
@@ -61,10 +68,10 @@ def format_csirt_alert(
 
 
 _STATUS_INFO: dict[str, tuple[str, str, str]] = {
-    "PENDING_REVIEW":  ("⏳", "Menunggu Tinjauan",  "Laporan Anda sedang dalam antrian tinjauan tim CSIRT."),
-    "IN_PROGRESS":     ("🔄", "Sedang Ditangani",   "Tim CSIRT sedang aktif menangani insiden Anda."),
-    "RESOLVED":        ("✅", "Terselesaikan",       "Insiden Anda telah berhasil ditangani oleh tim CSIRT."),
-    "CLOSED":          ("🔒", "Ditutup",             "Tiket ini telah ditutup. Hubungi CSIRT jika masalah muncul kembali."),
+    STATUS_PENDING_REVIEW: ("⏳", "Menunggu Tinjauan",  "Laporan Anda sedang dalam antrian tinjauan tim CSIRT"),
+    STATUS_IN_PROGRESS:    ("🔄", "Sedang Ditangani",   "Tim CSIRT sedang aktif menangani insiden Anda"),
+    STATUS_RESOLVED:       ("✅", "Terselesaikan",       "Insiden Anda telah berhasil ditangani oleh tim CSIRT"),
+    STATUS_CLOSED:         ("🔒", "Ditutup",             "Tiket ini telah ditutup. Hubungi CSIRT jika masalah muncul kembali"),
 }
 
 STATUS_UPDATE_TEMPLATE = """\

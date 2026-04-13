@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Inbox — Admin{% endblock %}
+
+{% block layout %}
+<aside class="sidebar">
+  <div class="logo"><div class="logo-dot">P</div><span>Pusdatin CSIRT</span></div>
+  <a class="nav-item active">📥 Inbox</a>
+  <a class="nav-item">🎫 Tiket</a>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <h2 style="font-size: 16px;">Inbox Tiket</h2>
+    <form method="post" action="/admin/logout">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <button type="submit" class="btn btn-outline">Logout</button>
+    </form>
+  </div>
+  <div class="card" style="margin-top: 20px;">
+    <p>Halo, <strong>{{ admin.full_name }}</strong> — halaman inbox akan diimplementasikan di Plan B.</p>
+  </div>
+</main>
+{% endblock %}

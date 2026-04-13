@@ -34,3 +34,6 @@ app/database/migrations/versions/*.pyc
 TA (Progress Saya)/
 TA (Rujukan)/
 .superpowers/
+
+# Web interface
+web_uploads/

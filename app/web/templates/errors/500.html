@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}500 — Server Error{% endblock %}
+{% block layout %}
+<div style="grid-column: 1 / -1; display: flex; align-items: center; justify-content: center; min-height: 100vh;">
+  <div style="text-align: center;">
+    <h1 style="font-size: 48px; color: #dc2626;">500</h1>
+    <p style="color: #64748b;">Terjadi kesalahan server.</p>
+    {% if trace_id %}
+      <p style="color: #94a3b8; font-size: 11px;">Trace ID: {{ trace_id }}</p>
+    {% endif %}
+    <a class="btn btn-primary" href="/">Kembali ke Beranda</a>
+  </div>
+</div>
+{% endblock %}

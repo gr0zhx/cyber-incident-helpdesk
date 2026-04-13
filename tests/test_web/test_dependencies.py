@@ -9,8 +9,11 @@ from starlette.requests import Request
 from starlette.responses import RedirectResponse
 
 from app.database.models import Admin
-from app.web import dependencies as deps_module
-from app.web.dependencies import _RedirectException, get_current_admin
+from app.web.dependencies import (
+    _RedirectException,
+    get_current_admin,
+    get_db_session,
+)
 
 
 @pytest.fixture
@@ -21,7 +24,7 @@ def admin_row():
     )
 
 
-def _make_app(monkeypatch, admin_row, is_active=True):
+def _make_app(admin_row, is_active=True):
     if admin_row is not None:
         admin_row.is_active = is_active
 
@@ -31,9 +34,8 @@ def _make_app(monkeypatch, admin_row, is_active=True):
         q.first.return_value = admin_row
         yield db
 
-    monkeypatch.setattr(deps_module, "get_db_session", fake_get_db_session)
-
     app = FastAPI()
+    app.dependency_overrides[get_db_session] = fake_get_db_session
     app.add_middleware(SessionMiddleware, secret_key="k")
 
     @app.exception_handler(_RedirectException)
@@ -52,23 +54,23 @@ def _make_app(monkeypatch, admin_row, is_active=True):
     return TestClient(app)
 
 
-def test_protected_without_session_redirects(monkeypatch, admin_row):
-    client = _make_app(monkeypatch, admin_row)
+def test_protected_without_session_redirects(admin_row):
+    client = _make_app(admin_row)
     r = client.get("/protected", follow_redirects=False)
     assert r.status_code in (302, 303, 307)
     assert "/admin/login" in r.headers["location"]
 
 
-def test_protected_with_valid_session(monkeypatch, admin_row):
-    client = _make_app(monkeypatch, admin_row)
+def test_protected_with_valid_session(admin_row):
+    client = _make_app(admin_row)
     client.get("/login")
     r = client.get("/protected")
     assert r.status_code == 200
     assert r.json() == {"username": "admin1"}
 
 
-def test_protected_with_inactive_admin(monkeypatch, admin_row):
-    client = _make_app(monkeypatch, admin_row, is_active=False)
+def test_protected_with_inactive_admin(admin_row):
+    client = _make_app(admin_row, is_active=False)
     client.get("/login")
     r = client.get("/protected", follow_redirects=False)
     assert r.status_code in (302, 303, 307)

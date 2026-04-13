@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from typing import Generator
 
-from fastapi import Request
+from fastapi import Depends, Request
 from sqlalchemy.orm import Session
 
 from app.database.connection import get_db as _get_db
@@ -20,7 +20,10 @@ def get_db_session() -> Generator[Session, None, None]:
     yield from _get_db()
 
 
-def get_current_admin(request: Request) -> Admin:
+def get_current_admin(
+    request: Request,
+    db: Session = Depends(get_db_session),
+) -> Admin:
     """Load admin dari session cookie.
 
     Raises _RedirectException (ditangkap exception handler) kalau tidak ada/invalid.
@@ -29,19 +32,11 @@ def get_current_admin(request: Request) -> Admin:
     if not admin_id:
         raise _RedirectException(f"/admin/login?next={request.url.path}")
 
-    db_gen = get_db_session()
-    db = next(db_gen)
-    try:
-        admin = db.query(Admin).filter_by(id=admin_id).first()
-        if admin is None or not admin.is_active:
-            request.session.clear()
-            raise _RedirectException("/admin/login")
-        return admin
-    finally:
-        try:
-            next(db_gen)
-        except StopIteration:
-            pass
+    admin = db.query(Admin).filter_by(id=admin_id).first()
+    if admin is None or not admin.is_active:
+        request.session.clear()
+        raise _RedirectException("/admin/login")
+    return admin
 
 
 def get_csrf_token(request: Request) -> str:

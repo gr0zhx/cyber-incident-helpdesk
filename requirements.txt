@@ -41,3 +41,11 @@ requests==2.32.*
 pytest==8.*
 pytest-asyncio==0.26.*
 
+# Web interface (Plan A)
+passlib[bcrypt]==1.7.4
+itsdangerous==2.2.0
+slowapi==0.1.9
+python-multipart==0.0.20
+python-magic; platform_system != "Windows"
+python-magic-bin; platform_system == "Windows"
+fakeredis==2.26.1

@@ -1,0 +1,17 @@
+{% macro csrf_input(token) %}
+  <input type="hidden" name="csrf_token" value="{{ token }}">
+{% endmacro %}
+
+{% macro badge(text, variant='default') %}
+  <span class="badge badge-{{ variant }}">{{ text }}</span>
+{% endmacro %}
+
+{% macro flash(messages) %}
+  {% if messages %}
+    <div class="flash-container">
+      {% for msg in messages %}
+        <div class="flash flash-{{ msg.level }}">{{ msg.text }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endmacro %}

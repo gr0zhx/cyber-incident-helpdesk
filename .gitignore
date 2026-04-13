@@ -31,3 +31,6 @@ htmlcov/
 
 # Alembic
 app/database/migrations/versions/*.pyc
+TA (Progress Saya)/
+TA (Rujukan)/
+.superpowers/

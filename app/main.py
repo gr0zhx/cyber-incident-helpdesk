@@ -5,6 +5,7 @@ from fastapi import FastAPI
 
 from app.api.routes import router
 from app.utils.logger import configure_logging
+from app.web.app import register_web
 
 
 @asynccontextmanager
@@ -21,11 +22,7 @@ app = FastAPI(
 )
 
 app.include_router(router)
-
-
-@app.get("/")
-def root() -> dict:
-    return {"status": "ok"}
+register_web(app)
 
 
 @app.get("/health")

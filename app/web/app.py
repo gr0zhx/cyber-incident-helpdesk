@@ -14,8 +14,9 @@ from app.web.dependencies import _RedirectException
 from app.web.middleware.csrf import CSRFMiddleware
 from app.web.middleware.rate_limit import limiter
 from app.web.middleware.security_headers import SecurityHeadersMiddleware
+from app.web.routes.admin_actions import router as admin_actions_router
 from app.web.routes.admin_auth import router as admin_auth_router
-from app.web.routes.admin_inbox_stub import router as admin_inbox_router
+from app.web.routes.admin_inbox import router as admin_inbox_router
 from app.web.routes.landing import router as landing_router
 
 STATIC_DIR = Path(__file__).resolve().parent / "static"
@@ -55,3 +56,4 @@ def register_web(app: FastAPI) -> None:
     app.include_router(landing_router)
     app.include_router(admin_auth_router)
     app.include_router(admin_inbox_router)
+    app.include_router(admin_actions_router)

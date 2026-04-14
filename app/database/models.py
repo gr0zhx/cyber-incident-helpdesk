@@ -90,3 +90,16 @@ class Admin(Base):
     is_active = Column(Boolean, default=True, nullable=False)
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     last_login_at = Column(DateTime, nullable=True)
+
+
+class TicketAttachment(Base):
+    __tablename__ = "ticket_attachments"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    ticket_id = Column(String(32), nullable=False, index=True)  # FK logis, tanpa constraint (prototipe)
+    original_filename = Column(String(255), nullable=False)
+    stored_path = Column(String(512), nullable=False)
+    mime_type = Column(String(128), nullable=False)
+    size_bytes = Column(Integer, nullable=False)
+    uploaded_by = Column(String(128), nullable=False)  # session_id pelapor atau admin username
+    uploaded_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))

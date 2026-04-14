@@ -1,0 +1,36 @@
+{# app/web/templates/pelapor/identitas.html #}
+{% extends "base.html" %}
+{% block title %}Laporkan Insiden — Pusdatin Helpdesk{% endblock %}
+{% block layout %}
+<div style="display: grid; grid-template-columns: 280px 1fr; min-height: 100vh;">
+  <aside style="background: #0f172a; color: #f8fafc; padding: 24px 16px;">
+    <h2 style="font-size: 18px; margin-bottom: 8px;">Pusdatin CSIRT</h2>
+    <p style="color: #64748b; font-size: 13px;">Sistem Helpdesk Keamanan Siber</p>
+  </aside>
+  <main style="padding: 48px 64px; background: #f8fafc; display: flex; align-items: center; justify-content: center;">
+    <div style="width: 100%; max-width: 480px;">
+      <h1 style="font-size: 28px; color: #0f172a; margin-bottom: 8px;">Laporkan Insiden</h1>
+      <p style="color: #64748b; margin-bottom: 32px;">Isi identitas Anda sebelum mulai chat.</p>
+      {% if error %}
+      <div style="background: #fee2e2; border: 1px solid #fca5a5; border-radius: 6px; padding: 12px; margin-bottom: 16px; color: #dc2626;">{{ error }}</div>
+      {% endif %}
+      <form method="post" action="/lapor">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <div style="margin-bottom: 16px;">
+          <label for="reporter_name" style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px;">Nama Lengkap *</label>
+          <input id="reporter_name" type="text" name="reporter_name" required class="form-control" placeholder="Nama Anda">
+        </div>
+        <div style="margin-bottom: 16px;">
+          <label for="reporter_contact" style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px;">Kontak (WhatsApp/Email)</label>
+          <input id="reporter_contact" type="text" name="reporter_contact" class="form-control" placeholder="08xx atau email@kementan.go.id">
+        </div>
+        <div style="margin-bottom: 24px;">
+          <label for="reporter_unit" style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px;">Unit/Divisi</label>
+          <input id="reporter_unit" type="text" name="reporter_unit" class="form-control" placeholder="Contoh: Divisi IT Pusdatin">
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px;">Mulai Laporkan &rarr;</button>
+      </form>
+    </div>
+  </main>
+</div>
+{% endblock %}

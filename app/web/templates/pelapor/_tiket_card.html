@@ -1,0 +1,12 @@
+{# app/web/templates/pelapor/_tiket_card.html #}
+<div style="align-self: flex-start; max-width: 70%; background: #eff6ff; border: 2px solid #2563eb; border-radius: 12px; padding: 16px;">
+  <p style="font-size: 12px; color: #2563eb; text-transform: uppercase; font-weight: 700; margin-bottom: 8px;">Tiket Dibuat</p>
+  <p style="font-family: monospace; font-size: 18px; font-weight: 700; color: #0f172a; margin-bottom: 8px;">{{ ticket_id }}</p>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 13px;">
+    <div><span style="color: #64748b;">Jenis:</span> {{ incident_type }}</div>
+    <div><span style="color: #64748b;">Severity:</span> {{ severity }}</div>
+    <div><span style="color: #64748b;">Escalation:</span> {{ escalation_level }}</div>
+    <div><span style="color: #64748b;">Confidence:</span> {{ "%.0f"|format(confidence_score * 100) }}%</div>
+  </div>
+  <a href="/lapor/tiket/{{ ticket_id }}" style="display: block; margin-top: 12px; font-size: 13px; color: #2563eb; text-decoration: none;">Lihat status tiket &rarr;</a>
+</div>

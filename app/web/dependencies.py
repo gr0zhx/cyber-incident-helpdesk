@@ -41,3 +41,23 @@ def get_current_admin(
 
 def get_csrf_token(request: Request) -> str:
     return request.session.get("csrf_token", "")
+
+
+class _ReporterNotFound(Exception):
+    """Pelapor belum isi identitas — redirect ke /lapor."""
+    def __init__(self, location: str = "/lapor") -> None:
+        self.location = location
+
+
+def get_reporter_session(request: Request) -> dict:
+    """Pastikan cookie sesi pelapor ada. Redirect ke /lapor jika belum."""
+    session = request.session
+    if not session.get("session_id") or not session.get("reporter_id"):
+        raise _ReporterNotFound("/lapor")
+    return {
+        "session_id": session["session_id"],
+        "reporter_id": session["reporter_id"],
+        "reporter_name": session.get("reporter_name", ""),
+        "reporter_contact": session.get("reporter_contact", ""),
+        "reporter_unit": session.get("reporter_unit", ""),
+    }

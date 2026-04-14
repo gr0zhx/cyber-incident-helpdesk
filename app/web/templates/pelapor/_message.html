@@ -1,0 +1,10 @@
+{# app/web/templates/pelapor/_message.html #}
+<div style="align-self: flex-end; max-width: 70%; background: #2563eb; color: white; padding: 12px 16px; border-radius: 12px 12px 4px 12px;">
+  {{ user_text }}
+</div>
+<div style="align-self: flex-start; max-width: 70%; background: white; border: 1px solid #e2e8f0; padding: 12px 16px; border-radius: 12px 12px 12px 4px;">
+  {{ bot_text }}
+</div>
+{% if ticket_id %}
+  {% include "pelapor/_tiket_card.html" %}
+{% endif %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block layout %}
+<div class="admin-shell" style="display: grid; grid-template-columns: 240px 1fr; min-height: 100vh;">
+  <aside style="background: #0f172a; color: #f8fafc; padding: 24px 16px;">
+    <h2 style="font-size: 18px; margin-bottom: 24px;">Pusdatin CSIRT</h2>
+    <nav style="display: flex; flex-direction: column; gap: 8px;">
+      <a href="/admin/inbox" style="color: #cbd5e1; text-decoration: none; padding: 8px 12px; border-radius: 6px;">Inbox Tiket</a>
+      <a href="/admin/rag" style="color: #64748b; text-decoration: none; padding: 8px 12px; border-radius: 6px;">Knowledge Base</a>
+      <a href="/admin/report" style="color: #64748b; text-decoration: none; padding: 8px 12px; border-radius: 6px;">Laporan</a>
+    </nav>
+    <form method="post" action="/admin/logout" style="margin-top: 32px;">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <button type="submit" class="btn" style="width: 100%; background: transparent; color: #cbd5e1; border: 1px solid #334155;">Logout</button>
+    </form>
+  </aside>
+  <main style="padding: 32px; background: #f8fafc;">
+    <header style="margin-bottom: 24px;">
+      <h1 style="font-size: 24px; color: #0f172a;">{% block page_title %}{% endblock %}</h1>
+    </header>
+    {% block content %}{% endblock %}
+  </main>
+</div>
+{% endblock %}

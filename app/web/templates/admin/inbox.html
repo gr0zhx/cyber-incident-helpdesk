@@ -1,0 +1,26 @@
+{% extends "admin/_shell.html" %}
+{% block page_title %}Inbox Tiket{% endblock %}
+{% block content %}
+<section style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+  <form hx-get="/admin/inbox/table"
+        hx-target="#inbox-table-wrap"
+        hx-trigger="change from:select, keyup changed delay:400ms from:input[name='search']"
+        hx-include="this"
+        style="display: grid; grid-template-columns: 1fr 1fr 2fr auto; gap: 12px;">
+    <select name="status" class="form-control">
+      <option value="">Semua status</option>
+      {% for s in statuses %}<option value="{{ s }}" {% if s == filters.status %}selected{% endif %}>{{ s }}</option>{% endfor %}
+    </select>
+    <select name="severity" class="form-control">
+      <option value="">Semua severity</option>
+      {% for s in ["LOW","MEDIUM","HIGH","CRITICAL"] %}<option value="{{ s }}" {% if s == filters.severity %}selected{% endif %}>{{ s }}</option>{% endfor %}
+    </select>
+    <input type="text" name="search" placeholder="Cari ticket_id atau nama pelapor..." value="{{ filters.search or '' }}" class="form-control">
+    <button type="button" class="btn" onclick="this.form.reset(); htmx.trigger(this.form, 'change');">Reset</button>
+  </form>
+</section>
+
+<div id="inbox-table-wrap">
+  {% include "admin/_inbox_table.html" %}
+</div>
+{% endblock %}

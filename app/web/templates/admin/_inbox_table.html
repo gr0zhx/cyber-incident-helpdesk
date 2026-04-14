@@ -1,0 +1,43 @@
+<div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
+  <table style="width: 100%; border-collapse: collapse;">
+    <thead style="background: #f1f5f9;">
+      <tr>
+        <th style="padding: 12px; text-align: left;">Ticket ID</th>
+        <th style="padding: 12px; text-align: left;">Waktu</th>
+        <th style="padding: 12px; text-align: left;">Pelapor</th>
+        <th style="padding: 12px; text-align: left;">Jenis</th>
+        <th style="padding: 12px; text-align: left;">Severity</th>
+        <th style="padding: 12px; text-align: left;">Status</th>
+        <th style="padding: 12px; text-align: left;">Assigned</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for t in result.items %}
+      <tr style="border-top: 1px solid #e2e8f0; cursor: pointer;"
+          onclick="window.location='/admin/tiket/{{ t.ticket_id }}'">
+        <td style="padding: 12px; font-family: monospace;">{{ t.ticket_id }}</td>
+        <td style="padding: 12px; color: #64748b; font-size: 13px;">{{ t.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
+        <td style="padding: 12px;">{{ t.reporter_name or t.reporter_id }}</td>
+        <td style="padding: 12px;">{{ t.incident_type }}</td>
+        <td style="padding: 12px;">{{ t.severity }}</td>
+        <td style="padding: 12px;"><span class="badge badge-{{ t.status|lower }}">{{ t.status }}</span></td>
+        <td style="padding: 12px; color: #64748b;">{{ t.assigned_to or "—" }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="7" style="padding: 32px; text-align: center; color: #94a3b8;">Tidak ada tiket cocok filter.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<nav style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0;">
+  <span style="color: #64748b; font-size: 13px;">Total {{ result.total }} tiket — Halaman {{ result.page }} dari {{ result.total_pages }}</span>
+  <div style="display: flex; gap: 8px;">
+    {% if result.page > 1 %}
+    <button class="btn" hx-get="/admin/inbox/table?page={{ result.page - 1 }}&status={{ filters.status or '' }}&severity={{ filters.severity or '' }}&search={{ filters.search or '' }}" hx-target="#inbox-table-wrap">← Prev</button>
+    {% endif %}
+    {% if result.page < result.total_pages %}
+    <button class="btn" hx-get="/admin/inbox/table?page={{ result.page + 1 }}&status={{ filters.status or '' }}&severity={{ filters.severity or '' }}&search={{ filters.search or '' }}" hx-target="#inbox-table-wrap">Next →</button>
+    {% endif %}
+  </div>
+</nav>

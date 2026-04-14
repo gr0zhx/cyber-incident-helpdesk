@@ -1,0 +1,29 @@
+{# app/web/templates/admin/report.html #}
+{% extends "admin/_shell.html" %}
+{% block page_title %}Generate Laporan{% endblock %}
+{% block content %}
+<div style="max-width: 600px;">
+  <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 24px;">
+    <p style="color: #64748b; margin-bottom: 24px; font-size: 14px;">
+      Generate laporan insiden per-tiket dalam format HTML yang dapat dicetak sebagai PDF via browser.
+    </p>
+    {% if error %}
+    <div style="background: #fee2e2; border: 1px solid #fca5a5; border-radius: 6px; padding: 12px; margin-bottom: 16px; color: #dc2626;">{{ error }}</div>
+    {% endif %}
+    <form method="post" action="/admin/report/generate">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <div style="margin-bottom: 16px;">
+        <label for="ticket_id" style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px;">Ticket ID *</label>
+        <input id="ticket_id" type="text" name="ticket_id" required class="form-control"
+               placeholder="INC-YYYYMMDD-XXXX" style="font-family: monospace;">
+      </div>
+      <div style="margin-bottom: 24px;">
+        <label for="prepared_by" style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px;">Disiapkan Oleh</label>
+        <input id="prepared_by" type="text" name="prepared_by" class="form-control"
+               value="Tim Keamanan Siber Pusdatin">
+      </div>
+      <button type="submit" class="btn btn-primary">Download Laporan &rarr;</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

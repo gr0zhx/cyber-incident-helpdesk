@@ -1,0 +1,101 @@
+{# app/web/templates/admin/rag.html #}
+{% extends "admin/_shell.html" %}
+{% block page_title %}Knowledge Base RAG{% endblock %}
+{% block content %}
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+  <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px;">
+    <h3 style="font-size: 13px; color: #64748b; text-transform: uppercase; margin-bottom: 12px;">Koleksi Qdrant</h3>
+    {% if collection.error %}
+    <p style="color: #dc2626;">{{ collection.error }}</p>
+    {% else %}
+    <div style="font-size: 28px; font-weight: 700; color: #0f172a;">{{ collection.total_vectors or 0 }}</div>
+    <div style="color: #64748b; font-size: 13px;">total vectors &middot; status: {{ collection.status or "&mdash;" }}</div>
+    {% endif %}
+  </div>
+  <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px;">
+    <h3 style="font-size: 13px; color: #64748b; text-transform: uppercase; margin-bottom: 12px;">Dokumen Terdaftar</h3>
+    <div style="font-size: 28px; font-weight: 700; color: #0f172a;">{{ documents|length }}</div>
+    <div style="color: #64748b; font-size: 13px;">PDF di knowledge_base/</div>
+  </div>
+</div>
+
+<div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 24px; margin-bottom: 24px;">
+  <h2 style="font-size: 16px; margin-bottom: 16px;">Upload Dokumen Baru</h2>
+  <form method="post" action="/admin/rag/upload" enctype="multipart/form-data">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+      <div>
+        <label style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px;">File PDF *</label>
+        <input type="file" name="file" accept=".pdf" required class="form-control">
+      </div>
+      <div>
+        <label style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px;">Doc ID (unik) *</label>
+        <input type="text" name="doc_id" required class="form-control" placeholder="nist-csf-v2">
+      </div>
+      <div>
+        <label style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px;">Judul Dokumen *</label>
+        <input type="text" name="doc_title" required class="form-control" placeholder="NIST Cybersecurity Framework v2">
+      </div>
+      <div>
+        <label style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px;">Framework Sumber</label>
+        <select name="source_framework" class="form-control">
+          {% for f in ["NIST","MITRE","BSSN","ISO27001","LAINNYA"] %}
+          <option value="{{ f }}">{{ f }}</option>{% endfor %}
+        </select>
+      </div>
+      <div>
+        <label style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px;">Incident Types (pisah koma)</label>
+        <input type="text" name="incident_types" class="form-control" placeholder="phishing,malware">
+      </div>
+      <div>
+        <label style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px;">Bahasa</label>
+        <select name="language" class="form-control">
+          <option value="id">Indonesia</option>
+          <option value="en">English</option>
+        </select>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Upload &amp; Ingest &rarr;</button>
+  </form>
+  {% if job_id %}
+  <div style="margin-top: 16px; padding: 12px; background: #eff6ff; border-radius: 6px; color: #1e40af;">
+    Ingest dimulai. Job ID: <code>{{ job_id }}</code> &mdash; Refresh halaman untuk melihat status.
+  </div>
+  {% endif %}
+</div>
+
+<div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 24px;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+    <h2 style="font-size: 16px;">Dokumen Terdaftar</h2>
+    <form method="post" action="/admin/rag/reindex">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <button type="submit" class="btn" style="font-size: 13px;">Reindex Semua</button>
+    </form>
+  </div>
+  <table style="width: 100%; border-collapse: collapse;">
+    <thead style="background: #f1f5f9;">
+      <tr>
+        <th style="padding: 10px; text-align: left;">Doc ID</th>
+        <th style="padding: 10px; text-align: left;">Judul</th>
+        <th style="padding: 10px; text-align: left;">Framework</th>
+        <th style="padding: 10px; text-align: left;">PDF</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for doc in documents %}
+      <tr style="border-top: 1px solid #e2e8f0;">
+        <td style="padding: 10px; font-family: monospace; font-size: 13px;">{{ doc.doc_id }}</td>
+        <td style="padding: 10px;">{{ doc.doc_title }}</td>
+        <td style="padding: 10px;">{{ doc.source_framework }}</td>
+        <td style="padding: 10px; font-size: 13px; color: {% if doc._pdf_exists %}#16a34a{% else %}#dc2626{% endif %};">
+          {% if doc._pdf_exists %}&#10003; {{ doc._pdf_size_kb }} KB{% else %}&#10007; hilang{% endif %}
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="4" style="padding: 24px; text-align: center; color: #94a3b8;">Belum ada dokumen.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

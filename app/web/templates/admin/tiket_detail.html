@@ -1,0 +1,97 @@
+{% extends "admin/_shell.html" %}
+{% block page_title %}Tiket {{ ticket.ticket_id }}{% endblock %}
+{% block content %}
+<div style="display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px;">
+
+  <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 24px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+      <div>
+        <div style="font-family: monospace; font-size: 20px; color: #0f172a;">{{ ticket.ticket_id }}</div>
+        <div style="color: #64748b; font-size: 13px;">{{ ticket.created_at.strftime("%d %b %Y %H:%M UTC") }}</div>
+      </div>
+      <div id="status-badge">
+        {% include "admin/_status_badge.html" %}
+      </div>
+    </div>
+
+    <h3 style="font-size: 14px; color: #64748b; text-transform: uppercase; margin-top: 24px;">Pelapor</h3>
+    <p><strong>{{ ticket.reporter_name or "—" }}</strong> ({{ ticket.reporter_id }})<br>
+       {{ ticket.reporter_contact or "" }} — {{ ticket.reporter_department or "" }}</p>
+
+    <h3 style="font-size: 14px; color: #64748b; text-transform: uppercase; margin-top: 24px;">Klasifikasi</h3>
+    <p>Jenis: <strong>{{ ticket.incident_type }}</strong> · Severity: <strong>{{ ticket.severity }}</strong>
+       · Confidence: {{ ticket.confidence_score or "n/a" }}<br>
+       Escalation: <strong>{{ ticket.escalation_level or "—" }}</strong></p>
+
+    <h3 style="font-size: 14px; color: #64748b; text-transform: uppercase; margin-top: 24px;">Deskripsi (sanitized)</h3>
+    <pre style="background: #f1f5f9; padding: 12px; border-radius: 6px; white-space: pre-wrap;">{{ ticket.description_sanitized }}</pre>
+
+    {% if ticket.mitigation_recommendation %}
+    <h3 style="font-size: 14px; color: #64748b; text-transform: uppercase; margin-top: 24px;">Rekomendasi Mitigasi</h3>
+    <div style="background: #eff6ff; padding: 12px; border-left: 3px solid #2563eb; border-radius: 4px;">
+      {{ ticket.mitigation_recommendation }}
+    </div>
+    {% endif %}
+
+    {% if attachments %}
+    <h3 style="font-size: 14px; color: #64748b; text-transform: uppercase; margin-top: 24px;">Attachment</h3>
+    <ul>
+      {% for att in attachments %}
+      <li><a href="/admin/tiket/{{ ticket.ticket_id }}/attachment/{{ loop.index0 }}">{{ att.filename }}</a> ({{ att.size_kb }} KB)</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 16px;">
+
+    <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px;">
+      <h3 style="font-size: 14px; color: #64748b; text-transform: uppercase; margin-bottom: 12px;">Update Status</h3>
+      <form hx-post="/admin/tiket/{{ ticket.ticket_id }}/status"
+            hx-target="#status-badge" hx-swap="innerHTML"
+            hx-headers='{"X-CSRF-Token": "{{ csrf_token }}"}'>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <select name="status" class="form-control">
+          {% for s in statuses %}<option value="{{ s }}" {% if s == ticket.status %}selected{% endif %}>{{ s }}</option>{% endfor %}
+        </select>
+        <button type="submit" class="btn btn-primary" style="margin-top: 8px; width: 100%;">Simpan</button>
+      </form>
+    </div>
+
+    <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px;">
+      <h3 style="font-size: 14px; color: #64748b; text-transform: uppercase; margin-bottom: 12px;">Assign</h3>
+      <form hx-post="/admin/tiket/{{ ticket.ticket_id }}/assign"
+            hx-target="this" hx-swap="afterend"
+            hx-headers='{"X-CSRF-Token": "{{ csrf_token }}"}'>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <input type="text" name="assignee" value="{{ ticket.assigned_to or '' }}" class="form-control" placeholder="username admin">
+        <button type="submit" class="btn" style="margin-top: 8px; width: 100%;">Assign</button>
+      </form>
+    </div>
+
+    <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px;">
+      <h3 style="font-size: 14px; color: #64748b; text-transform: uppercase; margin-bottom: 12px;">Escalation</h3>
+      <form hx-post="/admin/tiket/{{ ticket.ticket_id }}/escalation"
+            hx-target="this" hx-swap="afterend"
+            hx-headers='{"X-CSRF-Token": "{{ csrf_token }}"}'>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <select name="level" class="form-control">
+          {% for lv in ["LOW","MEDIUM","HIGH","CRITICAL"] %}<option value="{{ lv }}" {% if lv == ticket.escalation_level %}selected{% endif %}>{{ lv }}</option>{% endfor %}
+        </select>
+        <button type="submit" class="btn" style="margin-top: 8px; width: 100%;">Simpan</button>
+      </form>
+    </div>
+
+    <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px;">
+      <h3 style="font-size: 14px; color: #64748b; text-transform: uppercase; margin-bottom: 12px;">Notifikasi Pelapor</h3>
+      <form hx-post="/admin/tiket/{{ ticket.ticket_id }}/notify"
+            hx-target="this" hx-swap="afterend"
+            hx-headers='{"X-CSRF-Token": "{{ csrf_token }}"}'>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Kirim Update Status ke Pelapor</button>
+      </form>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

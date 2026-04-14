@@ -18,6 +18,8 @@ from app.web.routes.admin_actions import router as admin_actions_router
 from app.web.routes.admin_auth import router as admin_auth_router
 from app.web.routes.admin_inbox import router as admin_inbox_router
 from app.web.routes.landing import router as landing_router
+from app.web.routes.admin_rag import router as admin_rag_router
+from app.web.routes.admin_report import router as admin_report_router
 from app.web.routes.pelapor import router as pelapor_router
 
 STATIC_DIR = Path(__file__).resolve().parent / "static"
@@ -62,4 +64,6 @@ def register_web(app: FastAPI) -> None:
     app.include_router(admin_auth_router)
     app.include_router(admin_inbox_router)
     app.include_router(admin_actions_router)
+    app.include_router(admin_rag_router)
+    app.include_router(admin_report_router)
     app.include_router(pelapor_router)

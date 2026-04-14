@@ -10,7 +10,7 @@ from starlette.requests import Request
 from starlette.responses import RedirectResponse
 
 from app.web.config import get_web_config
-from app.web.dependencies import _RedirectException
+from app.web.dependencies import _RedirectException, _ReporterNotFound
 from app.web.middleware.csrf import CSRFMiddleware
 from app.web.middleware.rate_limit import limiter
 from app.web.middleware.security_headers import SecurityHeadersMiddleware
@@ -18,6 +18,7 @@ from app.web.routes.admin_actions import router as admin_actions_router
 from app.web.routes.admin_auth import router as admin_auth_router
 from app.web.routes.admin_inbox import router as admin_inbox_router
 from app.web.routes.landing import router as landing_router
+from app.web.routes.pelapor import router as pelapor_router
 
 STATIC_DIR = Path(__file__).resolve().parent / "static"
 
@@ -47,6 +48,10 @@ def register_web(app: FastAPI) -> None:
     async def _redirect_handler(request: Request, exc: _RedirectException):
         return RedirectResponse(url=exc.location, status_code=303)
 
+    @app.exception_handler(_ReporterNotFound)
+    async def _reporter_not_found_handler(request: Request, exc: _ReporterNotFound):
+        return RedirectResponse(url=exc.location, status_code=303)
+
     app.mount(
         "/web/static",
         StaticFiles(directory=str(STATIC_DIR)),
@@ -57,3 +62,4 @@ def register_web(app: FastAPI) -> None:
     app.include_router(admin_auth_router)
     app.include_router(admin_inbox_router)
     app.include_router(admin_actions_router)
+    app.include_router(pelapor_router)

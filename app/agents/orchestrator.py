@@ -36,10 +36,13 @@ def _validate_intent(parsed: dict) -> dict:
     needs_clarification = bool(parsed.get("needs_clarification", False))
     clarification_message = str(parsed.get("clarification_message", "")).strip()
 
-    # Konsistensi: needs_clarification hanya boleh True jika intent memang needs_clarification
-    if intent != "needs_clarification":
+    # needs_clarification boleh True untuk report_incident (kurang detail) ATAU
+    # untuk needs_clarification (terlalu ambigu). Untuk intent lain, reset.
+    if intent not in ("needs_clarification", "report_incident"):
         needs_clarification = False
         clarification_message = ""
+    if needs_clarification and not clarification_message:
+        needs_clarification = False
 
     return {
         "intent": intent,
@@ -105,6 +108,7 @@ class OrchestratorAgent:
         reporter_name: str = "",
         reporter_contact: str = "",
         session_id: str = "",
+        clarification_rounds: int = 0,
     ) -> IncidentState:
         """Buat IncidentState baru dengan field input terisi."""
         return IncidentState(
@@ -141,4 +145,5 @@ class OrchestratorAgent:
             # Meta
             processing_errors=[],
             agent_trace=[],
+            clarification_rounds=clarification_rounds,
         )

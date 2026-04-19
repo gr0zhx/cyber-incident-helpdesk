@@ -26,7 +26,14 @@
       "Bash(dir \"e:\\\\Kuliah\\\\TA\\\\Kode\\\\pusdatin-help\\\\config\\\\prompts\")",
       "Bash(pip show:*)",
       "Bash(alembic upgrade:*)",
-      "Bash(DATABASE_URL=postgresql://postgres:password@localhost:5432/helpdesk alembic upgrade head)"
+      "Bash(DATABASE_URL=postgresql://postgres:password@localhost:5432/helpdesk alembic upgrade head)",
+      "Bash(.venv/Scripts/pip install:*)",
+      "Bash(mkdir -p app/web/templates app/web/static/css app/web/static/js)",
+      "Bash(curl -sL https://unpkg.com/htmx.org@1.9.12/dist/htmx.min.js -o app/web/static/js/htmx.min.js)",
+      "Bash(cat docker-compose.yml)",
+      "Bash(ls *.yml *.yaml)",
+      "Bash(curl -s http://localhost:8000/api/v1/health)",
+      "Bash(curl -s http://localhost:8000/docs)"
     ]
   }
 }

@@ -206,6 +206,15 @@ def make_notifier_node(notifier):
 
 def route_by_intent(state: IncidentState) -> str:
     intent = state.get("intent", "report_incident")
+    rounds = state.get("clarification_rounds", 0)
+
+    # Hard limit: setelah 1 ronde klarifikasi, langsung proses — jangan tanya lagi
+    if rounds >= 1 and intent == "report_incident":
+        return "report_incident"
+
+    # report_incident dengan info kurang → minta klarifikasi (hanya ronde pertama)
+    if intent == "report_incident" and state.get("requires_clarification"):
+        return "needs_clarification"
     if intent == "report_incident":
         return "report_incident"
     if intent == "needs_clarification":

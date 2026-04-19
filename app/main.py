@@ -1,7 +1,10 @@
 """FastAPI application entry point."""
 from contextlib import asynccontextmanager
 
+from dotenv import load_dotenv
 from fastapi import FastAPI
+
+load_dotenv()
 
 from app.api.routes import router
 from app.utils.logger import configure_logging

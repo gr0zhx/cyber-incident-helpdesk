@@ -8,6 +8,15 @@ from __future__ import annotations
 import getpass
 import sys
 from datetime import datetime, timezone
+from pathlib import Path
+
+# Ensure repository root is on sys.path when this file is run directly.
+ROOT_DIR = Path(__file__).resolve().parents[1]
+if str(ROOT_DIR) not in sys.path:
+    sys.path.insert(0, str(ROOT_DIR))
+
+from dotenv import load_dotenv
+load_dotenv(ROOT_DIR / ".env")
 
 from passlib.hash import bcrypt
 

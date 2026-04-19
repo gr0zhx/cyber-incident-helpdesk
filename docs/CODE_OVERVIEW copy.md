@@ -2,7 +2,7 @@
 
 > Dokumen komprehensif untuk persiapan sidang skripsi: penjelasan **setiap file, setiap fungsi, setiap class**, logika internal, dan keterkaitan antar-modul.
 > Target pembaca: penulis (recall cepat) dan dosen penguji (verifikasi teknis).
-> Terakhir diperbarui: 2026-04-17.
+> Terakhir diperbarui: 2026-04-14.
 
 ---
 
@@ -1014,7 +1014,6 @@ return GuardrailsResult(sanitized_input=redacted, pii_mapping=mapping)
 - **Unsafe methods** (POST/PUT/PATCH/DELETE): Verifikasi token dari header `X-CSRF-Token` atau form field `csrf_token`.
 - **Exempt:** Semua path `/api/*` bypass CSRF.
 - Return **HTTP 403** jika token invalid atau hilang.
-- **Body buffering fix:** Saat membaca form field, middleware memanggil `await request.body()` terlebih dahulu untuk men-cache body di Starlette sebelum memanggil `request.form()`. Ini memastikan route handler tetap bisa membaca form data yang sama tanpa body habis dikonsumsi middleware.
 
 #### `app/web/middleware/security_headers.py` — SecurityHeadersMiddleware
 
@@ -1036,8 +1035,7 @@ Export `limiter = Limiter(key_func=get_remote_address)` untuk dipakai di routes 
 | File | Endpoint utama | Auth | Detail |
 |------|---------------|------|--------|
 | `landing.py` | `GET /` | None | Render `landing.html` |
-| `pelapor.py` | `GET /lapor` | None | Render form identitas |
-| | `POST /lapor` | None | `identitas_submit()` — **async**, strip whitespace reporter_name/contact/unit sebelum validasi, simpan ke session, redirect ke `/lapor/chat` |
+| `pelapor.py` | `GET/POST /lapor` | None | Form identitas → simpan ke session |
 | | `GET /lapor/chat` | Reporter session | Chat interface |
 | | `POST /lapor/chat/message` | Reporter session | Invoke pipeline via `ChatService`, return HTMX fragment (rate limit 20/min) |
 | | `POST /lapor/chat/upload` | Reporter session | `UploadService.save_pending()` |
@@ -1266,12 +1264,10 @@ Export `limiter = Limiter(key_func=get_remote_address)` untuk dipakai di routes 
 **CLI untuk buat admin pertama** saat pertama deploy.
 
 **Alur:**
-
-1. Auto-inject root repo ke `sys.path` (agar bisa dijalankan langsung dengan `python scripts/seed_admin.py` dari direktori manapun tanpa perlu `PYTHONPATH`).
-2. Prompt interaktif: username, email, full_name, password.
-3. Hash password: `bcrypt.hashpw(password.encode(), bcrypt.gensalt(rounds=12))`.
-4. Insert ke tabel `admins` via SQLAlchemy.
-5. Exit 0 jika sukses, exit 1 jika error.
+1. Prompt interaktif: username, email, full_name, password.
+2. Hash password: `bcrypt.hashpw(password.encode(), bcrypt.gensalt(rounds=12))`.
+3. Insert ke tabel `admins` via SQLAlchemy.
+4. Exit 0 jika sukses, exit 1 jika error.
 
 ---
 

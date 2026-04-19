@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "additionalDirectories": [
+      "e:\\Kuliah\\TA\\Kode\\pusdatin-help\\docs\\superpowers"
+    ],
+    "allow": [
+      "Bash(.venv/Scripts/pip show:*)"
+    ]
+  }
+}

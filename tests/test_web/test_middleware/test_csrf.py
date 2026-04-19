@@ -20,6 +20,16 @@ def _make_app():
     def submit():
         return {"ok": True}
 
+    @app.post("/form-data")
+    async def form_data(request: Request):
+        # Test that form data can be read after CSRF middleware reads it
+        if hasattr(request.state, "form_data"):
+            form = request.state.form_data
+        else:
+            form = await request.form()
+        name = form.get("name", "")
+        return {"name": name}
+
     return TestClient(app)
 
 
@@ -50,3 +60,15 @@ def test_post_with_valid_token_passes():
     token = r1.json()["csrf"]
     r2 = client.post("/submit", headers={"X-CSRF-Token": token})
     assert r2.status_code == 200
+
+
+def test_form_data_parsed_after_csrf_middleware_reads_it():
+    """Test that form data can still be extracted after CSRF middleware consumes it."""
+    client = _make_app()
+    r1 = client.get("/form")
+    token = r1.json()["csrf"]
+
+    # POST form data with CSRF token in form field
+    r2 = client.post("/form-data", data={"name": "Alice", "csrf_token": token})
+    assert r2.status_code == 200
+    assert r2.json()["name"] == "Alice"

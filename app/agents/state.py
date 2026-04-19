@@ -42,3 +42,4 @@ class IncidentState(TypedDict):
     # Meta
     processing_errors: list[str]
     agent_trace: list[dict]
+    clarification_rounds: int   # berapa kali sudah minta klarifikasi; batas = 1

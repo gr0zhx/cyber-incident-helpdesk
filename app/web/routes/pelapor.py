@@ -1,6 +1,8 @@
 """Routes untuk alur pelapor: identitas -> chat -> status tiket."""
+import html as _html
 import logging
 import os
+import re
 import uuid
 
 import redis as _redis_lib
@@ -19,6 +21,15 @@ from app.web.services.upload_service import UploadError, UploadService
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/lapor", tags=["pelapor"])
 templates = Jinja2Templates(directory="app/web/templates")
+
+
+def _render_md(text: str) -> str:
+    """Escape HTML then convert **bold** → <strong>bold</strong>."""
+    escaped = _html.escape(str(text))
+    return re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", escaped)
+
+
+templates.env.filters["render_md"] = _render_md
 
 
 def _redis_client():
@@ -43,7 +54,7 @@ def identitas_form(request: Request):
 
 
 @router.post("", response_class=HTMLResponse)
-def identitas_submit(
+async def identitas_submit(
     request: Request,
     reporter_name: str = Form(...),
     reporter_contact: str = Form(""),
@@ -51,6 +62,9 @@ def identitas_submit(
     db: Session = Depends(get_db_session),
 ):
     reporter_name = reporter_name.strip()
+    reporter_contact = reporter_contact.strip()
+    reporter_unit = reporter_unit.strip()
+
     if not reporter_name:
         return templates.TemplateResponse(
             "pelapor/identitas.html",
@@ -61,8 +75,8 @@ def identitas_submit(
     request.session["session_id"] = session_id
     request.session["reporter_id"] = f"web:{session_id}"
     request.session["reporter_name"] = reporter_name
-    request.session["reporter_contact"] = reporter_contact.strip()
-    request.session["reporter_unit"] = reporter_unit.strip()
+    request.session["reporter_contact"] = reporter_contact
+    request.session["reporter_unit"] = reporter_unit
     return RedirectResponse(url="/lapor/chat", status_code=303)
 
 

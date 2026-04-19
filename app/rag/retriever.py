@@ -44,11 +44,14 @@ def _reciprocal_rank_fusion(
 def _build_incident_filter(incident_type: str | None) -> Filter | None:
     if not incident_type:
         return None
+    # Normalise to match stored format: lowercase + spaces → underscores
+    # e.g. "Web Defacement" → "web_defacement", "Akses Tidak Sah" → "akses_tidak_sah"
+    normalised = incident_type.lower().replace(" ", "_")
     return Filter(
         must=[
             FieldCondition(
                 key="incident_types",
-                match=MatchValue(value=incident_type.lower()),
+                match=MatchValue(value=normalised),
             )
         ]
     )

@@ -245,11 +245,11 @@ class MitigationAdvisorAgent:
                 citations = _build_citations(valid_steps)
                 rag_confidence = _compute_rag_confidence(top_chunks)
 
-                # Re-assemble recommendation string
+                # Re-assemble recommendation string — citations separated to bottom
                 recommendation_parts = []
                 for s in valid_steps:
                     recommendation_parts.append(
-                        f"{s.get('step', '?')}. {s.get('action', '')} [{s.get('source', '')}]"
+                        f"{s.get('step', '?')}. {s.get('action', '')}"
                     )
                 general = parsed.get("general_guidance", "")
                 escalation = parsed.get("escalation_note", "")
@@ -257,6 +257,19 @@ class MitigationAdvisorAgent:
                     recommendation_parts.append(f"\nPanduan umum: {general}")
                 if escalation:
                     recommendation_parts.append(f"Catatan eskalasi: {escalation}")
+
+                # Deduplicated citation block at the end
+                seen_src: set[str] = set()
+                unique_sources: list[str] = []
+                for s in valid_steps:
+                    src = s.get("source", "")
+                    if src and src not in seen_src:
+                        seen_src.add(src)
+                        unique_sources.append(src)
+                if unique_sources:
+                    recommendation_parts.append("\nSumber:")
+                    for i, src in enumerate(unique_sources, 1):
+                        recommendation_parts.append(f"[{i}] {src}")
 
                 return {
                     "mitigation_recommendation": "\n".join(recommendation_parts),

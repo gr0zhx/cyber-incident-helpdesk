@@ -64,9 +64,23 @@ class ChatService:
         ts = datetime.now(timezone.utc).isoformat()
         history.append({"role": "user", "content": text, "ts": ts})
 
-        # Multi-turn context: concat last 3 user messages
-        user_msgs = [m["content"] for m in history if m["role"] == "user"]
-        context_text = "\n".join(user_msgs[-3:])
+        # Hitung berapa kali bot sudah minta klarifikasi sebelumnya
+        clarification_rounds = sum(
+            1 for m in history
+            if m["role"] == "assistant" and not m["content"].startswith("Tiket insiden")
+        )
+
+        # Jika sudah ada percakapan sebelumnya, kirim konteks lengkap (Q&A)
+        # agar orchestrator bisa memahami jawaban-jawaban user secara kontekstual
+        recent = history[-8:]  # maks 4 pasang pesan
+        if clarification_rounds >= 1:
+            context_text = "\n".join(
+                f"{'Pengguna' if m['role'] == 'user' else 'Asisten'}: {m['content']}"
+                for m in recent
+            )
+        else:
+            user_msgs = [m["content"] for m in history if m["role"] == "user"]
+            context_text = "\n".join(user_msgs[-3:])
 
         state = orchestrator.initialize_state(
             raw_input=context_text,
@@ -74,6 +88,7 @@ class ChatService:
             reporter_name=reporter_name,
             reporter_contact=reporter_contact,
             session_id=session_id,
+            clarification_rounds=clarification_rounds,
         )
 
         try:

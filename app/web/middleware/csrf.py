@@ -4,6 +4,7 @@ Strategi:
 - GET/HEAD/OPTIONS: generate token kalau belum ada di session.
 - POST/PATCH/PUT/DELETE: verify header X-CSRF-Token atau form field
   `csrf_token` cocok dengan token di session.
+- Body buffering: read body once, allow Route handlers to re-parse (Starlette caches).
 """
 from __future__ import annotations
 
@@ -44,8 +45,11 @@ class CSRFMiddleware(BaseHTTPMiddleware):
 
         if not token:
             try:
-                form = await request.form()
-                token = form.get(FORM_FIELD)
+                # Load body into memory first (caches it in Starlette).
+                # This allows request.form() to be called again by route handlers.
+                await request.body()
+                form_data = await request.form()
+                token = form_data.get(FORM_FIELD)
             except Exception:
                 token = None
 

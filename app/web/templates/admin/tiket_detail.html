@@ -41,6 +41,42 @@
       {% endfor %}
     </ul>
     {% endif %}
+
+    {% if ticket.agent_trace %}
+    <h3 style="font-size: 14px; color: #64748b; text-transform: uppercase; margin-top: 28px; margin-bottom: 12px;">
+      Agent Trace
+    </h3>
+    <div style="display: flex; flex-direction: column; gap: 6px;">
+      {% for step in ticket.agent_trace %}
+      <div style="display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px;
+                  background: {% if step.status == 'success' %}#f0fdf4{% elif step.status == 'fallback' %}#fff7ed{% elif step.status == 'blocked' or step.status == 'issues_found' %}#fef2f2{% else %}#f8fafc{% endif %};
+                  border-left: 3px solid {% if step.status == 'success' %}#22c55e{% elif step.status == 'fallback' %}#f59e0b{% elif step.status in ['blocked','issues_found'] %}#ef4444{% else %}#94a3b8{% endif %};
+                  border-radius: 0 6px 6px 0; font-size: 12px;">
+        <span style="font-family: monospace; font-weight: 700; color: #475569; min-width: 160px; flex-shrink: 0;">
+          {{ step.agent }}
+        </span>
+        <span style="padding: 1px 7px; border-radius: 4px; font-size: 11px; font-weight: 700;
+                     background: {% if step.status == 'success' %}#dcfce7; color:#166534{% elif step.status == 'fallback' %}#ffedd5; color:#9a3412{% elif step.status in ['blocked','issues_found'] %}#fee2e2; color:#991b1b{% else %}#f1f5f9; color:#475569{% endif %};">
+          {{ step.status }}
+        </span>
+        <span style="color: #64748b; font-size: 11px;">
+          {{ step.timestamp[11:19] if step.timestamp else "" }}
+        </span>
+        {# Extra fields #}
+        {% set skip = ['agent','status','timestamp'] %}
+        {% for k, v in step.items() %}
+          {% if k not in skip %}
+          <span style="color: #334155;">
+            <span style="color: #94a3b8;">{{ k }}:</span>
+            <strong>{{ v }}</strong>
+          </span>
+          {% endif %}
+        {% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
   </div>
 
   <div style="display: flex; flex-direction: column; gap: 16px;">

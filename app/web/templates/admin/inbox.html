@@ -1,25 +1,94 @@
+{# app/web/templates/admin/inbox.html #}
 {% extends "admin/_shell.html" %}
 {% block page_title %}Inbox Tiket{% endblock %}
 {% block content %}
-<section style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+
+{# ── Stats strip ── #}
+<div style="display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 24px;">
+  {% set stat_items = [
+    ("Total Tiket",   result.total,                       "#2563eb", "📋"),
+    ("Menunggu Review", result.pending_count | default(0), "#f59e0b", "⏳"),
+    ("Sedang Ditangani", result.inprogress_count | default(0), "#3b82f6", "🔄"),
+    ("Terselesaikan", result.resolved_count | default(0), "#10b981", "✅"),
+  ] %}
+  {% for label, val, color, icon in stat_items %}
+  <div style="background:white;border:1px solid #e2e8f0;border-radius:12px;padding:18px 20px;
+              display:flex;align-items:center;gap:14px;box-shadow:0 1px 4px rgba(15,23,42,.04);">
+    <div style="width:40px;height:40px;border-radius:10px;background:{{ color }}1a;
+                display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">
+      {{ icon }}
+    </div>
+    <div>
+      <p style="font-size:22px;font-weight:800;color:#0f172a;line-height:1;">{{ val }}</p>
+      <p style="font-size:12px;color:#64748b;margin-top:2px;">{{ label }}</p>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+{# ── Filter bar ── #}
+<div style="background:white;border:1px solid #e2e8f0;border-radius:12px;padding:16px 20px;margin-bottom:16px;
+            box-shadow:0 1px 4px rgba(15,23,42,.04);">
   <form hx-get="/admin/inbox/table"
         hx-target="#inbox-table-wrap"
         hx-trigger="change from:select, keyup changed delay:400ms from:input[name='search']"
         hx-include="this"
-        style="display: grid; grid-template-columns: 1fr 1fr 2fr auto; gap: 12px;">
-    <select name="status" class="form-control">
-      <option value="">Semua status</option>
-      {% for s in statuses %}<option value="{{ s }}" {% if s == filters.status %}selected{% endif %}>{{ s }}</option>{% endfor %}
-    </select>
-    <select name="severity" class="form-control">
-      <option value="">Semua severity</option>
-      {% for s in ["LOW","MEDIUM","HIGH","CRITICAL"] %}<option value="{{ s }}" {% if s == filters.severity %}selected{% endif %}>{{ s }}</option>{% endfor %}
-    </select>
-    <input type="text" name="search" placeholder="Cari ticket_id atau nama pelapor..." value="{{ filters.search or '' }}" class="form-control">
-    <button type="button" class="btn" onclick="this.form.reset(); htmx.trigger(this.form, 'change');">Reset</button>
-  </form>
-</section>
+        style="display:grid;grid-template-columns:180px 180px 1fr 100px;gap:10px;align-items:center;">
 
+    <div style="position:relative;">
+      <select name="status"
+              style="width:100%;padding:9px 12px;border:1.5px solid #e2e8f0;border-radius:8px;
+                     font-size:13px;font-family:inherit;color:#0f172a;background:white;
+                     outline:none;appearance:none;cursor:pointer;">
+        <option value="">Semua Status</option>
+        {% for s in statuses %}
+        <option value="{{ s }}" {% if s == filters.status %}selected{% endif %}>
+          {% if s == 'PENDING_REVIEW' %}⏳ Menunggu Review
+          {% elif s == 'IN_PROGRESS' %}🔄 Sedang Ditangani
+          {% elif s == 'RESOLVED' %}✅ Terselesaikan
+          {% elif s == 'CLOSED' %}🔒 Ditutup
+          {% else %}{{ s }}{% endif %}
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div style="position:relative;">
+      <select name="severity"
+              style="width:100%;padding:9px 12px;border:1.5px solid #e2e8f0;border-radius:8px;
+                     font-size:13px;font-family:inherit;color:#0f172a;background:white;
+                     outline:none;appearance:none;cursor:pointer;">
+        <option value="">Semua Severity</option>
+        {% for s in ["Kritis","Tinggi","Sedang","Rendah"] %}
+        <option value="{{ s }}" {% if s == filters.severity %}selected{% endif %}>
+          {% if s=="Kritis" %}🔴{% elif s=="Tinggi" %}🟠{% elif s=="Sedang" %}🟡{% else %}🟢{% endif %} {{ s }}
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <input type="text" name="search"
+           placeholder="🔍  Cari nomor tiket, nama pelapor, jenis insiden…"
+           value="{{ filters.search or '' }}"
+           style="padding:9px 14px;border:1.5px solid #e2e8f0;border-radius:8px;
+                  font-size:13px;font-family:inherit;color:#0f172a;outline:none;
+                  transition:border-color .15s;"
+           onfocus="this.style.borderColor='#2563eb'"
+           onblur="this.style.borderColor='#e2e8f0'">
+
+    <button type="button"
+            onclick="this.form.reset(); htmx.trigger(this.form, 'change');"
+            style="padding:9px 14px;border:1.5px solid #e2e8f0;border-radius:8px;
+                   font-size:13px;font-family:inherit;background:white;color:#64748b;
+                   cursor:pointer;transition:background .12s;"
+            onmouseover="this.style.background='#f1f5f9'"
+            onmouseout="this.style.background='white'">
+      ↺ Reset
+    </button>
+  </form>
+</div>
+
+{# ── Table ── #}
 <div id="inbox-table-wrap">
   {% include "admin/_inbox_table.html" %}
 </div>

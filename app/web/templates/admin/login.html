@@ -1,31 +1,231 @@
+{# app/web/templates/admin/login.html #}
 {% extends "base.html" %}
-{% block title %}Admin Login — Pusdatin Helpdesk{% endblock %}
-
+{% block title %}Admin Login — Pusdatin CSIRT{% endblock %}
 {% block layout %}
-<div style="grid-column: 1 / -1; display: flex; align-items: center; justify-content: center; min-height: 100vh;">
-  <div class="card" style="width: 360px;">
-    <div style="text-align: center; margin-bottom: 20px;">
-      <div style="width: 40px; height: 40px; background: #2563eb; border-radius: 8px; margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 600;">P</div>
-      <h2 style="font-size: 18px;">Admin Login</h2>
-      <p style="color: #64748b; font-size: 12px;">Pusdatin Helpdesk CSIRT</p>
+<style>
+  .app-shell { display: block; }
+
+  .adm-login-shell {
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    min-height: 100vh;
+  }
+
+  /* ── Left branding panel ── */
+  .adm-panel {
+    background: linear-gradient(160deg, #0f172a 0%, #1a2744 100%);
+    color: #f8fafc;
+    padding: 48px 40px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+  .adm-panel::before {
+    content: "";
+    position: absolute; top: -80px; right: -80px;
+    width: 320px; height: 320px;
+    background: rgba(220,38,38,.08);
+    border-radius: 50%;
+  }
+  .adm-panel::after {
+    content: "";
+    position: absolute; bottom: -60px; left: -60px;
+    width: 240px; height: 240px;
+    background: rgba(37,99,235,.10);
+    border-radius: 50%;
+  }
+
+  .adm-logo {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 56px; position: relative; z-index: 1;
+  }
+  .adm-logo-icon {
+    width: 44px; height: 44px;
+    background: #dc2626;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    box-shadow: 0 4px 14px rgba(220,38,38,.4);
+  }
+  .adm-logo-text strong { font-size: 16px; font-weight: 700; display: block; }
+  .adm-logo-text span { font-size: 12px; color: #94a3b8; }
+
+  .adm-headline { position: relative; z-index: 1; flex: 1; }
+  .adm-headline h1 {
+    font-size: 28px; font-weight: 800;
+    line-height: 1.25; margin-bottom: 16px; letter-spacing: -.3px;
+  }
+  .adm-headline h1 span { color: #f87171; }
+  .adm-headline p { font-size: 14px; color: #94a3b8; line-height: 1.7; margin-bottom: 40px; }
+
+  .adm-features { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+  .adm-features li {
+    display: flex; align-items: flex-start; gap: 12px;
+    font-size: 13px; color: #cbd5e1; line-height: 1.5;
+  }
+  .adm-features li .feat-icon {
+    width: 28px; height: 28px; flex-shrink: 0;
+    background: rgba(255,255,255,.07);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; margin-top: 1px;
+  }
+
+  .adm-footer {
+    margin-top: auto; padding-top: 32px;
+    font-size: 11px; color: #475569;
+    position: relative; z-index: 1;
+    border-top: 1px solid rgba(255,255,255,.06);
+  }
+
+  /* ── Right form panel ── */
+  .adm-form-wrap {
+    background: #f8fafc;
+    display: flex; align-items: center; justify-content: center;
+    padding: 48px 32px;
+  }
+
+  .adm-card {
+    width: 100%; max-width: 420px;
+    background: white;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    padding: 40px;
+    box-shadow: 0 4px 24px rgba(15,23,42,.07);
+  }
+
+  .adm-card-header { margin-bottom: 32px; }
+  .adm-card-header h2 { font-size: 22px; font-weight: 700; color: #0f172a; margin-bottom: 6px; }
+  .adm-card-header p { font-size: 14px; color: #64748b; }
+
+  .adm-field { margin-bottom: 20px; }
+  .adm-field label {
+    display: block; font-size: 13px; font-weight: 600;
+    color: #374151; margin-bottom: 7px;
+  }
+  .adm-input {
+    width: 100%; padding: 10px 14px;
+    border: 1.5px solid #e2e8f0; border-radius: 8px;
+    font-size: 14px; font-family: inherit; color: #0f172a;
+    background: #f8fafc; outline: none;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .adm-input::placeholder { color: #94a3b8; }
+  .adm-input:focus {
+    border-color: #dc2626; background: white;
+    box-shadow: 0 0 0 3px rgba(220,38,38,.1);
+  }
+
+  .adm-submit {
+    width: 100%; padding: 13px;
+    background: #dc2626; color: white;
+    border: none; border-radius: 10px;
+    font-size: 15px; font-weight: 600; font-family: inherit;
+    cursor: pointer; transition: background .15s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    margin-top: 8px;
+  }
+  .adm-submit:hover { background: #b91c1c; }
+
+  .adm-notice {
+    margin-top: 20px; padding: 12px 14px;
+    background: #fef2f2; border: 1px solid #fecaca;
+    border-radius: 8px; font-size: 12px; color: #991b1b;
+    display: flex; gap: 8px; align-items: flex-start;
+  }
+</style>
+
+<div class="adm-login-shell">
+
+  {# ── Left: Branding ── #}
+  <aside class="adm-panel">
+    <div class="adm-logo">
+      <div class="adm-logo-icon">🛡</div>
+      <div class="adm-logo-text">
+        <strong>Pusdatin CSIRT</strong>
+        <span>Panel Admin — Kementan RI</span>
+      </div>
     </div>
 
-    {% if error %}
-      <div class="flash flash-error">{{ error }}</div>
-    {% endif %}
+    <div class="adm-headline">
+      <h1>Portal Admin<br><span>Tim CSIRT</span></h1>
+      <p>
+        Akses terbatas untuk analis dan administrator CSIRT Pusdatin Kementan.
+        Gunakan kredensial yang telah diberikan oleh administrator sistem.
+      </p>
 
-    <form method="post" action="/admin/login?next={{ next }}">
-      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-      <div class="form-group">
-        <label class="form-label">Username</label>
-        <input class="form-input" type="text" name="username" required autofocus>
+      <ul class="adm-features">
+        <li>
+          <span class="feat-icon">📥</span>
+          <div><strong style="color:#e2e8f0;">Inbox Tiket</strong><br>
+          Monitor dan tangani laporan insiden dari seluruh unit</div>
+        </li>
+        <li>
+          <span class="feat-icon">⚙️</span>
+          <div><strong style="color:#e2e8f0;">Manajemen Status</strong><br>
+          Update, assign, dan eskalasi tiket insiden</div>
+        </li>
+        <li>
+          <span class="feat-icon">📚</span>
+          <div><strong style="color:#e2e8f0;">Knowledge Base</strong><br>
+          Kelola dokumen panduan RAG untuk rekomendasi mitigasi</div>
+        </li>
+        <li>
+          <span class="feat-icon">📊</span>
+          <div><strong style="color:#e2e8f0;">Laporan</strong><br>
+          Unduh rekap insiden untuk pelaporan berkala</div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="adm-footer">
+      Akses tidak sah akan dicatat dan dilaporkan · Pusdatin Kementan 2026
+    </div>
+  </aside>
+
+  {# ── Right: Form ── #}
+  <main class="adm-form-wrap">
+    <div class="adm-card">
+      <div class="adm-card-header">
+        <h2>Masuk ke Panel Admin</h2>
+        <p>Gunakan akun CSIRT Anda untuk melanjutkan.</p>
       </div>
-      <div class="form-group">
-        <label class="form-label">Password</label>
-        <input class="form-input" type="password" name="password" required>
+
+      {% if error %}
+      <div style="background:#fee2e2;border:1px solid #fca5a5;border-radius:8px;padding:12px 14px;margin-bottom:20px;color:#dc2626;font-size:13px;display:flex;gap:8px;">
+        <span>⚠️</span> {{ error }}
       </div>
-      <button type="submit" class="btn btn-primary" style="width: 100%;">Masuk</button>
-    </form>
-  </div>
+      {% endif %}
+
+      <form method="post" action="/admin/login?next={{ next }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+        <div class="adm-field">
+          <label for="username">Username</label>
+          <input id="username" class="adm-input" type="text"
+                 name="username" required autofocus
+                 placeholder="Username admin">
+        </div>
+
+        <div class="adm-field" style="margin-bottom: 28px;">
+          <label for="password">Password</label>
+          <input id="password" class="adm-input" type="password"
+                 name="password" required
+                 placeholder="••••••••">
+        </div>
+
+        <button type="submit" class="adm-submit">
+          Masuk ke Dashboard
+          <span style="font-size:18px;">→</span>
+        </button>
+      </form>
+
+      <div class="adm-notice">
+        <span>🔒</span>
+        <span>Sesi ini dimonitor. Logout setelah selesai menggunakan sistem.</span>
+      </div>
+    </div>
+  </main>
 </div>
 {% endblock %}

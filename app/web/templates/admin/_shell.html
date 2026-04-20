@@ -1,23 +1,165 @@
+{# app/web/templates/admin/_shell.html #}
 {% extends "base.html" %}
 {% block layout %}
-<div class="admin-shell" style="display: grid; grid-template-columns: 240px 1fr; min-height: 100vh;">
-  <aside style="background: #0f172a; color: #f8fafc; padding: 24px 16px;">
-    <h2 style="font-size: 18px; margin-bottom: 24px;">Pusdatin CSIRT</h2>
-    <nav style="display: flex; flex-direction: column; gap: 8px;">
-      <a href="/admin/inbox" style="color: #cbd5e1; text-decoration: none; padding: 8px 12px; border-radius: 6px;">Inbox Tiket</a>
-      <a href="/admin/rag" style="color: #cbd5e1; text-decoration: none; padding: 8px 12px; border-radius: 6px;">Knowledge Base</a>
-      <a href="/admin/report" style="color: #cbd5e1; text-decoration: none; padding: 8px 12px; border-radius: 6px;">Laporan</a>
+<style>
+  /* Override app-shell grid agar admin shell bisa full-width */
+  .app-shell { display: block; }
+
+  .adm-shell {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    min-height: 100vh;
+  }
+
+  /* ── Sidebar ── */
+  .adm-sidebar {
+    background: #0f172a;
+    color: #f8fafc;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+
+  .adm-sidebar-head {
+    padding: 20px 16px;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .adm-sidebar-head .dot {
+    width: 32px; height: 32px;
+    background: #dc2626; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+  .adm-sidebar-head .brand strong { font-size: 14px; font-weight: 700; display: block; }
+  .adm-sidebar-head .brand span { font-size: 11px; color: #64748b; }
+
+  .adm-nav {
+    padding: 12px 10px;
+    flex: 1;
+  }
+  .adm-nav-label {
+    font-size: 10px; font-weight: 700; color: #475569;
+    text-transform: uppercase; letter-spacing: .7px;
+    padding: 0 8px; margin: 16px 0 6px;
+  }
+  .adm-nav a {
+    display: flex; align-items: center; gap: 9px;
+    padding: 9px 10px;
+    border-radius: 7px;
+    color: #94a3b8; font-size: 13px;
+    text-decoration: none;
+    transition: background .12s, color .12s;
+    margin-bottom: 2px;
+  }
+  .adm-nav a:hover { background: #1e293b; color: #f1f5f9; }
+  .adm-nav a.active { background: #1e3a5f; color: #60a5fa; font-weight: 600; }
+  .adm-nav a .nav-icon { font-size: 15px; width: 20px; text-align: center; flex-shrink: 0; }
+
+  .adm-sidebar-foot {
+    padding: 12px 10px;
+    border-top: 1px solid rgba(255,255,255,.06);
+  }
+
+  /* ── Main area ── */
+  .adm-main {
+    background: #f1f5f9;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  .adm-topbar {
+    background: white;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 14px 28px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 10;
+  }
+  .adm-topbar h1 {
+    font-size: 18px; font-weight: 700; color: #0f172a;
+  }
+  .adm-topbar-right {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 13px; color: #64748b;
+  }
+
+  .adm-content {
+    padding: 28px;
+    flex: 1;
+  }
+</style>
+
+<div class="adm-shell">
+
+  {# ── Sidebar ── #}
+  <aside class="adm-sidebar">
+    <div class="adm-sidebar-head">
+      <div class="dot">🛡</div>
+      <div class="brand">
+        <strong>Pusdatin CSIRT</strong>
+        <span>Panel Admin</span>
+      </div>
+    </div>
+
+    <nav class="adm-nav">
+      <div class="adm-nav-label">Manajemen</div>
+      <a href="/admin/inbox"
+         class="{% if request.url.path.startswith('/admin/inbox') or request.url.path.startswith('/admin/tiket') %}active{% endif %}">
+        <span class="nav-icon">📥</span> Inbox Tiket
+      </a>
+
+      <div class="adm-nav-label">Sistem</div>
+      <a href="/admin/rag"
+         class="{% if request.url.path.startswith('/admin/rag') %}active{% endif %}">
+        <span class="nav-icon">📚</span> Knowledge Base
+      </a>
+      <a href="/admin/report"
+         class="{% if request.url.path.startswith('/admin/report') %}active{% endif %}">
+        <span class="nav-icon">📊</span> Laporan
+      </a>
     </nav>
-    <form method="post" action="/admin/logout" style="margin-top: 32px;">
-      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-      <button type="submit" class="btn" style="width: 100%; background: transparent; color: #cbd5e1; border: 1px solid #334155;">Logout</button>
-    </form>
+
+    <div class="adm-sidebar-foot">
+      {% if admin is defined %}
+      <div style="padding: 8px 10px; margin-bottom: 8px;">
+        <p style="font-size: 12px; font-weight: 600; color: #e2e8f0;">{{ admin.full_name }}</p>
+        <p style="font-size: 11px; color: #64748b;">{{ admin.username }}</p>
+      </div>
+      {% endif %}
+      <form method="post" action="/admin/logout" style="margin:0;"
+            onsubmit="this.querySelector('[name=csrf_token]').value = document.querySelector('meta[name=csrf-token]').content">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <button type="submit"
+                style="width: 100%; background: transparent; color: #64748b; border: 1px solid #334155;
+                       border-radius: 7px; padding: 8px 10px; font-size: 12px; cursor: pointer;
+                       font-family: inherit; text-align: left; display: flex; align-items: center; gap: 8px;">
+          <span>⬡</span> Logout
+        </button>
+      </form>
+    </div>
   </aside>
-  <main style="padding: 32px; background: #f8fafc;">
-    <header style="margin-bottom: 24px;">
-      <h1 style="font-size: 24px; color: #0f172a;">{% block page_title %}{% endblock %}</h1>
+
+  {# ── Main ── #}
+  <div class="adm-main">
+    <header class="adm-topbar">
+      <h1>{% block page_title %}{% endblock %}</h1>
+      <div class="adm-topbar-right">
+        <span>🕐 {{ now().strftime("%d %b %Y") if now is defined else "" }}</span>
+        <a href="/lapor" target="_blank"
+           style="color: #2563eb; text-decoration: none; font-size: 12px; padding: 5px 10px;
+                  border: 1px solid #dbeafe; border-radius: 6px; background: #eff6ff;">
+          Portal Pelapor ↗
+        </a>
+      </div>
     </header>
-    {% block content %}{% endblock %}
-  </main>
+    <div class="adm-content">
+      {% block content %}{% endblock %}
+    </div>
+  </div>
 </div>
 {% endblock %}

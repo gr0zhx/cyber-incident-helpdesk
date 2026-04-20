@@ -28,13 +28,13 @@
     </div>
 
     <div style="margin-top: auto;">
-      <form method="post" action="/lapor/chat/reset">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-        <button type="submit" class="btn"
-                style="width: 100%; background: transparent; color: #64748b; border: 1px solid #334155; font-size: 12px; padding: 9px;">
-          ↺ Mulai Sesi Baru
-        </button>
-      </form>
+      <button hx-post="/lapor/chat/reset"
+              hx-target="body"
+              hx-swap="none"
+              style="width: 100%; background: transparent; color: #64748b; border: 1px solid #334155;
+                     font-size: 12px; padding: 9px; border-radius: 6px; cursor: pointer; font-family: inherit;">
+        ↺ Mulai Sesi Baru
+      </button>
     </div>
   </aside>
 

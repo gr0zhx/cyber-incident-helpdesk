@@ -1,35 +1,310 @@
 {# app/web/templates/pelapor/identitas.html #}
 {% extends "base.html" %}
-{% block title %}Laporkan Insiden — Pusdatin Helpdesk{% endblock %}
+{% block title %}Laporkan Insiden Keamanan — Pusdatin Helpdesk{% endblock %}
 {% block layout %}
-<div style="display: grid; grid-template-columns: 280px 1fr; min-height: 100vh;">
-  <aside style="background: #0f172a; color: #f8fafc; padding: 24px 16px;">
-    <h2 style="font-size: 18px; margin-bottom: 8px;">Pusdatin CSIRT</h2>
-    <p style="color: #64748b; font-size: 13px;">Sistem Helpdesk Keamanan Siber</p>
+<style>
+  .app-shell { display: block; }
+
+  .id-shell {
+    display: grid;
+    grid-template-columns: 420px 1fr;
+    min-height: 100vh;
+  }
+
+  /* ── Left branding panel ── */
+  .id-panel {
+    background: linear-gradient(160deg, #0f172a 0%, #1e3a5f 100%);
+    color: #f8fafc;
+    padding: 48px 40px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+  .id-panel::before {
+    content: "";
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 320px; height: 320px;
+    background: rgba(37,99,235,.15);
+    border-radius: 50%;
+  }
+  .id-panel::after {
+    content: "";
+    position: absolute;
+    bottom: -60px; left: -60px;
+    width: 240px; height: 240px;
+    background: rgba(16,185,129,.08);
+    border-radius: 50%;
+  }
+
+  .id-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 56px;
+    position: relative; z-index: 1;
+  }
+  .id-logo-icon {
+    width: 44px; height: 44px;
+    background: #2563eb;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    box-shadow: 0 4px 14px rgba(37,99,235,.4);
+  }
+  .id-logo-text { line-height: 1.2; }
+  .id-logo-text strong { font-size: 16px; font-weight: 700; display: block; }
+  .id-logo-text span { font-size: 12px; color: #94a3b8; }
+
+  .id-headline {
+    position: relative; z-index: 1;
+    flex: 1;
+  }
+  .id-headline h1 {
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1.25;
+    margin-bottom: 16px;
+    letter-spacing: -.3px;
+  }
+  .id-headline h1 span { color: #60a5fa; }
+  .id-headline p {
+    font-size: 14px;
+    color: #94a3b8;
+    line-height: 1.7;
+    margin-bottom: 40px;
+  }
+
+  .id-features { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+  .id-features li {
+    display: flex; align-items: flex-start; gap: 12px;
+    font-size: 13px; color: #cbd5e1; line-height: 1.5;
+  }
+  .id-features li .feat-icon {
+    width: 28px; height: 28px; flex-shrink: 0;
+    background: rgba(255,255,255,.07);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    margin-top: 1px;
+  }
+
+  .id-footer {
+    margin-top: auto;
+    padding-top: 32px;
+    font-size: 11px;
+    color: #475569;
+    position: relative; z-index: 1;
+    border-top: 1px solid rgba(255,255,255,.06);
+  }
+
+  /* ── Right form panel ── */
+  .id-form-wrap {
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 32px;
+  }
+
+  .id-card {
+    width: 100%;
+    max-width: 460px;
+    background: white;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    padding: 40px;
+    box-shadow: 0 4px 24px rgba(15,23,42,.07);
+  }
+
+  .id-card-header { margin-bottom: 32px; }
+  .id-card-header h2 {
+    font-size: 22px; font-weight: 700;
+    color: #0f172a; margin-bottom: 6px;
+  }
+  .id-card-header p { font-size: 14px; color: #64748b; }
+
+  .id-field { margin-bottom: 20px; }
+  .id-field label {
+    display: block;
+    font-size: 13px; font-weight: 600;
+    color: #374151; margin-bottom: 7px;
+  }
+  .id-field .required {
+    color: #ef4444; margin-left: 3px; font-weight: 700;
+  }
+  .id-field .hint {
+    font-size: 11px; color: #94a3b8;
+    font-weight: 400; margin-left: 4px;
+  }
+  .id-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    color: #0f172a;
+    background: #f8fafc;
+    transition: border-color .15s, box-shadow .15s;
+    outline: none;
+  }
+  .id-input::placeholder { color: #94a3b8; }
+  .id-input:focus {
+    border-color: #2563eb;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(37,99,235,.1);
+  }
+
+  .id-divider {
+    display: flex; align-items: center; gap: 12px;
+    margin: 24px 0;
+    color: #94a3b8; font-size: 12px;
+  }
+  .id-divider::before, .id-divider::after {
+    content: ""; flex: 1;
+    border-top: 1px solid #e2e8f0;
+  }
+
+  .id-submit {
+    width: 100%;
+    padding: 13px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background .15s, transform .1s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .id-submit:hover { background: #1d4ed8; }
+  .id-submit:active { transform: scale(.99); }
+
+  .id-notice {
+    margin-top: 20px;
+    padding: 12px 14px;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 8px;
+    font-size: 12px;
+    color: #166534;
+    display: flex; gap: 8px; align-items: flex-start;
+  }
+</style>
+
+<div class="id-shell">
+
+  {# ── Left: Branding ── #}
+  <aside class="id-panel">
+    <div class="id-logo">
+      <div class="id-logo-icon">🛡</div>
+      <div class="id-logo-text">
+        <strong>Pusdatin CSIRT</strong>
+        <span>Kementerian Pertanian RI</span>
+      </div>
+    </div>
+
+    <div class="id-headline">
+      <h1>Laporkan Insiden<br><span>Keamanan Siber</span></h1>
+      <p>
+        Sistem helpdesk berbasis AI untuk membantu triase awal insiden keamanan
+        siber di lingkungan Pusdatin Kementan. Laporan Anda akan dianalisis
+        secara otomatis dan diteruskan ke tim CSIRT.
+      </p>
+
+      <ul class="id-features">
+        <li>
+          <span class="feat-icon">🔍</span>
+          <div><strong style="color:#e2e8f0;">Klasifikasi Otomatis</strong><br>
+          Jenis dan tingkat keparahan insiden diidentifikasi oleh AI</div>
+        </li>
+        <li>
+          <span class="feat-icon">📋</span>
+          <div><strong style="color:#e2e8f0;">Panduan Mitigasi</strong><br>
+          Rekomendasi langkah awal berdasarkan NIST &amp; MITRE ATT&amp;CK</div>
+        </li>
+        <li>
+          <span class="feat-icon">🔔</span>
+          <div><strong style="color:#e2e8f0;">Notifikasi Segera</strong><br>
+          Tim CSIRT diberitahu otomatis setelah tiket dibuat</div>
+        </li>
+        <li>
+          <span class="feat-icon">🔒</span>
+          <div><strong style="color:#e2e8f0;">Aman &amp; Teraudit</strong><br>
+          Input disanitasi, PII diredaksi sebelum diproses AI</div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="id-footer">
+      Sistem Prototipe · Pusdatin Kementan · 2026<br>
+      Hanya untuk penggunaan internal
+    </div>
   </aside>
-  <main style="padding: 48px 64px; background: #f8fafc; display: flex; align-items: center; justify-content: center;">
-    <div style="width: 100%; max-width: 480px;">
-      <h1 style="font-size: 28px; color: #0f172a; margin-bottom: 8px;">Laporkan Insiden</h1>
-      <p style="color: #64748b; margin-bottom: 32px;">Isi identitas Anda sebelum mulai chat.</p>
+
+  {# ── Right: Form ── #}
+  <main class="id-form-wrap">
+    <div class="id-card">
+      <div class="id-card-header">
+        <h2>Identitas Pelapor</h2>
+        <p>Isi data berikut agar tim CSIRT dapat menghubungi Anda.</p>
+      </div>
+
       {% if error %}
-      <div style="background: #fee2e2; border: 1px solid #fca5a5; border-radius: 6px; padding: 12px; margin-bottom: 16px; color: #dc2626;">{{ error }}</div>
+      <div style="background:#fee2e2;border:1px solid #fca5a5;border-radius:8px;padding:12px 14px;margin-bottom:20px;color:#dc2626;font-size:13px;display:flex;gap:8px;">
+        <span>⚠️</span> {{ error }}
+      </div>
       {% endif %}
+
       <form method="post" action="/lapor">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-        <div style="margin-bottom: 16px;">
-          <label for="reporter_name" style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px;">Nama Lengkap *</label>
-          <input id="reporter_name" type="text" name="reporter_name" required class="form-control" placeholder="Nama Anda">
+
+        <div class="id-field">
+          <label for="reporter_name">
+            Nama Lengkap <span class="required">*</span>
+          </label>
+          <input id="reporter_name" class="id-input" type="text"
+                 name="reporter_name" required
+                 placeholder="Nama sesuai ID kepegawaian"
+                 autocomplete="name">
         </div>
-        <div style="margin-bottom: 16px;">
-          <label for="reporter_contact" style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px;">Kontak (WhatsApp/Email)</label>
-          <input id="reporter_contact" type="text" name="reporter_contact" class="form-control" placeholder="08xx atau email@kementan.go.id">
+
+        <div class="id-field">
+          <label for="reporter_unit">
+            Unit / Divisi
+            <span class="hint">(opsional)</span>
+          </label>
+          <input id="reporter_unit" class="id-input" type="text"
+                 name="reporter_unit"
+                 placeholder="Contoh: Divisi IT Pusdatin, Bagian Jaringan"
+                 autocomplete="organization">
         </div>
-        <div style="margin-bottom: 24px;">
-          <label for="reporter_unit" style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px;">Unit/Divisi</label>
-          <input id="reporter_unit" type="text" name="reporter_unit" class="form-control" placeholder="Contoh: Divisi IT Pusdatin">
+
+        <div class="id-field" style="margin-bottom: 28px;">
+          <label for="reporter_contact">
+            Kontak
+            <span class="hint">(WhatsApp / email dinas — opsional)</span>
+          </label>
+          <input id="reporter_contact" class="id-input" type="text"
+                 name="reporter_contact"
+                 placeholder="08xx... atau nama@kementan.go.id"
+                 autocomplete="tel">
         </div>
-        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px;">Mulai Laporkan &rarr;</button>
+
+        <button type="submit" class="id-submit">
+          Mulai Laporkan
+          <span style="font-size:18px;">→</span>
+        </button>
       </form>
+
+      <div class="id-notice">
+        <span>🔒</span>
+        <span>Data Anda hanya digunakan untuk keperluan penanganan insiden dan tidak disebarluaskan.</span>
+      </div>
     </div>
   </main>
 </div>

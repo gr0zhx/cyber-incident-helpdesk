@@ -1,0 +1,467 @@
+{# app/web/templates/pelapor/tiket_detail.html #}
+{% extends "base.html" %}
+{% block title %}{{ ticket.ticket_id }} — Status Tiket{% endblock %}
+{% block layout %}
+<style>
+  .app-shell { display: block; }
+
+  body { background: #f1f5f9; }
+
+  .tk-shell {
+    min-height: 100vh;
+    padding: 0 0 48px;
+  }
+
+  /* ── Top bar ── */
+  .tk-topbar {
+    background: #0f172a;
+    color: #f8fafc;
+    padding: 14px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .tk-topbar-brand {
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 700; font-size: 15px;
+  }
+  .tk-topbar-brand .dot {
+    width: 30px; height: 30px;
+    background: #2563eb; border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px;
+  }
+  .tk-back {
+    font-size: 13px; color: #94a3b8;
+    text-decoration: none;
+    display: flex; align-items: center; gap: 6px;
+    padding: 7px 14px;
+    border: 1px solid #334155;
+    border-radius: 7px;
+    transition: color .15s, border-color .15s;
+  }
+  .tk-back:hover { color: #f8fafc; border-color: #64748b; }
+
+  /* ── Content ── */
+  .tk-content {
+    max-width: 760px;
+    margin: 40px auto;
+    padding: 0 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* ── Cards ── */
+  .tk-card {
+    background: white;
+    border-radius: 14px;
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(15,23,42,.05);
+  }
+  .tk-card-head {
+    padding: 18px 24px;
+    border-bottom: 1px solid #f1f5f9;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .tk-card-head h3 {
+    font-size: 13px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .6px;
+    color: #64748b;
+  }
+  .tk-card-body { padding: 24px; }
+
+  /* ── Status badge ── */
+  .tk-status {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .4px;
+  }
+  .tk-status-dot { width: 7px; height: 7px; border-radius: 50%; }
+  .status-PENDING_REVIEW    { background:#fef9c3; color:#854d0e; }
+  .status-PENDING_REVIEW .tk-status-dot { background:#eab308; }
+  .status-IN_PROGRESS       { background:#dbeafe; color:#1e40af; }
+  .status-IN_PROGRESS .tk-status-dot { background:#3b82f6; animation: pulse 1.5s infinite; }
+  .status-RESOLVED          { background:#dcfce7; color:#166534; }
+  .status-RESOLVED .tk-status-dot { background:#22c55e; }
+  .status-CLOSED            { background:#f1f5f9; color:#475569; }
+  .status-CLOSED .tk-status-dot { background:#94a3b8; }
+  @keyframes pulse {
+    0%,100% { opacity:1; } 50% { opacity:.4; }
+  }
+
+  /* ── Severity badge ── */
+  .sev { display:inline-block; padding:3px 10px; border-radius:6px; font-size:12px; font-weight:700; }
+  .sev-Kritis   { background:#fee2e2; color:#991b1b; }
+  .sev-Tinggi   { background:#ffedd5; color:#9a3412; }
+  .sev-Sedang   { background:#fef9c3; color:#854d0e; }
+  .sev-Rendah   { background:#dcfce7; color:#166534; }
+  .sev-default  { background:#f1f5f9; color:#475569; }
+
+  /* ── Info grid ── */
+  .tk-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .tk-info-item label {
+    font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: .5px;
+    color: #94a3b8; display: block; margin-bottom: 5px;
+  }
+  .tk-info-item .val {
+    font-size: 14px; font-weight: 600; color: #0f172a;
+  }
+  .tk-info-item .val.mono {
+    font-family: monospace; font-size: 15px; color: #2563eb;
+  }
+
+  /* ── Confidence bar ── */
+  .conf-bar-wrap { display:flex; align-items:center; gap:10px; }
+  .conf-bar-bg {
+    flex:1; height:6px; background:#e2e8f0; border-radius:3px; overflow:hidden;
+  }
+  .conf-bar-fill {
+    height:100%; border-radius:3px;
+    background: linear-gradient(90deg, #2563eb, #7c3aed);
+    transition: width .6s ease;
+  }
+  .conf-pct { font-size:13px; font-weight:700; color:#2563eb; min-width:36px; text-align:right; }
+
+  /* ── Timeline ── */
+  .tk-timeline { display:flex; flex-direction:column; gap:0; }
+  .tl-item {
+    display:flex; gap:16px; position:relative;
+    padding-bottom: 20px;
+  }
+  .tl-item:last-child { padding-bottom: 0; }
+  .tl-item:not(:last-child)::before {
+    content:""; position:absolute;
+    left:15px; top:30px; bottom:0; width:2px;
+    background:#e2e8f0;
+  }
+  .tl-dot {
+    width:32px; height:32px; flex-shrink:0;
+    border-radius:50%; border:2px solid #e2e8f0;
+    background:white;
+    display:flex; align-items:center; justify-content:center;
+    font-size:14px; z-index:1;
+  }
+  .tl-dot.done { border-color:#2563eb; background:#eff6ff; }
+  .tl-dot.active { border-color:#f59e0b; background:#fffbeb; }
+  .tl-dot.pending { border-color:#e2e8f0; background:#f8fafc; }
+  .tl-text { padding-top:4px; }
+  .tl-text strong { font-size:14px; font-weight:600; color:#0f172a; display:block; margin-bottom:2px; }
+  .tl-text span { font-size:12px; color:#94a3b8; }
+
+  /* ── Mitigation steps ── */
+  .mit-step {
+    display:flex; gap:14px; align-items:flex-start;
+    padding: 14px 0;
+    border-bottom: 1px solid #f1f5f9;
+  }
+  .mit-step:last-child { border-bottom: none; }
+  .mit-num {
+    width:26px; height:26px; flex-shrink:0;
+    background:#2563eb; color:white;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:12px; font-weight:700; margin-top:1px;
+  }
+  .mit-step p { font-size:14px; line-height:1.65; color:#1e293b; }
+
+  /* ── Description box ── */
+  .desc-box {
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    border-radius:8px;
+    padding:16px;
+    font-size:14px; line-height:1.7; color:#334155;
+    white-space:pre-wrap; word-break:break-word;
+  }
+
+  /* ── Actions ── */
+  .tk-actions { display:flex; gap:10px; flex-wrap:wrap; }
+  .tk-action-btn {
+    display:inline-flex; align-items:center; gap:7px;
+    padding:10px 18px;
+    border-radius:9px;
+    font-size:13px; font-weight:600; font-family:inherit;
+    cursor:pointer; transition:background .15s;
+    text-decoration:none;
+  }
+  .tk-action-primary { background:#2563eb; color:white; border:none; }
+  .tk-action-primary:hover { background:#1d4ed8; }
+  .tk-action-outline { background:white; color:#0f172a; border:1.5px solid #e2e8f0; }
+  .tk-action-outline:hover { border-color:#2563eb; color:#2563eb; }
+  .tk-action-ghost { background:#f8fafc; color:#64748b; border:1.5px solid #e2e8f0; }
+  .tk-action-ghost:hover { background:#e2e8f0; }
+
+  /* Copy flash */
+  #copy-flash {
+    display:none; font-size:12px; color:#166534;
+    background:#dcfce7; border-radius:6px;
+    padding:4px 10px; align-items:center; gap:4px;
+  }
+</style>
+
+<div class="tk-shell">
+
+  {# ── Top bar ── #}
+  <nav class="tk-topbar">
+    <div class="tk-topbar-brand">
+      <div class="dot">🛡</div>
+      Pusdatin CSIRT
+    </div>
+    <a href="javascript:window.close();" class="tk-back"
+       onclick="if(window.opener) { window.close(); } else { window.history.back(); } return false;">
+      ← Kembali ke Chat
+    </a>
+  </nav>
+
+  <div class="tk-content">
+
+    {# ── Hero: Ticket ID + Status ── #}
+    <div class="tk-card">
+      <div class="tk-card-body" style="padding:28px 28px 24px;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+          <div>
+            <p style="font-size:12px;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">
+              Nomor Tiket
+            </p>
+            <p style="font-family:monospace;font-size:26px;font-weight:800;color:#0f172a;letter-spacing:.5px;">
+              {{ ticket.ticket_id }}
+            </p>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
+            <span class="tk-status status-{{ ticket.status | default('PENDING_REVIEW') }}">
+              <span class="tk-status-dot"></span>
+              {% if ticket.status == 'PENDING_REVIEW' %}Menunggu Review
+              {% elif ticket.status == 'IN_PROGRESS' %}Sedang Ditangani
+              {% elif ticket.status == 'RESOLVED' %}Terselesaikan
+              {% elif ticket.status == 'CLOSED' %}Ditutup
+              {% else %}{{ ticket.status }}{% endif %}
+            </span>
+            <div id="copy-flash">✓ Disalin!</div>
+          </div>
+        </div>
+
+        {# Info grid #}
+        <div class="tk-grid">
+          <div class="tk-info-item">
+            <label>Jenis Insiden</label>
+            <div class="val">{{ ticket.incident_type }}</div>
+          </div>
+          <div class="tk-info-item">
+            <label>Tingkat Keparahan</label>
+            <div class="val">
+              <span class="sev sev-{{ ticket.severity | default('default') }}">{{ ticket.severity }}</span>
+            </div>
+          </div>
+          <div class="tk-info-item">
+            <label>Eskalasi</label>
+            <div class="val">{{ ticket.escalation_level or "—" }}</div>
+          </div>
+          <div class="tk-info-item">
+            <label>Kepercayaan AI</label>
+            <div class="conf-bar-wrap">
+              <div class="conf-bar-bg">
+                <div class="conf-bar-fill" style="width:{{ (ticket.confidence_score or 0) * 100 | round | int }}%;"></div>
+              </div>
+              <span class="conf-pct">{{ "%.0f" | format((ticket.confidence_score or 0) * 100) }}%</span>
+            </div>
+          </div>
+          <div class="tk-info-item">
+            <label>Pelapor</label>
+            <div class="val">{{ ticket.reporter_name or "—" }}</div>
+          </div>
+          <div class="tk-info-item">
+            <label>Dilaporkan</label>
+            <div class="val" style="font-size:13px;">
+              {{ ticket.created_at.strftime("%d %b %Y, %H:%M") if ticket.created_at else "—" }}
+            </div>
+          </div>
+        </div>
+
+        {# Actions #}
+        <div class="tk-actions" style="margin-top:24px;padding-top:20px;border-top:1px solid #f1f5f9;">
+          <button class="tk-action-btn tk-action-primary" onclick="copyTicketId()">
+            📋 Salin Nomor Tiket
+          </button>
+          <a href="/lapor/chat" class="tk-action-btn tk-action-outline">
+            💬 Kembali ke Chat
+          </a>
+          <button class="tk-action-btn tk-action-ghost" onclick="window.print()">
+            🖨️ Cetak
+          </button>
+        </div>
+      </div>
+    </div>
+
+    {# ── Status timeline ── #}
+    <div class="tk-card">
+      <div class="tk-card-head">
+        <h3>Alur Penanganan</h3>
+      </div>
+      <div class="tk-card-body">
+        <div class="tk-timeline">
+          <div class="tl-item">
+            <div class="tl-dot done">✓</div>
+            <div class="tl-text">
+              <strong>Laporan Diterima</strong>
+              <span>{{ ticket.created_at.strftime("%d %b %Y pukul %H:%M WIB") if ticket.created_at else "—" }}</span>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot done">✓</div>
+            <div class="tl-text">
+              <strong>Klasifikasi &amp; Triase Otomatis</strong>
+              <span>{{ ticket.incident_type }} · Keparahan {{ ticket.severity }}</span>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot done">✓</div>
+            <div class="tl-text">
+              <strong>Notifikasi CSIRT Terkirim</strong>
+              <span>Tim keamanan siber telah diberitahu</span>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot {% if ticket.status in ['IN_PROGRESS','RESOLVED','CLOSED'] %}done{% else %}active{% endif %}">
+              {% if ticket.status in ['IN_PROGRESS','RESOLVED','CLOSED'] %}✓{% else %}⏳{% endif %}
+            </div>
+            <div class="tl-text">
+              <strong>Review oleh Analis CSIRT</strong>
+              <span>{% if ticket.status == 'PENDING_REVIEW' %}Menunggu analis{% elif ticket.reviewed_at %}{{ ticket.reviewed_at.strftime("%d %b %Y pukul %H:%M WIB") }}{% else %}Sedang diproses{% endif %}</span>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot {% if ticket.status in ['RESOLVED','CLOSED'] %}done{% else %}pending{% endif %}">
+              {% if ticket.status in ['RESOLVED','CLOSED'] %}✓{% else %}○{% endif %}
+            </div>
+            <div class="tl-text">
+              <strong>Penanganan &amp; Penutupan</strong>
+              <span>{% if ticket.resolved_at %}{{ ticket.resolved_at.strftime("%d %b %Y pukul %H:%M WIB") }}{% else %}Belum selesai{% endif %}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {# ── Deskripsi laporan ── #}
+    {% if ticket.description_sanitized %}
+    <div class="tk-card">
+      <div class="tk-card-head">
+        <h3>Ringkasan Laporan</h3>
+      </div>
+      <div class="tk-card-body">
+        <div class="desc-box">{{ ticket.description_sanitized }}</div>
+        {% if ticket.classification_reasoning %}
+        <div style="margin-top:14px;padding:12px 14px;background:#f8fafc;border-radius:8px;border-left:3px solid #2563eb;">
+          <p style="font-size:12px;font-weight:600;color:#64748b;margin-bottom:4px;">ANALISIS AI</p>
+          <p style="font-size:13px;color:#334155;line-height:1.6;">{{ ticket.classification_reasoning }}</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+
+    {# ── Rekomendasi mitigasi ── #}
+    {% if ticket.mitigation_recommendation %}
+    <div class="tk-card">
+      <div class="tk-card-head">
+        <h3>Rekomendasi Mitigasi Awal</h3>
+        <span style="font-size:11px;color:#94a3b8;">Berbasis NIST SP 800-61 &amp; MITRE ATT&amp;CK</span>
+      </div>
+      <div class="tk-card-body" style="padding-top:8px;padding-bottom:8px;">
+        {% set lines = ticket.mitigation_recommendation.split('\n') %}
+        {% set ns = namespace(in_sources=false) %}
+        {% for line in lines %}
+          {% set stripped = line.strip() %}
+          {% if stripped == 'Sumber:' %}
+            {% set ns.in_sources = true %}
+          {% endif %}
+          {% if ns.in_sources %}
+            {# sources block #}
+          {% elif stripped and stripped[0].isdigit() and '. ' in stripped %}
+            {% set dot_pos = stripped.index('. ') %}
+            {% set num = stripped[:dot_pos] %}
+            {% set text = stripped[dot_pos+2:] %}
+            <div class="mit-step">
+              <div class="mit-num">{{ num }}</div>
+              <p>{{ text }}</p>
+            </div>
+          {% elif stripped.startswith('Panduan umum:') %}
+            <div style="margin-top:16px;padding:14px;background:#eff6ff;border-radius:8px;border-left:3px solid #3b82f6;">
+              <p style="font-size:12px;font-weight:700;color:#1d4ed8;margin-bottom:4px;">PANDUAN UMUM</p>
+              <p style="font-size:13px;color:#1e3a5f;line-height:1.65;">{{ stripped[len('Panduan umum:'):].strip() }}</p>
+            </div>
+          {% elif stripped.startswith('Catatan eskalasi:') %}
+            <div style="margin-top:12px;padding:14px;background:#fff7ed;border-radius:8px;border-left:3px solid #f59e0b;">
+              <p style="font-size:12px;font-weight:700;color:#b45309;margin-bottom:4px;">CATATAN ESKALASI</p>
+              <p style="font-size:13px;color:#78350f;line-height:1.65;">{{ stripped[len('Catatan eskalasi:'):].strip() }}</p>
+            </div>
+          {% endif %}
+        {% endfor %}
+
+        {# Citations #}
+        {% set source_lines = [] %}
+        {% set collecting = namespace(active=false) %}
+        {% for line in lines %}
+          {% if line.strip() == 'Sumber:' %}{% set collecting.active = true %}
+          {% elif collecting.active and line.strip() %}{% set _ = source_lines.append(line.strip()) %}{% endif %}
+        {% endfor %}
+        {% if source_lines %}
+        <div style="margin-top:16px;padding:14px 16px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">
+          <p style="font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Referensi</p>
+          {% for src in source_lines %}
+          <p style="font-size:12px;color:#64748b;margin-bottom:5px;">{{ src }}</p>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+
+    {# ── Hubungi CSIRT ── #}
+    <div class="tk-card" style="background:linear-gradient(135deg,#0f172a,#1e3a5f);border:none;">
+      <div class="tk-card-body" style="padding:28px;">
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+          <div style="font-size:36px;">📞</div>
+          <div style="flex:1;">
+            <p style="font-weight:700;font-size:16px;color:#f8fafc;margin-bottom:4px;">Butuh bantuan lebih lanjut?</p>
+            <p style="font-size:13px;color:#94a3b8;line-height:1.6;">
+              Hubungi tim CSIRT Pusdatin secara langsung untuk penanganan lebih lanjut atau jika insiden memerlukan respons segera.
+            </p>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;min-width:180px;">
+            <div style="background:rgba(255,255,255,.08);border-radius:8px;padding:10px 14px;">
+              <p style="font-size:11px;color:#64748b;margin-bottom:2px;">Telepon / WhatsApp</p>
+              <p style="font-size:14px;font-weight:700;color:#f8fafc;">Ext. 1234</p>
+            </div>
+            <div style="background:rgba(255,255,255,.08);border-radius:8px;padding:10px 14px;">
+              <p style="font-size:11px;color:#64748b;margin-bottom:2px;">Email</p>
+              <p style="font-size:13px;font-weight:600;color:#60a5fa;">csirt@pusdatin.kementan.go.id</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>{# /tk-content #}
+</div>
+
+<script>
+function copyTicketId() {
+  navigator.clipboard.writeText("{{ ticket.ticket_id }}").then(function() {
+    var f = document.getElementById("copy-flash");
+    f.style.display = "flex";
+    setTimeout(function() { f.style.display = "none"; }, 2000);
+  });
+}
+</script>
+{% endblock %}

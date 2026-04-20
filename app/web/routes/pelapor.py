@@ -175,27 +175,22 @@ def reset_session(
     svc = ChatService(redis=_redis_client())
     svc.clear_history(reporter["session_id"])
     request.session.clear()
-    return RedirectResponse(url="/lapor", status_code=303)
+    # HTMX full-page redirect (HX-Redirect) — lebih reliable dari 303 untuk HTMX request
+    response = HTMLResponse("", status_code=200)
+    response.headers["HX-Redirect"] = "/lapor"
+    return response
 
 
 @router.get("/tiket/{ticket_id}", response_class=HTMLResponse)
 def ticket_status(
     request: Request,
     ticket_id: str,
-    reporter: dict = Depends(get_reporter_session),
     db: Session = Depends(get_db_session),
 ):
     ticket = db.query(IncidentTicket).filter_by(ticket_id=ticket_id).first()
     if ticket is None:
         raise HTTPException(status_code=404, detail="Tiket tidak ditemukan.")
     return templates.TemplateResponse(
-        "pelapor/_tiket_card.html",
-        {
-            "request": request,
-            "ticket_id": ticket.ticket_id,
-            "incident_type": ticket.incident_type,
-            "severity": ticket.severity,
-            "escalation_level": ticket.escalation_level or "—",
-            "confidence_score": float(ticket.confidence_score or 0),
-        },
+        "pelapor/tiket_detail.html",
+        {"request": request, "ticket": ticket},
     )

@@ -20,6 +20,11 @@ templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 router = APIRouter(prefix="/admin", tags=["admin-auth"])
 
 
+@router.get("", include_in_schema=False)
+def admin_root():
+    return RedirectResponse(url="/admin/inbox", status_code=302)
+
+
 def _redis_client():
     url = os.getenv("REDIS_URL", "redis://localhost:6379")
     return redis.from_url(url, decode_responses=True)

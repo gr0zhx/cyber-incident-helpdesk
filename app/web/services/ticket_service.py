@@ -29,6 +29,9 @@ class TicketListResult:
     page: int
     page_size: int
     total_pages: int
+    pending_count: int = 0
+    inprogress_count: int = 0
+    resolved_count: int = 0
 
 
 class TicketService:
@@ -67,11 +70,20 @@ class TicketService:
             .limit(page_size)
             .all()
         )
+        # Status counts (selalu dari keseluruhan, bukan filtered)
+        base = self.db.query(IncidentTicket)
+        pending_count   = base.filter(IncidentTicket.status == "PENDING_REVIEW").count()
+        inprogress_count = base.filter(IncidentTicket.status == "IN_PROGRESS").count()
+        resolved_count  = base.filter(IncidentTicket.status == "RESOLVED").count()
+
         return TicketListResult(
             items=items,
             total=total,
             page=page,
             page_size=page_size,
+            pending_count=pending_count,
+            inprogress_count=inprogress_count,
+            resolved_count=resolved_count,
             total_pages=total_pages,
         )
 

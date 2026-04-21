@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import logging
-import time
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Any, Optional
@@ -21,6 +20,9 @@ class AuthResult:
     admin_id: Optional[int] = None
     username: Optional[str] = None
     error: Optional[str] = None  # "invalid_credentials" | "account_disabled" | "locked"
+
+
+_DUMMY_HASH = bcrypt.using(rounds=12).hash("dummy-password-for-timing-defense")
 
 
 class AuthService:
@@ -49,13 +51,13 @@ class AuthService:
         admin = self._db.query(Admin).filter_by(username=username).first()
 
         if admin is None:
-            bcrypt.using(rounds=4).hash("dummy")
-            time.sleep(0.1)
+            # Verify against a real bcrypt(rounds=12) hash agar timing konsisten
+            # dengan path valid-user (mitigasi username enumeration).
+            bcrypt.verify(password, _DUMMY_HASH)
             self._increment_failure(lockout_key)
             return AuthResult(success=False, error="invalid_credentials")
 
         if not bcrypt.verify(password, admin.password_hash):
-            time.sleep(0.1)
             self._increment_failure(lockout_key)
             return AuthResult(success=False, error="invalid_credentials")
 

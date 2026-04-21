@@ -1,4 +1,5 @@
 """Routes HTMX untuk aksi update tiket admin."""
+import html
 import logging
 import os
 
@@ -67,7 +68,7 @@ def assign_ticket(
         ticket_id, admin.username, assignee,
     )
     return HTMLResponse(
-        f'<p style="color: #16a34a; font-size: 13px; margin-top: 8px;">Ditugaskan ke <strong>{assignee}</strong></p>'
+        f'<p style="color: #16a34a; font-size: 13px; margin-top: 8px;">Ditugaskan ke <strong>{html.escape(assignee)}</strong></p>'
     )
 
 
@@ -90,7 +91,7 @@ def set_escalation(
         ticket_id, admin.username, level,
     )
     return HTMLResponse(
-        f'<p style="color: #16a34a; font-size: 13px; margin-top: 8px;">Escalation diset ke <strong>{level}</strong></p>'
+        f'<p style="color: #16a34a; font-size: 13px; margin-top: 8px;">Escalation diset ke <strong>{html.escape(level)}</strong></p>'
     )
 
 
@@ -140,6 +141,11 @@ def download_attachment(
         raise HTTPException(status_code=400, detail="Nama file tidak valid.")
 
     abs_path = os.path.abspath(raw_path)
+    try:
+        if os.path.commonpath([abs_path, UPLOAD_ROOT]) != UPLOAD_ROOT:
+            raise HTTPException(status_code=400, detail="Path file di luar direktori upload.")
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Path file tidak valid.")
     if not os.path.isfile(abs_path):
         raise HTTPException(status_code=404, detail="File fisik hilang.")
 

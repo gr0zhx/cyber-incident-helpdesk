@@ -108,8 +108,11 @@ def test_action_on_missing_ticket_404(client):
     assert r.status_code == 404
 
 
-def test_attachment_download_streams_file(client, tmp_path):
+def test_attachment_download_streams_file(client, tmp_path, monkeypatch):
     c, db = client
+    # Titik file DI DALAM UPLOAD_ROOT agar lolos path traversal guard.
+    from app.web.routes import admin_actions as aa
+    monkeypatch.setattr(aa, "UPLOAD_ROOT", str(tmp_path.resolve()))
     f = tmp_path / "evidence.png"
     f.write_bytes(b"\x89PNG\r\n\x1a\nFAKE")
     ticket = db.query(IncidentTicket).filter_by(ticket_id="INC-A").one()

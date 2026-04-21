@@ -32,7 +32,13 @@ class ChatService:
         raw = self._redis.get(f"web:chat:{session_id}")
         if not raw:
             return []
-        return json.loads(raw)
+        try:
+            data = json.loads(raw)
+            return data if isinstance(data, list) else []
+        except (json.JSONDecodeError, ValueError):
+            logger.warning("Corrupt chat history session=%s, reset", session_id[:8])
+            self._redis.delete(f"web:chat:{session_id}")
+            return []
 
     def _save_history(self, session_id: str, history: list[dict]) -> None:
         self._redis.setex(
@@ -132,11 +138,19 @@ class ChatService:
         self, session_id: str, ticket_id: str, uploaded_by: str, db: Any
     ) -> None:
         from app.database.models import TicketAttachment
-        pending_raw = self._redis.get(f"web:pending_uploads:{session_id}")
+        key = f"web:pending_uploads:{session_id}"
+        pipe = self._redis.pipeline()
+        pipe.get(key)
+        pipe.delete(key)
+        pending_raw, _ = pipe.execute()
         if not pending_raw:
             return
-        self._redis.delete(f"web:pending_uploads:{session_id}")
-        for meta in json.loads(pending_raw):
+        try:
+            metas = json.loads(pending_raw)
+        except (json.JSONDecodeError, ValueError):
+            logger.warning("Corrupt pending_uploads session=%s, abort flush", session_id[:8])
+            return
+        for meta in metas:
             att = TicketAttachment(
                 ticket_id=ticket_id,
                 original_filename=meta["original_filename"],

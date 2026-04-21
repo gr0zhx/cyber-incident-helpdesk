@@ -3,8 +3,12 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 import uuid
+from pathlib import Path
 from typing import Any, Optional
+
+_DOC_ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_\-]{0,63}$")
 
 from app.dashboard.rag_client import (
     get_collection_info,
@@ -49,7 +53,14 @@ class RagService:
         language: str = "id",
     ) -> str:
         """Simpan PDF + metadata ke knowledge_base/, return meta_filename."""
-        safe_name = filename.replace(" ", "_")
+        if not _DOC_ID_RE.match(doc_id):
+            raise ValueError("doc_id hanya boleh alfanumerik, dash, underscore (maks 64 char).")
+        base_name = Path(filename).name
+        if not base_name or base_name.startswith("."):
+            raise ValueError("Nama file tidak valid.")
+        safe_name = base_name.replace(" ", "_")
+        if not safe_name.lower().endswith(".pdf"):
+            raise ValueError("File harus berekstensi .pdf")
         save_pdf(safe_name, data)
         meta_filename = f"{doc_id}.json"
         save_metadata(meta_filename, {
@@ -74,7 +85,11 @@ class RagService:
         raw = self._redis.get(f"rag:job:{job_id}")
         if not raw:
             return None
-        return json.loads(raw)
+        try:
+            return json.loads(raw)
+        except (json.JSONDecodeError, ValueError):
+            logger.warning("Corrupt RAG job status job=%s", job_id)
+            return None
 
     def run_ingest(self, job_id: str) -> None:
         """Eksekusi reingest (dipanggil dari BackgroundTasks)."""
@@ -82,7 +97,11 @@ class RagService:
         if not raw:
             logger.error("Job %s tidak ditemukan di Redis", job_id)
             return
-        status = json.loads(raw)
+        try:
+            status = json.loads(raw)
+        except (json.JSONDecodeError, ValueError):
+            logger.error("Job %s status corrupt, abort ingest", job_id)
+            return
         meta_filename = status["meta_filename"]
         try:
             result = reingest_document(meta_filename)

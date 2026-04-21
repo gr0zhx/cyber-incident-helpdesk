@@ -4,7 +4,7 @@ import os
 from typing import Optional
 
 import redis as _redis_lib
-from fastapi import APIRouter, BackgroundTasks, Depends, Form, Request, UploadFile
+from fastapi import APIRouter, BackgroundTasks, Depends, Form, HTTPException, Request, UploadFile
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
@@ -65,11 +65,14 @@ async def upload_document(
     filename = file.filename or "upload.pdf"
     types_list = [t.strip() for t in incident_types.split(",") if t.strip()] or ["general"]
     svc = _make_service()
-    meta_filename = svc.upload_pdf(
-        filename=filename, data=data, doc_id=doc_id,
-        doc_title=doc_title, source_framework=source_framework,
-        incident_types=types_list, language=language,
-    )
+    try:
+        meta_filename = svc.upload_pdf(
+            filename=filename, data=data, doc_id=doc_id,
+            doc_title=doc_title, source_framework=source_framework,
+            incident_types=types_list, language=language,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
     job_id = svc.start_ingest_job(meta_filename)
     background_tasks.add_task(svc.run_ingest, job_id)
     logger.info("RAG_INGEST_STARTED admin=%s doc_id=%s job=%s", admin.username, doc_id, job_id)

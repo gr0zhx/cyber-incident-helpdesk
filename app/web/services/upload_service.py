@@ -2,10 +2,24 @@
 from __future__ import annotations
 
 import json
+import logging
 import uuid
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+
+logger = logging.getLogger(__name__)
+
+
+def _load_list(raw: Any) -> list:
+    if not raw:
+        return []
+    try:
+        data = json.loads(raw)
+        return data if isinstance(data, list) else []
+    except (json.JSONDecodeError, ValueError):
+        logger.warning("Corrupt pending uploads JSON, reset")
+        return []
 
 try:
     import magic
@@ -52,21 +66,21 @@ class UploadService:
             "size_bytes": len(data),
         }
         key = f"web:pending_uploads:{session_id}"
-        existing = json.loads(self._redis.get(key) or b"[]")
+        existing = _load_list(self._redis.get(key))
         existing.append(meta)
         self._redis.setex(key, 3600, json.dumps(existing).encode())
         return meta
 
     def flush_pending(self, session_id: str) -> list[dict]:
-        """Ambil + hapus pending uploads dari Redis. Return list metadata."""
+        """Ambil + hapus pending uploads dari Redis (atomic). Return list metadata."""
         key = f"web:pending_uploads:{session_id}"
-        raw = self._redis.get(key)
-        if raw:
-            self._redis.delete(key)
-            return json.loads(raw)
-        return []
+        pipe = self._redis.pipeline()
+        pipe.get(key)
+        pipe.delete(key)
+        raw, _ = pipe.execute()
+        return _load_list(raw)
 
     def get_pending(self, session_id: str) -> list[dict]:
         """Lihat pending uploads tanpa menghapus."""
         key = f"web:pending_uploads:{session_id}"
-        return json.loads(self._redis.get(key) or b"[]")
+        return _load_list(self._redis.get(key))

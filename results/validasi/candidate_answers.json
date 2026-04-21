@@ -1,0 +1,932 @@
+[
+  {
+    "id": "QA-001",
+    "question": "Apa langkah pertama yang harus dilakukan saat menerima email phishing?",
+    "ground_truth": "Jangan klik link atau lampiran apapun. Segera laporkan ke tim IT/CSIRT dan tandai email sebagai phishing.",
+    "context_source": "NIST SP 800-61",
+    "candidate_answer": "2. Sosialisasikan kepada pegawai untuk tidak mengklik tautan atau membuka lampiran dari email yang tidak dikenal, terutama jika email tersebut meminta informasi pribadi atau kredensial.\n3. Dorong pegawai untuk melaporkan email phishing yang mencurigakan kepada tim keamanan siber internal untuk analisis lebih lanjut.\n4. Pastikan pegawai memahami risiko membuka lampiran email yang tidak dikenal, karena dapat mengandung malware yang memanfaatkan eksekusi pengguna.\n\nPanduan umum: Langkah-langkah mitigasi awal ini bertujuan untuk meningkatkan kesadaran dan respons pegawai terhadap ancaman phishing, serta mencegah akses awal oleh pihak yang tidak berwenang melalui email atau media sosial.\nCatatan eskalasi: Jika insiden phishing telah menyebabkan kebocoran data atau akses tidak sah, segera eskalasi ke tim keamanan siber untuk investigasi lebih lanjut dan mitigasi teknis.\n\nSumber:\n[1] [3] Teknik Serangan MITRE ATT&CK: Spearphishing Link (T1192)\n[2] [4] Teknik Serangan MITRE ATT&CK: Phishing for Information (T1598)\n[3] [5] Teknik Serangan MITRE ATT&CK: Spearphishing Attachment (T1193)",
+    "retrieved_contexts": [
+      {
+        "source": "",
+        "content_preview": "Training and Awareness:\n\n- Educate employees on identifying phishing attempts, securing their social media, and avoiding information leaks.\n\nTeknik yang dimitigasi (84):\n  - T1583.001: Domains\n  - T1583.002: DNS Server\n  - T1583.003: Virtual Private Server\n  - T1583.004: Server\n  - T1583.005: Botnet"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Phishing (T1566)\nTaktik: initial-access\n\nAdversaries may send phishing messages to gain access to victim systems. All forms of phishing are electronically delivered social engineering. Phishing can be targeted, known as spearphishing. In spearphishing, a specific indivi"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Spearphishing Link (T1192)\nTaktik: initial-access\n\nSpearphishing with a link is a specific variant of spearphishing. It is different from other forms of spearphishing in that it employs the use of links to download malware contained in email, instead of attaching malici"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Phishing for Information (T1598)\nTaktik: reconnaissance\n\nAdversaries may send phishing messages to elicit sensitive information that can be used during targeting. Phishing for information is an attempt to trick targets into divulging information, frequently credentials "
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Spearphishing Attachment (T1193)\nTaktik: initial-access\n\nSpearphishing attachment is a specific variant of spearphishing. Spearphishing attachment is different from other forms of spearphishing in that it employs the use of malware attached to an email. All forms of spe"
+      }
+    ],
+    "chunks_retrieved": 5,
+    "status": "ok"
+  },
+  {
+    "id": "QA-002",
+    "question": "Bagaimana cara mengisolasi sistem yang terinfeksi ransomware?",
+    "ground_truth": "Segera putuskan koneksi jaringan (cabut kabel LAN atau matikan WiFi), jangan matikan komputer, dan hubungi tim CSIRT segera.",
+    "context_source": "NIST SP 800-61",
+    "candidate_answer": "1. Identifikasi file, folder, atau direktori yang mungkin sengaja dikecualikan oleh pelaku ancaman dari enkripsi atau manipulasi untuk menghindari deteksi. Pastikan untuk memeriksa file dengan ekstensi seperti `.dll`, `.exe`, dan `.lnk` yang mungkin tidak terpengaruh oleh ransomware.\n2. Pastikan bahwa sistem pemulihan data seperti backup dan layanan pemulihan sistem tidak dinonaktifkan atau dihapus oleh pelaku ancaman. Verifikasi integritas backup secara berkala dan simpan salinan backup di lokasi yang terisolasi dari jaringan utama.\n3. Lakukan audit terhadap file yang sering menjadi target enkripsi ransomware, seperti dokumen Office, PDF, gambar, video, dan file kode sumber. Pastikan bahwa file-file ini memiliki izin akses yang sesuai untuk mencegah manipulasi oleh pelaku ancaman.\n4. Pantau aktivitas akun pengguna untuk mendeteksi potensi penghapusan, penguncian, atau manipulasi akun yang dapat mengganggu akses ke sistem dan sumber daya jaringan. Pastikan ada kebijakan pengelolaan akun yang ketat untuk mencegah akses tidak sah.\n\nPanduan umum: Pastikan untuk selalu memiliki backup data yang terpisah dari jaringan utama dan diperbarui secara berkala. Selain itu, edukasi staf mengenai ancaman ransomware dan pentingnya tidak membuka lampiran atau tautan mencurigakan dari email yang tidak dikenal.\nCatatan eskalasi: Jika insiden tidak dapat ditangani secara internal, segera eskalasi ke tim keamanan siber nasional atau penyedia layanan keamanan siber yang berkompeten untuk mendapatkan bantuan lebih lanjut.\n\nSumber:\n[1] [1] Teknik Serangan MITRE ATT&CK: Selective Exclusion (T1679)\n[2] [2] Teknik Serangan MITRE ATT&CK: Inhibit System Recovery (T1490)\n[3] [4] Teknik Serangan MITRE ATT&CK: Data Encrypted for Impact (T1486)\n[4] [5] Teknik Serangan MITRE ATT&CK: Account Access Removal (T1531)",
+    "retrieved_contexts": [
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Selective Exclusion (T1679)\nTaktik: defense-evasion\n\nAdversaries may intentionally exclude certain files, folders, directories, file types, or system components from encryption or tampering during a ransomware or malicious payload execution. Some file extensions that ad"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Inhibit System Recovery (T1490)\nTaktik: impact\n\nAdversaries may delete or remove built-in data and turn off services designed to aid in the recovery of a corrupted system to prevent recovery.(Citation: Talos Olympic Destroyer 2018)(Citation: FireEye WannaCry 2017) This "
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Data Encrypted for Impact (T1486)\nTaktik: impact\n\nAdversaries may encrypt data on target systems or on large numbers of systems in a network to interrupt availability to system and network resources. They can attempt to render stored data inaccessible by encrypting file"
+      },
+      {
+        "source": "",
+        "content_preview": "In the case of ransomware, it is typical that common user files like Office documents, PDFs, images, videos, audio, text, and source code files will be encrypted (and often renamed and/or tagged with specific file markers). Adversaries may need to first employ other behaviors, such as [File and Dire"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Account Access Removal (T1531)\nTaktik: impact\n\nAdversaries may interrupt availability of system and network resources by inhibiting access to accounts utilized by legitimate users. Accounts may be deleted, locked, or manipulated (ex: changed credentials, revoked permiss"
+      }
+    ],
+    "chunks_retrieved": 5,
+    "status": "ok"
+  },
+  {
+    "id": "QA-003",
+    "question": "Apa yang harus dilakukan jika menemukan data sensitif bocor ke publik?",
+    "ground_truth": "Laporkan segera ke tim CSIRT, dokumentasikan bukti, identifikasi sumber kebocoran, dan patuhi prosedur notifikasi insiden sesuai regulasi.",
+    "context_source": "NIST SP 800-61",
+    "candidate_answer": "3. Lakukan peninjauan terhadap domain, sertifikat, dan data teknis yang tersedia secara publik untuk memastikan tidak ada informasi sensitif yang dapat digunakan oleh pihak yang tidak bertanggung jawab.\n\nPanduan umum: Langkah-langkah mitigasi awal ini bertujuan untuk mengurangi dampak kebocoran data sensitif dan mencegah insiden serupa di masa depan. Penting untuk melibatkan semua pihak terkait dalam proses mitigasi dan memastikan komunikasi yang transparan namun tetap menjaga kerahasiaan informasi internal.\nCatatan eskalasi: Jika insiden kebocoran data sensitif memiliki dampak yang lebih besar atau melibatkan data yang sangat penting, segera eskalasi ke tim keamanan siber nasional atau pihak berwenang terkait untuk mendapatkan dukungan lebih lanjut.\n\nSumber:\n[1] [5] Teknik Serangan MITRE ATT&CK: Search Open Technical Databases (T1596)",
+    "retrieved_contexts": [
+      {
+        "source": "",
+        "content_preview": "Training and Awareness:\n\n- Educate employees on identifying phishing attempts, securing their social media, and avoiding information leaks.\n\nTeknik yang dimitigasi (84):\n  - T1583.001: Domains\n  - T1583.002: DNS Server\n  - T1583.003: Virtual Private Server\n  - T1583.004: Server\n  - T1583.005: Botnet"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Data Destruction (T1485)\nTaktik: impact"
+      },
+      {
+        "source": "",
+        "content_preview": "COMPUTER SECURITY INCIDENT HANDLING GUIDE \n13 \nit. Another way in which external parties may be affected is if an attacker gains access to sensitive \ninformation regarding them, such as credit card information. In some jurisdictions, organizations are \nrequired to notify all parties that are affecte"
+      },
+      {
+        "source": "",
+        "content_preview": "*Tools for Implementation*\n\nOpen Source Tools:\n\n- OpenVAS: Comprehensive network and system vulnerability scanning.\n- OWASP ZAP: Dynamic scanning of web applications for vulnerabilities.\n- Nmap with NSE Scripts: Network scanning with scripts to detect vulnerabilities.\n\nTeknik yang dimitigasi (5):\n  "
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Search Open Technical Databases (T1596)\nTaktik: reconnaissance\n\nAdversaries may search freely available technical databases for information about victims that can be used during targeting. Information about victims may be available in online databases and repositories, "
+      }
+    ],
+    "chunks_retrieved": 5,
+    "status": "ok"
+  },
+  {
+    "id": "QA-004",
+    "question": "Bagaimana cara mendeteksi serangan DDoS pada server?",
+    "ground_truth": "Pantau lonjakan trafik yang tidak normal, periksa log server untuk pola permintaan berulang dari banyak IP, dan gunakan tools monitoring jaringan.",
+    "context_source": "NIST SP 800-61",
+    "candidate_answer": "1. Identifikasi pola lalu lintas jaringan yang tidak biasa, seperti lonjakan tiba-tiba dalam permintaan ke server atau konsumsi bandwidth yang tidak wajar, untuk mendeteksi potensi serangan DDoS.\n2. Pantau ketersediaan layanan penting seperti website, email, DNS, dan aplikasi berbasis web untuk mendeteksi degradasi atau gangguan layanan.\n3. Koordinasikan dengan penyedia layanan internet (ISP) untuk memantau dan memitigasi lalu lintas mencurigakan yang dapat mengindikasikan serangan DDoS.\n4. Pastikan bahwa tim keamanan memiliki akses ke log jaringan dan server untuk analisis lebih lanjut terhadap pola serangan yang mencurigakan.\n5. Edukasi staf internal untuk melaporkan segera jika mereka mengalami kesulitan mengakses layanan atau mendeteksi anomali dalam sistem.\n\nPanduan umum: Serangan DDoS dapat menyebabkan gangguan signifikan pada layanan penting. Oleh karena itu, penting untuk memiliki rencana respons insiden yang mencakup deteksi dini, pelaporan, dan koordinasi dengan pihak terkait seperti ISP. Selain itu, pastikan bahwa sistem pemantauan jaringan selalu aktif untuk mendeteksi anomali.\nCatatan eskalasi: Jika serangan DDoS tidak dapat ditangani dengan langkah-langkah awal ini, segera eskalasi insiden ke tim keamanan siber nasional (BSSN) untuk mendapatkan bantuan lebih lanjut.\n\nSumber:\n[1] [3] Teknik Serangan MITRE ATT&CK: Network Denial of Service (T1498)\n[2] [1] Teknik Serangan MITRE ATT&CK: Endpoint Denial of Service (T1499)",
+    "retrieved_contexts": [
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Endpoint Denial of Service (T1499)\nTaktik: impact\n\nAdversaries may perform Endpoint Denial of Service (DoS) attacks to degrade or block the availability of services to users. Endpoint DoS can be performed by exhausting the system resources those services are hosted on o"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Domain Trust Discovery (T1482)\nTaktik: discovery"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Network Denial of Service (T1498)\nTaktik: impact\n\nAdversaries may perform Network Denial of Service (DoS) attacks to degrade or block the availability of targeted resources to users. Network DoS can be performed by exhausting the network bandwidth services rely on. Exam"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: System Owner/User Discovery (T1033)\nTaktik: discovery"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: System Network Configuration Discovery (T1016)\nTaktik: discovery\n\nAdversaries may look for details about the network configuration and settings, such as IP and/or MAC addresses, of systems they access or through information discovery of remote systems. Several operating"
+      }
+    ],
+    "chunks_retrieved": 5,
+    "status": "ok"
+  },
+  {
+    "id": "QA-005",
+    "question": "Apa langkah mitigasi awal untuk serangan malware pada workstation?",
+    "ground_truth": "Isolasi perangkat dari jaringan, jalankan full scan antivirus, dokumentasikan proses mencurigakan yang berjalan, dan laporkan ke CSIRT.",
+    "context_source": "NIST SP 800-61",
+    "candidate_answer": "1. Lakukan audit terhadap konfigurasi dan status alat keamanan yang terpasang, seperti antivirus, firewall, dan perangkat lunak keamanan lainnya, untuk memastikan bahwa tidak ada yang dinonaktifkan atau dimodifikasi oleh penyerang.\n2. Identifikasi dan catat perangkat lunak keamanan yang terpasang di workstation untuk memastikan bahwa semua alat yang diperlukan tersedia dan berfungsi sebagaimana mestinya.\n3. Tinjau dan periksa log sistem untuk mendeteksi aktivitas mencurigakan, seperti perubahan pada Registry atau proses yang terkait dengan alat keamanan.\n4. Evaluasi dan periksa konfigurasi Windows Management Instrumentation (WMI) untuk mendeteksi adanya event subscription yang tidak sah, yang dapat digunakan untuk mempertahankan akses ke sistem.\n5. Tingkatkan kesadaran dan pelatihan staf terkait potensi serangan yang memanfaatkan teknik persistence dan defense-evasion, seperti memodifikasi alat keamanan atau menggunakan WMI untuk tujuan jahat.\n\nPanduan umum: Langkah-langkah mitigasi awal ini bertujuan untuk mengidentifikasi dan mengurangi dampak serangan malware pada workstation. Penting untuk segera melibatkan tim keamanan siber internal untuk investigasi lebih lanjut dan memastikan bahwa semua sistem telah diperiksa secara menyeluruh.\nCatatan eskalasi: Jika ditemukan bukti bahwa serangan telah meluas atau ada potensi dampak yang lebih besar, segera eskalasi insiden ini ke tim respons insiden keamanan siber nasional (CSIRT) atau otoritas terkait untuk penanganan lebih lanjut.\n\nSumber:\n[1] [2] Teknik Serangan MITRE ATT&CK: Disabling Security Tools (T1089)\n[2] [3] Teknik Serangan MITRE ATT&CK: Security Software Discovery (T1063)\n[3] [1] Teknik Serangan MITRE ATT&CK: Windows Management Instrumentation Event Subscription (T1084)\n[4] [1] Teknik Serangan MITRE ATT&CK: Windows Management Instrumentation Event Subscription (T1084), [2] Teknik Serangan MITRE ATT&CK: Disabling Security Tools (T1089)",
+    "retrieved_contexts": [
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Windows Management Instrumentation Event Subscription (T1084)\nTaktik: persistence"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Disabling Security Tools (T1089)\nTaktik: defense-evasion\n\nAdversaries may disable security tools to avoid possible detection of their tools and activities. This can take the form of killing security software or event logging processes, deleting Registry keys so that too"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Security Software Discovery (T1063)\nTaktik: discovery\n\nAdversaries may attempt to get a listing of security software, configurations, defensive tools, and sensors that are installed on the system. This may include things such as local firewall rules and anti-virus. Adve"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Kernel Modules and Extensions (T1215)\nTaktik: persistence"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: HISTCONTROL (T1148)\nTaktik: defense-evasion"
+      }
+    ],
+    "chunks_retrieved": 5,
+    "status": "ok"
+  },
+  {
+    "id": "QA-006",
+    "question": "Bagaimana prosedur response saat akun admin dikompromis?",
+    "ground_truth": "Segera nonaktifkan akun yang dikompromis, reset semua kredensial terkait, audit log akses, dan investigasi sumber kompromi.",
+    "context_source": "NIST SP 800-61",
+    "candidate_answer": "1. Segera lakukan peninjauan terhadap semua akun yang memiliki hak akses administratif untuk memastikan tidak ada manipulasi atau eskalasi hak akses yang tidak sah. Fokus pada perubahan kredensial atau grup izin yang mencurigakan.\n3. Lakukan audit terhadap log aktivitas akun untuk mengidentifikasi pola penggunaan yang tidak biasa, seperti login dari lokasi geografis yang tidak dikenal atau aktivitas di luar jam kerja normal.\n4. Berikan pelatihan kepada staf tentang teknik social engineering yang dapat digunakan untuk kompromi akun, termasuk cara mengenali email phishing atau komunikasi mencurigakan.\n5. Tinjau dan perbarui kebijakan rotasi kata sandi untuk memastikan bahwa kredensial yang dikompromikan tidak dapat digunakan dalam jangka waktu yang lama.\n\nPanduan umum: Langkah-langkah mitigasi ini bertujuan untuk mengurangi risiko eskalasi lebih lanjut dari akun yang dikompromikan dan mencegah akses tidak sah di masa depan. Penting untuk melibatkan tim keamanan siber internal untuk memastikan implementasi kebijakan yang konsisten.\nCatatan eskalasi: Jika insiden ini berkembang menjadi tingkat keparahan tinggi atau melibatkan data sensitif, segera eskalasi ke Badan Siber dan Sandi Negara (BSSN) untuk dukungan lebih lanjut.\n\nSumber:\n[1] Dokumen Referensi [3], Teknik MITRE ATT&CK: Account Manipulation (T1098)\n[2] Dokumen Referensi [2], Teknik MITRE ATT&CK: Compromise Accounts (T1586)",
+    "retrieved_contexts": [
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Valid Accounts (T1078)\nTaktik: defense-evasion, persistence, privilege-escalation, initial-access"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Compromise Accounts (T1586)\nTaktik: resource-development\n\nAdversaries may compromise accounts with services that can be used during targeting. For operations incorporating social engineering, the utilization of an online persona may be important. Rather than creating an"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Account Manipulation (T1098)\nTaktik: persistence, privilege-escalation\n\nAdversaries may manipulate accounts to maintain and/or elevate access to victim systems. Account manipulation may consist of any action that preserves or modifies adversary access to a compromised a"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik yang dimitigasi (17):\n  - T1078: Valid Accounts\n  - T1195.001: Compromise Software Dependencies and Development Tools\n  - T1195: Supply Chain Compromise\n  - T1212: Exploitation for Credential Access\n  - T1496.003: SMS Pumping\n  - T1550.001: Application Access Token\n  - T1550: Use Alternate Au"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik yang dimitigasi (10):\n  - T1078.004: Cloud Accounts\n  - T1078: Valid Accounts\n  - T1110.001: Password Guessing\n  - T1110.003: Password Spraying\n  - T1110.004: Credential Stuffing\n  - T1110: Brute Force\n  - T1550.001: Application Access Token\n  - T1550: Use Alternate Authentication Material\n  "
+      }
+    ],
+    "chunks_retrieved": 5,
+    "status": "ok"
+  },
+  {
+    "id": "QA-007",
+    "question": "Apa indikator kompromi (IoC) yang umum pada serangan phishing?",
+    "ground_truth": "Email dari domain mirip tapi berbeda, link menuju URL yang tidak sesuai, permintaan kredensial mendesak, dan lampiran berekstensi tidak biasa.",
+    "context_source": "NIST SP 800-61",
+    "candidate_answer": "2. Meningkatkan kewaspadaan terhadap email yang mencurigakan, terutama yang meminta informasi sensitif seperti kredensial atau data penting lainnya.\n4. Menerapkan kebijakan internal untuk memverifikasi keaslian email yang berasal dari akun internal, guna mencegah spearphishing internal.\n5. Meningkatkan pengawasan terhadap aktivitas mencurigakan yang melibatkan akun internal, seperti penggunaan akun untuk mengirim email phishing ke pengguna lain.\n\nPanduan umum: Langkah-langkah mitigasi ini bertujuan untuk meningkatkan kesadaran pegawai, memperkuat kebijakan internal, dan mengidentifikasi serta memblokir infrastruktur yang digunakan oleh pelaku serangan phishing.\nCatatan eskalasi: Jika serangan phishing telah menyebabkan kompromi data atau sistem, segera eskalasi ke tim respons insiden untuk investigasi lebih lanjut dan mitigasi teknis.\n\nSumber:\n[1] [1] Teknik Serangan MITRE ATT&CK: Phishing for Information (T1598)\n[2] [4] Teknik Serangan MITRE ATT&CK: Internal Spearphishing (T1534)",
+    "retrieved_contexts": [
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Phishing for Information (T1598)\nTaktik: reconnaissance\n\nAdversaries may send phishing messages to elicit sensitive information that can be used during targeting. Phishing for information is an attempt to trick targets into divulging information, frequently credentials "
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Phishing (T1566)\nTaktik: initial-access\n\nAdversaries may send phishing messages to gain access to victim systems. All forms of phishing are electronically delivered social engineering. Phishing can be targeted, known as spearphishing. In spearphishing, a specific indivi"
+      },
+      {
+        "source": "",
+        "content_preview": "Training and Awareness:\n\n- Educate employees on identifying phishing attempts, securing their social media, and avoiding information leaks.\n\nTeknik yang dimitigasi (84):\n  - T1583.001: Domains\n  - T1583.002: DNS Server\n  - T1583.003: Virtual Private Server\n  - T1583.004: Server\n  - T1583.005: Botnet"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Internal Spearphishing (T1534)\nTaktik: lateral-movement\n\nAfter they already have access to accounts or systems within the environment, adversaries may use internal spearphishing to gain access to additional information or compromise other users within the same organizat"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Indicator Blocking (T1054)\nTaktik: defense-evasion"
+      }
+    ],
+    "chunks_retrieved": 5,
+    "status": "ok"
+  },
+  {
+    "id": "QA-008",
+    "question": "Bagaimana cara memulihkan sistem setelah serangan ransomware?",
+    "ground_truth": "Jangan bayar tebusan. Restore dari backup bersih yang terverifikasi, scan sistem sebelum reconnect ke jaringan, dan laporkan ke penegak hukum.",
+    "context_source": "NIST SP 800-61",
+    "candidate_answer": "Sistem tidak menemukan panduan SOP yang relevan untuk jenis insiden ini. Silakan hubungi tim CSIRT secara langsung untuk penanganan lebih lanjut.",
+    "retrieved_contexts": [
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Inhibit System Recovery (T1490)\nTaktik: impact\n\nAdversaries may delete or remove built-in data and turn off services designed to aid in the recovery of a corrupted system to prevent recovery.(Citation: Talos Olympic Destroyer 2018)(Citation: FireEye WannaCry 2017) This "
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Data Encrypted for Impact (T1486)\nTaktik: impact\n\nAdversaries may encrypt data on target systems or on large numbers of systems in a network to interrupt availability to system and network resources. They can attempt to render stored data inaccessible by encrypting file"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Selective Exclusion (T1679)\nTaktik: defense-evasion\n\nAdversaries may intentionally exclude certain files, folders, directories, file types, or system components from encryption or tampering during a ransomware or malicious payload execution. Some file extensions that ad"
+      },
+      {
+        "source": "",
+        "content_preview": "In the case of ransomware, it is typical that common user files like Office documents, PDFs, images, videos, audio, text, and source code files will be encrypted (and often renamed and/or tagged with specific file markers). Adversaries may need to first employ other behaviors, such as [File and Dire"
+      },
+      {
+        "source": "",
+        "content_preview": "Operating systems may contain features that can help fix corrupted systems, such as a backup catalog, volume shadow copies, and automatic repair features. Adversaries may disable or delete system recovery features to augment the effects of [Data Destruction](https://attack.mitre.org/techniques/T1485"
+      }
+    ],
+    "chunks_retrieved": 5,
+    "status": "ok"
+  },
+  {
+    "id": "QA-009",
+    "question": "Apa perbedaan antara incident response dan disaster recovery?",
+    "ground_truth": "Incident response fokus pada mengatasi ancaman keamanan aktif, sedangkan disaster recovery fokus pada pemulihan sistem dan data setelah insiden selesai.",
+    "context_source": "NIST SP 800-61",
+    "candidate_answer": "Sistem tidak menemukan panduan SOP yang relevan untuk jenis insiden ini. Silakan hubungi tim CSIRT secara langsung untuk penanganan lebih lanjut.",
+    "retrieved_contexts": [
+      {
+        "source": "",
+        "content_preview": "extensive expertise in minimizing operational disruption during severe circumstances, they may be \nvaluable in planning responses to certain situations, such as denial of service (DoS) conditions.  \n Physical Security and Facilities Management. Some computer security incidents occur through \nbreach"
+      },
+      {
+        "source": "",
+        "content_preview": "• Detect, Respond, and Recover help organizations discover, manage, prioritize, contain, \neradicate, and recover from cybersecurity incidents, as well as perform incident \nreporting, notification, and other incident-related communications.  \nMany individuals, teams, and third parties hold a wide var"
+      },
+      {
+        "source": "",
+        "content_preview": "recovery plans and plan execution, see \n[SP800-184]. \nRC.RP-01 The recovery portion of the \nincident response plan is \nexecuted once initiated from the \nincident response process \nHigh R1: Begin recovery procedures during or \nafter incident response processes. \nR2: Inform all individuals with recove"
+      },
+      {
+        "source": "",
+        "content_preview": "necessary or is performed during recovery.  \nIn recovery, administrators restore systems to normal operation, confirm that the systems are functioning \nnormally, and (if applicable) remediate vulnerabilities to prevent similar incidents. Recovery may involve \nsuch actions as restoring systems from c"
+      },
+      {
+        "source": "",
+        "content_preview": "criteria defined in the incident response \nplan and available resources. \nR3: Change planned recovery actions based \non a reassessment of organizational needs \nand resources. \nRC.RP-03 The integrity of backups and \nother restoration assets is \nverified before using them for \nrestoration \nHigh R1: Ch"
+      }
+    ],
+    "chunks_retrieved": 5,
+    "status": "ok"
+  },
+  {
+    "id": "QA-010",
+    "question": "Bagaimana cara mengamankan akun dari serangan brute force?",
+    "ground_truth": "Aktifkan multi-factor authentication, terapkan kebijakan lockout akun setelah beberapa kali gagal login, dan gunakan password yang kuat dan unik.",
+    "context_source": "NIST SP 800-53",
+    "candidate_answer": "1. Menerapkan kebijakan kata sandi yang kuat, termasuk panjang minimum, kombinasi karakter, dan pembaruan berkala untuk mencegah serangan brute force.\n2. Mengaktifkan mekanisme penguncian akun setelah sejumlah upaya login yang gagal untuk mencegah serangan brute force yang berulang.\n3. Memantau log aktivitas untuk mendeteksi pola upaya login yang mencurigakan, seperti banyaknya upaya login yang gagal dalam waktu singkat.\n4. Menggunakan autentikasi multi-faktor (MFA) untuk menambahkan lapisan keamanan tambahan pada akun pengguna.\n5. Memberikan pelatihan kepada pengguna tentang pentingnya menggunakan kata sandi yang kuat dan tidak menggunakan kata sandi yang sama di berbagai layanan.\n\nPanduan umum: Langkah-langkah mitigasi ini bertujuan untuk mengurangi risiko serangan brute force dengan memperkuat kebijakan kata sandi, meningkatkan deteksi aktivitas mencurigakan, dan menerapkan autentikasi tambahan.\nCatatan eskalasi: Jika serangan terus berlanjut atau terdapat indikasi akses tidak sah, segera eskalasi insiden ke tim keamanan siber untuk investigasi lebih lanjut.\n\nSumber:\n[1] Dokumen [1], Teknik Serangan MITRE ATT&CK: Brute Force (T1110)",
+    "retrieved_contexts": [
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Brute Force (T1110)\nTaktik: credential-access\n\nAdversaries may use brute force techniques to gain access to accounts when passwords are unknown or when password hashes are obtained.(Citation: TrendMicro Pawn Storm Dec 2020) Without knowledge of the password for an accou"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Valid Accounts (T1078)\nTaktik: defense-evasion, persistence, privilege-escalation, initial-access"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Login Item (T1162)\nTaktik: persistence"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Create Account (T1136)\nTaktik: persistence\n\nAdversaries may create an account to maintain access to victim systems.(Citation: Symantec WastedLocker June 2020) With a sufficient level of access, creating such accounts may be used to establish secondary credentialed acces"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Steal or Forge Kerberos Tickets (T1558)\nTaktik: credential-access"
+      }
+    ],
+    "chunks_retrieved": 5,
+    "status": "ok"
+  },
+  {
+    "id": "QA-011",
+    "question": "Apa yang dimaksud dengan privilege escalation dan bagaimana mencegahnya?",
+    "ground_truth": "Privilege escalation adalah upaya penyerang mendapatkan hak akses lebih tinggi. Pencegahan: prinsip least privilege, patch reguler, dan monitoring aktivitas akun.",
+    "context_source": "MITRE ATT&CK",
+    "candidate_answer": "1. Lakukan peninjauan berkala terhadap kerentanan perangkat lunak yang digunakan dalam sistem untuk memastikan bahwa semua patch keamanan terbaru telah diterapkan. Hal ini dapat mencegah eksploitasi kerentanan yang dapat digunakan untuk privilege escalation.\n2. Pastikan mekanisme kontrol elevasi hak akses seperti User Account Control (UAC) diaktifkan dan dikonfigurasi dengan benar untuk membatasi akses pengguna terhadap tindakan berisiko tinggi.\n3. Edukasi pengguna tentang pentingnya tidak memberikan izin administratif atau menjalankan perintah dengan hak akses tinggi tanpa verifikasi yang jelas. Hal ini dapat mengurangi risiko penyalahgunaan prompt elevasi hak akses.\n4. Batasi penggunaan caching pada perintah sudo untuk mencegah penyalahgunaan hak akses administratif oleh pihak yang tidak berwenang.\n5. Lakukan audit terhadap konfigurasi sistem untuk memastikan bahwa tidak ada mekanisme seperti Emond yang dapat digunakan untuk mempertahankan akses atau meningkatkan hak istimewa secara tidak sah.\n\nPanduan umum: Privilege escalation adalah teknik yang digunakan oleh penyerang untuk mendapatkan hak akses yang lebih tinggi dalam sistem, biasanya dengan mengeksploitasi kerentanan perangkat lunak atau mekanisme kontrol hak akses. Pencegahan privilege escalation melibatkan penerapan patch keamanan, konfigurasi sistem yang ketat, dan edukasi pengguna.\nCatatan eskalasi: Dokumen referensi memberikan panduan yang relevan untuk mitigasi privilege escalation, termasuk eksploitasi kerentanan perangkat lunak, penyalahgunaan mekanisme kontrol elevasi, dan teknik lainnya.\n\nSumber:\n[1] Dokumen [1], Teknik Serangan MITRE ATT&CK: Exploitation for Privilege Escalation (T1068)\n[2] Dokumen [2], Teknik Serangan MITRE ATT&CK: Abuse Elevation Control Mechanism (T1548)\n[3] Dokumen [3], Teknik Serangan MITRE ATT&CK: Elevated Execution with Prompt (T1514)\n[4] Dokumen [4], Teknik Serangan MITRE ATT&CK: Sudo Caching (T1206)\n[5] Dokumen [5], Teknik Serangan MITRE ATT&CK: Emond (T1519)",
+    "retrieved_contexts": [
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Exploitation for Privilege Escalation (T1068)\nTaktik: privilege-escalation\n\nAdversaries may exploit software vulnerabilities in an attempt to elevate privileges. Exploitation of a software vulnerability occurs when an adversary takes advantage of a programming error in "
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Abuse Elevation Control Mechanism (T1548)\nTaktik: privilege-escalation, defense-evasion\n\nAdversaries may circumvent mechanisms designed to control elevate privileges to gain higher-level permissions. Most modern systems contain native elevation control mechanisms that a"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Elevated Execution with Prompt (T1514)\nTaktik: privilege-escalation"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Sudo Caching (T1206)\nTaktik: privilege-escalation"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Emond (T1519)\nTaktik: persistence, privilege-escalation"
+      }
+    ],
+    "chunks_retrieved": 5,
+    "status": "ok"
+  },
+  {
+    "id": "QA-012",
+    "question": "Bagaimana cara mengamankan server web dari serangan defacement?",
+    "ground_truth": "Terapkan patch keamanan rutin, gunakan WAF (Web Application Firewall), batasi akses file sistem, aktifkan monitoring integritas file, dan backup berkala.",
+    "context_source": "NIST SP 800-44",
+    "candidate_answer": "2. Pastikan bahwa semua konten visual yang diunggah ke server web telah diperiksa dan diverifikasi untuk mencegah modifikasi yang tidak sah. Hal ini dapat membantu menjaga integritas konten.\n3. Lakukan audit rutin terhadap server web untuk mendeteksi potensi penyalahgunaan fitur pengembangan yang dapat digunakan untuk menambahkan komponen berbahaya.\n4. Implementasikan kebijakan akses berbasis peran (role-based access control) untuk membatasi akses ke server web hanya kepada individu yang memerlukan akses tersebut.\n5. Pastikan bahwa semua perangkat lunak server web diperbarui secara berkala untuk mengatasi kerentanan yang dapat dimanfaatkan oleh penyerang.\n\nPanduan umum: Langkah-langkah mitigasi ini dirancang untuk mengurangi risiko serangan defacement pada server web Kementerian Pertanian. Fokus utama adalah pada peningkatan kesadaran, pengamanan konten, dan pembatasan akses.\nCatatan eskalasi: Jika serangan defacement telah terjadi atau ada indikasi pelanggaran keamanan, segera eskalasi insiden ini ke tim keamanan siber internal atau CSIRT (Computer Security Incident Response Team) untuk investigasi lebih lanjut.\n\nSumber:\n[1] [1] Teknik Serangan MITRE ATT&CK: Defacement (T1491)\n[2] [5] Teknik Serangan MITRE ATT&CK: Server Software Component (T1505)",
+    "retrieved_contexts": [
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Defacement (T1491)\nTaktik: impact\n\nAdversaries may modify visual content available internally or externally to an enterprise network, thus affecting the integrity of the original content. Reasons for [Defacement](https://attack.mitre.org/techniques/T1491) include delive"
+      },
+      {
+        "source": "",
+        "content_preview": "Training and Awareness:\n\n- Educate employees on identifying phishing attempts, securing their social media, and avoiding information leaks.\n\nTeknik yang dimitigasi (84):\n  - T1583.001: Domains\n  - T1583.002: DNS Server\n  - T1583.003: Virtual Private Server\n  - T1583.004: Server\n  - T1583.005: Botnet"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Data Destruction (T1485)\nTaktik: impact"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: HISTCONTROL (T1148)\nTaktik: defense-evasion"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Server Software Component (T1505)\nTaktik: persistence\n\nAdversaries may abuse legitimate extensible development features of servers to establish persistent access to systems. Enterprise server applications may include features that allow developers to write and install s"
+      }
+    ],
+    "chunks_retrieved": 5,
+    "status": "ok"
+  },
+  {
+    "id": "QA-013",
+    "question": "Apa langkah investigasi digital forensik awal setelah insiden keamanan?",
+    "ground_truth": "Amankan barang bukti digital tanpa mengubahnya, buat image forensik, catat chain of custody, dan jangan jalankan program apapun di sistem yang dikompromis.",
+    "context_source": "NIST SP 800-86",
+    "candidate_answer": "2. Lakukan audit terhadap informasi yang tersedia secara publik, termasuk data yang dapat diakses melalui situs web, domain, dan media sosial organisasi. Identifikasi dan kurangi informasi sensitif yang dapat digunakan oleh pelaku ancaman untuk melakukan reconnaissance.\n3. Pantau aktivitas di database teknis terbuka seperti WHOIS, Shodan, dan DNS Dumpster untuk memastikan tidak ada informasi sensitif organisasi yang dapat diakses secara publik.\n4. Evaluasi dan perbarui kebijakan keamanan data organisasi untuk memastikan bahwa informasi sensitif tidak dipublikasikan secara tidak sengaja di situs web atau platform lain yang dapat diakses oleh publik.\n5. Gunakan laporan intelijen ancaman dari vendor keamanan untuk memahami pola serangan yang relevan dengan sektor pertanian dan mengidentifikasi potensi ancaman yang dapat memengaruhi organisasi.\n\nPanduan umum: Langkah-langkah mitigasi awal ini bertujuan untuk mengurangi risiko eksploitasi informasi yang tersedia secara publik oleh pelaku ancaman. Fokus utama adalah meningkatkan kesadaran karyawan, mengamankan informasi sensitif, dan memanfaatkan intelijen ancaman untuk mengidentifikasi potensi risiko.\nCatatan eskalasi: Jika insiden menunjukkan tanda-tanda eskalasi atau dampak yang lebih besar, segera koordinasikan dengan tim keamanan siber nasional atau pihak berwenang terkait untuk mendapatkan dukungan lebih lanjut.\n\nSumber:\n[1] [4] Teknik Serangan MITRE ATT&CK: Search Open Websites/Domains (T1593)\n[2] [1] Teknik Serangan MITRE ATT&CK: Search Open Technical Databases (T1596)\n[3] [5] Teknik Serangan MITRE ATT&CK: Search Threat Vendor Data (T1681)",
+    "retrieved_contexts": [
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Search Open Technical Databases (T1596)\nTaktik: reconnaissance\n\nAdversaries may search freely available technical databases for information about victims that can be used during targeting. Information about victims may be available in online databases and repositories, "
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Data Destruction (T1485)\nTaktik: impact"
+      },
+      {
+        "source": "",
+        "content_preview": "Training and Awareness:\n\n- Educate employees on identifying phishing attempts, securing their social media, and avoiding information leaks.\n\nTeknik yang dimitigasi (84):\n  - T1583.001: Domains\n  - T1583.002: DNS Server\n  - T1583.003: Virtual Private Server\n  - T1583.004: Server\n  - T1583.005: Botnet"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Search Open Websites/Domains (T1593)\nTaktik: reconnaissance\n\nAdversaries may search freely available websites and/or domains for information about victims that can be used during targeting. Information about victims may be available in various online sites, such as soci"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Search Threat Vendor Data (T1681)\nTaktik: reconnaissance\n\nThreat actors may seek information/indicators from closed or open threat intelligence sources gathered about their own campaigns, as well as those conducted by other adversaries that may align with their target i"
+      }
+    ],
+    "chunks_retrieved": 5,
+    "status": "ok"
+  },
+  {
+    "id": "QA-014",
+    "question": "Bagaimana cara mendeteksi lateral movement dalam jaringan?",
+    "ground_truth": "Monitor log autentikasi untuk login dari akun yang tidak biasa, pantau koneksi jaringan internal yang tidak normal, dan gunakan SIEM untuk korelasi log.",
+    "context_source": "MITRE ATT&CK",
+    "candidate_answer": "1. Melakukan audit dan pembatasan akses terhadap layanan SSH dengan memastikan hanya pengguna yang berwenang yang dapat mengakses sistem melalui SSH. Selain itu, gunakan metode autentikasi yang lebih kuat seperti kunci asimetris dibandingkan kata sandi.\n2. Melakukan pemantauan terhadap aktivitas jaringan untuk mendeteksi upaya eksploitasi layanan jarak jauh (remote services) yang dapat digunakan untuk pergerakan lateral. Fokuskan pada identifikasi pola lalu lintas yang mencurigakan atau tidak biasa.\n3. Melakukan inventarisasi dan pembaruan sistem secara berkala untuk memastikan bahwa semua perangkat lunak dan layanan yang digunakan telah diperbarui dengan patch keamanan terbaru, guna mencegah eksploitasi kerentanan.\n4. Mengimplementasikan pemantauan log jaringan dan sistem untuk mendeteksi aktivitas yang mencurigakan, seperti upaya untuk mendapatkan daftar koneksi jaringan atau konfigurasi jaringan.\n5. Meningkatkan kesadaran dan pelatihan keamanan siber bagi staf untuk mengenali tanda-tanda awal serangan, seperti aktivitas mencurigakan pada sistem atau jaringan, serta melaporkannya segera kepada tim keamanan.\n\nPanduan umum: Langkah-langkah mitigasi ini bertujuan untuk mencegah dan mendeteksi pergerakan lateral dalam jaringan, yang dapat digunakan oleh penyerang untuk memperluas akses mereka ke sistem internal. Penting untuk mengadopsi pendekatan proaktif dengan memantau aktivitas jaringan, memperbarui sistem, dan meningkatkan kesadaran keamanan di seluruh organisasi.\nCatatan eskalasi: Jika aktivitas mencurigakan terus terdeteksi atau jika ada bukti bahwa pergerakan lateral telah berhasil dilakukan, segera eskalasi insiden ini ke tim respons insiden keamanan siber tingkat lanjut untuk analisis lebih lanjut dan tindakan mitigasi yang lebih mendalam.\n\nSumber:\n[1] Dokumen [1], Teknik Serangan MITRE ATT&CK: SSH Hijacking (T1184)\n[2] Dokumen [3], Teknik Serangan MITRE ATT&CK: Exploitation of Remote Services (T1210)\n[3] Dokumen [2], Teknik Serangan MITRE ATT&CK: System Network Configuration Discovery (T1016) dan Dokumen [4], Teknik Serangan MITRE ATT&CK: System Network Connections Discovery (T1049)\n[4] Dokumen [5], Teknik Serangan MITRE ATT&CK: Pass the Ticket (T1097)",
+    "retrieved_contexts": [
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: SSH Hijacking (T1184)\nTaktik: lateral-movement\n\nSecure Shell (SSH) is a standard means of remote access on Linux and macOS systems. It allows a user to connect to another system via an encrypted tunnel, commonly authenticating through a password, certificate or the use "
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: System Network Configuration Discovery (T1016)\nTaktik: discovery\n\nAdversaries may look for details about the network configuration and settings, such as IP and/or MAC addresses, of systems they access or through information discovery of remote systems. Several operating"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Exploitation of Remote Services (T1210)\nTaktik: lateral-movement\n\nAdversaries may exploit remote services to gain unauthorized access to internal systems once inside of a network. Exploitation of a software vulnerability occurs when an adversary takes advantage of a pro"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: System Network Connections Discovery (T1049)\nTaktik: discovery\n\nAdversaries may attempt to get a listing of network connections to or from the compromised system they are currently accessing or from remote systems by querying for information over the network."
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Pass the Ticket (T1097)\nTaktik: lateral-movement\n\nPass the ticket (PtT) is a method of authenticating to a system using Kerberos tickets without having access to an account's password. Kerberos authentication can be used as the first step to lateral movement to a remote"
+      }
+    ],
+    "chunks_retrieved": 5,
+    "status": "ok"
+  },
+  {
+    "id": "QA-015",
+    "question": "Apa saja best practice untuk keamanan email organisasi?",
+    "ground_truth": "Implementasikan SPF, DKIM, dan DMARC, gunakan email gateway dengan filtering, latih pengguna mengenali phishing, dan aktifkan MFA untuk akses email.",
+    "context_source": "NIST SP 800-177",
+    "candidate_answer": "Sistem tidak menemukan panduan SOP yang relevan untuk jenis insiden ini. Silakan hubungi tim CSIRT secara langsung untuk penanganan lebih lanjut.",
+    "retrieved_contexts": [
+      {
+        "source": "",
+        "content_preview": "Training and Awareness:\n\n- Educate employees on identifying phishing attempts, securing their social media, and avoiding information leaks.\n\nTeknik yang dimitigasi (84):\n  - T1583.001: Domains\n  - T1583.002: DNS Server\n  - T1583.003: Virtual Private Server\n  - T1583.004: Server\n  - T1583.005: Botnet"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Email Collection (T1114)\nTaktik: collection\n\nAdversaries may target user email to collect sensitive information. Emails may contain sensitive data, including trade secrets or personal information, that can prove valuable to adversaries. Emails may also contain details o"
+      },
+      {
+        "source": "",
+        "content_preview": "checklists to assist in securing hosts consistently and effectively.29 \n Network Security. The network perimeter should be configured to deny all activity that is not \nexpressly permitted. This includes securing all connection points, such as virtual private networks \n(VPNs) and dedicated connectio"
+      },
+      {
+        "source": "",
+        "content_preview": "Protect Domain and DNS Infrastructure:\n\n- Enable DNSSEC and use WHOIS privacy protection.\n- Monitor for domain hijacking or lookalike domains using services like RiskIQ or DomainTools.\n\nExternal Monitoring:\n\n- Use tools like Shodan, Censys to monitor your external attack surface.\n- Deploy external v"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Email Bombing (T1667)\nTaktik: impact\n\nAdversaries may flood targeted email addresses with an overwhelming volume of messages. This may bury legitimate emails in a flood of spam and disrupt business operations.(Citation: sophos-bombing)(Citation: krebs-email-bombing)\n\nAn"
+      }
+    ],
+    "chunks_retrieved": 5,
+    "status": "ok"
+  },
+  {
+    "id": "QA-016",
+    "question": "Bagaimana cara menangani insiden kebocoran data pribadi pegawai?",
+    "ground_truth": "Identifikasi scope kebocoran, notifikasi individu yang terdampak sesuai regulasi, laporkan ke otoritas terkait jika diperlukan, dan perbaiki celah keamanan.",
+    "context_source": "NIST SP 800-122",
+    "candidate_answer": "3. Evaluasi data yang bocor untuk memahami dampaknya terhadap integritas organisasi, termasuk potensi manipulasi data yang dapat memengaruhi proses bisnis atau pengambilan keputusan.\n4. Lakukan analisis terhadap informasi identitas yang dikumpulkan oleh pelaku, seperti nama pegawai, alamat email, atau konfigurasi MFA, untuk mengidentifikasi potensi risiko lebih lanjut dan memperkuat langkah-langkah keamanan.\n\nPanduan umum: Langkah-langkah mitigasi awal ini bertujuan untuk mengurangi dampak insiden kebocoran data pribadi pegawai, meningkatkan kesadaran keamanan, dan memastikan transparansi dalam penanganan insiden.\nCatatan eskalasi: Jika insiden ini berkembang menjadi lebih serius atau melibatkan data sensitif yang lebih luas, segera eskalasi ke tim keamanan siber nasional atau pihak berwenang terkait untuk penanganan lebih lanjut.\n\nSumber:\n[1] [3] Teknik Serangan MITRE ATT&CK: Data Manipulation (T1565)\n[2] [5] Teknik Serangan MITRE ATT&CK: Gather Victim Identity Information (T1589)",
+    "retrieved_contexts": [
+      {
+        "source": "",
+        "content_preview": "Training and Awareness:\n\n- Educate employees on identifying phishing attempts, securing their social media, and avoiding information leaks.\n\nTeknik yang dimitigasi (84):\n  - T1583.001: Domains\n  - T1583.002: DNS Server\n  - T1583.003: Virtual Private Server\n  - T1583.004: Server\n  - T1583.005: Botnet"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Data Destruction (T1485)\nTaktik: impact"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Data Manipulation (T1565)\nTaktik: impact\n\nAdversaries may insert, delete, or manipulate data in order to influence external outcomes or hide activity, thus threatening the integrity of the data.(Citation: Sygnia Elephant Beetle Jan 2022) By manipulating data, adversarie"
+      },
+      {
+        "source": "",
+        "content_preview": "COMPUTER SECURITY INCIDENT HANDLING GUIDE \n13 \nit. Another way in which external parties may be affected is if an attacker gains access to sensitive \ninformation regarding them, such as credit card information. In some jurisdictions, organizations are \nrequired to notify all parties that are affecte"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Gather Victim Identity Information (T1589)\nTaktik: reconnaissance\n\nAdversaries may gather information about the victim's identity that can be used during targeting. Information about identities may include a variety of details, including personal data (ex: employee name"
+      }
+    ],
+    "chunks_retrieved": 5,
+    "status": "ok"
+  },
+  {
+    "id": "QA-017",
+    "question": "Apa itu supply chain attack dan bagaimana mitigasinya?",
+    "ground_truth": "Serangan melalui pihak ketiga atau software vendor. Mitigasi: verifikasi integritas software, audit vendor keamanan, gunakan software signing, dan zero-trust architecture.",
+    "context_source": "MITRE ATT&CK",
+    "candidate_answer": "Sistem tidak menemukan panduan SOP yang relevan untuk jenis insiden ini. Silakan hubungi tim CSIRT secara langsung untuk penanganan lebih lanjut.",
+    "retrieved_contexts": [
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Supply Chain Compromise (T1195)\nTaktik: initial-access\n\nAdversaries may manipulate products or product delivery mechanisms prior to receipt by a final consumer for the purpose of data or system compromise.\n\nSupply chain compromise can take place at any stage of the supp"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Acquire Access (T1650)\nTaktik: resource-development\n\nAdversaries may purchase or otherwise acquire an existing access to a target system or network. A variety of online services and initial access broker networks are available to sell access to previously compromised sy"
+      },
+      {
+        "source": "",
+        "content_preview": "Supply chain compromise can take place at any stage of the supply chain including:\n\n* Manipulation of development tools\n* Manipulation of a development environment\n* Manipulation of source code repositories (public or private)\n* Manipulation of source code in open-source dependencies\n* Manipulation "
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Resource Hijacking (T1496)\nTaktik: impact\n\nAdversaries may leverage the resources of co-opted systems to complete resource-intensive tasks, which may impact system and/or hosted service availability. \n\nResource hijacking may take a number of different forms. For example"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Endpoint Denial of Service (T1499)\nTaktik: impact\n\nAdversaries may perform Endpoint Denial of Service (DoS) attacks to degrade or block the availability of services to users. Endpoint DoS can be performed by exhausting the system resources those services are hosted on o"
+      }
+    ],
+    "chunks_retrieved": 5,
+    "status": "ok"
+  },
+  {
+    "id": "QA-018",
+    "question": "Bagaimana cara mengamankan VPN dari akses tidak sah?",
+    "ground_truth": "Gunakan MFA untuk autentikasi VPN, terapkan certificate-based authentication, monitor log koneksi VPN, dan batasi akses berdasarkan IP dan jadwal.",
+    "context_source": "NIST SP 800-77",
+    "candidate_answer": "Sistem tidak menemukan panduan SOP yang relevan untuk jenis insiden ini. Silakan hubungi tim CSIRT secara langsung untuk penanganan lebih lanjut.",
+    "retrieved_contexts": [
+      {
+        "source": "",
+        "content_preview": "Training and Awareness:\n\n- Educate employees on identifying phishing attempts, securing their social media, and avoiding information leaks.\n\nTeknik yang dimitigasi (84):\n  - T1583.001: Domains\n  - T1583.002: DNS Server\n  - T1583.003: Virtual Private Server\n  - T1583.004: Server\n  - T1583.005: Botnet"
+      },
+      {
+        "source": "",
+        "content_preview": "Monitor and Tune:\n\n- Continuously monitor SSL/TLS inspection logs for anomalies and fine-tune policies to reduce false positives.\n\nTeknik yang dimitigasi (4):\n  - T1090.004: Domain Fronting\n  - T1090: Proxy\n  - T1573.002: Asymmetric Cryptography\n  - T1573: Encrypted Channel"
+      },
+      {
+        "source": "",
+        "content_preview": "Deploy Secure Remote Access Solutions:\n\n- Use RDP gateways, VPN concentrators, and ZTNA solutions to aggregate and secure remote access connections.\n- Configure access controls to restrict connections based on time, device, and user identity.\n- Enforce MFA for all remote access mechanisms.\n\nDisable "
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Subvert Trust Controls (T1553)\nTaktik: defense-evasion\n\nAdversaries may undermine security controls that will either warn users of untrusted activity or prevent execution of untrusted programs. Operating systems and security products may contain mechanisms to identify p"
+      },
+      {
+        "source": "",
+        "content_preview": "checklists to assist in securing hosts consistently and effectively.29 \n Network Security. The network perimeter should be configured to deny all activity that is not \nexpressly permitted. This includes securing all connection points, such as virtual private networks \n(VPNs) and dedicated connectio"
+      }
+    ],
+    "chunks_retrieved": 5,
+    "status": "ok"
+  },
+  {
+    "id": "QA-019",
+    "question": "Apa yang harus dilaporkan dalam tiket insiden keamanan siber?",
+    "ground_truth": "Waktu kejadian, deskripsi insiden, sistem yang terdampak, tindakan yang sudah dilakukan, tingkat keparahan estimasi, dan kontak pelapor.",
+    "context_source": "NIST SP 800-61",
+    "candidate_answer": "Sistem tidak menemukan panduan SOP yang relevan untuk jenis insiden ini. Silakan hubungi tim CSIRT secara langsung untuk penanganan lebih lanjut.",
+    "retrieved_contexts": [
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Steal or Forge Kerberos Tickets (T1558)\nTaktik: credential-access"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Windows Management Instrumentation Event Subscription (T1084)\nTaktik: persistence"
+      },
+      {
+        "source": "",
+        "content_preview": "incident report to verify that a \ncybersecurity incident has occurred, then \nestimate the severity of the incident and \nthe level of urgency needed to respond to \nit. \nR2: Have mechanisms in place for third \nparties to report possible incidents that \ninvolve the organization. Reports should be \ncare"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Pass the Ticket (T1097)\nTaktik: lateral-movement\n\nPass the ticket (PtT) is a method of authenticating to a system using Kerberos tickets without having access to an account's password. Kerberos authentication can be used as the first step to lateral movement to a remote"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik yang dimitigasi (15):\n  - T1003.005: Cached Domain Credentials\n  - T1003.006: DCSync\n  - T1003: OS Credential Dumping\n  - T1072: Software Deployment Tools\n  - T1078.004: Cloud Accounts\n  - T1078: Valid Accounts\n  - T1134.005: SID-History Injection\n  - T1550.003: Pass the Ticket\n  - T1550: Use"
+      }
+    ],
+    "chunks_retrieved": 5,
+    "status": "ok"
+  },
+  {
+    "id": "QA-020",
+    "question": "Bagaimana cara mengidentifikasi apakah sistem terkena keylogger?",
+    "ground_truth": "Periksa proses yang berjalan di background, scan dengan antimalware, monitor aktivitas jaringan tidak biasa, dan periksa startup programs untuk program mencurigakan.",
+    "context_source": "MITRE ATT&CK",
+    "candidate_answer": "1. Lakukan pelatihan dan edukasi kepada pengguna untuk mengenali tanda-tanda aktivitas mencurigakan, seperti perubahan perilaku sistem atau aplikasi yang tidak biasa, yang dapat mengindikasikan keberadaan keylogger.\n2. Tinjau log sistem dan layanan secara berkala untuk mendeteksi aktivitas yang tidak biasa, seperti upaya login yang mencurigakan atau pola akses yang tidak wajar.\n3. Identifikasi dan dokumentasikan pemilik sistem atau pengguna yang memiliki akses ke sistem untuk memastikan bahwa hanya pengguna yang sah yang memiliki akses.\n4. Lakukan audit terhadap perangkat lunak yang terinstal di sistem untuk memastikan tidak ada perangkat lunak yang mencurigakan atau tidak dikenal yang dapat berfungsi sebagai keylogger.\n5. Tingkatkan kesadaran akan potensi serangan berbasis rootkit yang dapat digunakan untuk menyembunyikan keylogger, dan pastikan sistem dilengkapi dengan perangkat lunak keamanan yang dapat mendeteksi rootkit.\n\nPanduan umum: Langkah-langkah mitigasi awal ini bertujuan untuk meningkatkan kesadaran pengguna, memperkuat pengawasan terhadap aktivitas sistem, dan mengidentifikasi potensi ancaman yang dapat mengindikasikan keberadaan keylogger. Penting untuk melibatkan tim keamanan siber untuk analisis lebih lanjut jika ditemukan indikasi serangan.\nCatatan eskalasi: Jika ditemukan bukti keberadaan keylogger atau aktivitas mencurigakan lainnya, segera eskalasi insiden ini ke tim keamanan siber internal atau otoritas terkait untuk investigasi lebih lanjut dan mitigasi yang lebih mendalam.\n\nSumber:\n[1] Dokumen [3], Teknik Serangan MITRE ATT&CK: Input Injection (T1674)\n[2] Dokumen [2], Teknik Serangan MITRE ATT&CK: Log Enumeration (T1654)\n[3] Dokumen [4], Teknik Serangan MITRE ATT&CK: System Owner/User Discovery (T1033)\n[4] Dokumen [5], Teknik Serangan MITRE ATT&CK: Rootkit (T1014)",
+    "retrieved_contexts": [
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Login Item (T1162)\nTaktik: persistence"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Log Enumeration (T1654)\nTaktik: discovery\n\nAdversaries may enumerate system and service logs to find useful data. These logs may highlight various types of valuable insights for an adversary, such as user authentication records ([Account Discovery](https://attack.mitre."
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Input Injection (T1674)\nTaktik: execution\n\nAdversaries may simulate keystrokes on a victim’s computer by various means to perform any type of action on behalf of the user, such as launching the command interpreter using keyboard shortcuts,  typing an inline script to be"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: System Owner/User Discovery (T1033)\nTaktik: discovery"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Rootkit (T1014)\nTaktik: defense-evasion\n\nAdversaries may use rootkits to hide the presence of programs, files, network connections, services, drivers, and other system components. Rootkits are programs that hide the existence of malware by intercepting/hooking and modif"
+      }
+    ],
+    "chunks_retrieved": 5,
+    "status": "ok"
+  },
+  {
+    "id": "QA-021",
+    "question": "Apa perbedaan antara vulnerability dan exploit?",
+    "ground_truth": "Vulnerability adalah kelemahan di sistem yang bisa dieksploitasi. Exploit adalah kode atau teknik yang memanfaatkan vulnerability tersebut untuk tujuan berbahaya.",
+    "context_source": "NIST SP 800-40",
+    "candidate_answer": "2. Pastikan semua aplikasi yang menghadap publik (public-facing applications) diperbarui secara rutin untuk mengatasi kerentanan yang diketahui, terutama yang dapat dieksploitasi untuk akses awal ke jaringan.\n3. Terapkan kebijakan pengelolaan patch yang ketat untuk memastikan bahwa semua perangkat lunak dan sistem operasi diperbarui dengan patch keamanan terbaru guna mencegah eksploitasi kerentanan untuk eskalasi hak akses.\n4. Lakukan audit keamanan terhadap aplikasi dan sistem untuk mengidentifikasi potensi kerentanan yang dapat digunakan untuk mengakses kredensial pengguna.\n5. Tinjau konfigurasi keamanan pada perangkat lunak dan sistem untuk memastikan tidak ada kesalahan konfigurasi yang dapat dimanfaatkan oleh penyerang untuk menghindari mekanisme pertahanan.\n\nPanduan umum: Kerentanan adalah kelemahan atau cacat dalam sistem, aplikasi, atau perangkat lunak yang dapat dieksploitasi oleh penyerang. Exploit adalah metode atau kode yang digunakan oleh penyerang untuk memanfaatkan kerentanan tersebut guna mendapatkan akses atau mengontrol sistem.\nCatatan eskalasi: Jika insiden keamanan siber meningkat ke tingkat keparahan tinggi, segera koordinasikan dengan Badan Siber dan Sandi Negara (BSSN) untuk mendapatkan dukungan lebih lanjut.\n\nSumber:\n[1] [4] Teknik Serangan MITRE ATT&CK: Exploit Public-Facing Application (T1190)\n[2] [3] Teknik Serangan MITRE ATT&CK: Exploitation for Privilege Escalation (T1068)\n[3] [2] Teknik Serangan MITRE ATT&CK: Exploitation for Credential Access (T1212)\n[4] [1] Teknik Serangan MITRE ATT&CK: Exploitation for Defense Evasion (T1211)",
+    "retrieved_contexts": [
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Exploitation for Defense Evasion (T1211)\nTaktik: defense-evasion\n\nAdversaries may exploit a system or application vulnerability to bypass security features. Exploitation of a vulnerability occurs when an adversary takes advantage of a programming error in a program, ser"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Exploitation for Credential Access (T1212)\nTaktik: credential-access\n\nAdversaries may exploit software vulnerabilities in an attempt to collect credentials. Exploitation of a software vulnerability occurs when an adversary takes advantage of a programming error in a pro"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Exploitation for Privilege Escalation (T1068)\nTaktik: privilege-escalation\n\nAdversaries may exploit software vulnerabilities in an attempt to elevate privileges. Exploitation of a software vulnerability occurs when an adversary takes advantage of a programming error in "
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Exploit Public-Facing Application (T1190)\nTaktik: initial-access\n\nAdversaries may attempt to exploit a weakness in an Internet-facing host or system to initially access a network. The weakness in the system can be a software bug, a temporary glitch, or a misconfiguratio"
+      },
+      {
+        "source": "",
+        "content_preview": "*Tools for Implementation*\n\nOpen Source Tools:\n\n- OpenVAS: Comprehensive network and system vulnerability scanning.\n- OWASP ZAP: Dynamic scanning of web applications for vulnerabilities.\n- Nmap with NSE Scripts: Network scanning with scripts to detect vulnerabilities.\n\nTeknik yang dimitigasi (5):\n  "
+      }
+    ],
+    "chunks_retrieved": 5,
+    "status": "ok"
+  },
+  {
+    "id": "QA-022",
+    "question": "Bagaimana strategi backup yang baik untuk mencegah kehilangan data akibat ransomware?",
+    "ground_truth": "Terapkan strategi 3-2-1: 3 salinan data, 2 media berbeda, 1 offsite. Uji restore secara berkala dan pastikan backup tidak terhubung langsung ke jaringan utama.",
+    "context_source": "NIST SP 800-34",
+    "candidate_answer": "Sistem tidak menemukan panduan SOP yang relevan untuk jenis insiden ini. Silakan hubungi tim CSIRT secara langsung untuk penanganan lebih lanjut.",
+    "retrieved_contexts": [
+      {
+        "source": "",
+        "content_preview": "Mitigasi MITRE ATT&CK: Data Backup (M1053)\n\nData Backup involves taking and securely storing backups of data from end-user systems and critical servers. It ensures that data remains available in the event of system compromise, ransomware attacks, or other disruptions. Backup processes should include"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Data Encrypted for Impact (T1486)\nTaktik: impact\n\nAdversaries may encrypt data on target systems or on large numbers of systems in a network to interrupt availability to system and network resources. They can attempt to render stored data inaccessible by encrypting file"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Selective Exclusion (T1679)\nTaktik: defense-evasion\n\nAdversaries may intentionally exclude certain files, folders, directories, file types, or system components from encryption or tampering during a ransomware or malicious payload execution. Some file extensions that ad"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Inhibit System Recovery (T1490)\nTaktik: impact\n\nAdversaries may delete or remove built-in data and turn off services designed to aid in the recovery of a corrupted system to prevent recovery.(Citation: Talos Olympic Destroyer 2018)(Citation: FireEye WannaCry 2017) This "
+      },
+      {
+        "source": "",
+        "content_preview": "Immutable Backups:\n- Use Case: Protect backups from modification or deletion, even by attackers.\n- Implementation: Use write-once-read-many (WORM) storage for backups, preventing ransomware from encrypting or deleting backup files.\n\nBackup Encryption:\n- Use Case: Protect data integrity and confident"
+      }
+    ],
+    "chunks_retrieved": 5,
+    "status": "ok"
+  },
+  {
+    "id": "QA-023",
+    "question": "Apa yang harus dilakukan pegawai Pusdatin jika menemukan tampilan website resmi kementerian berubah dan menampilkan konten tidak resmi?",
+    "ground_truth": "Segera laporkan ke tim CSIRT Pusdatin, jangan mencoba memperbaiki sendiri, dokumentasikan tampilan defacement dengan screenshot, dan bantu identifikasi kapan perubahan pertama kali terdeteksi.",
+    "context_source": "NIST SP 800-61",
+    "candidate_answer": "1. Segera laporkan perubahan tampilan website resmi kepada tim keamanan siber internal atau pihak yang bertanggung jawab atas pengelolaan website untuk investigasi lebih lanjut.\n3. Lakukan audit terhadap informasi sensitif yang tersedia di website resmi kementerian untuk memastikan tidak ada data yang dapat dimanfaatkan oleh pelaku untuk serangan lebih lanjut.\n\nPanduan umum: Pastikan seluruh pegawai memahami prosedur pelaporan insiden keamanan siber dan pentingnya menjaga kerahasiaan informasi yang dapat digunakan oleh pelaku untuk serangan lebih lanjut.\nCatatan eskalasi: Jika insiden ini berdampak pada reputasi atau operasional kementerian, segera eskalasi ke Badan Siber dan Sandi Negara (BSSN) untuk mendapatkan bantuan lebih lanjut.\n\nSumber:\n[1] Dokumen [1]: Teknik Serangan MITRE ATT&CK: Defacement (T1491)\n[2] Dokumen [3]: Teknik Serangan MITRE ATT&CK: Search Victim-Owned Websites (T1594)",
+    "retrieved_contexts": [
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Defacement (T1491)\nTaktik: impact\n\nAdversaries may modify visual content available internally or externally to an enterprise network, thus affecting the integrity of the original content. Reasons for [Defacement](https://attack.mitre.org/techniques/T1491) include delive"
+      },
+      {
+        "source": "",
+        "content_preview": "Training and Awareness:\n\n- Educate employees on identifying phishing attempts, securing their social media, and avoiding information leaks.\n\nTeknik yang dimitigasi (84):\n  - T1583.001: Domains\n  - T1583.002: DNS Server\n  - T1583.003: Virtual Private Server\n  - T1583.004: Server\n  - T1583.005: Botnet"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Search Victim-Owned Websites (T1594)\nTaktik: reconnaissance\n\nAdversaries may search websites owned by the victim for information that can be used during targeting. Victim-owned websites may contain a variety of details, including names of departments/divisions, physical"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Search Open Websites/Domains (T1593)\nTaktik: reconnaissance\n\nAdversaries may search freely available websites and/or domains for information about victims that can be used during targeting. Information about victims may be available in various online sites, such as soci"
+      },
+      {
+        "source": "",
+        "content_preview": "Monitor and Tune:\n\n- Continuously monitor SSL/TLS inspection logs for anomalies and fine-tune policies to reduce false positives.\n\nTeknik yang dimitigasi (4):\n  - T1090.004: Domain Fronting\n  - T1090: Proxy\n  - T1573.002: Asymmetric Cryptography\n  - T1573: Encrypted Channel"
+      }
+    ],
+    "chunks_retrieved": 5,
+    "status": "ok"
+  },
+  {
+    "id": "QA-024",
+    "question": "Bagaimana prosedur eskalasi insiden keamanan siber yang benar di lingkungan Pusdatin Kementan?",
+    "ground_truth": "Laporan insiden diterima sistem helpdesk, dilakukan pra-triase otomatis, lalu diteruskan ke tim CSIRT. Untuk insiden kritis, eskalasi langsung ke koordinator keamanan siber dan pimpinan Pusdatin.",
+    "context_source": "NIST SP 800-61",
+    "candidate_answer": "Sistem tidak menemukan panduan SOP yang relevan untuk jenis insiden ini. Silakan hubungi tim CSIRT secara langsung untuk penanganan lebih lanjut.",
+    "retrieved_contexts": [
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Elevated Execution with Prompt (T1514)\nTaktik: privilege-escalation"
+      },
+      {
+        "source": "",
+        "content_preview": "COMPUTER SECURITY INCIDENT HANDLING GUIDE \n11 \n Maintain a statement of the current status of the incident so that communications with the media are \nconsistent and up-to-date. \n Remind all staff of the general procedures for handling media inquiries. \n Hold mock interviews and press conferences "
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Parent PID Spoofing (T1502)\nTaktik: defense-evasion, privilege-escalation"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Sudo Caching (T1206)\nTaktik: privilege-escalation"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Windows Management Instrumentation Event Subscription (T1084)\nTaktik: persistence"
+      }
+    ],
+    "chunks_retrieved": 5,
+    "status": "ok"
+  },
+  {
+    "id": "QA-025",
+    "question": "Apa langkah yang harus diambil jika SOC Pusdatin mendeteksi aktivitas anomali pada server yang tidak bisa diidentifikasi sumbernya?",
+    "ground_truth": "Isolasi segmen jaringan yang terpengaruh, catat semua log aktivitas anomali, laporkan ke tim keamanan dengan bukti lengkap, dan tahan dari eksekusi perubahan sistem hingga investigasi selesai.",
+    "context_source": "NIST SP 800-61",
+    "candidate_answer": "5. Pastikan kebijakan keamanan terkait kepercayaan domain (domain trust) diperiksa secara berkala untuk mengidentifikasi potensi penyalahgunaan atau eksploitasi.\n\nPanduan umum: Langkah-langkah mitigasi awal ini bertujuan untuk mengidentifikasi dan mengurangi risiko dari aktivitas anomali yang terdeteksi pada server. Fokus utama adalah pada peningkatan kesadaran, pemantauan log, dan analisis lebih lanjut menggunakan metode yang aman.\nCatatan eskalasi: Jika aktivitas anomali tidak dapat diidentifikasi atau terus berlanjut meskipun langkah-langkah mitigasi awal telah dilakukan, segera eskalasi insiden ini ke tim respons insiden keamanan siber tingkat lanjut atau pihak berwenang terkait untuk investigasi lebih mendalam.\n\nSumber:\n[1] [2] Teknik Serangan MITRE ATT&CK: Domain Trust Discovery (T1482)",
+    "retrieved_contexts": [
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: System Owner/User Discovery (T1033)\nTaktik: discovery"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Domain Trust Discovery (T1482)\nTaktik: discovery"
+      },
+      {
+        "source": "",
+        "content_preview": "Monitor and Tune:\n\n- Continuously monitor SSL/TLS inspection logs for anomalies and fine-tune policies to reduce false positives.\n\nTeknik yang dimitigasi (4):\n  - T1090.004: Domain Fronting\n  - T1090: Proxy\n  - T1573.002: Asymmetric Cryptography\n  - T1573: Encrypted Channel"
+      },
+      {
+        "source": "",
+        "content_preview": "information on unusual activity. For example, an analyst may see some unusual connection attempts \ntargeting TCP port 22912. Performing a search on the terms “TCP,” “port,” and “22912” may return \nsome hits that contain logs of similar activity or even an explanation of the significance of the port "
+      },
+      {
+        "source": "",
+        "content_preview": "Training and Awareness:\n\n- Educate employees on identifying phishing attempts, securing their social media, and avoiding information leaks.\n\nTeknik yang dimitigasi (84):\n  - T1583.001: Domains\n  - T1583.002: DNS Server\n  - T1583.003: Virtual Private Server\n  - T1583.004: Server\n  - T1583.005: Botnet"
+      }
+    ],
+    "chunks_retrieved": 5,
+    "status": "ok"
+  },
+  {
+    "id": "QA-026",
+    "question": "Bagaimana cara memastikan pemulihan data setelah insiden ransomware jika backup cold-storage adalah satu-satunya opsi?",
+    "ground_truth": "Verifikasi integritas backup sebelum restore, isolasi sistem yang terinfeksi, restore ke environment bersih, scan hasil restore sebelum reconnect, dan dokumentasikan semua langkah untuk audit.",
+    "context_source": "NIST SP 800-34",
+    "candidate_answer": "1. Jadwalkan backup data secara teratur, termasuk backup incremental harian dan backup penuh mingguan untuk semua server dan sistem kritis. Pastikan backup disimpan di lokasi yang terisolasi dari jaringan utama untuk mencegah kompromi selama insiden aktif.\n3. Pastikan backup cold-storage disimpan dalam lingkungan yang aman dan tidak terhubung ke jaringan utama untuk mencegah akses oleh penyerang selama insiden ransomware.\n4. Lakukan hardening pada sistem backup, termasuk membatasi akses hanya kepada personel yang berwenang dan menggunakan solusi penyimpanan yang aman.\n\nPanduan umum: Langkah-langkah mitigasi ini bertujuan untuk memastikan bahwa data dapat dipulihkan dengan aman dan cepat setelah insiden ransomware, terutama jika backup cold-storage adalah satu-satunya opsi. Penting untuk terus memantau dan menguji sistem backup secara berkala untuk memastikan kesiapan dalam menghadapi insiden serupa di masa depan.\nCatatan eskalasi: Jika langkah-langkah mitigasi awal ini tidak cukup untuk memulihkan data atau jika terdapat indikasi serangan yang lebih luas, segera eskalasi insiden ini ke tim respons insiden keamanan siber nasional (BSSN) untuk mendapatkan bantuan lebih lanjut.\n\nSumber:\n[1] [1] Mitigasi MITRE ATT&CK: Data Backup (M1053)",
+    "retrieved_contexts": [
+      {
+        "source": "",
+        "content_preview": "Mitigasi MITRE ATT&CK: Data Backup (M1053)\n\nData Backup involves taking and securely storing backups of data from end-user systems and critical servers. It ensures that data remains available in the event of system compromise, ransomware attacks, or other disruptions. Backup processes should include"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Inhibit System Recovery (T1490)\nTaktik: impact\n\nAdversaries may delete or remove built-in data and turn off services designed to aid in the recovery of a corrupted system to prevent recovery.(Citation: Talos Olympic Destroyer 2018)(Citation: FireEye WannaCry 2017) This "
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Data Encrypted for Impact (T1486)\nTaktik: impact\n\nAdversaries may encrypt data on target systems or on large numbers of systems in a network to interrupt availability to system and network resources. They can attempt to render stored data inaccessible by encrypting file"
+      },
+      {
+        "source": "",
+        "content_preview": "Backup Testing:\n- Use Case: Validate backup integrity and ensure recoverability.\n- Implementation: Regularly test data restoration processes to ensure that backups are not corrupted and can be recovered quickly.\n\nTeknik yang dimitigasi (10):\n  - T1485.001: Lifecycle-Triggered Deletion\n  - T1485: Dat"
+      },
+      {
+        "source": "",
+        "content_preview": "Operating systems may contain features that can help fix corrupted systems, such as a backup catalog, volume shadow copies, and automatic repair features. Adversaries may disable or delete system recovery features to augment the effects of [Data Destruction](https://attack.mitre.org/techniques/T1485"
+      }
+    ],
+    "chunks_retrieved": 5,
+    "status": "ok"
+  },
+  {
+    "id": "QA-027",
+    "question": "Apa tanda-tanda bahwa akun email dinas seorang pegawai telah dikompromis oleh pihak tidak berwenang?",
+    "ground_truth": "Login dari lokasi atau perangkat tidak dikenal, email terkirim tanpa sepengetahuan pemilik, perubahan pengaturan email (filter, forward), pemberitahuan login dari sistem, dan rekan menerima email mencurigakan dari akun tersebut.",
+    "context_source": "NIST SP 800-61",
+    "candidate_answer": "5. Dorong pegawai untuk segera melaporkan aktivitas mencurigakan pada akun email dinas mereka, seperti pengiriman email yang tidak dikenal atau perubahan pengaturan akun tanpa izin.\n\nPanduan umum: Langkah-langkah mitigasi awal ini bertujuan untuk meningkatkan kesadaran dan kewaspadaan pegawai terhadap potensi kompromi akun email dinas. Fokus utama adalah pada pelatihan, penguatan kebijakan keamanan, dan pelaporan insiden secara proaktif.\nCatatan eskalasi: Jika tanda-tanda kompromi akun email dinas semakin jelas atau melibatkan data sensitif, segera eskalasi insiden ini kepada tim keamanan siber internal atau pihak berwenang terkait untuk investigasi lebih lanjut.\n\nSumber:\n[1] [2] Teknik Serangan MITRE ATT&CK: Compromise Accounts (T1586)",
+    "retrieved_contexts": [
+      {
+        "source": "",
+        "content_preview": "Training and Awareness:\n\n- Educate employees on identifying phishing attempts, securing their social media, and avoiding information leaks.\n\nTeknik yang dimitigasi (84):\n  - T1583.001: Domains\n  - T1583.002: DNS Server\n  - T1583.003: Virtual Private Server\n  - T1583.004: Server\n  - T1583.005: Botnet"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Compromise Accounts (T1586)\nTaktik: resource-development\n\nAdversaries may compromise accounts with services that can be used during targeting. For operations incorporating social engineering, the utilization of an online persona may be important. Rather than creating an"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik yang dimitigasi (17):\n  - T1078: Valid Accounts\n  - T1195.001: Compromise Software Dependencies and Development Tools\n  - T1195: Supply Chain Compromise\n  - T1212: Exploitation for Credential Access\n  - T1496.003: SMS Pumping\n  - T1550.001: Application Access Token\n  - T1550: Use Alternate Au"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik yang dimitigasi (48):\n  - T1021.001: Remote Desktop Protocol\n  - T1021.004: SSH\n  - T1021.007: Cloud Services\n  - T1021: Remote Services\n  - T1040: Network Sniffing\n  - T1072: Software Deployment Tools\n  - T1078.001: Default Accounts\n  - T1078.002: Domain Accounts\n  - T1078.003: Local Account"
+      },
+      {
+        "source": "",
+        "content_preview": "Adversaries may [Compromise Accounts](https://attack.mitre.org/techniques/T1586) to conduct unauthorized transfers of funds.(Citation: Internet crime report 2022) In the case of business email compromise or email fraud, an adversary may utilize [Impersonation](https://attack.mitre.org/techniques/T16"
+      }
+    ],
+    "chunks_retrieved": 5,
+    "status": "ok"
+  },
+  {
+    "id": "QA-028",
+    "question": "Bagaimana cara melaporkan insiden keamanan siber secara efektif agar tim CSIRT dapat merespons dengan cepat?",
+    "ground_truth": "Sertakan waktu kejadian, deskripsi insiden yang jelas, sistem dan data yang terdampak, tindakan awal yang sudah dilakukan, tingkat keparahan estimasi, dan kontak yang bisa dihubungi. Hindari laporan yang terlalu singkat atau tidak terstruktur.",
+    "context_source": "NIST SP 800-61",
+    "candidate_answer": "Sistem tidak menemukan panduan SOP yang relevan untuk jenis insiden ini. Silakan hubungi tim CSIRT secara langsung untuk penanganan lebih lanjut.",
+    "retrieved_contexts": [
+      {
+        "source": "",
+        "content_preview": "risk because new malicious activity may not fall into one of the chosen indicator categories. \n Seek Assistance from Others. Occasionally, the team will be unable to determine the full cause and \nnature of an incident. If the team lacks sufficient information to contain and eradicate the incident, "
+      },
+      {
+        "source": "",
+        "content_preview": "incident report to verify that a \ncybersecurity incident has occurred, then \nestimate the severity of the incident and \nthe level of urgency needed to respond to \nit. \nR2: Have mechanisms in place for third \nparties to report possible incidents that \ninvolve the organization. Reports should be \ncare"
+      },
+      {
+        "source": "",
+        "content_preview": "COMPUTER SECURITY INCIDENT HANDLING GUIDE \n66 \nstructures, such as the IT help desk, for an initial POC. The organization should recognize that \nexternal parties, such as other incident response teams, would report some incidents. Federal \nagencies are required under the law to report all incidents "
+      },
+      {
+        "source": "",
+        "content_preview": "COMPUTER SECURITY INCIDENT HANDLING GUIDE \n19 \nshould be on the incident response team. This information can be communicated through many \nmeans: workshops, websites, newsletters, posters, and even stickers on monitors and laptops. \n Information Sharing. Incident response teams often participate in"
+      },
+      {
+        "source": "",
+        "content_preview": "The more precise the information is, the better. For example, if a workstation appears to have \nbeen infected by malware, the incident report should include as much of the following data as \npractical: \n The user’s name, user ID, and contact information (e.g., phone number, email address) \n The wo"
+      }
+    ],
+    "chunks_retrieved": 5,
+    "status": "ok"
+  },
+  {
+    "id": "QA-029",
+    "question": "Apa langkah containment yang harus segera dilakukan saat mendeteksi malware aktif pada workstation pegawai?",
+    "ground_truth": "Segera isolasi workstation dari jaringan (cabut LAN/matikan WiFi), jangan restart perangkat, catat proses yang berjalan, hubungi CSIRT untuk panduan selanjutnya, dan jangan akses data sensitif dari perangkat lain hingga investigasi selesai.",
+    "context_source": "NIST SP 800-61",
+    "candidate_answer": "Sistem tidak menemukan panduan SOP yang relevan untuk jenis insiden ini. Silakan hubungi tim CSIRT secara langsung untuk penanganan lebih lanjut.",
+    "retrieved_contexts": [
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Windows Management Instrumentation Event Subscription (T1084)\nTaktik: persistence"
+      },
+      {
+        "source": "",
+        "content_preview": "Training and Awareness:\n\n- Educate employees on identifying phishing attempts, securing their social media, and avoiding information leaks.\n\nTeknik yang dimitigasi (84):\n  - T1583.001: Domains\n  - T1583.002: DNS Server\n  - T1583.003: Virtual Private Server\n  - T1583.004: Server\n  - T1583.005: Botnet"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Security Software Discovery (T1063)\nTaktik: discovery\n\nAdversaries may attempt to get a listing of security software, configurations, defensive tools, and sensors that are installed on the system. This may include things such as local firewall rules and anti-virus. Adve"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: System Owner/User Discovery (T1033)\nTaktik: discovery"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: HISTCONTROL (T1148)\nTaktik: defense-evasion"
+      }
+    ],
+    "chunks_retrieved": 5,
+    "status": "ok"
+  },
+  {
+    "id": "QA-030",
+    "question": "Bagaimana cara mencegah serangan phishing yang menargetkan pegawai Pusdatin melalui email dinas?",
+    "ground_truth": "Latih pegawai mengenali ciri-ciri phishing, aktifkan SPF/DKIM/DMARC pada domain pertanian.go.id, gunakan email gateway dengan anti-phishing filter, terapkan MFA untuk semua akun email dinas, dan laporkan setiap email mencurigakan ke tim CSIRT.",
+    "context_source": "NIST SP 800-177",
+    "candidate_answer": "2. Sosialisasikan kepada pegawai tentang bahaya spearphishing melalui tautan (T1192) dan spearphishing via layanan pihak ketiga (T1194), serta cara menghindarinya dengan tidak mengklik tautan yang tidak dikenal.\n3. Tingkatkan kesadaran pegawai tentang teknik phishing (T1566) dan phishing for information (T1598), termasuk bagaimana serangan ini dapat digunakan untuk mengumpulkan informasi sensitif atau mengakses sistem.\n4. Pastikan pegawai memverifikasi keaslian email yang meminta informasi sensitif atau mengarahkan mereka untuk mengklik tautan, terutama jika email tersebut tampak berasal dari sumber internal.\n\nPanduan umum: Langkah-langkah mitigasi ini bertujuan untuk meningkatkan kesadaran dan mengurangi risiko serangan phishing yang menargetkan pegawai Pusdatin melalui email dinas. Fokus utama adalah pada pelatihan, edukasi, dan penerapan kebijakan komunikasi yang aman.\nCatatan eskalasi: Jika serangan phishing berhasil atau ada indikasi pelanggaran keamanan, segera laporkan insiden tersebut kepada tim keamanan siber internal dan pertimbangkan untuk melibatkan Badan Siber dan Sandi Negara (BSSN) untuk investigasi lebih lanjut.\n\nSumber:\n[1] [2] Teknik Serangan MITRE ATT&CK: Spearphishing Link (T1192) dan [3] Teknik Serangan MITRE ATT&CK: Spearphishing via Service (T1194)\n[2] [4] Teknik Serangan MITRE ATT&CK: Phishing (T1566) dan [5] Teknik Serangan MITRE ATT&CK: Phishing for Information (T1598)\n[3] [5] Teknik Serangan MITRE ATT&CK: Phishing for Information (T1598)",
+    "retrieved_contexts": [
+      {
+        "source": "",
+        "content_preview": "Training and Awareness:\n\n- Educate employees on identifying phishing attempts, securing their social media, and avoiding information leaks.\n\nTeknik yang dimitigasi (84):\n  - T1583.001: Domains\n  - T1583.002: DNS Server\n  - T1583.003: Virtual Private Server\n  - T1583.004: Server\n  - T1583.005: Botnet"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Spearphishing Link (T1192)\nTaktik: initial-access\n\nSpearphishing with a link is a specific variant of spearphishing. It is different from other forms of spearphishing in that it employs the use of links to download malware contained in email, instead of attaching malici"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Spearphishing via Service (T1194)\nTaktik: initial-access\n\nSpearphishing via service is a specific variant of spearphishing. It is different from other forms of spearphishing in that it employs the use of third party services rather than directly via enterprise email cha"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Phishing (T1566)\nTaktik: initial-access\n\nAdversaries may send phishing messages to gain access to victim systems. All forms of phishing are electronically delivered social engineering. Phishing can be targeted, known as spearphishing. In spearphishing, a specific indivi"
+      },
+      {
+        "source": "",
+        "content_preview": "Teknik Serangan MITRE ATT&CK: Phishing for Information (T1598)\nTaktik: reconnaissance\n\nAdversaries may send phishing messages to elicit sensitive information that can be used during targeting. Phishing for information is an attempt to trick targets into divulging information, frequently credentials "
+      }
+    ],
+    "chunks_retrieved": 5,
+    "status": "ok"
+  }
+]

@@ -28,6 +28,14 @@ class ChatService:
     # History
     # ------------------------------------------------------------------
 
+    def get_session_ticket(self, session_id: str) -> Optional[str]:
+        """Return ticket_id created in this chat session, or None."""
+        val = self._redis.get(f"web:session_ticket:{session_id}")
+        return val.decode() if val else None
+
+    def _set_session_ticket(self, session_id: str, ticket_id: str) -> None:
+        self._redis.setex(f"web:session_ticket:{session_id}", _HISTORY_TTL, ticket_id.encode())
+
     def get_history(self, session_id: str) -> list[dict]:
         raw = self._redis.get(f"web:chat:{session_id}")
         if not raw:
@@ -47,6 +55,7 @@ class ChatService:
 
     def clear_history(self, session_id: str) -> None:
         self._redis.delete(f"web:chat:{session_id}")
+        self._redis.delete(f"web:session_ticket:{session_id}")
 
     # ------------------------------------------------------------------
     # Message handling
@@ -69,6 +78,28 @@ class ChatService:
         history = self.get_history(session_id)
         ts = datetime.now(timezone.utc).isoformat()
         history.append({"role": "user", "content": text, "ts": ts})
+
+        # Bug fix: jika tiket sudah dibuat di sesi ini, jangan buat tiket baru
+        existing_ticket = self.get_session_ticket(session_id)
+        if existing_ticket:
+            bot_text = (
+                f"Tiket insiden **{existing_ticket}** sudah dibuat untuk sesi ini. "
+                f"Tim CSIRT akan segera menghubungi Anda. "
+                f"Jika ada informasi tambahan, sampaikan langsung ke CSIRT dengan menyebutkan nomor tiket tersebut."
+            )
+            history.append({"role": "assistant", "content": bot_text, "ts": ts})
+            self._save_history(session_id, history)
+            return {
+                "user_text": text,
+                "bot_text": bot_text,
+                "requires_clarification": False,
+                "ticket_id": existing_ticket,
+                "incident_type": "",
+                "severity": "",
+                "escalation_level": "",
+                "confidence_score": 0.0,
+                "error": False,
+            }
 
         # Hitung berapa kali bot sudah minta klarifikasi sebelumnya
         clarification_rounds = sum(
@@ -107,17 +138,21 @@ class ChatService:
         requires_clarification: bool = result.get("requires_clarification", False)
         ticket_id: Optional[str] = result.get("ticket_id") or None
 
-        if requires_clarification:
-            bot_text = result.get("clarification_message", "Mohon berikan informasi lebih lanjut.")
-        elif ticket_id:
+        # ticket_id takes priority — if a ticket was created, show it regardless
+        # of clarification flags (avoids simultaneous clarification + ticket bug)
+        if ticket_id:
             bot_text = (
                 f"Tiket insiden berhasil dibuat: **{ticket_id}**.\n\n"
                 f"{result.get('mitigation_recommendation', '')}"
             ).strip()
+            self._set_session_ticket(session_id, ticket_id)
             if db is not None:
                 self._flush_pending_uploads(session_id, ticket_id, reporter_id, db)
+        elif requires_clarification:
+            bot_text = result.get("clarification_message", "Mohon berikan informasi lebih lanjut.")
         else:
-            bot_text = result.get("mitigation_recommendation", "Respons tidak tersedia.")
+            mitigation = result.get("mitigation_recommendation", "")
+            bot_text = mitigation if mitigation else "Respons tidak tersedia."
 
         history.append({"role": "assistant", "content": bot_text, "ts": ts})
         self._save_history(session_id, history)

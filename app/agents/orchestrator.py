@@ -62,6 +62,33 @@ class OrchestratorAgent:
         prompt = self._prompt_template.replace("{sanitized_input}", sanitized_input)
         return [{"role": "user", "content": prompt}]
 
+    async def generate_help_response(self, sanitized_input: str) -> str:
+        """Generate a helpful LLM response for general_help / query_status intents."""
+        try:
+            response = await self.llm.chat.completions.create(
+                model=self.model,
+                messages=[
+                    {
+                        "role": "system",
+                        "content": (
+                            "Anda adalah asisten keamanan siber Pusdatin Kementan. "
+                            "Jawab pertanyaan umum keamanan siber secara informatif dalam Bahasa Indonesia. "
+                            "Jika terlihat ada insiden nyata, dorong pengguna untuk melaporkan secara resmi melalui sistem ini."
+                        ),
+                    },
+                    {"role": "user", "content": sanitized_input},
+                ],
+                temperature=0.3,
+                max_tokens=500,
+            )
+            return response.choices[0].message.content or "Maaf, tidak ada respons yang tersedia."
+        except Exception as exc:
+            logger.exception("Error generating help response: %s", exc)
+            return (
+                "Maaf, saya tidak dapat memproses pertanyaan Anda saat ini. "
+                "Untuk bantuan, silakan hubungi tim CSIRT Pusdatin Kementan."
+            )
+
     async def classify_intent(self, sanitized_input: str) -> dict:
         """Klasifikasi intent pesan pengguna.
 

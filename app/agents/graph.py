@@ -182,6 +182,23 @@ def make_ticket_node(ticket_manager):
     return ticket_node
 
 
+def make_general_help_node(orchestrator):
+    async def general_help_node(state: IncidentState) -> IncidentState:
+        try:
+            response = await orchestrator.generate_help_response(state["sanitized_input"])
+            state["mitigation_recommendation"] = response
+            _trace(state, "general_help", "success")
+        except Exception as exc:
+            logger.exception("General help node error: %s", exc)
+            state["mitigation_recommendation"] = (
+                "Maaf, saya tidak dapat memproses pertanyaan Anda saat ini. "
+                "Silakan hubungi tim CSIRT untuk bantuan lebih lanjut."
+            )
+            _trace(state, "general_help", "fallback")
+        return state
+    return general_help_node
+
+
 def make_notifier_node(notifier):
     async def notifier_node(state: IncidentState) -> IncidentState:
         try:
@@ -245,14 +262,15 @@ def build_helpdesk_graph(
                   │                    → validate_output → create_ticket
                   │                    → send_notification → END
                   ├─ needs_clarification → END
-                  ├─ query_status        → END  (Fase 8+)
-                  └─ general_help        → END  (Fase 8+)
+                  ├─ query_status        → general_help → END
+                  └─ general_help        → general_help → END
     """
     graph = StateGraph(IncidentState)
 
     # Tambahkan node
     graph.add_node("guardrails", guardrails_node)
     graph.add_node("classify_intent", make_orchestrator_node(orchestrator))
+    graph.add_node("general_help", make_general_help_node(orchestrator))
     graph.add_node("identify_incident", make_identifier_node(identifier))
     graph.add_node("generate_mitigation", make_mitigation_node(mitigation_advisor))
     graph.add_node("validate_output", make_validate_output_node())
@@ -279,10 +297,12 @@ def build_helpdesk_graph(
         {
             "report_incident":     "identify_incident",
             "needs_clarification": END,
-            "query_status":        END,
-            "general_help":        END,
+            "query_status":        "general_help",
+            "general_help":        "general_help",
         },
     )
+
+    graph.add_edge("general_help", END)
 
     # Pipeline insiden (dengan validate_output setelah mitigation)
     graph.add_edge("identify_incident", "generate_mitigation")

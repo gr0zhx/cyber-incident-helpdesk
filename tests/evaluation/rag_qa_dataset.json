@@ -130,5 +130,53 @@
     "question": "Bagaimana strategi backup yang baik untuk mencegah kehilangan data akibat ransomware?",
     "ground_truth": "Terapkan strategi 3-2-1: 3 salinan data, 2 media berbeda, 1 offsite. Uji restore secara berkala dan pastikan backup tidak terhubung langsung ke jaringan utama.",
     "context_source": "NIST SP 800-34"
+  },
+  {
+    "id": "QA-023",
+    "question": "Apa yang harus dilakukan pegawai Pusdatin jika menemukan tampilan website resmi kementerian berubah dan menampilkan konten tidak resmi?",
+    "ground_truth": "Segera laporkan ke tim CSIRT Pusdatin, jangan mencoba memperbaiki sendiri, dokumentasikan tampilan defacement dengan screenshot, dan bantu identifikasi kapan perubahan pertama kali terdeteksi.",
+    "context_source": "NIST SP 800-61"
+  },
+  {
+    "id": "QA-024",
+    "question": "Bagaimana prosedur eskalasi insiden keamanan siber yang benar di lingkungan Pusdatin Kementan?",
+    "ground_truth": "Laporan insiden diterima sistem helpdesk, dilakukan pra-triase otomatis, lalu diteruskan ke tim CSIRT. Untuk insiden kritis, eskalasi langsung ke koordinator keamanan siber dan pimpinan Pusdatin.",
+    "context_source": "NIST SP 800-61"
+  },
+  {
+    "id": "QA-025",
+    "question": "Apa langkah yang harus diambil jika SOC Pusdatin mendeteksi aktivitas anomali pada server yang tidak bisa diidentifikasi sumbernya?",
+    "ground_truth": "Isolasi segmen jaringan yang terpengaruh, catat semua log aktivitas anomali, laporkan ke tim keamanan dengan bukti lengkap, dan tahan dari eksekusi perubahan sistem hingga investigasi selesai.",
+    "context_source": "NIST SP 800-61"
+  },
+  {
+    "id": "QA-026",
+    "question": "Bagaimana cara memastikan pemulihan data setelah insiden ransomware jika backup cold-storage adalah satu-satunya opsi?",
+    "ground_truth": "Verifikasi integritas backup sebelum restore, isolasi sistem yang terinfeksi, restore ke environment bersih, scan hasil restore sebelum reconnect, dan dokumentasikan semua langkah untuk audit.",
+    "context_source": "NIST SP 800-34"
+  },
+  {
+    "id": "QA-027",
+    "question": "Apa tanda-tanda bahwa akun email dinas seorang pegawai telah dikompromis oleh pihak tidak berwenang?",
+    "ground_truth": "Login dari lokasi atau perangkat tidak dikenal, email terkirim tanpa sepengetahuan pemilik, perubahan pengaturan email (filter, forward), pemberitahuan login dari sistem, dan rekan menerima email mencurigakan dari akun tersebut.",
+    "context_source": "NIST SP 800-61"
+  },
+  {
+    "id": "QA-028",
+    "question": "Bagaimana cara melaporkan insiden keamanan siber secara efektif agar tim CSIRT dapat merespons dengan cepat?",
+    "ground_truth": "Sertakan waktu kejadian, deskripsi insiden yang jelas, sistem dan data yang terdampak, tindakan awal yang sudah dilakukan, tingkat keparahan estimasi, dan kontak yang bisa dihubungi. Hindari laporan yang terlalu singkat atau tidak terstruktur.",
+    "context_source": "NIST SP 800-61"
+  },
+  {
+    "id": "QA-029",
+    "question": "Apa langkah containment yang harus segera dilakukan saat mendeteksi malware aktif pada workstation pegawai?",
+    "ground_truth": "Segera isolasi workstation dari jaringan (cabut LAN/matikan WiFi), jangan restart perangkat, catat proses yang berjalan, hubungi CSIRT untuk panduan selanjutnya, dan jangan akses data sensitif dari perangkat lain hingga investigasi selesai.",
+    "context_source": "NIST SP 800-61"
+  },
+  {
+    "id": "QA-030",
+    "question": "Bagaimana cara mencegah serangan phishing yang menargetkan pegawai Pusdatin melalui email dinas?",
+    "ground_truth": "Latih pegawai mengenali ciri-ciri phishing, aktifkan SPF/DKIM/DMARC pada domain pertanian.go.id, gunakan email gateway dengan anti-phishing filter, terapkan MFA untuk semua akun email dinas, dan laporkan setiap email mencurigakan ke tim CSIRT.",
+    "context_source": "NIST SP 800-177"
   }
 ]

@@ -95,7 +95,7 @@ async def evaluate_pair(
     try:
         result = await mitigation_advisor.generate_mitigation(
             sanitized_input=question,
-            incident_type="Umum",
+            incident_type="",   # kosong = tidak ada filter metadata Qdrant
             severity="Sedang",
         )
         answer = result.get("mitigation_recommendation", "")

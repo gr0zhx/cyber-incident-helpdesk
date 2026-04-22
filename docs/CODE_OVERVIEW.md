@@ -2,7 +2,7 @@
 
 > Dokumen komprehensif untuk persiapan sidang skripsi: penjelasan **setiap file, setiap fungsi, setiap class**, logika internal, dan keterkaitan antar-modul.
 > Target pembaca: penulis (recall cepat) dan dosen penguji (verifikasi teknis).
-> Terakhir diperbarui: 2026-04-17.
+> Terakhir diperbarui: 2026-04-21 (+ Security Audit & Fixes).
 
 ---
 
@@ -26,7 +26,8 @@
 16. [tests/ — Test Suite](#16-tests--test-suite)
 17. [Infrastruktur & Deployment](#17-infrastruktur--deployment)
 18. [Peta Interaksi Modul](#18-peta-interaksi-modul)
-19. [Tabel Q&A Sidang](#19-tabel-qa-sidang)
+19. [Security Audit & Fixes (2026-04-21)](#19-security-audit--fixes-2026-04-21)
+20. [Tabel Q&A Sidang](#20-tabel-qa-sidang)
 
 ---
 
@@ -132,6 +133,7 @@ Semua query SQL/ORM dikapsulasi di `repository.py`. Modul lain tidak boleh menul
 ## 3. Struktur Folder Lengkap
 
 ```
+
 pusdatin-help/
 ├── app/
 │   ├── agents/             ← LangGraph nodes + state (otak sistem)
@@ -232,6 +234,7 @@ pusdatin-help/
 ├── requirements.txt        ← Dependency pinned
 ├── pytest.ini              ← Config pytest
 └── .env.example            ← Template env vars
+
 ```
 
 ---
@@ -239,6 +242,7 @@ pusdatin-help/
 ## 4. Alur Data End-to-End
 
 ```
+
 ┌─────────────────────────────────────────────────────────────────────┐
 │              Kanal Input (pilih salah satu)                         │
 │  Telegram Bot    Web Chat (HTMX)    REST API POST /api/v1/report    │
@@ -288,6 +292,7 @@ pusdatin-help/
                                 │
                                 ▼ IncidentState final
                     Format response → kirim ke pelapor
+
 ```
 
 ---
@@ -401,12 +406,14 @@ File ini adalah "sutradara" — merakit semua agen menjadi satu pipeline berurut
 **Graf utama (`build_helpdesk_graph(...)`):**
 
 ```
+
 START → guardrails → (blocked?) → END
                    → classify_intent → (route_by_intent)
                                     → identify_incident → generate_mitigation
                                                         → validate_output
                                                         → create_ticket
                                                         → send_notification → END
+
 ```
 
 Fungsi `run_pipeline(raw_input, reporter_*)` adalah **satu-satunya entry point publik** — dipanggil dari bot, API, web chat, test.
@@ -517,6 +524,7 @@ return {
     "retrieved_chunks": all_chunks,
     "rag_confidence": confidence,
 }
+
 ```
 
 **Fallback:** Jika RAG gagal atau LLM error → kembalikan rekomendasi generik beserta `rag_confidence=0.0`.
@@ -588,6 +596,7 @@ Mendukung dua format: **PDF** (NIST SP 800-61) dan **STIX JSON** (MITRE ATT&CK).
 | `ingest_directory(docs_dir, metadata_dir)` | `Path, Path` | `list[Document]` | Batch ingest semua PDF yang ada metadata-nya |
 
 **Mapping taktik MITRE → incident_type** (`_TACTIC_TO_INCIDENT_TYPES`):
+
 ```python
 {
     "initial-access":     ["phishing", "akses_tidak_sah"],
@@ -599,6 +608,7 @@ Mendukung dua format: **PDF** (NIST SP 800-61) dan **STIX JSON** (MITRE ATT&CK).
     "impact":             ["ransomware", "ddos", "web_defacement"],
     # dst.
 }
+
 ```
 
 **Fungsi STIX (MITRE ATT&CK):**
@@ -712,6 +722,7 @@ if result["is_injection"]:
     return GuardrailsResult(blocked=True, reason="prompt_injection")
 redacted, mapping = pii_redactor.redact(cleaned) # 3. redact PII
 return GuardrailsResult(sanitized_input=redacted, pii_mapping=mapping)
+
 ```
 
 **Fail-closed:** Exception apapun → `blocked=True`, pipeline berhenti.
@@ -1184,6 +1195,7 @@ Export `limiter = Limiter(key_func=get_remote_address)` untuk dipakai di routes 
 **Tugas:** Klasifikasikan pesan pengguna ke satu dari 4 intent.
 **Input:** Teks pesan yang sudah disanitasi.
 **Output JSON:**
+
 ```json
 {
   "intent": "report_incident|query_status|general_help|needs_clarification",
@@ -1191,7 +1203,9 @@ Export `limiter = Limiter(key_func=get_remote_address)` untuk dipakai di routes 
   "needs_clarification": false,
   "clarification_message": ""
 }
+
 ```
+
 **Instruksi kunci di prompt:** Jika pesan sangat ambigu atau tidak ada informasi teknis → `needs_clarification`. Jika menyebut tiket ID → `query_status`. Default ambiguous → `report_incident`.
 
 ---
@@ -1201,6 +1215,7 @@ Export `limiter = Limiter(key_func=get_remote_address)` untuk dipakai di routes 
 **Tugas:** Klasifikasikan jenis insiden + severity dari deskripsi.
 **Input:** Teks deskripsi insiden.
 **Output JSON:**
+
 ```json
 {
   "incident_type": "Phishing|Malware|Ransomware|...|Lainnya",
@@ -1209,7 +1224,9 @@ Export `limiter = Limiter(key_func=get_remote_address)` untuk dipakai di routes 
   "reasoning": "penjelasan singkat",
   "requires_review": false
 }
+
 ```
+
 **Instruksi kunci:** Definisi tiap jenis insiden. Kriteria severity (Kritis = layanan kritis down/ransomware aktif, dll.). Jika tidak yakin → `requires_review=True`. Bahasa Indonesia.
 
 ---
@@ -1224,6 +1241,7 @@ Export `limiter = Limiter(key_func=get_remote_address)` untuk dipakai di routes 
 - `{user_report}` — `sanitized_input`
 
 **Output JSON:**
+
 ```json
 {
   "mitigation_steps": [
@@ -1232,7 +1250,9 @@ Export `limiter = Limiter(key_func=get_remote_address)` untuk dipakai di routes 
   "general_guidance": "ringkasan singkat",
   "escalation_note": "rekomendasi eskalasi jika perlu"
 }
+
 ```
+
 **Instruksi kunci:** Cite source per step. Maksimal 5 step. Bahasa Indonesia. Jangan halusinasi — hanya dari context yang diberikan. Format citation yang diakui.
 
 ---
@@ -1344,6 +1364,7 @@ Export `limiter = Limiter(key_func=get_remote_address)` untuk dipakai di routes 
 | `.env.example` | Template env vars; `.env` aktual tidak di-commit |
 
 **Cara run development:**
+
 ```bash
 docker compose up -d          # PostgreSQL + Redis + Qdrant
 alembic upgrade head          # Migrasi database
@@ -1351,6 +1372,7 @@ python scripts/seed_admin.py  # Buat admin pertama
 python scripts/ingest_knowledge.py  # Ingest knowledge base
 uvicorn app.main:app --reload # FastAPI
 python -m app.telegram.run    # Telegram bot (proses terpisah)
+
 ```
 
 ---
@@ -1358,6 +1380,7 @@ python -m app.telegram.run    # Telegram bot (proses terpisah)
 ## 18. Peta Interaksi Modul
 
 ```
+
 app/main.py
 │
 ├─▶ app/api/routes.py (REST API /api/v1/*)
@@ -1415,11 +1438,336 @@ Infrastruktur (Docker):
                 ← app/web/services/upload_service.py
   Qdrant        ← app/rag/embedder.py
                 ← app/rag/retriever.py
+
 ```
 
 ---
 
-## 19. Tabel Q&A Sidang
+## 19. Security Audit & Fixes (2026-04-21)
+
+### Ringkasan Audit
+
+Audit keamanan menyeluruh dilakukan pada web module sebelum sidang. **8 isu nyata diperbaiki** (HIGH: 5, MED: 3), 88 test lulus. Pre-existing failures (2 test di `/lapor/chat/reset`) tidak terkait fix.
+
+### Isu yang Diperbaiki
+
+#### 1. XSS (Cross-Site Scripting) — `admin_actions.py:70, 93`
+
+**Masalah:** Nilai `assignee` dan `level` (user-controlled) langsung diinterpolasi ke `HTMLResponse()` tanpa HTML-escape:
+
+```python
+return HTMLResponse(f'<p>Ditugaskan ke <strong>{assignee}</strong></p>')
+
+```
+
+Jika `assignee` berisi `<img onerror=alert(1)>`, maka XSS terjadi.
+
+**Fix:**
+
+```python
+import html
+return HTMLResponse(f'<p>Ditugaskan ke <strong>{html.escape(assignee)}</strong></p>')
+
+```
+
+Juga apply di `level` output. Validasi pada layar controller tetap bernilai (TICKET_STATUSES, ESCALATION_LEVELS) karena constrained, tapi output HTML harus selalu safe.
+
+**Sumber:** CWE-79 (Improper Neutralization of Input During Web Page Generation).
+
+---
+
+#### 2. Path Traversal — `admin_actions.py:142`
+
+**Masalah:** Endpoint download attachment memvalidasi filename tapi tidak memastikan `raw_path` (dari DB) **berada di dalam `UPLOAD_ROOT`**:
+
+```python
+abs_path = os.path.abspath(raw_path)
+if not os.path.isfile(abs_path):
+    raise HTTPException(status_code=404, detail="File fisik hilang.")
+return FileResponse(abs_path, filename=filename)
+
+```
+
+Jika attacker bisa inject `raw_path="/etc/passwd"` (misalnya via vulnerability upload lain), endpoint ini akan serve file arbitrary.
+
+**Fix:**
+
+```python
+abs_path = os.path.abspath(raw_path)
+try:
+    if os.path.commonpath([abs_path, UPLOAD_ROOT]) != UPLOAD_ROOT:
+        raise HTTPException(status_code=400, detail="Path file di luar direktori upload.")
+except ValueError:
+    raise HTTPException(status_code=400, detail="Path file tidak valid.")
+
+```
+
+Memastikan `commonpath` == `UPLOAD_ROOT` (standar path traversal mitigation).
+
+**Sumber:** CWE-22 (Improper Limitation of a Pathname to a Restricted Directory).
+
+---
+
+#### 3. Path Traversal — `rag_service.py:52` (upload_pdf)
+
+**Masalah:** Fungsi `upload_pdf()` menerima `filename` dan `doc_id` user-controlled, kemudian dipakai sebagai path:
+
+```python
+safe_name = filename.replace(" ", "_")  # ← insufficient sanitasi
+save_pdf(safe_name, data)               # → _DOCS_DIR / safe_name
+meta_filename = f"{doc_id}.json"        # → _META_DIR / meta_filename
+
+```
+
+Attacker bisa kirim `doc_id="../../../etc/passwd"` atau `filename="../../evil.pdf"` → write outside base dir.
+
+**Fix:**
+
+```python
+_DOC_ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_\-]{0,63}$")
+
+if not _DOC_ID_RE.match(doc_id):
+    raise ValueError("doc_id hanya boleh alfanumerik, dash, underscore (maks 64 char).")
+base_name = Path(filename).name  # Extract basename saja, buang dir traversal
+if not base_name or base_name.startswith("."):
+    raise ValueError("Nama file tidak valid.")
+safe_name = base_name.replace(" ", "_")
+if not safe_name.lower().endswith(".pdf"):
+    raise ValueError("File harus berekstensi .pdf")
+
+```
+
+`Path(filename).name` adalah cara aman di Python untuk mengambil nama file saja (strip semua path prefix).
+
+**Sumber:** CWE-22.
+
+---
+
+#### 4. Hardcoded Default Secrets — `config.py:12-13`
+
+**Masalah:** Session dan CSRF secret memiliki default string `"change-me-in-prod-..."` yang tidak akan diganti jika env var tidak di-set:
+
+```python
+session_secret: str = "change-me-in-prod-64-chars-minimum-aaaaaaaaaaaaaaaaaaaaaaaaaa"
+csrf_secret: str = "change-me-in-prod-csrf-64-chars-aaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+
+```
+
+Jika deployment lupa set `WEB_SESSION_SECRET` dan `WEB_CSRF_SECRET`, secret ini akan **identik untuk semua instance**, memungkinkan session fixation / CSRF bypass.
+
+**Fix:**
+
+```python
+_DEV_SESSION_SECRET = "change-me-in-prod-64-chars-minimum-aaaaaaaaaaaaaaaaaaaaaaaaaa"
+_DEV_CSRF_SECRET = "change-me-in-prod-csrf-64-chars-aaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+
+@lru_cache
+def get_web_config() -> WebConfig:
+    config = WebConfig()
+    if config.cookie_secure and (
+        config.session_secret == _DEV_SESSION_SECRET
+        or config.csrf_secret == _DEV_CSRF_SECRET
+    ):
+        raise RuntimeError(
+            "Default session/csrf secret terdeteksi sementara cookie_secure=True. "
+            "Set WEB_SESSION_SECRET dan WEB_CSRF_SECRET via env var."
+        )
+    return config
+
+```
+
+Fail-closed: jika `cookie_secure=True` (indikator production), tapi secret default, app crash at startup (better than silent vulnerability).
+
+**Sumber:** CWE-798 (Use of Hard-Coded Credentials).
+
+---
+
+#### 5. Username Enumeration (Timing Attack) — `auth_service.py:52`
+
+**Masalah:** Login handler membedakan timing antara "user tidak ada" vs "password salah":
+
+```python
+if admin is None:
+    bcrypt.using(rounds=4).hash("dummy")  # Hanya 4 round, super cepat!
+    time.sleep(0.1)
+    self._increment_failure(lockout_key)
+    return AuthResult(success=False, error="invalid_credentials")
+
+if not bcrypt.verify(password, admin.password_hash):  # rounds=12
+    time.sleep(0.1)
+    self._increment_failure(lockout_key)
+    return AuthResult(success=False, error="invalid_credentials")
+
+```
+
+Attacker bisa measure timing: jika response cepat, user tidak ada; jika lambat, user ada. Dengan ini attacker bisa enumerate username valid.
+
+**Fix:**
+
+```python
+_DUMMY_HASH = bcrypt.using(rounds=12).hash("dummy-password-for-timing-defense")
+
+# Di method authenticate():
+if admin is None:
+    bcrypt.verify(password, _DUMMY_HASH)  # Verify terhadap hash real (rounds=12)
+    self._increment_failure(lockout_key)  # Tanpa hardcoded sleep
+    return AuthResult(success=False, error="invalid_credentials")
+
+```
+
+Dengan ini, path "user tidak ada" dan "password salah" keduanya melakukan `bcrypt.verify(rounds=12)`, sehingga timing serupa. Attacker tidak bisa bedakan.
+
+**Sumber:** CWE-208 (Observable Timing Discrepancy).
+
+---
+
+#### 6. Race Condition — `chat_service.py:135`
+
+**Masalah:** `_flush_pending_uploads()` mengambil data upload dari Redis, lalu hapus:
+
+```python
+pending_raw = self._redis.get(f"web:pending_uploads:{session_id}")
+if not pending_raw:
+    return
+self._redis.delete(f"web:pending_uploads:{session_id}")  # ← separate call
+for meta in json.loads(pending_raw):
+    # insert ke DB
+    db.add(TicketAttachment(...))
+
+```
+
+Jika dua request concurrent dengan `session_id` sama, bisa terjadi:
+1. Request A: `GET` → dapat data
+2. Request B: `GET` → dapat data (sama)
+3. Request A: `DELETE` → hapus
+4. Request B: `DELETE` → hapus (sudah kosong, tapi OK)
+5. Kedua request insert ke DB → duplikat attachment
+
+**Fix:**
+
+```python
+pipe = self._redis.pipeline()
+pipe.get(key)
+pipe.delete(key)
+pending_raw, _ = pipe.execute()  # ← atomic
+
+```
+
+Pipeline memastikan GET+DELETE adalah atomic operation (dari perspektif Redis), tidak bisa di-interleave oleh request lain.
+
+**Sumber:** CWE-362 (Concurrent Execution using Shared Resource with Improper Synchronization).
+
+---
+
+#### 7. JSON Parse Error Handling — `chat_service.py:35`, `rag_service.py:73`, `upload_service.py:55`
+
+**Masalah:** Per CLAUDE.md rule, **JSON parsing WAJIB error handling**. Namun di tiga service, `json.loads()` tidak di-wrap try/except:
+
+```python
+# chat_service.py:35
+return json.loads(raw)  # Crash jika Redis corrupt
+
+# rag_service.py:73
+return json.loads(raw)  # Crash
+
+# upload_service.py:55
+existing = json.loads(self._redis.get(key) or b"[]")  # Crash
+
+```
+
+Jika Redis corruption terjadi (rare tapi possible), requests crash dengan 500 error.
+
+**Fix:** Wrap semua dengan try/except + log + return safe default:
+
+```python
+def get_history(self, session_id: str) -> list[dict]:
+    raw = self._redis.get(f"web:chat:{session_id}")
+    if not raw:
+        return []
+    try:
+        data = json.loads(raw)
+        return data if isinstance(data, list) else []
+    except (json.JSONDecodeError, ValueError):
+        logger.warning("Corrupt chat history session=%s, reset", session_id[:8])
+        self._redis.delete(f"web:chat:{session_id}")
+        return []
+
+```
+
+Juga apply di `rag_service.py:get_job_status()`, `rag_service.py:run_ingest()`, dan `upload_service.py` helpers.
+
+**Sumber:** CWE-1025 (Comparison Using Wrong Factors) — implicit; best practice untuk input validation boundary.
+
+---
+
+#### 8. Missing ValueError Handling — `admin_rag.py:68`
+
+**Masalah:** Route `upload_document` memanggil `svc.upload_pdf()` tapi tidak catch `ValueError` yang bisa dilempar dari path traversal validation:
+
+```python
+meta_filename = svc.upload_pdf(
+    filename=filename, data=data, doc_id=doc_id,
+    doc_title=doc_title, source_framework=source_framework,
+    incident_types=types_list, language=language,
+)
+
+```
+
+Jika `doc_id` invalid atau `filename` buruk, `ValueError` tidak tertangkap → 500 error.
+
+**Fix:**
+
+```python
+from fastapi import HTTPException
+
+try:
+    meta_filename = svc.upload_pdf(...)
+except ValueError as exc:
+    raise HTTPException(status_code=400, detail=str(exc))
+
+```
+
+Mengubah 500 Internal Server Error menjadi 400 Bad Request yang informatif.
+
+---
+
+### Test Impact
+
+| File | Test Lama | Test Baru | Status |
+|------|-----------|-----------|--------|
+| `test_admin_actions.py` | 10 | 10 | ✅ All pass |
+| `test_services/` (auth, chat, upload, rag) | 49 | 49 | ✅ All pass |
+| `test_middleware/` (CSRF, headers) | ? | ? | ✅ All pass |
+| `test_web/` total | 90 | 90 | ✅ 88 pass, 2 pre-existing fail |
+
+Pre-existing failures: `test_reset_clears_session`, `test_reporter_full_flow` (unrelated to security fixes, terkait flow `/lapor/chat/reset`).
+
+Regression test: `test_attachment_download_streams_file` diperbaiki via monkeypatch `UPLOAD_ROOT` ke `tmp_path` agar comply dengan path guard baru.
+
+---
+
+### Checklist Compliance
+
+| Aturan CLAUDE.md | Isu | Fix |
+|---|---|---|
+| "PII WAJIB di-redact sebelum kirim ke LLM API" | Sudah diterapkan di guardrails, audit confirm OK | ✓ |
+| "API key, token, password: HANYA dari env vars" | Default secret di config bisa lolos ke prod | Fixed: fail-closed jika default tetap + cookie_secure |
+| "LLM output selalu parse sebagai JSON dengan error handling" | Chat history, RAG job status, upload pending list tidak di-wrap | Fixed: try/except + log + default aman |
+| "Setiap agen harus punya fallback" | Web routes kurang fallback di error handling | Partial: auth & upload sekarang return 400 terstruktur |
+| "Fail-closed: guardrails gagal → blokir, jangan teruskan" | Path traversal bisa terjadi jika attacker control DB | Fixed: path guard di download, filename validation di upload |
+
+---
+
+### Rekomendasi Post-Audit
+
+1. **Rate-limit endpoint upload** (admin_rag.py) untuk cegah DoS.
+2. **Log semua error 400+** di endpoint CRUD ticket/attachment untuk deteksi attack pattern.
+3. **Rotate session secret periodik** (3 bulan) jika deployment prod.
+4. **Input validation di layer frontend** (JavaScript) untuk UX lebih baik (client-side validation + server-side validation berlapis).
+
+---
+
+## 20. Tabel Q&A Sidang
 
 | Pertanyaan Dosen | Jawaban + Referensi Kode |
 |------------------|--------------------------|

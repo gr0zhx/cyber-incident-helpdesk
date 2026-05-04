@@ -171,6 +171,24 @@ def test_validate_citations_accepts_known_standards():
     assert len(valid) == 2
 
 
+def test_validate_citations_accepts_numeric_chunk_reference():
+    """LLM sering menghasilkan '[1] Training and Awareness' — harus diterima karena [1] valid."""
+    chunks = [
+        _make_chunk("1", "konten A", "NIST SP 800-61", "Training and Awareness"),
+        _make_chunk("2", "konten B", "NIST SP 800-61", "Containment"),
+    ]
+    steps = [
+        {"step": 1, "action": "Lakukan pelatihan", "source": "[1] Training and Awareness"},
+        {"step": 2, "action": "Lakukan isolasi", "source": "[2] Containment Procedures"},
+        {"step": 3, "action": "Tidak valid", "source": "[9] Bab yang tidak ada"},
+    ]
+    valid = _validate_citations(steps, chunks)
+    # [1] dan [2] valid (dalam rentang 1–2), [9] tidak valid
+    assert len(valid) == 2
+    assert valid[0]["step"] == 1
+    assert valid[1]["step"] == 2
+
+
 def test_compute_rag_confidence_average():
     chunks = [
         _make_chunk("1", "", "", score=0.8),

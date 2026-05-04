@@ -191,9 +191,9 @@ async def run_evaluation(qa_path: str, output_path: str | None = None) -> dict:
     print("HASIL EVALUASI RAG")
     print(f"{'='*65}")
     print(f"Pasangan dievaluasi: {len(valid)}/{len(qa_pairs)}")
-    print(f"\nContext Relevance : {avg_cr:.3f} {'✅' if avg_cr >= targets['context_relevance'] else '❌'} (target: ≥ {targets['context_relevance']})")
-    print(f"Answer Relevance  : {avg_ar:.3f} {'✅' if avg_ar >= targets['answer_relevance'] else '❌'} (target: ≥ {targets['answer_relevance']})")
-    print(f"Faithfulness      : {avg_fa:.3f} {'✅' if avg_fa >= targets['faithfulness'] else '❌'} (target: ≥ {targets['faithfulness']})")
+    print(f"\nContext Relevance : {avg_cr:.3f} {'[PASS]' if avg_cr >= targets['context_relevance'] else '[FAIL]'} (target: >= {targets['context_relevance']})")
+    print(f"Answer Relevance  : {avg_ar:.3f} {'[PASS]' if avg_ar >= targets['answer_relevance'] else '[FAIL]'} (target: >= {targets['answer_relevance']})")
+    print(f"Faithfulness      : {avg_fa:.3f} {'[PASS]' if avg_fa >= targets['faithfulness'] else '[FAIL]'} (target: >= {targets['faithfulness']})")
 
     summary = {
         "timestamp": datetime.now(timezone.utc).isoformat(),

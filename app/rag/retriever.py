@@ -77,9 +77,9 @@ class HybridRetriever:
 
         # --- Semantic search ---
         query_vector = self.embedder.embed_query(query)
-        semantic_results = self.client.search(
+        semantic_response = self.client.query_points(
             collection_name=COLLECTION_NAME,
-            query_vector=query_vector,
+            query=query_vector,
             query_filter=metadata_filter,
             limit=top_k,
             with_payload=True,
@@ -91,7 +91,7 @@ class HybridRetriever:
                 "metadata": {k: v for k, v in hit.payload.items() if k != "content"},
                 "score": hit.score,
             }
-            for hit in semantic_results
+            for hit in semantic_response.points
         ]
 
         # --- Keyword search via full-text index ---

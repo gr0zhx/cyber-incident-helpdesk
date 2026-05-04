@@ -1,0 +1,162 @@
+[
+  {
+    "id": "QA-N01",
+    "question": "Kalau kita mau bentuk tim incident response dari nol, apa aja yang harus disiapkan duluan?",
+    "ground_truth": "Hal-hal dasar yang harus ada sebelum insiden datang: pembentukan tim respons dengan pembagian peran yang jelas (di Pusdatin: SOC sebagai penerima awal, Tim Keamanan Siber & PDP sebagai analis dan koordinator, Tim Infrastruktur untuk takedown/buka blokir, Tim Aplikasi untuk perbaikan), kebijakan dan playbook penanganan, tools (SIEM, kit forensik, jalur komunikasi aman), pelatihan tim dan awareness pegawai, plus kontrol pencegahan teknis seperti patching, hardening, dan segmentasi jaringan.",
+    "context_source": "NIST SP 800-61",
+    "category": "Preparation",
+    "incident_type": "general"
+  },
+  {
+    "id": "QA-N02",
+    "question": "Kalau ada insiden masuk, siapa yang harusnya pegang apa? Bingung kalau timnya banyak begini.",
+    "ground_truth": "Pembagian peran biasanya: SOC menerima laporan awal dan triase, Tim Keamanan Siber & PDP melakukan analisis (identifikasi malware, scanning, VA), koordinasi respons, dan validasi pasca-perbaikan. Tim Infrastruktur eksekusi takedown dan buka blokir aset setelah aman. Tim Aplikasi/pemilik sistem yang melakukan perbaikan teknis. CSIRT (kalau dilibatkan) lebih ke koordinatif untuk eskalasi dan red/blue teaming, bukan perbaikan langsung.",
+    "context_source": "NIST SP 800-61",
+    "category": "Preparation",
+    "incident_type": "general"
+  },
+  {
+    "id": "QA-N03",
+    "question": "Dari mana biasanya kita tahu kalau ada insiden? Kadang dapat alert, kadang dapat laporan pegawai — mana yang lebih bisa dipercaya?",
+    "ground_truth": "Indikator insiden bisa datang dari banyak sumber: alert SIEM/IDS/IPS, alert antivirus/EDR, log autentikasi anomali (waktu/lokasi/gagal berulang), laporan pegawai via helpdesk, notifikasi pihak ketiga (vendor, BSSN, regulator), monitoring trafik tidak normal, perubahan integritas file sistem kritis, atau pemantauan OSINT/dark-web. Semua sumber valid; analis harus melakukan korelasi dan verifikasi sebelum eskalasi — laporan pegawai tidak boleh diabaikan, alert otomatis tidak boleh ditelan mentah.",
+    "context_source": "NIST SP 800-61",
+    "category": "Detection & Analysis",
+    "incident_type": "general"
+  },
+  {
+    "id": "QA-N04",
+    "question": "Ada dua laporan insiden masuk barengan, sama-sama kelihatan mendesak. Gimana cara nentuin mana yang perlu ditangani lebih dulu?",
+    "ground_truth": "Prioritas insiden ditentukan dari tiga aspek: (1) functional impact ke layanan (none/low/medium/high/kritis), (2) information impact ke data (kerahasiaan/integritas/ketersediaan, terutama kalau menyangkut data pribadi), dan (3) recoverability (waktu dan sumber daya buat pulih). Insiden kritis = layanan publik mati total, ransomware aktif, atau data sensitif massal terekspos — ini didahulukan. Hasil prioritisasi menentukan SLA respons dan jalur eskalasi.",
+    "context_source": "NIST SP 800-61",
+    "category": "Detection & Analysis",
+    "incident_type": "general"
+  },
+  {
+    "id": "QA-N05",
+    "question": "Pencatatan laporan insiden keamanan di sini sering keropos isinya. Minimum informasi apa aja yang harus ada supaya investigasi dan respons bisa berjalan dengan baik?",
+    "ground_truth": "Minimal harus ada: timestamp deteksi dan timestamp laporan, sumber laporan (SOC/pegawai/eksternal), deskripsi insiden, sistem/aset terdampak, jenis insiden kalau sudah teridentifikasi, severity awal, indikator kompromi (IoC) yang ditemukan, tindakan yang sudah dilakukan beserta PIC, dan status saat ini. Kronologi diperbarui terus sampai tiket ditutup, dan referensi bukti (log, screenshot, image forensik) disimpan terpisah dengan chain of custody.",
+    "context_source": "NIST SP 800-61",
+    "category": "Detection & Analysis",
+    "incident_type": "general"
+  },
+  {
+    "id": "QA-N06",
+    "question": "Bedanya containment yang sebentar sama yang panjang itu apa? Kapan harus pakai yang mana?",
+    "ground_truth": "Short-term containment = tindakan cepat menghentikan dampak — mis. permohonan takedown aset oleh Tim Infrastruktur, isolasi host dari jaringan, blokir IP/domain di firewall. Long-term containment = solusi sementara yang lebih stabil sebelum perbaikan tuntas — mis. patching darurat, menjalankan sistem cadangan/standby. Pilihan tergantung kritikalitas layanan, ada tidaknya workaround, dan estimasi waktu sampai eradikasi tuntas.",
+    "context_source": "NIST SP 800-61",
+    "category": "Containment, Eradication & Recovery",
+    "incident_type": "general"
+  },
+  {
+    "id": "QA-N07",
+    "question": "Workstation yang kena malware udah berhasil diisolasi, langkah lanjutnya gimana biar bener-bener bersih?",
+    "ground_truth": "Tahap eradikasi: (1) identifikasi seluruh artefak malware (file, entry registry, scheduled task, mekanisme persistence), (2) hapus malware dari semua host yang terdampak, (3) tutup vektor masuk — patch vulnerability yang dieksploitasi, ubah seluruh kredensial yang berpotensi bocor, revoke token/sesi, (4) lakukan vulnerability assessment ulang oleh Tim KS-PDP, (5) verifikasi tidak ada lateral movement atau backdoor yang tersisa sebelum lanjut ke recovery.",
+    "context_source": "NIST SP 800-61",
+    "category": "Containment, Eradication & Recovery",
+    "incident_type": "Malware/Ransomware"
+  },
+  {
+    "id": "QA-N08",
+    "question": "Sistem yang terdampak insiden sudah diperbaiki tim aplikasi. Apa langkah recovery yang harus dilalui sebelum sistem bisa dioperasikan kembali ke produksi?",
+    "ground_truth": "Sebelum live: (1) clean restore dari backup terverifikasi atau rebuild penuh dari image bersih, (2) full scanning dan VA ulang oleh Tim KS-PDP, (3) validasi keamanan formal dengan dokumentasi hasilnya, (4) monitoring intensif paska-recovery (24-72 jam) untuk deteksi reinfection, (5) baru kemudian Tim Infrastruktur diminta buka blokir agar aplikasi live kembali. Kalau perbaikan tidak memungkinkan, lakukan restore backup dulu lalu scanning + VA ulang sebelum live.",
+    "context_source": "NIST SP 800-61",
+    "category": "Containment, Eradication & Recovery",
+    "incident_type": "general"
+  },
+  {
+    "id": "QA-N09",
+    "question": "Setelah insiden ditutup, perlu meeting evaluasi gak sih? Kalau perlu, bahasnya apa aja?",
+    "ground_truth": "Lessons-learned meeting penting untuk mengevaluasi penyebab insiden, efektivitas respons, dan kesenjangan kontrol/proses. Agenda: kronologi lengkap, apa yang berjalan baik, apa yang gagal, gap pada tools/playbook/SDM, dan rekomendasi konkret (update playbook, kebijakan, training, kontrol teknis, pengajuan budget). Idealnya dilakukan 1-2 minggu setelah penutupan, melibatkan SOC, Tim KS-PDP, Tim Infrastruktur, dan Tim Aplikasi.",
+    "context_source": "NIST SP 800-61",
+    "category": "Post-Incident Activity",
+    "incident_type": "general"
+  },
+  {
+    "id": "QA-N10",
+    "question": "Log dan image forensik insiden kemarin sampai kapan harus disimpan? Sayang kalau kelamaan makan storage.",
+    "ground_truth": "Retensi mengikuti kebijakan internal organisasi dan regulasi yang berlaku. Untuk instansi pemerintah Indonesia, minimal sampai investigasi selesai dan kewajiban pelaporan ke instansi pengawas (mis. BSSN) terpenuhi. Praktik umum 1-3 tahun, lebih lama kalau ada potensi proses hukum, audit, atau insiden bersifat strategis. Bukti disimpan dengan chain of custody yang terdokumentasi dan akses terbatas, sehingga storage cost tidak boleh jadi alasan menghapus prematur.",
+    "context_source": "NIST SP 800-61",
+    "category": "Post-Incident Activity",
+    "incident_type": "general"
+  },
+  {
+    "id": "QA-M01",
+    "question": "Phishing itu cuma lewat email aja kan? Atau ada bentuk lain yang perlu diwaspadai?",
+    "ground_truth": "Phishing (T1566) di MITRE ATT&CK punya beberapa sub-teknik: (1) Spearphishing Attachment (T1566.001) — lampiran malicious, (2) Spearphishing Link (T1566.002) — tautan ke situs malicious atau credential harvesting, (3) Spearphishing via Service (T1566.003) — lewat WhatsApp, Telegram, LinkedIn yang sering bypass kontrol email gateway. Mitigasinya: M1017 User Training, M1031 Network Intrusion Prevention, M1049 Antivirus/Antimalware, dan M1054 Software Configuration (mis. disable macro Office).",
+    "context_source": "MITRE ATT&CK",
+    "category": "Initial Access",
+    "incident_type": "Phishing"
+  },
+  {
+    "id": "QA-M02",
+    "question": "Pegawai sering banget kena email berisi link aneh. Selain ngingetin terus, apa yang bisa dipasang teknisnya biar berkurang?",
+    "ground_truth": "Untuk Spearphishing Link (T1566.002): (1) user awareness training mengenali URL palsu dan domain serupa (M1017), (2) email gateway dengan URL rewriting, sandboxing, dan filter ancaman, (3) DNS filtering atau web proxy untuk blok domain malicious, (4) browser isolation untuk akses link mencurigakan, (5) MFA pada semua akun agar credential phishing tidak otomatis berakibat takeover. Setiap email mencurigakan dilaporkan ke SOC untuk analisis IoC dan dipush ke control.",
+    "context_source": "MITRE ATT&CK",
+    "category": "Initial Access",
+    "incident_type": "Phishing"
+  },
+  {
+    "id": "QA-M03",
+    "question": "Kalau ransomware nyerang dan file-file dienkripsi, kontrol apa yang sebenarnya bisa nahan dampaknya?",
+    "ground_truth": "Data Encrypted for Impact (T1486) = adversary mengenkripsi data sistem/jaringan untuk menghentikan ketersediaan, biasanya disertai tuntutan tebusan. Mitigasi yang bekerja: (1) backup terisolasi (offline/air-gapped) yang diuji restore-nya secara berkala (M1053 Data Backup), (2) behavior monitoring untuk mendeteksi enkripsi massal pada file system, (3) application control / allow-listing biar binary tidak dikenal tidak bisa eksekusi, (4) least privilege agar penyebaran lateral terbatas, (5) network segmentation memisahkan zona produksi dan workstation.",
+    "context_source": "MITRE ATT&CK",
+    "category": "Impact",
+    "incident_type": "Ransomware"
+  },
+  {
+    "id": "QA-M04",
+    "question": "Katanya ransomware modern juga ngerusak backup. Itu beneran? Kalau iya, gimana cara cegahnya?",
+    "ground_truth": "Bener, ini namanya Inhibit System Recovery (T1490). Adversary menonaktifkan/menghapus mekanisme pemulihan: Volume Shadow Copies via vssadmin, restore points, backup catalog, fitur recovery OS — supaya korban tidak bisa pulih tanpa bayar tebusan. Mitigasi: backup off-host atau offline yang tidak bisa dijangkau dari host yang dikompromis, pembatasan hak modifikasi terhadap repository backup, monitoring command yang menyentuh vssadmin/wbadmin/bcdedit/wmic, dan tamper-proof / immutable backup repository.",
+    "context_source": "MITRE ATT&CK",
+    "category": "Impact",
+    "incident_type": "Ransomware"
+  },
+  {
+    "id": "QA-M05",
+    "question": "Banyak malware masuk gara-gara user iseng klik file. Selain ngomelin user, apa yang bisa dipasang biar lebih aman?",
+    "ground_truth": "Untuk User Execution (T1204): (1) user awareness training (M1017), terutama bahaya membuka lampiran/menjalankan file dari sumber tidak dikenal, (2) email gateway dengan sandboxing lampiran sebelum delivery, (3) application control / allow-listing (M1038), (4) disable macro Office secara default dan blok macro dari internet, (5) endpoint detection & response (EDR) untuk menangkap eksekusi mencurigakan paska user click, (6) web proxy untuk blok download executable berisiko.",
+    "context_source": "MITRE ATT&CK",
+    "category": "Execution",
+    "incident_type": "Malware"
+  },
+  {
+    "id": "QA-M06",
+    "question": "Website kementan kena serangan defacement, tampilannya diubah penyerang. Mitigasi teknis apa saja yang direkomendasikan untuk mencegahnya terulang?",
+    "ground_truth": "Untuk Defacement (T1491): (1) patch dan hardening web server, framework, dan CMS secara rutin (M1051 Update Software), (2) WAF dengan rule set OWASP Top 10, (3) File Integrity Monitoring (FIM) untuk mendeteksi perubahan file web tidak terotorisasi, (4) backup statis konten halaman untuk pemulihan cepat, (5) least privilege pada akun service web dan akun admin CMS, (6) MFA wajib untuk akses panel admin, (7) audit log akses CMS secara berkala.",
+    "context_source": "MITRE ATT&CK",
+    "category": "Impact",
+    "incident_type": "Web Defacement"
+  },
+  {
+    "id": "QA-M07",
+    "question": "Server dibanjiri trafik dari ribuan IP berbeda, sepertinya serangan denial of service. Apa mitigasi yang bisa dilakukan biar layanan tetap bisa diakses?",
+    "ground_truth": "Untuk Network Denial of Service (T1498): (1) filter trafik di edge dengan layanan anti-DDoS atau scrubbing center (M1037 Filter Network Traffic), (2) rate limiting dan connection throttling pada layer aplikasi, (3) load balancer dengan auto-scaling untuk menyerap lonjakan trafik, (4) blackhole atau sinkhole IP sumber serangan, (5) koordinasi dengan ISP/penyedia hosting untuk mitigasi upstream, (6) baseline trafik dan alert anomali untuk deteksi dini, (7) playbook komunikasi krisis ke publik kalau layanan terganggu.",
+    "context_source": "MITRE ATT&CK",
+    "category": "Impact",
+    "incident_type": "DDoS"
+  },
+  {
+    "id": "QA-M08",
+    "question": "Penyerang bisa menyalahgunakan credential pegawai yang bocor untuk masuk ke sistem pakai akun yang valid. Kontrol keamanan apa yang efektif untuk mencegahnya?",
+    "ground_truth": "Untuk Valid Accounts (T1078): (1) MFA wajib pada semua akun, terutama akun admin dan akses jarak jauh (M1032), (2) Privileged Access Management (PAM) dan just-in-time access untuk akun istimewa, (3) monitoring login anomali (lokasi/waktu/perangkat tidak biasa) di SIEM, (4) password policy kuat, rotation berkala, dan deteksi password yang sudah bocor, (5) audit dan review hak akses berkala, (6) immediate offboarding (deaktivasi + revoke token) untuk pegawai keluar atau mutasi.",
+    "context_source": "MITRE ATT&CK",
+    "category": "Defense Evasion / Persistence / Initial Access",
+    "incident_type": "Akses Tidak Sah"
+  },
+  {
+    "id": "QA-M09",
+    "question": "Insider atau attacker bisa upload data internal ke layanan cloud kayak mega atau anonfiles. Cara cegahnya gimana?",
+    "ground_truth": "Untuk Exfiltration Over Web Service (T1567): (1) web proxy dan DLP yang inspeksi trafik keluar serta blok upload ke layanan cloud tidak resmi (M1057 Data Loss Prevention), (2) network segmentation dan firewall egress rules yang restrictive, (3) monitoring volume transfer ke domain eksternal dengan alert anomali, (4) restrict akses ke layanan file-sharing publik (mega.nz, anonfiles, pastebin, ngrok, transfer.sh), (5) endpoint DLP untuk klasifikasi dan blok data sensitif berdasarkan label, (6) audit kegiatan upload pada akun cloud resmi instansi.",
+    "context_source": "MITRE ATT&CK",
+    "category": "Exfiltration",
+    "incident_type": "Kebocoran Data"
+  },
+  {
+    "id": "QA-M10",
+    "question": "Login gagal berkali-kali dari IP yang sama, itu kena brute force ya? Cara cegahnya apa aja?",
+    "ground_truth": "Iya, itu indikasi Brute Force (T1110). Mitigasi: (1) account lockout policy setelah N kegagalan login berturut-turut (M1027 Password Policies), (2) MFA agar password saja tidak cukup untuk autentikasi (M1032), (3) password policy kuat dan blocking dictionary/breached password, (4) CAPTCHA pada endpoint login publik, (5) rate limiting di IDP atau authentication endpoint, (6) monitoring dan alerting pada lonjakan login gagal di SIEM, (7) minimisasi exposure layanan autentikasi ke internet (gunakan VPN, jump host, atau model zero trust).",
+    "context_source": "MITRE ATT&CK",
+    "category": "Credential Access",
+    "incident_type": "Akses Tidak Sah / Lainnya"
+  }
+]

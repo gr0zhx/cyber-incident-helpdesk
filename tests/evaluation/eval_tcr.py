@@ -160,7 +160,7 @@ async def run_evaluation(scenarios_path: str, output_path: str | None = None) ->
 
         eval_result = _evaluate_scenario(scenario, result)
         results.append(eval_result)
-        sym = {"COMPLETE": "✅", "PARTIAL": "⚠️", "FAIL": "❌"}[eval_result["status"]]
+        sym = {"COMPLETE": "[OK]", "PARTIAL": "[~]", "FAIL": "[X]"}[eval_result["status"]]
         print(f"       {sym} {eval_result['status']} | intent={eval_result['intent']} | type={eval_result['incident_type']}")
 
     # Hitung TCR
@@ -187,7 +187,7 @@ async def run_evaluation(scenarios_path: str, output_path: str | None = None) ->
     print(f"Berhasil lengkap: {complete}")
     print(f"Parsial        : {partial}")
     print(f"Gagal          : {fail}")
-    print(f"\nTCR = {tcr:.1f}% {'✅' if tcr >= 80 else '❌'} (target: ≥ 80%)")
+    print(f"\nTCR = {tcr:.1f}% {'[PASS]' if tcr >= 80 else '[FAIL]'} (target: >= 80%)")
     print(f"\nBreakdown per kategori:")
     for cat, counts in categories.items():
         cat_pct = counts["complete"] / counts["total"] * 100

@@ -1,0 +1,302 @@
+{
+  "timestamp": "2026-04-29T13:52:07.898372+00:00",
+  "total_pairs": 20,
+  "valid_pairs": 20,
+  "metrics": {
+    "context_relevance": 0.365,
+    "answer_relevance": 0.47,
+    "faithfulness": 0.44
+  },
+  "targets": {
+    "context_relevance": 0.75,
+    "answer_relevance": 0.8,
+    "faithfulness": 0.85
+  },
+  "targets_met": {
+    "context_relevance": false,
+    "answer_relevance": false,
+    "faithfulness": false
+  },
+  "details": [
+    {
+      "id": "QA-N01",
+      "question": "Kalau kita mau bentuk tim incident response dari nol, apa aja yang harus disiapkan duluan?",
+      "answer_preview": "1. Identifikasi dan pilih anggota tim dengan keterampilan yang sesuai untuk membentuk tim respons insiden. Keterampilan teknis yang penting meliputi administrasi sistem, administrasi jaringan, pemrogr",
+      "chunks_retrieved": 5,
+      "context_relevance": 0.9,
+      "answer_relevance": 1.0,
+      "faithfulness": 1.0,
+      "reasons": {
+        "context_relevance": "Konteks memberikan informasi penting tentang struktur tim respons insiden, keterampilan yang diperlukan, dan sumber daya yang harus disiapkan, yang semuanya relevan untuk membentuk tim incident response dari nol.",
+        "answer_relevance": "Jawaban secara langsung menjawab pertanyaan tentang langkah-langkah yang perlu disiapkan untuk membentuk tim incident response, mencakup identifikasi anggota, pelatihan, kolaborasi dengan kelompok lain, layanan yang ditawarkan, dan ketersediaan alat serta sumber daya.",
+        "faithfulness": "Jawaban sepenuhnya konsisten dengan konteks yang diberikan, mencakup semua aspek penting seperti pemilihan anggota tim, pelatihan, kolaborasi dengan kelompok lain, layanan yang ditawarkan, dan ketersediaan alat serta sumber daya."
+      }
+    },
+    {
+      "id": "QA-N02",
+      "question": "Kalau ada insiden masuk, siapa yang harusnya pegang apa? Bingung kalau timnya banyak begini.",
+      "answer_preview": "1. Mulai mencatat semua informasi terkait insiden segera setelah tim mencurigai adanya insiden. Dokumentasikan setiap langkah yang diambil, mulai dari deteksi hingga resolusi akhir, dengan mencantumka",
+      "chunks_retrieved": 5,
+      "context_relevance": 0.4,
+      "answer_relevance": 0.8,
+      "faithfulness": 1.0,
+      "reasons": {
+        "context_relevance": "Konteks memberikan beberapa informasi tentang penanganan insiden, tetapi tidak secara spesifik menjelaskan siapa yang harus memegang peran tertentu dalam tim yang besar.",
+        "answer_relevance": "Jawaban memberikan langkah-langkah yang jelas untuk menangani insiden, tetapi tidak secara spesifik menjelaskan siapa yang harus memegang peran tertentu dalam tim yang besar, sehingga masih ada ruang untuk kejelasan lebih lanjut.",
+        "faithfulness": "Jawaban sistem sepenuhnya konsisten dengan konteks yang diberikan, mencakup langkah-langkah penanganan insiden yang sesuai dan relevan dengan informasi yang terdapat dalam sumber."
+      }
+    },
+    {
+      "id": "QA-N03",
+      "question": "Dari mana biasanya kita tahu kalau ada insiden? Kadang dapat alert, kadang dapat laporan pegawai — mana yang lebih bisa dipercaya?",
+      "answer_preview": "1. Pastikan organisasi memiliki mekanisme yang jelas untuk menerima laporan insiden dari pihak eksternal, seperti menyediakan nomor telepon darurat, alamat email, atau formulir berbasis web untuk pela",
+      "chunks_retrieved": 5,
+      "context_relevance": 0.7,
+      "answer_relevance": 0.8,
+      "faithfulness": 1.0,
+      "reasons": {
+        "context_relevance": "Konteks memberikan informasi tentang berbagai sumber laporan insiden, termasuk laporan dari pihak eksternal dan prosedur pelaporan dalam organisasi. Namun, tidak ada penjelasan langsung mengenai mana yang lebih dapat dipercaya antara alert dan laporan pegawai.",
+        "answer_relevance": "Jawaban memberikan langkah-langkah yang jelas untuk menangani laporan insiden, tetapi tidak secara langsung membandingkan keandalan antara alert dan laporan pegawai, yang merupakan inti dari pertanyaan.",
+        "faithfulness": "Jawaban sistem sepenuhnya konsisten dengan konteks yang diberikan, mencakup mekanisme pelaporan insiden, verifikasi laporan, dan keterlibatan pihak relevan, yang semuanya didukung oleh informasi dalam konteks."
+      }
+    },
+    {
+      "id": "QA-N04",
+      "question": "Ada dua laporan insiden masuk barengan, sama-sama kelihatan mendesak. Gimana cara nentuin mana yang perlu ditangani lebih dulu?",
+      "answer_preview": "1. Identifikasi dan kategorikan insiden berdasarkan tingkat keparahan dan urgensi. Prioritaskan insiden yang memiliki dampak fungsional dan informasi yang lebih besar, serta yang memerlukan pemulihan ",
+      "chunks_retrieved": 5,
+      "context_relevance": 0.7,
+      "answer_relevance": 1.0,
+      "faithfulness": 1.0,
+      "reasons": {
+        "context_relevance": "Konteks memberikan beberapa informasi tentang cara menangani insiden dan pentingnya menganalisis bukti serta mengutamakan penanganan berdasarkan faktor relevansi. Namun, tidak ada penjelasan langsung tentang cara menentukan prioritas antara dua insiden yang mendesak.",
+        "answer_relevance": "Jawaban sistem secara langsung menjawab pertanyaan dengan memberikan langkah-langkah yang jelas untuk menentukan prioritas penanganan insiden berdasarkan tingkat keparahan dan urgensi, serta menyarankan analisis dan eskalasi jika diperlukan.",
+        "faithfulness": "Jawaban sistem sepenuhnya konsisten dengan konteks yang diberikan, mencakup langkah-langkah yang tepat dalam menangani insiden keamanan siber, analisis bukti, pelaporan kepada pihak yang relevan, dan pembatasan akses data insiden."
+      }
+    },
+    {
+      "id": "QA-N05",
+      "question": "Pencatatan laporan insiden keamanan di sini sering keropos isinya. Minimum informasi apa aja yang harus ada supaya investigasi dan respons bisa berjalan dengan baik?",
+      "answer_preview": "1. Mulai mencatat semua informasi terkait insiden segera setelah tim mencurigai adanya insiden. Setiap langkah yang diambil, mulai dari deteksi hingga resolusi akhir, harus didokumentasikan dan diberi",
+      "chunks_retrieved": 5,
+      "context_relevance": 0.8,
+      "answer_relevance": 1.0,
+      "faithfulness": 1.0,
+      "reasons": {
+        "context_relevance": "Konteks memberikan informasi penting tentang pencatatan insiden keamanan, termasuk langkah-langkah yang harus didokumentasikan dan jenis informasi yang perlu dicatat. Namun, tidak semua minimum informasi yang diperlukan untuk investigasi dan respons dijelaskan secara spesifik.",
+        "answer_relevance": "Jawaban memberikan informasi lengkap dan relevan mengenai minimum informasi yang harus ada dalam pencatatan laporan insiden keamanan, serta langkah-langkah yang perlu diambil untuk memastikan investigasi dan respons yang efektif.",
+        "faithfulness": "Jawaban sistem sepenuhnya konsisten dengan konteks yang diberikan, mencakup semua langkah penting dalam penanganan insiden keamanan siber, termasuk pencatatan informasi, pelibatan rekan kerja, dan pelaporan kepada pihak yang relevan."
+      }
+    },
+    {
+      "id": "QA-N06",
+      "question": "Bedanya containment yang sebentar sama yang panjang itu apa? Kapan harus pakai yang mana?",
+      "answer_preview": "1. Identifikasi jenis insiden dan pilih strategi containment yang sesuai berdasarkan kriteria seperti potensi kerusakan, kebutuhan untuk pelestarian bukti, ketersediaan layanan, waktu, dan sumber daya",
+      "chunks_retrieved": 5,
+      "context_relevance": 0.8,
+      "answer_relevance": 1.0,
+      "faithfulness": 1.0,
+      "reasons": {
+        "context_relevance": "Konteks memberikan informasi tentang jenis-jenis containment dan faktor-faktor yang perlu dipertimbangkan dalam memilih strategi containment, meskipun tidak secara eksplisit menjelaskan perbedaan antara containment yang sebentar dan yang panjang.",
+        "answer_relevance": "Jawaban sistem secara langsung menjelaskan perbedaan antara containment jangka pendek dan jangka panjang, serta kapan masing-masing harus digunakan, sesuai dengan pertanyaan yang diajukan.",
+        "faithfulness": "Jawaban sistem sepenuhnya konsisten dengan konteks yang diberikan, mencakup langkah-langkah yang tepat untuk containment insiden, evaluasi durasi, dan diskusi dengan departemen hukum, yang semuanya didukung oleh informasi dalam konteks."
+      }
+    },
+    {
+      "id": "QA-N07",
+      "question": "Workstation yang kena malware udah berhasil diisolasi, langkah lanjutnya gimana biar bener-bener bersih?",
+      "answer_preview": "1. Lakukan audit terhadap sistem yang terdampak untuk mengidentifikasi potensi persistence yang menggunakan teknik seperti Windows Management Instrumentation Event Subscription (T1084) atau Kernel Mod",
+      "chunks_retrieved": 5,
+      "context_relevance": 0.6,
+      "answer_relevance": 1.0,
+      "faithfulness": 0.9,
+      "reasons": {
+        "context_relevance": "Konteks memberikan beberapa informasi tentang teknik serangan dan mitigasi yang relevan, tetapi tidak secara langsung menjelaskan langkah-langkah spesifik untuk membersihkan workstation dari malware setelah isolasi.",
+        "answer_relevance": "Jawaban memberikan langkah-langkah yang komprehensif dan relevan untuk memastikan workstation yang terinfeksi malware benar-benar bersih, termasuk audit sistem, pengaktifan Secure Boot, kebijakan whitelisting aplikasi, verifikasi integritas file, dan penggunaan alat untuk memverifikasi tanda tangan digital.",
+        "faithfulness": "Jawaban sistem sebagian besar konsisten dengan konteks yang diberikan, mencakup teknik serangan dan mitigasi yang relevan. Namun, ada beberapa detail yang tidak sepenuhnya terhubung dengan konteks, seperti spesifikasi alat yang digunakan untuk mitigasi yang tidak disebutkan dalam konteks."
+      }
+    },
+    {
+      "id": "QA-N08",
+      "question": "Sistem yang terdampak insiden sudah diperbaiki tim aplikasi. Apa langkah recovery yang harus dilalui sebelum sistem bisa dioperasikan kembali ke produksi?",
+      "answer_preview": "1. Lakukan pengujian integritas dan pemulihan data dari backup yang telah disiapkan untuk memastikan bahwa data tidak rusak dan dapat dipulihkan dengan cepat.\n2. Pastikan sistem yang telah diperbaiki ",
+      "chunks_retrieved": 5,
+      "context_relevance": 0.8,
+      "answer_relevance": 1.0,
+      "faithfulness": 0.9,
+      "reasons": {
+        "context_relevance": "Konteks memberikan informasi penting tentang langkah-langkah pemulihan sistem setelah insiden, termasuk pentingnya pengujian cadangan dan pemulihan dari cadangan yang bersih. Namun, tidak semua langkah spesifik untuk pemulihan sistem setelah perbaikan disebutkan secara eksplisit.",
+        "answer_relevance": "Jawaban memberikan langkah-langkah yang jelas dan komprehensif untuk proses recovery sebelum sistem dapat dioperasikan kembali, mencakup pengujian integritas, mitigasi kerentanan, dan peningkatan monitoring.",
+        "faithfulness": "Jawaban sistem sangat konsisten dengan konteks yang diberikan, terutama dalam hal pengujian integritas backup, pemulihan sistem, dan mitigasi kerentanan. Namun, ada sedikit ketidakjelasan mengenai beberapa langkah yang tidak sepenuhnya terperinci dalam konteks."
+      }
+    },
+    {
+      "id": "QA-N09",
+      "question": "Setelah insiden ditutup, perlu meeting evaluasi gak sih? Kalau perlu, bahasnya apa aja?",
+      "answer_preview": "1. Adakan rapat evaluasi (lessons learned meeting) dalam beberapa hari setelah insiden ditutup untuk meninjau apa yang terjadi, langkah-langkah yang diambil, dan efektivitas intervensi yang dilakukan.",
+      "chunks_retrieved": 5,
+      "context_relevance": 1.0,
+      "answer_relevance": 1.0,
+      "faithfulness": 1.0,
+      "reasons": {
+        "context_relevance": "Konteks memberikan informasi yang jelas tentang pentingnya meeting evaluasi setelah insiden, termasuk apa yang perlu dibahas dan manfaat dari pertemuan tersebut.",
+        "answer_relevance": "Jawaban sistem secara langsung menjawab pertanyaan tentang perlunya rapat evaluasi setelah insiden ditutup dan memberikan rincian tentang apa yang perlu dibahas dalam rapat tersebut, serta manfaatnya.",
+        "faithfulness": "Jawaban sistem sepenuhnya konsisten dengan konteks yang diberikan, mencakup semua aspek penting dari proses evaluasi pasca-insiden dan langkah-langkah yang harus diambil, serta manfaat dari rapat evaluasi."
+      }
+    },
+    {
+      "id": "QA-N10",
+      "question": "Log dan image forensik insiden kemarin sampai kapan harus disimpan? Sayang kalau kelamaan makan storage.",
+      "answer_preview": "1. Lakukan pengambilan snapshot sistem menggunakan full forensic disk images, bukan file system backups, untuk memastikan bukti insiden tidak rusak dan dapat digunakan untuk analisis lebih lanjut.\n2. ",
+      "chunks_retrieved": 5,
+      "context_relevance": 0.6,
+      "answer_relevance": 0.8,
+      "faithfulness": 0.0,
+      "reasons": {
+        "context_relevance": "Konteks memberikan informasi tentang pentingnya penyimpanan log dan image forensik untuk analisis dan investigasi, tetapi tidak secara langsung menjawab pertanyaan tentang durasi penyimpanan yang optimal.",
+        "answer_relevance": "Jawaban memberikan panduan yang relevan tentang penyimpanan log dan image forensik, tetapi tidak secara eksplisit menyebutkan durasi penyimpanan yang spesifik, yang merupakan inti dari pertanyaan.",
+        "faithfulness": "Error: Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84685 seconds before retrying.', 'details': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84685 seconds before retrying.'}}"
+      }
+    },
+    {
+      "id": "QA-M01",
+      "question": "Phishing itu cuma lewat email aja kan? Atau ada bentuk lain yang perlu diwaspadai?",
+      "answer_preview": "1. Melakukan pelatihan dan peningkatan kesadaran kepada pegawai untuk mengenali upaya phishing, termasuk melalui email, media sosial, atau platform pihak ketiga lainnya. Pegawai juga harus diajarkan c",
+      "chunks_retrieved": 5,
+      "context_relevance": 0.0,
+      "answer_relevance": 0.0,
+      "faithfulness": 0.0,
+      "reasons": {
+        "context_relevance": "Error: Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84676 seconds before retrying.', 'details': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84676 seconds before retrying.'}}",
+        "answer_relevance": "Error: Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84656 seconds before retrying.', 'details': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84656 seconds before retrying.'}}",
+        "faithfulness": "Error: Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84654 seconds before retrying.', 'details': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84654 seconds before retrying.'}}"
+      }
+    },
+    {
+      "id": "QA-M02",
+      "question": "Pegawai sering banget kena email berisi link aneh. Selain ngingetin terus, apa yang bisa dipasang teknisnya biar berkurang?",
+      "answer_preview": "1. Lakukan pelatihan dan peningkatan kesadaran kepada pegawai untuk mengenali upaya phishing, termasuk email yang mengandung tautan mencurigakan. Pegawai harus diajarkan untuk tidak mengklik tautan ya",
+      "chunks_retrieved": 5,
+      "context_relevance": 0.0,
+      "answer_relevance": 0.0,
+      "faithfulness": 0.0,
+      "reasons": {
+        "context_relevance": "Error: Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84583 seconds before retrying.', 'details': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84583 seconds before retrying.'}}",
+        "answer_relevance": "Error: Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84581 seconds before retrying.', 'details': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84581 seconds before retrying.'}}",
+        "faithfulness": "Error: Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84579 seconds before retrying.', 'details': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84579 seconds before retrying.'}}"
+      }
+    },
+    {
+      "id": "QA-M03",
+      "question": "Kalau ransomware nyerang dan file-file dienkripsi, kontrol apa yang sebenarnya bisa nahan dampaknya?",
+      "answer_preview": "1. Segera identifikasi dan isolasi sistem yang terinfeksi untuk mencegah penyebaran ransomware ke sistem lain dalam jaringan.\n2. Pastikan bahwa backup data yang ada tidak terhubung dengan jaringan yan",
+      "chunks_retrieved": 5,
+      "context_relevance": 0.0,
+      "answer_relevance": 0.0,
+      "faithfulness": 0.0,
+      "reasons": {
+        "context_relevance": "Error: Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84571 seconds before retrying.', 'details': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84571 seconds before retrying.'}}",
+        "answer_relevance": "Error: Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84569 seconds before retrying.', 'details': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84569 seconds before retrying.'}}",
+        "faithfulness": "Error: Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84524 seconds before retrying.', 'details': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84524 seconds before retrying.'}}"
+      }
+    },
+    {
+      "id": "QA-M04",
+      "question": "Katanya ransomware modern juga ngerusak backup. Itu beneran? Kalau iya, gimana cara cegahnya?",
+      "answer_preview": "1. Pastikan backup data dilakukan secara rutin dan disimpan di lokasi yang terisolasi dari jaringan utama, seperti perangkat offline atau layanan cloud yang memiliki autentikasi multi-faktor. Hal ini ",
+      "chunks_retrieved": 5,
+      "context_relevance": 0.0,
+      "answer_relevance": 0.0,
+      "faithfulness": 0.0,
+      "reasons": {
+        "context_relevance": "Error: Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84514 seconds before retrying.', 'details': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84514 seconds before retrying.'}}",
+        "answer_relevance": "Error: Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84512 seconds before retrying.', 'details': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84512 seconds before retrying.'}}",
+        "faithfulness": "Error: Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84510 seconds before retrying.', 'details': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84510 seconds before retrying.'}}"
+      }
+    },
+    {
+      "id": "QA-M05",
+      "question": "Banyak malware masuk gara-gara user iseng klik file. Selain ngomelin user, apa yang bisa dipasang biar lebih aman?",
+      "answer_preview": "1. Konfigurasikan kebijakan grup Microsoft Office untuk menonaktifkan eksekusi makro pada file yang diunduh, guna mencegah eksploitasi melalui fitur makro yang berisiko.\n2. Gunakan Windows Defender Ap",
+      "chunks_retrieved": 5,
+      "context_relevance": 0.0,
+      "answer_relevance": 0.0,
+      "faithfulness": 0.0,
+      "reasons": {
+        "context_relevance": "Error: Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84503 seconds before retrying.', 'details': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84503 seconds before retrying.'}}",
+        "answer_relevance": "Error: Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84464 seconds before retrying.', 'details': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84464 seconds before retrying.'}}",
+        "faithfulness": "Error: Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84462 seconds before retrying.', 'details': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84462 seconds before retrying.'}}"
+      }
+    },
+    {
+      "id": "QA-M06",
+      "question": "Website kementan kena serangan defacement, tampilannya diubah penyerang. Mitigasi teknis apa saja yang direkomendasikan untuk mencegahnya terulang?",
+      "answer_preview": "1. Melakukan pelatihan dan edukasi kepada staf terkait pentingnya menjaga integritas konten website, serta mengenali tanda-tanda serangan defacement untuk segera dilaporkan.\n2. Mengimplementasikan keb",
+      "chunks_retrieved": 5,
+      "context_relevance": 0.0,
+      "answer_relevance": 0.0,
+      "faithfulness": 0.0,
+      "reasons": {
+        "context_relevance": "Error: Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84454 seconds before retrying.', 'details': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84454 seconds before retrying.'}}",
+        "answer_relevance": "Error: Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84452 seconds before retrying.', 'details': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84452 seconds before retrying.'}}",
+        "faithfulness": "Error: Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84450 seconds before retrying.', 'details': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84450 seconds before retrying.'}}"
+      }
+    },
+    {
+      "id": "QA-M07",
+      "question": "Server dibanjiri trafik dari ribuan IP berbeda, sepertinya serangan denial of service. Apa mitigasi yang bisa dilakukan biar layanan tetap bisa diakses?",
+      "answer_preview": "1. Identifikasi layanan yang terdampak dan prioritas layanan kritis untuk memastikan bahwa layanan penting tetap dapat diakses oleh pengguna yang sah.\n2. Koordinasikan dengan penyedia layanan internet",
+      "chunks_retrieved": 5,
+      "context_relevance": 0.0,
+      "answer_relevance": 0.0,
+      "faithfulness": 0.0,
+      "reasons": {
+        "context_relevance": "Error: Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 15 per 60s exceeded for UserByModelByMinute. Please wait 37 seconds before retrying.', 'details': 'Rate limit of 15 per 60s exceeded for UserByModelByMinute. Please wait 37 seconds before retrying.'}}",
+        "answer_relevance": "Error: Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84404 seconds before retrying.', 'details': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84404 seconds before retrying.'}}",
+        "faithfulness": "Error: Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84401 seconds before retrying.', 'details': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84401 seconds before retrying.'}}"
+      }
+    },
+    {
+      "id": "QA-M08",
+      "question": "Penyerang bisa menyalahgunakan credential pegawai yang bocor untuk masuk ke sistem pakai akun yang valid. Kontrol keamanan apa yang efektif untuk mencegahnya?",
+      "answer_preview": "1. Melakukan audit terhadap akun-akun yang memiliki akses ke sistem untuk memastikan hanya akun yang valid dan diperlukan yang memiliki akses. Nonaktifkan atau hapus akun yang tidak digunakan atau men",
+      "chunks_retrieved": 5,
+      "context_relevance": 0.0,
+      "answer_relevance": 0.0,
+      "faithfulness": 0.0,
+      "reasons": {
+        "context_relevance": "Error: Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84393 seconds before retrying.', 'details': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84393 seconds before retrying.'}}",
+        "answer_relevance": "Error: Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84391 seconds before retrying.', 'details': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84391 seconds before retrying.'}}",
+        "faithfulness": "Error: Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84389 seconds before retrying.', 'details': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84389 seconds before retrying.'}}"
+      }
+    },
+    {
+      "id": "QA-M09",
+      "question": "Insider atau attacker bisa upload data internal ke layanan cloud kayak mega atau anonfiles. Cara cegahnya gimana?",
+      "answer_preview": "1. Meningkatkan pemantauan terhadap transfer data ke akun cloud lain dalam penyedia layanan cloud yang sama. Fokuskan pada pola transfer data yang tidak biasa, seperti volume data besar atau aktivitas",
+      "chunks_retrieved": 5,
+      "context_relevance": 0.0,
+      "answer_relevance": 0.0,
+      "faithfulness": 0.0,
+      "reasons": {
+        "context_relevance": "Error: Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 15 per 60s exceeded for UserByModelByMinute. Please wait 37 seconds before retrying.', 'details': 'Rate limit of 15 per 60s exceeded for UserByModelByMinute. Please wait 37 seconds before retrying.'}}",
+        "answer_relevance": "Error: Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84341 seconds before retrying.', 'details': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84341 seconds before retrying.'}}",
+        "faithfulness": "Error: Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84339 seconds before retrying.', 'details': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84339 seconds before retrying.'}}"
+      }
+    },
+    {
+      "id": "QA-M10",
+      "question": "Login gagal berkali-kali dari IP yang sama, itu kena brute force ya? Cara cegahnya apa aja?",
+      "answer_preview": "1. Terapkan kebijakan penguncian akun setelah sejumlah upaya login yang gagal untuk mencegah serangan brute force lebih lanjut.\n2. Gunakan autentikasi multi-faktor (MFA) untuk menambahkan lapisan keam",
+      "chunks_retrieved": 5,
+      "context_relevance": 0.0,
+      "answer_relevance": 0.0,
+      "faithfulness": 0.0,
+      "reasons": {
+        "context_relevance": "Error: Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84331 seconds before retrying.', 'details': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84331 seconds before retrying.'}}",
+        "answer_relevance": "Error: Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84329 seconds before retrying.', 'details': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84329 seconds before retrying.'}}",
+        "faithfulness": "Error: Error code: 429 - {'error': {'code': 'RateLimitReached', 'message': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84327 seconds before retrying.', 'details': 'Rate limit of 150 per 86400s exceeded for UserByModelByDay. Please wait 84327 seconds before retrying.'}}"
+      }
+    }
+  ]
+}

@@ -1,0 +1,3475 @@
+                          TUGAS AKHIR
+
+TamanbaruBot: Chatbot Layanan Informasi Administrasi
+  Kependudukan Kelurahan Tamanbaru Berbasis RAG
+                        dengan SmoothLLM
+
+                               Rizal Abie Giffari
+                                   2120101749
+
+                            Rekayasa Kriptografi
+                    Politeknik Siber dan Sandi Negara
+
+                                       2025
+                              LEMBAR JUDUL
+
+                          TUGAS AKHIR
+
+          Diajukan untuk memenuhi persyaratan menyelesaikan pendidikan
+                         pada Politeknik Siber dan Sandi Negara
+
+TamanbaruBot: Chatbot Layanan Informasi Administrasi
+  Kependudukan Kelurahan Tamanbaru Berbasis RAG
+                        dengan SmoothLLM
+
+                               Rizal Abie Giffari
+                                  21020101749
+
+                            Rekayasa Kriptografi
+                    Politeknik Siber dan Sandi Negara
+
+                                       2025
+LEMBAR PERNYATAAN ORISINALITAS
+
+ Tugas Akhir ini adalah hasil karya saya sendiri dan
+semua sumber baik yang dikutip maupun dirujuk telah
+
+               saya nyatakan dengan benar.
+
+Nama          : Rizal Abie Giffari
+
+NPM           : 2020101749
+
+Tempat dan Tanggal : Bogor, 3 September 2025
+
+Tanda Tangan  :
+
+Dokumen ini telah ditandatangani secara elektronik menggunakan sertifikat elektronik yang
+ diterbitkan oleh Balai Besar Sertifikasi Elektronik (BSrE), Badan Siber dan Sandi Negara
+
+                                             iii
+                     LEMBAR PERSETUJUAN
+
+Tugas Akhir dengan:
+
+JUDUL  : TamanbaruBot: Chatbot Layanan Informasi Administrasi
+
+       Kependudukan Kelurahan Tamanbaru Berbasis RAG dengan
+
+       SmoothLLM
+
+PENULIS : Rizal Abie Giffari
+
+NPM    : 21020101749
+
+dinyatakan telah sesuai dengan Berita Acara Sidang Tugas Akhir dan disetujui
+
+untuk digunakan sebagai syarat menyelesaikan pendidikan di Politeknik Siber dan
+
+Sandi Negara Angkatan 2021 tahun 2025.
+
+                     Bogor, 3 September 2025
+                        Pembimbing Materi
+
+                                 Girinoto, S.Si, M.Si.
+                             NIP. 197701092005011006
+
+Dokumen ini telah ditandatangani secara elektronik menggunakan sertifikat elektronik yang
+ diterbitkan oleh Balai Besar Sertifikasi Elektronik (BSrE), Badan Siber dan Sandi Negara
+
+                                             v
+                     LEMBAR PENGESAHAN
+
+Tugas Akhir dengan:
+
+JUDUL  : TamanbaruBot: Chatbot Layanan Informasi Administrasi
+
+       Kependudukan Kelurahan Tamanbaru Berbasis RAG dengan
+
+       SmoothLLM
+
+PENULIS : Rizal Abie Giffari
+
+NPM    : 2120101749
+
+telah diperiksa dan disahkan oleh Penguji Sidang Tugas Akhir di Bogor,
+
+pada tanggal 3 September 2025.
+
+       Ketua Penguji                         Penguji I
+
+     I Komang Setia Buana, M.T.                  Girinoto, S.Si, M.Si.
+     NIP. 198512292019021001                 NIP. 197701092005011006
+
+                                 Penguji II
+
+                     R. Budiarto Hadiprakoso, MMSI
+                        NIP. 198610172017121001
+
+Dokumen ini telah ditandatangani secara elektronik menggunakan sertifikat elektronik yang
+ diterbitkan oleh Balai Besar Sertifikasi Elektronik (BSrE), Badan Siber dan Sandi Negara
+
+                                            vii
+      LEMBAR PERNYATAAN PERSETUJUAN PUBLIKASI
+      TUGAS AKHIR UNTUK KEPENTINGAN AKADEMIS
+
+Sebagai sivitas akademika Politeknik Siber dan Sandi Negara (Poltek SSN), saya
+
+yang bertanda tangan di bawah ini:
+
+Nama  : Rizal Abie Giffari
+
+NPM   : 2120101749
+
+Program Studi : Rekayasa Kriptografi
+
+Bidang Minat : Rekayasa Perangkat Lunak Kriptografi
+demi pengembangan ilmu pengetahuan, menyetujui untuk memberikan kepada
+
+Poltek SSN Hak Bebas Biaya Royalti Nonekslusif (Non-exclusive Royalty-Free
+Right) atas tugas akhir saya berjudul:
+
+TamanbaruBot: Chatbot Layanan Informasi Administrasi Kependudukan
+Kelurahan Tamanbaru Berbasis RAG dengan SmoothLLM
+
+beserta perangkat yang ada (jika diperlukan). Dengan Hak Bebas Biaya Royalti
+
+Noneksklusif ini, Poltek SSN berhak untuk menyimpan,
+
+mengalihmediakan/mengalihformatkan, mengelola dalam bentuk data (database),
+
+merawat, dan mempublikasikan tugas akhir saya selama tetap mencantumkan nama
+
+saya sebagai penulis/pencipta dan sebagai pemilik Hak Cipta.
+
+Demikian pernyataan ini saya buat dengan sebenarnya.
+
+                                      Dibuat di : Bogor
+                                      Pada tanggal : 3 September 2025
+                                      Yang menyatakan:
+
+                                                     Rizal Abie Giffari
+
+Dokumen ini telah ditandatangani secara elektronik menggunakan sertifikat elektronik yang
+ diterbitkan oleh Balai Besar Sertifikasi Elektronik (BSrE), Badan Siber dan Sandi Negara
+
+                                             ix
+                                          ABSTRAK
+
+  TamanbaruBot: Chatbot Layanan Informasi Administrasi Kependudukan
+           Kelurahan Tamanbaru Berbasis RAG dengan SmoothLLM
+
+                                               oleh
+
+                                      Rizal Abie Giffari
+                                          2120101749
+
+                                    Rekayasa Kriptografi
+
+Sebagai salah satu satuan perangkat kerja perangkat daerah (SKPD), Kelurahan
+Tamanbaru juga memiliki tuntutan untuk memiliki inovasi terhadap layanan berupa
+penyediaan informasi. Bentuk penyediaan informasi sebagai inovasi layanan
+berupa implementasi large language model dalam bentuk chatbot. Implementasi
+tersebut menggunakan pendekatan retrieval-augmented generation karena chatbot
+yang akan dibangun nantinya memanfaatkan pengetahuan eksternal terhadap
+kebijakan yang berlaku di Kabupaten Banyuwangi serta mencegah isu halusinasi
+respons yang dihasilkan. Sementara itu, pencegahan terhadap prompt injection
+ditambahkan sebagai bentuk pengamanan pada chatbot dengan menggunakan
+modul SmoothLLM berdasarkan tren penelitian. Proses evaluasi terhadap chatbot
+meliputi pengujian terhadap pengguna menggunakan chatbot usability
+questionnaire (CUQ); pengujian keamanan terhadap penerapan SmoothLLM; serta
+benchmarking LLM menggunakan framework DeepEval dan RAGAS terhadap tiga
+LLM yang digunakan, yakni gpt-4.1, gemini-2.0-flash, dan claude-3.5-haiku. Hasil
+yang didapatkan adalah LLM gpt-4.1 memiliki performa paling baik berdasarkan
+similaritas skor pada metrik Faithfulness, Answer Relevancy, dan Contextual
+Recall terhadap unsur input dan output yang dihasilkan. Skor rerata dari tiga metrik
+tersebut adalah 0,805. Pada pengujian keamanan, 36 prompt berhasil mengubah
+perilaku LLM dari 1094 total. Namun, setelah penerapan modul SmoothLLM, 36
+prompt tersebut dapat dicegah. Di lain sisi, hasil CUQ dengan responden dari pihak
+lokus dan masyarakat sekitar Kelurahan Tamanbaru menghasilkan skor rerata
+sebesar 80,3. Hal tersebut diinterpretasikan bahwa nilai ketergunaan chatbot yang
+dihasilkan berada pada kategori setuju.
+
+xxiii + 71 halaman + 2 lampiran (2025)
+Kata kunci : chatbot (1), large language model (2), retrieval-augmented
+generation (3), DeepEval (4), RAGAS (5), SmoothLLM (6)
+
+                                                xi
+
+                                                                      Politeknik Siber dan Sandi Negara
+                                          ABSTRACT
+
+TamanbaruBot: RAG-Based Chatbot for Population Administration Services in
+                          Tamanbaru Village with SmoothLLM
+
+                                                by
+
+                                      Rizal Abie Giffari
+                                          2120101749
+
+                                Cryptographic Engineering
+
+As one of the regional work units (SKPD), Tamanbaru Village also has a
+requirement to innovate its services in the form of information provision. The form
+of information provision as a service innovation is the implementation of a large
+language model in the form of a chatbot. This implementation uses a retrieval-
+augmented generation approach because the chatbot that will be built will utilize
+external knowledge of the policies applicable in Banyuwangi Regency and prevent
+issues of response hallucination. Meanwhile, prevention of prompt injection is
+added as a form of security for the chatbot using the SmoothLLM module based on
+research trends. The chatbot evaluation process includes testing users using a
+chatbot usability questionnaire (CUQ); security testing of SmoothLLM
+implementation; and LLM benchmarking using the DeepEval and RAGAS
+frameworks for the three LLMs used, namely gpt-4.1, gemini-2.0-flash, and claude-
+3.5-haiku. The results show that the gpt-4.1 LLM has the best performance based
+on the similarity scores on the Faithfulness, Answer Relevancy, and Contextual
+Recall metrics for the input and output elements generated. The average score of
+the three metrics is 0.805. In security testing, 36 prompts successfully changed the
+behavior of the LLM out of a total of 1094. However, after implementing the
+SmoothLLM module, these 36 prompts could be prevented. On the other hand, the
+CUQ results with respondents from the locus and the surrounding community of
+Tamanbaru Village produced an average score of 80.3. This was interpreted as
+meaning that the usefulness value of the chatbot produced was in the agree
+category.
+
+xxiii + 71 pages + 2 attachments (2025)
+Keywords : chatbot (1), large language model (2), retrieval-augmented
+generation (3), DeepEval (4), RAGAS (5), SmoothLLM (6)
+
+                                                xiii
+
+                                                                      Politeknik Siber dan Sandi Negara
+                                   KATA PENGANTAR
+
+      Assalamu'alaikum Warahmatullahi Wabarakatuh
+
+      Segala puji bagi Allah SWT, yang telah memberikan rahmat, hidayah, dan
+karunia-Nya sehingga penulis dapat menyelesaikan tugas akhir yang berjudul
+"TamanbaruBot: Chatbot Layanan Informasi Administrasi Kependudukan
+Kelurahan Tamanbaru Berbasis RAG dengan SmoothLLM". Selawat dan salam
+semoga selalu tercurahkan kepada junjungan kita Nabi Muhammad SAW, beserta
+keluarga, sahabat, dan para pengikutnya hingga akhir zaman.
+
+      Penulisan Tugas Akhir ini bertujuan untuk memenuhi salah satu syarat dalam
+menyelesaikan Program Pendidikan Diploma IV di Politeknik Siber dan Sandi
+Negara, serta diharapkan dapat memberikan wawasan dan pengetahuan kepada
+pembaca. Dalam proses penyusunan Tugas Akhir ini, penulis banyak menerima
+bantuan, bimbingan, dan dukungan dari berbagai pihak. Oleh karena itu, penulis
+ingin menyampaikan rasa terima kasih yang sebesar-besarnya kepada:
+
+1. Allah SWT yang telah memberikan limpahan rahmat, cinta, dan karunia-Nya
+    kepada penulis sehingga dapat menyusun dan menyelesaikan penulisan Tugas
+    Akhir ini dengan lancar.
+
+2. Nabi Muhammad SAW, sebagai panutan dalam menjalani hidup.
+3. Keluarga penulis Ibu dan Mas yang selalu senantiasa memberikan semangat
+
+    serta doa yang tidak pernah putus selama penulis berpendidikan di Poltek SSN.
+4. Direktur Poltek SSN dan seluruh penyelenggara pendidikan serta pengasuh
+
+    yang telah memberikan segala bantuan dan bimbingan selama masa pendidikan.
+5. Bapak Girinoto, S.Si., M.Si. selaku pembimbing Tugas Akhir yang senantiasa
+
+    sabar dan gigih dalam memberikan tuntunan, arahan, motivasi, serta semangat
+    kepada penulis dalam penyelesaian Tugas Akhir ini.
+6. Bapak I Komang Setia Buana, M.T. dan Bapak Raden Budiarto Hadiprakoso,
+    MMSI sebagai penguji Tugas Akhir yang selalu memberikan saran dan
+    masukan yang membangun dalam penyelesaian Tugas Akhir penulis.
+7. Rekan angkatan ALTRUIST, Unit B Taruna Satria, dan RPLK PT 20 yang
+    mewarnai kehidupan penulis selama menjalani masa pendidikan di Poltek SSN.
+8. Abang Mba serta Adik-adik PT 21, PT 22, dan PT 23 yang telah membantu
+    dalam berbagai proses pendidikan penulis di Kampus Bumi Sanapati.
+
+                                                xv
+
+                                                                      Politeknik Siber dan Sandi Negara
+9. Semua pihak yang berjasa dan yang tidak dapat disebutkan penulis satu per satu
+    dalam membantu secara langsung maupun tidak langsung perihal penyelesaian
+    Tugas Akhir ini.
+      Penulis menyadari bahwa Tugas Akhir ini masih memiliki kekurangan
+
+sehingga saran dan kritik yang bersifat membangun sangat diharapkan. Akhir kata,
+semoga Tugas Akhir ini dapat memberikan manfaat bagi semua pihak, khususnya
+bagi penulis.
+
+      Wassalamu'alaikum warahmatullahi wabarakatuh
+                                                                     Bogor, 3 September 2025
+                                                                     Rizal Abie Giffari
+
+                                                xvi
+
+                                                                      Politeknik Siber dan Sandi Negara
+                                         DAFTAR ISI
+
+                                                                                                  Halaman
+
+LEMBAR JUDUL ................................................................................................... i
+LEMBAR PERNYATAAN ORISINALITAS....................................................... iii
+LEMBAR PERSETUJUAN ....................................................................................v
+LEMBAR PENGESAHAN .................................................................................. vii
+LEMBAR PERNYATAAN PERSETUJUAN PUBLIKASI ................................ ix
+ABSTRAK ............................................................................................................. xi
+ABSTRACT ........................................................................................................... xiii
+KATA PENGANTAR ...........................................................................................xv
+DAFTAR ISI ....................................................................................................... xvii
+DAFTAR GAMBAR ........................................................................................... xix
+DAFTAR TABEL ................................................................................................ xxi
+DAFTAR LAMPIRAN ...................................................................................... xxiii
+BAB I PENDAHULUAN ........................................................................................1
+
+   I.1 LATAR BELAKANG .............................................................................1
+   I.2 RUMUSAN MASALAH ........................................................................3
+   I.3 PEMBATASAN MASALAH .................................................................3
+   I.4 TUJUAN DAN MANFAAT ...................................................................4
+   I.5 SISTEMATIKA PENULISAN ...............................................................4
+BAB II KAJIAN PUSTAKA ...................................................................................7
+   II.1 LANDASAN TEORI ..............................................................................7
+   II.2 PENELITIAN TERKAIT......................................................................13
+   II.3 KERANGKA KONSEPTUAL..............................................................16
+BAB III METODOLOGI PENELITIAN...............................................................17
+   III.1 OBJEK PENELITIAN ..........................................................................17
+   III.2 JENIS PENELITIAN ............................................................................17
+   III.3 DESAIN PENELITIAN ........................................................................17
+BAB IV HASIL PENELITIAN DAN PEMBAHASAN .......................................25
+   IV.1 PENGEMBANGAN CHATBOT..........................................................25
+
+                                               xvii
+
+                                                                      Politeknik Siber dan Sandi Negara
+   IV.2 CHATBOT DEPLOYMENT...................................................................60
+BAB V SIMPULAN DAN SARAN ......................................................................67
+
+   V.1 SIMPULAN...........................................................................................67
+   V.2 SARAN..................................................................................................67
+DAFTAR PUSTAKA ............................................................................................69
+LAMPIRAN ...........................................................................................................75
+DAFTAR RIWAYAT HIDUP...............................................................................81
+
+xviii
+
+       Politeknik Siber dan Sandi Negara
+                                    DAFTAR GAMBAR
+
+Gambar 2.1 Opsi Jawaban pada CUQ..................................................................... 8
+Gambar 2.2 Alur Kerja RAG [43]........................................................................... 9
+Gambar 2.3 Kerangka Konseptual ........................................................................ 16
+Gambar 3.1 SDLC Waterfall [58] ......................................................................... 17
+Gambar 3.2 Contoh Pernyataan Pengujian CUQ .................................................. 23
+Gambar 4.1 Alur Sistem Aplikasi Chatbot ........................................................... 47
+Gambar 4.2 Import Beberapa Library yang Dibutuhkan ...................................... 48
+Gambar 4.3 Variabel dan Fungsi Penyiapan Ekstraksi Dokumen ........................ 48
+Gambar 4.4 Isi Dokumen Surat Keputusan........................................................... 49
+Gambar 4.5 Halaman Depan UU Nomor 23 Tahun 2006 tentang Administrasi
+Kependudukan ...................................................................................................... 50
+Gambar 4.6 Halaman Depan UU Nomor 24 Tahun 2013 tentang Perubahan atas
+UU Nomor 23 Tahun 2006 tentang Administrasi Kependudukan........................ 50
+Gambar 4.7 Inisialisasi Fungsi Retrieving dan Summarizing ............................... 53
+Gambar 4.8 Fungsi-Fungsi yang Digunakan pada Modul SmoothLLM .............. 55
+Gambar 4.9 Penggabungan System Prompt, Retrieving Context, dan Mekanisme
+Pencegahan terhadap Serangan Prompt Injection................................................. 56
+Gambar 4.10 Fungsi Start dan Handle Message pada Telegram .......................... 58
+Gambar 4.11 Aplikasi Chatbot yang Dijalankan secara Lokal............................. 59
+Gambar 4.12 Contoh Respons yang Diberikan oleh Chatbot ............................... 60
+Gambar 4.13 Daftar Library yang Digunakan ...................................................... 61
+Gambar 4.14 Kuesioner CUQ pada Google Form ................................................ 62
+Gambar 4.15 Rerata Respons pada Pernyataan Ganjil.......................................... 64
+Gambar 4.16 Rerata Respons pada Pernyataan Genap ........................................ 65
+
+                                                xix
+
+                                                                      Politeknik Siber dan Sandi Negara
+                                      DAFTAR TABEL
+
+Tabel 2.1 Daftar Pertanyaan CUQ .......................................................................... 8
+Tabel 2.2 Penelitian Terkait .................................................................................. 13
+Tabel 3.1 Daftar Pertanyaan dan Jawaban untuk Pengujian ................................. 19
+Tabel 4.1 Tabel Rerata Hasil Evaluasi RAGAS per Metrik dari Tiga LLM ........ 25
+Tabel 4.2 Tabel Rerata Hasil Evaluasi DeepEval per Metrik dari Tiga LLM ...... 25
+Tabel 4.3 Hasil Input, Expected Output, Retrieved Context, dan Actual Output
+dengan LLM gpt-4.1 pada Pertanyaan 1 ............................................................... 27
+Tabel 4.4 Hasil Evaluasi RAGAS pada LLM gpt-4.1 .......................................... 30
+Tabel 4.5 Hasil Evaluasi DeepEval pada LLM gpt-4.1 ........................................ 30
+Tabel 4.6 Hasil Input, Expected Output, Retrieved Context, dan Actual Output
+dengan LLM gpt-4.1 pada Pertanyaan 7 ............................................................... 32
+Tabel 4.7 Hasil Evaluasi Benchmarking LLM pada Framework RAGAS ........... 36
+Tabel 4.8 Hasil Input, Expected Output, Retrieved Context, dan Actual Output
+dengan LLM claude-3.5-haiku pada Pertanyaan 5 ............................................... 37
+Tabel 4.9 Hasil Input, Expected Output, Retrieved Context, dan Actual Output
+dengan LLM gpt-4.1 pada Pertanyaan 5 ............................................................... 42
+Tabel 4.10 Hasil Pengujian Sebelum dan Sesudah Integrasi SmoothLLM .......... 46
+Tabel 4.11 Spesifikasi VPS yang Digunakan ....................................................... 61
+Tabel 4.12 Rekapitulasi Respons Kuesioner CUQ ............................................... 63
+
+                                                xxi
+
+                                                                      Politeknik Siber dan Sandi Negara
+                                   DAFTAR LAMPIRAN
+
+LAMPIRAN 1...................................................................................................... 76
+LAMPIRAN 2...................................................................................................... 77
+
+xxiii
+
+       Politeknik Siber dan Sandi Negara
+                                       BAB I
+                               PENDAHULUAN
+
+I.1 LATAR BELAKANG
+Kelurahan Tamanbaru merupakan salah satu kelurahan di Kabupaten Banyuwangi.
+Sebagaimana dengan Keputusan Kepala Dinas Kependudukan dan Pencatatan Sipil
+Kabupaten Banyuwangi Nomor: 188/256/KEP/429.113/2020, kelurahan menjadi
+salah satu tempat pelayanan administrasi kependudukan yang berlaku di Kabupaten
+Banyuwangi [1]. Pelayanan tersebut mencakup layanan kartu tanda penduduk
+(KTP), kartu identitas anak (KIA), Perubahan data kartu keluarga (KK), Akta
+Perkawinan, dan Akta Kematian [1]. Informasi terkait persyaratan dan alur layanan
+tersebut dapat diketahui masyarakat dengan cara mengunjungi Kantor Kelurahan
+Tamanbaru serta menanyakannya kepada pihak petugas. Di lain sisi, berdasarkan
+hasil wawancara, pihak kelurahan juga dituntut untuk melakukan inovasi terhadap
+pelayanannya, terutama dalam penerapan teknologi informasi dan komunikasi
+terhadap layanan penyediaan informasi perihal administrasi kependudukan yang
+berlaku di Kabupaten Banyuwangi.
+
+Mengacu pada hasil wawancara, salah satu pendekatan terhadap inovasi layanan
+adalah implementasi chatbot. Hal tersebut disebabkan karena chatbot merupakan
+jenis implementasi kecerdasan buatan yang paling marak dikembangkan [2].
+Penelitian [3] menyatakan bahwa keberadaan chatbot memiliki dampak positif lain,
+khususnya chatbot layanan publik. Penelitian tersebut menyatakan bahwa nilai
+efisiensi, aksesibilitas, dan fleksibilitas dapat dengan mudah diperoleh masyarakat
+melalui adanya chatbot [3]. Penelitian lain menyebutkan bahwa chatbot dapat
+memberikan layanan informasi bagi pengguna di mana pun dan kapan pun karena
+chatbot terbukti menjadi sarana untuk meningkatkan kualitas layanan informasi [4].
+
+Berdasarkan penelitian Minaee et al. (2024), large language model (LLM) telah
+menarik banyak perhatian karena performanya memproses tugas-tugas kompleks
+dengan teknologi natural language processing (NLP) [5]. Teknologi tersebut
+merupakan salah satu cabang dari kecerdasan buatan [6]. Teknologi tersebut
+memungkinkan pemahaman terhadap konteks serta pemecahan masalah
+menggunakan bahasa yang seperti manusia (human-like text) [7]. Sebagai contoh,
+beberapa tugas yang dapat dikerjakan yakni melakukan transalasi bahasa,
+membangkitkan respons atau jawaban pertanyaan dengan gaya bahasa seperti
+manusia, serta memahami konteks dan memberikan respons yang koheren dengan
+prompt yang diberikan [8].
+
+Namun, permasalahan yang rentan pada chatbot berbasis LLM adalah adanya
+halusinasi yang dihasilkan pada respons jawaban [9]. Halusinasi muncul
+disebabkan karena LLM menghasilkan respons yang kurang akurat, tetapi
+
+                                                 1
+
+                                                                       Politeknik Siber dan Sandi Negara
+dijelaskan secara fasih sehingga terkesan logis bagi pengguna [9]. Penelitian [10]
+menyebutkan bahwa halusinasi dijelaskan sebagai "an unreal perception that feels
+real." Penelitian [11] menyebutkan bahwa halusinasi memiliki isu terhadap
+beberapa hal, yakni akurasi, kepercayaan, misinformation, koheren, nonsensical,
+dan factually incorrect. Oleh karenanya, isu utama terkait chatbot berbasis LLM
+adalah adanya kemungkinan respons yang dihasilkan bersifat halusinatif.
+
+Sebagai solusinya, sebuah pendekatan untuk mencegah halusinasi pada chatbot
+telah muncul. Pendekatan tersebut adalah Retrieval-Augmented Generation (RAG).
+Pendekatan tersebut memungkinkan chatbot tidak menghasilkan halusinasi secara
+kualitatif [12]. Respons yang diberikan menggunakan pendekatan tersebut secara
+efektif berhasil mengurangi konten yang salah karena bersumber dari pengetahuan
+eksternal [13]. Hal tersebut disebabkan karena pendekatan tersebut memungkinkan
+penggunaan prompt yang mudah dapat menghasilkan respons sesuai konteks
+berdasarkan pengetahuan yang telah diberikan dan tanpa melakukan pelatihan
+terhadap LLM [14]. Selain itu, pendekatan tersebut lebih tepat digunakan pada
+konteks layanan publik karena mampu beradaptasi untuk memperbarui
+pengetahuan chatbot lebih efisien mengingat dinamisnya kebijakan yang berlaku di
+lingkungan pemerintahan [15].
+
+Sejalan dengan kondisi yang dinamis, beberapa tahun terakhir menjadi masa yang
+sangat pesat bagi perkembangan LLM. Berbagai perusahaan pengembang LLM
+berbayar (proprietary LLM) telah mengeluarkan berbagai LLM state-of-the-art
+mereka. Perusahaan seperti OpenAI, Google, Anthropic, xAI, dan yang lainnya
+telah menyediakan masing-masing LLM mereka. Berdasarkan tren pada [16], LLM
+yang banyak digunakan merupakan produk dari beberapa perusahaan. Perusahaan-
+perusahaan tersebut adalah OpenAI, Google, DeepSeek, dan Anthropic. Beberapa
+perusahaan tersebut telah banyak menyediakan jenis LLM berdasarkan
+fungsionalitasnya pada pengerjaan tugas tertentu. Oleh karenanya, ketersediaan
+LLM inilah dapat menjadi peluang terhadap sebuah penelitian dengan tujuan
+benchmarking. Benchmarking tersebut dilakukan dengan cara membandingkan
+performa LLM dari berbagai perusahaan penyedia dengan fungsionalitas tertentu
+menggunakan framework yang sudah ada, yakni DeepEval dan RAGAS. Dua
+framework tersebut memiliki basis penilaian menggunakan LLM (llm-as-judge).
+Pemilihan DeepEval didasarkan pada tren penggunaannya yang merupakan salah
+satu framework evaluasi LLM yang paling populer [17]. Di lain sisi, pemilihan
+RAGAS didasari pada kedekatan hasil evaluasi terhadap WikiEval, sebuah dataset
+yang dibuat untuk mendukung pengembangan framework RAGAS dengan basis
+penilaian berupa human judgement [18].
+
+Selain halusinasi, penerapan chatbot berbasis LLM sebagai sebuah inovasi layanan
+publik memiliki kerentanan lain. Berdasarkan [19], salah satu kerentanan pada
+
+                                                 2
+
+                                                                       Politeknik Siber dan Sandi Negara
+chatbot adalah prompt injection. Penelitian [20] menunjukkan bahwa dari 79
+prompt injection, 39 di antaranya berhasil mengubah chatbot dan menghasilkan
+respons di luar konteks yang seharusnya. Penelitian lain [21] menyebutkan bahwa
+dari 144 prompt injection, 56 persen dari 144 prompt berhasil membuat LLM
+menjadi rentan. Dari dua penelitian tersebut, 52 persen dari total prompt injection
+yang diujikan dapat mengubah perilaku chatbot apabila pengamanan pada chatbot
+tidak dilakukan.
+
+Di lain sisi, penelitian [22] melakukan survei pada aspek keamanan LLM. Aspek
+keamanan tersebut meliputi baik serangan maupun pengamanan pada chatbot,
+termasuk kerentanan prompt injection. Dari aspek serangan, 14 dari 36 penelitian
+menggunakan dataset AdvBench sebagai dataset pengujian keamanan LLM. Pada
+penelian [22] juga, pengamanan terhadap kerentanan prompt injection didapat 17
+penelitian. Dari 17 penelitian tersebut, lima di antaranya menggunakan mekanisme
+pengamanan melalui rephrasing. Di antara metode rephrasing yang ada pada
+penelitian [22], SmoothLLM [23] menjadi acuan utama untuk penerapan
+pencegahan prompt injection mengingat kesamaan dataset yang digunakan
+berdasarkan tren penelitian, yakni AdvBench, serta dasar pencegahannya yang
+berupa input defense dengan metode rephrasing [22].
+
+Oleh karena itu, penelitian ini memiliki tujuan untuk mengembangkan chatbot
+berbasis LLM sebagai inovasi layanan informasi bagi Kelurahan Tamanbaru.
+Pengembangan tersebut dilengkapi dengan perlindungan terhadap prompt injection
+sebagai bentuk pengamanan aplikasi chatbot. Bentuk pengamanan tersebut berupa
+implementasi metode SmoothLLM dan pengujian menggunakan dataset AdvBench
+berdasarkan penelitian [22]. Sebagai parameter benchmarking, penelitian ini juga
+menerapkan teknik RAG yang selanjutnya dilakukan komparasi hasil evaluasinya
+menggunakan framework DeepEval dan RAGAS.
+
+I.2 RUMUSAN MASALAH
+Berdasarkan latar belakang yang telah diuraikan, rumusan permasalahan dalam
+penelitian ini, yaitu:
+a. Bagaimana kualitas interaksi penggunaan chatbot dalam memberikan layanan
+
+    informasi administrasi kependudukan?
+b. LLM apa yang memiliki performa paling baik pada hasil evaluasi framework
+
+    DeepEval dan RAGAS?
+c. Bagaimana pengaruh penerapan SmoothLLM terhadap pencegahan serangan
+
+    prompt injection menggunakan dataset AdvBench?
+
+I.3 PEMBATASAN MASALAH
+Dalam penelitian Tugas Akhir ini, beberapa pembatasan masalah yang digunakan
+meliputi:
+
+                                                 3
+
+                                                                       Politeknik Siber dan Sandi Negara
+a. Perancangan chatbot menggunakan integrasi API OpenAI, Gemini, dan Claude.
+b. Penerapan teknik Retrieval-Augmented Generation (RAG) menggunakan
+
+    metode Hybrid Search dengan kombinasi semantic search dan keyword search
+    menggunakan model all-MiniLM-L6-v2 dan algoritma TF-IDF (Term
+    Frequency-Inverse Document Frequency).
+c. Implementasi LLM hanya menerima input teks serta memberikan respons
+    jawaban.
+d. Informasi yang diberikan oleh chatbot berupa syarat, kebutuhan dokumen, dan
+    alur terkait pengajuan dokumen kependudukan yang berlaku di Kabupaten
+    Banyuwangi.
+e. Pembahasan terkait penelitian ini tidak mencakup aspek matematis.
+f. Aspek keamanan yang dibahas hanya terkait pencegahan terhadap prompt
+    injection dan jailbreak.
+g. Dataset pengujian keamanan terhadap prompt injection menggunakan
+    AdvBench.
+
+I.4 TUJUAN DAN MANFAAT
+I.4.1 Tujuan
+Tujuan dari penelitian ini adalah sebagai berikut:
+a. Mengetahui kualitas interaksi penggunaan chatbot layanan informasi
+
+    administrasi kependudukan.
+b. Mengetahui LLM apa yang memiliki performa paling baik pada evaluasi
+
+    menggunakan framework DeepEval dan RAGAS terhadap penerapan teknik
+    RAG pada chatbot informasi layanan administrasi kependudukan.
+c. Mengetahui seberapa besar pengaruh penerapan SmoothLLM untuk mencegah
+    serangan prompt injection menggunakan dataset AdvBench.
+
+I.4.2 Manfaat
+Penelitian ini diharapkan memiliki manfaat antara lain:
+a. Penelitian diharapkan sebagai referensi untuk menambah pengetahuan dan
+
+    wawasan terhadap implementasi LLM berbasis chatbot dengan pendekatan
+    RAG.
+b. Penelitian ini diharapkan membantu pihak Kelurahan Tamanbaru untuk
+    meningkatkan layanannya dalam memberikan informasi administrasi
+    kependudukan.
+
+I.5 SISTEMATIKA PENULISAN
+Penulisan Tugas Akhir ini terbagi menjadi lima bab yang saling berkaitan
+membentuk satu kesatuan dengan sistematika penulisan sebagai berikut:
+
+                                                 4
+
+                                                                      Politeknik Siber dan Sandi Negara
+BAB I    :  PENDAHULUAN
+
+            Bab ini membahas mengenai latar belakang masalah,
+
+            rumusan masalah, pembatasan masalah, tujuan dan manfaat,
+
+            serta sistematika penulisan.
+
+BAB II   :  KAJIAN PUSTAKA
+
+            Bab ini membahas konsep-konsep dan teori-teori yang
+
+            berkaitan dan mendukung penelitian, antara lain Kelurahan
+
+            Tamanbaru, chatbot, large language model, retrieval
+
+            augmented generation, prompt engineering, prompt
+
+            injection, dan waterfall.
+
+BAB III  :  METODOLOGI PENELITIAN
+
+            Bab ini membahas mengenai hal-hal yang mencakup metode
+
+            selama penelitian dilakukan.
+
+BAB IV   :  HASIL PENELITIAN DAN PEMBAHASAN
+
+            Bab ini membahas implementasi dan hasil yang didapat dari
+
+            rangkaian proses penelitian yang telah dirumuskan pada bab-
+
+            bab sebelumnya yang mencakup perancangan alur sistem,
+
+            hasil pengujian, dan implementasi pada aplikasi Telegram.
+
+BAB V    :  PENUTUP
+
+            Bab ini berisi simpulan dan saran dari penelitian yang telah
+
+            dilakukan.
+
+                        5
+
+                                   Politeknik Siber dan Sandi Negara
+                                      BAB II
+                             KAJIAN PUSTAKA
+
+II.1 LANDASAN TEORI
+Landasan teori membahas tentang penjelasan variabel penelitian dan segala hal
+yang berkaitan dengan domain penelitian.
+
+II.1.1 Kelurahan Tamanbaru
+Kelurahan Tamanbaru merupakan sebuah kelurahan yang berada di Kabupaten
+Banyuwangi. Sebagaimana kelurahan lain, Kelurahan Tamanbaru terikat pada
+aturan yang berada di atasnya terkait layanan administrasi kependudukan.
+Berdasarkan Keputusan Kepala Dinas Kependudukan dan Pencatatan Sipil
+Kabupaten Banyuwangi Nomor: 188/ 256 /KEP/429.113/2020, kelurahan menjadi
+lokus terhadap 9 layanan terkait data kependudukan. Hal tersebut memungkinkan
+kelurahan menjadi tujuan pertama masyarakat untuk mengurus dokumen-dokumen
+kependudukan, baik secara daring maupun luring.
+
+II.1.2 Chatbot
+Chatbot merupakan sebuah asisten virtual yang mampu melakukan interaksi
+layaknya komunikasi antarmanusia dengan fokus pengembangan pada dunia
+kecerdasan buatan [24]. Beberapa tahun ke belakang, aplikasi tersebut digunakan
+pada lingkungan organisasi karena memiliki sifat user-friendly [25]. Dalam konteks
+layanan publik, chatbot muncul sebagai sebuah solusi yang inovatif dan cerdas
+mengingat kemampuannya memberikan respons yang seperti manusia jika
+dikembangan dengan basis kecerdasan buatan [26] [27].
+
+Pada 2019, sebuah pengujian terhadap ketergunaan chatbot telah diajukan dalam
+bentuk kuesioner [28]. Chatbot usability questionnaire (CUQ) merupakan
+kuesioner baru yang didesain khusus untuk mengukur ketergunaan suatu chatbot
+[29]. Kuesioner yang dibuat oleh Universitas Ulster tersebut terdiri dari 16
+pertanyaan dengan rincian 8 pertanyaan merupakan aspek positif dari chatbot dan
+8 lainnya merupakan aspek negatif chatbot [30]. Penelitian [28] melakukan
+simulasi penggunaan CUQ terhadap chatbot layanan kesehatan. Hasil yang
+didapatkan adalah pengujian chatbot menggunakan CUQ mampu digunakan untuk
+menilai penggunaan chatbot dibandingkan pengujian system usability scale dan
+user experience questionnaire karena dua pengujian tersebut kurang
+merepresentasikan nilai terhadap semua aspek ketergunaan chatbot [28]. Daftar
+pertanyaan kuesioner yang telah diubah menjadi bahasa Indonesia berdasarkan
+penelitian [31] dilampirkan pada Tabel 2.1 dan opsi jawaban kuesioner CUQ pada
+Gambar 2.1.
+
+                                                 7
+
+                                                                      Politeknik Siber dan Sandi Negara
+    Tabel 2.1 Daftar Pertanyaan CUQ
+
+No  Pertanyaan
+
+1 Karakter chatbot realistis dan menarik ketika digunakan
+
+2 Chatbot terkesan terlalu robotik
+
+3 Chatbot memberi sambutan pada awal komunikasi
+
+4 Chatbot terkesan tidak bersahabat
+
+5 Chatbot mampu menjelaskan ruang lingkup dan tujuannya dengan baik
+
+6 Chatbot tidak menunjukkan tujuan penggunaannya
+
+7 Chatbot mudah untuk dioperasikan
+
+8 Orang mudah bingung ketika menggunakan chatbot
+
+9 Chatbot memahami saya dengan baik
+
+10 Chatbot tidak mampu membaca sebagian besar input saya
+
+11 Tanggapan chatbot bermanfaat, tepat, dan informatif
+
+12 Tanggapan chatbot tidak relevan
+
+13 Chatbot dapat menangani semua jenis keluhan pengguna dengan baik
+
+14 Chatbot tidak dapat menangani kesalahan apa pun dari pengguna
+
+15 Chatbot sangat mudah digunakan
+
+16 Chatbot sangat kompleks digunakan
+
+                           Gambar 2.1 Opsi Jawaban pada CUQ
+
+II.1.3 Large Language Model (LLM)
+Large language model merupakan alat NLP yang telah dilatihkan dengan jumlah
+data yang sangat banyak sehingga memungkinkannya untuk menghasilkan respons
+seperti manusia dan memahami konteks bahasa yang kompleks [32]. LLM telah
+mendapat perhatian yang signifikan karena kemampuannya memahami bahasa
+dengan lancar sehingga membuatnya bernilai terhadap data dengan rentang yang
+luas [33]. Lebih jauh dari itu, LLM mampu memahami berbagai tingkat kefasihan
+bahasa berdasarkan prompt yang dimasukkan oleh user, sekalipun pada tingkat
+kefasihan bahasa yang rendah [34].
+
+Saat ini telah banyak LLM yang dikembangkan oleh berbagai perusahaan.
+Beberapa di antaranya adalah Gemma dan Gemini oleh Google, Llama oleh Meta,
+Qwen oleh Alibaba Cloud, Phi oleh Microsoft, dan GPT (Generative Pretrained
+Transformer) oleh OpenAI [35]. LLM tersebut memiliki beberapa objektif, yakni
+sebagai text generation, text completion, dan reasoning sehingga memungkinkan
+
+                                                 8
+
+                                                                      Politeknik Siber dan Sandi Negara
+LLM tersebut mampu menjawab pertanyaan dari user berdasarkan konteks dari
+prompt atau query.
+
+Salah satu LLM yang paling popular adalah GPT yang dikembangkan oleh OpenAI
+[36]. GPT dikembangkan melalui sebuah transformer yang dilatihkan dengan data
+teks yang sangat besar dan dapat dilakukan fine-tuned untuk melakukan suatu
+objektif, seperti menghasilkan teks bahasa, melakukan analisis sentimen,
+memodelkan bahasa, dan mengklasifikasikan teks [37]. GPT mengalami perubahan
+yang berawal dari GPT-1 hingga LLM terbarunya adalah o3 [38] [39]. Pelatihan
+LLM GPT memiliki dua tahap, yang pertama yakni secara unsupervised pada data-
+data yang tidak memiliki label menggunakan language modelling untuk
+memperoleh kemampuan berbahasa secara umum dan yang kedua berupa fine-
+tuning secara supervised untuk mengoptimasi kemampuan pada tugas-tugas yang
+spesifik, seperti menjawab pertanyaan pada domain pengetahuan tertentu [38].
+
+Beberapa tahun belakangan, berbagai perusahaan LLM telah banyak muncul. Lebih
+jauh, berbagai LLM dengan spesialisasi tertentu juga banyak diproduksi.
+Perusahaan selain OpenAI [16], seperti DeepSeek, Google, Anthropic, xAI, serta
+Meta, juga telah banyak memproduksi berbagai LLM. LLM yang dihasilkan
+tersebut memiliki masing-masing kemampuan, seperti deep thinking, reasoning
+task, deep research, image generation, text-to-speech, multimodal, serta berbagai
+kemampuan lainnya [40], [41], [42]. Dari berbagai LLM tersebut, beberapa di
+antaranya juga dibedakan berdasarkan knowledge cutoff.
+
+II.1.4 Retrieval-Augmented Generation
+Retrieval-augmented generation (RAG) merupakan sebuah metode yang
+memungkinkan LLM mendapatkan pengetahuan atau data eksternal [43]. Data
+eksternal tersebut selanjutnya diproses menjadi respons yang lebih akurat [43].
+Teknik tersebut meningkatkan proses generate dari data-data yang telah disediakan
+sehingga pengetahuan dari LLM yang dimiliki telah terbarui dengan pengetahuan
+yang telah dilakukan proses embedding pada domain pengetahuan tertentu [44].
+Berikut gambaran secara umum penerapan metode RAG pada Gambar 2.2.
+
+                             Gambar 2.2 Alur Kerja RAG [43]
+
+                                                 9
+
+                                                                      Politeknik Siber dan Sandi Negara
+Berdasarkan penelitian [43], alur kerja RAG tersusun dari tiga komponen sebagai
+berikut.
+
+a. Indexing
+
+Tahap tersebut merupakan proses tokenisasi untuk meningkatkan kecocokan teks
+untuk indexing. Token-token teks yang sudah dihasilkan tersebut kemudian
+dihasilkan nilai vektor semantik sebagai representasi teks. Vektor inilah yang
+disimpan pada database vector untuk mempermudah proses retrieval.
+
+b. Retrieval
+
+Proses retrieval merupakan proses pencarian konteks pengetahuan. Proses tersebut
+memanfaatkan sinonim atau struktur suatu frasa untuk menemukan similaritas
+semantik atau kata kunci. Hal tersebut dilakukan melalui pencarian nilai yang
+paling dekat sehingga token-token teks yang paling relevan dapat diperoleh.
+
+c. Generation
+
+Proses tersebut merupakan proses text generation yang paling relevan berdasarkan
+hasil proses retrieval dan query yang diberikan. Hal tersebut dilakukan dengan cara
+menggabungkan hasil retrieval dan query sebagai satu prompt kemudian diproses
+oleh LLM untuk menghasilkan respons. Teks yang dihasilkan inilah merupakan
+respons jawaban dengan pemahaman konteks yang paling dekat (berdasarkan nilai
+kata kunci dan semantik) terhadap pertanyaan atau query yang diberikan.
+
+Di lain sisi, penelitian [45] menunjukkan bahwa penerapan RAG dengan dua
+metode pencarian, semantic search dan keyword search, memiliki performa lebih
+baik dibandingkan hanya pencarian tunggal baik semantic search atau keyword
+search. Penelitian tersebut dilakukan pada empat dataset berbeda. Sebagai
+contohnya, salah satu hasil pada pengujian dataset SquAD menunjukkan bahwa
+hybrid search memiliki nilai paling tinggi pada tiap parameter yang diujikan,
+seperti exact match (EM), F1 score, dan akurasi retrieval (Top-5 dan Top-20) [45].
+
+Semantic search dilakukan dengan cara memecah data-data menjadi chunk yang
+kemudian diproses oleh embedding model menghasilkan semantic vector [26].
+Semantic vector tersebut disimpan pada vector database yang selanjutnya berfungsi
+untuk mencari chunk yang memiliki nilai cosine similarity paling tinggi
+berdasarkan skor semantik (semantic score) pada prompt atau query yang diberikan
+oleh user [26]. Berbeda dengan semantic search, keyword search memiliki cara
+kerja terhadap pencarian chunk. Keyword search bekerja dengan cara
+memfokuskan pencarian pada chunk yang memiliki similaritas pada kata kunci
+yang ada pada query pengguna [43].
+
+                                                10
+
+                                                                      Politeknik Siber dan Sandi Negara
+Dua metode pencarian tersebut memanfaatkan model embedding serta algoritma
+pencarian kata kunci yang telah ada, yakni model all-MiniLM-L6-v2 dan algoritma
+TF-IDF. Model embedding diartikan sebagai model yang digunakan untuk
+mengonversi data teks menjadi vektor yang menggambarkan representasi angka.
+[46]. Model tersebut dapat menarik unsur semantik dan relasinya berdasarkan
+elemen kata dalam bentuk vektor [46]. Sementara itu, algoritma TF-IDF merupakan
+algoritma yang digunakan untuk menilai statistik numerikal terhadap seberapa
+penting suatu istilah atau kata pada koleksi korpus [47]. Algoritma tersebut
+umumnya digunakan untuk pembobotan istilah dalam dokumen dengan cara
+mengukur seberapa sering suatu istilah/kata muncul dalam dokumen serta seberapa
+penting istilah/kata tersebut [47].
+
+Model embedding all-MiniLM-L6-v2 dipilih karena salah satu model yang banyak
+digunakan serta memiliki ukuran yang lebih kecil dibandingkan model embedding
+populer lainnya [48]. Ukuran yang lebih kecil tersebut didasarkan pada perencanaan
+penyewaan VPS nantinya sehingga spesifikasi yang dibutuhkan tidak memerlukan
+kebutuhan komputasi yang tinggi. Hal tersebut berimbas pada dapat ditekannya
+biaya penyewaan VPS. Model tersebut berperan pada proses semantic search yang
+berfungsi untuk mengubah chunk menjadi vektor. Pada keyword search, algoritma
+TF-IDF dipilih karena memiliki performa yang lebih baik dalam mengekstraksi
+kata kunci dibandingkan algoritma BM25 [49].
+
+Berdasarkan penelitian [50], teknik RAG dapat dievaluasi penerapannya. Evaluasi
+tersebut dilakukan untuk mengukur apakah RAG yang diterapkan menghasilkan
+jawaban yang bersifat halusinatif atau tidak berdasarkan Triad RAG [51]. Triad
+RAG terdiri dari tiga aspek yang diukur. Tiga aspek tersebut meliputi:
+
+a. Context Relevance
+
+Sebuah aspek yang digunakan untuk menilai kualitas retrieval pada RAG. Aspek
+tersebut digunakan untuk menilai apakah konteks yang dihasilkan dari bagian
+retrieval relevan terhadap input atau query yang diberikan user.
+
+b. Groundedness
+
+Sebuah aspek yang digunakan untuk menilai kualitas jawaban yang dihasilkan oleh
+LLM. Aspek tersebut berfungsi untuk menilai apakah jawaban yang dihasilkan
+LLM memiliki tendensi untuk ditambah-tambahkan, diubah, atau dibuat-buat
+sehingga terlihat benar.
+
+c. Answer Relevance
+
+Sebuah aspek yang digunakan untuk menilai relevansi jawaban yang dihasilkan
+LLM dengan pertanyaan yang diberikan.
+
+                                                11
+
+                                                                      Politeknik Siber dan Sandi Negara
+Dari tiga aspek tersebut, dua framework baik DeepEval maupun RAGAS memiliki
+metrik yang dapat digunakan sebagai instrumen evaluasi. Berdasarkan penelitian
+[50], metrik yang memiliki keseuaian yang sama dengan tiga aspek Triad RAG
+adalah Faithfulness, Contextual Recall, dan Answer Relevancy [52]. Berikut
+penjelasan dari masing-masing metrik berdasarkan [52]:
+
+a. Faithfulness
+Metrik yang digunakan untuk menilai kualitas jawaban LLM (actual output)
+berdasarkan pertanyaan (input) dan konteks (retrieved context) yang didapatkan.
+
+b. Context Recall
+Metrik yang digunakan untuk menilai keseluruhan alur kerja metode RAG
+berdasarkan pertanyaan (input), konteks (retrieved context), jawaban LLM (actual
+output) dan jawaban faktual (expected output)
+
+c. Answer Relevancy
+Metrik yang digunakan untuk menilai kualitas jawaban LLM (actual output)
+berdasarkan pertanyaan (input).
+
+II.1.5 Prompt Engineering
+Prompt engineering merupakan sebuah teknik untuk melakukan strukturisasi teks
+yang dimasukkan pada LLM untuk mendapatkan hasil yang diharapkan [53].
+Prompt engineering juga digunakan untuk meningkatkan akurasi dan relevansi
+respons terhadap pertanyaan atau input yang diberikan oleh user [54]. Teknik
+tersebut juga digunakan untuk melakukan amplifikasi terhadap LLM di berbagai
+sektor [54].
+
+II.1.6 Prompt Injection
+Prompt injection merupakan sebuah serangan yang mengeksploitasi LLM melalui
+prompt yang dimasukkan oleh user [55]. Kerentanan tersebut memanipulasi
+perilaku LLM dan mekanisme pengamanan LLM [56]. Hal tersebut menyebabkan
+LLM memberikan informasi yang sensitif, menghasilkan kode atau produk yang
+tidak etis, dan menghasilkan informasi yang salah [21]. Berdasarkan penelitian
+[57], prompt injection memiliki dua kategori, yakni prompt-engineering-based
+attack (menggunakan konteks ignoring prompt pada instruksi yang dimasukkan)
+dan gradient-based attack (instruksi berbahaya diletakkan pada bagian akhir
+prompt).
+
+                                                12
+
+                                                                      Politeknik Siber dan Sandi Negara
+II.1.7 Waterfall
+Waterfall merupakan sebuah metodologi pengembangan yang memiliki proses
+seperti air terjun [58]. Metodologi tersebut memiliki alur dengan ketentuan bahwa
+pengembangan dilakukan dari fase ke fase. Alur pengembangan bergerak secara
+sekuensial sehingga harus menyelesaikan sebuah fase terlebih dahulu sebelum
+bergerak ke fase selanjutnya. Metodologi tersebut terdiri dari empat fase, yakni
+planning, analysis, design, dan implementation [58].
+
+II.2 PENELITIAN TERKAIT
+Terdapat beberapa penelitian sebelumnya yang berkaitan dengan uji penetrasi.
+Berikut disajikan pembahasan dari literature review yang telah dilakukan penulis
+terhadap beberapa penelitian terkait pada Tabel 2.2.
+
+                         Tabel 2.2 Penelitian Terkait
+
+Peneliti dan  Judul Penelitian                         Ulasan
+   Tahun
+   Terbit
+
+Pujiono, Implementing                 Penelitian tersebut melakukan
+                                      pembuatan purwarupa chatbot dengan
+Ibnu, Irfan Retrieval-Augmented       konteks penyediaan informasi regulasi
+                                      terhadap lembaga layanan publik
+Murtadho Generation and Vector        menggunakan LLM. Penelitian tersebut
+                                      menggunakan pendekatan RAG dengan
+Agtyaputra, Databases           for   melakukan tahap pembangunan chatbot
+                                      yang diawali dari data cleansing, text
+dan Yova Chatbots in Public           splitting, creating embedding and store
+                                      vector serta diakhiri dengan komparasi
+Ruldeviyani Services Agencies         terhadap empat LLM, yakni davinci-
+                                      002, gpt-3,5-turbo, babbage-002, dan
+(2024)        Context.                gpt-4. Hasil yang didapatkan adalah
+                                      LLM gpt-4 memiliki nilai cosine
+Sawarkar,     Blended           RAG:  similarity yang paling tinggi
+Kunal,                                dibandingkan tiga LLM lainnya.
+Abhilasha     Improving         RAG   Penelitian tersebut mengajukan metode
+Mangal, and                           penerapan RAG untuk meningkat hasil
+Shivam Raj    (retriever-augmented    konteks yang diperoleh melalui
+Solanki                               pencarian semantik dan pencarian kata
+(2024)        generation) Accuracy    kunci. Pengujian tersebut dilakukan pada
+                                      beberapa dataset, yakni NQ, TREC-
+              with Semantic Search    Covid, SqUAD, dan HotPotQA. Hasil
+                                      yang didapatkan adalah pencarian hybrid
+              and Hybrid Query-
+
+              Based Retrievers
+
+                                      13
+
+                                                  Politeknik Siber dan Sandi Negara
+Peneliti dan  Judul Penelitian         Ulasan
+   Tahun
+   Terbit
+
+Öberg,        Automating  the          memiliki performa yang lebih baik
+Felicia.                               dibandingkan RAG-original dan RAG-
+(2025)        Assessment           of  end2end.
+                                       Penelitian tersebut melakukan evaluasi
+Robey, A.,    Retrieval-augmented      performa penerapan RAG menggunakan 2
+Wong, E.,                              framework, DeepEval dan RAGAS. Proses
+Hassani, H.,  Generation Responses     evaluasi tersebut dilakukan menggunakan
+& Pappas, G.                           tiga metrik untuk masing-masing
+J. (2023).    Smoothllm: Defending     framework yang berkaitan dengan Triad
+              Large Language           RAG, yakni Context Recall, Response
+              Models Against           Relevancy, dan Faithfulness (RAGAS)
+              Jailbreaking Attacks     serta Answer Relevancy, Faithfulness, dan
+                                       Contextual Recall (DeepEval). Pengujian
+                                       tersebut dilakukan sebanyak 10 kali
+                                       perulangan pada (input), jawaban LLM
+                                       (actual response), jawaban seharusnya
+                                       (expected response), dan konteks
+                                       (retrieved context). Hasil pengujian
+                                       RAGAS memiliki performa lebih baik
+                                       pada metrik Answer Relevance dan
+                                       Faithfulness serta DeepEval memiliki
+                                       performa lebih baik pada metrik
+                                       Contextual Recall. Selain itu, perulangan
+                                       selama pengujian melalui framework
+                                       sangat disarankan untuk memperoleh
+                                       perbandingan yang setara.
+                                       Penelitian tersebut mengajukan metode
+                                       pencegahan terhadap prompt injection dan
+                                       jailbreak dengan nama SmoothLLM.
+                                       Pencegahan tersebut dilakukan dengan
+                                       cara membuat beberapa salinan prompt
+                                       kemudian melakukan perturbasi atau
+                                       pengacakan karakter pada salinan-salinan
+                                       prompt. Pengacakan karakter tersebut
+                                       mencakup metode seperti insert, patch,
+                                       dan swap. Hasil dari masing-masing
+                                       modifikasi tersebut diteruskan pada LLM
+                                       dan diperiksa output yang dihasilkan.
+                                       Output yang dihasilkan selanjutnya
+
+                                       14
+
+                                                   Politeknik Siber dan Sandi Negara
+Peneliti dan  Judul Penelitian      Ulasan
+   Tahun
+   Terbit
+
+Holmes, S., Usability Testing of A  diklasifikasikan sebagai respons yang telah
+                                    terpapar jailbreak atau tidak. Pada bagian
+Moorhead, Healthcare Chatbot:       akhir, hasil klasifikasi tersebut dilakukan
+                                    akumulasi untuk menentukan respons yang
+A., Bond, R., Can We Use            nantinya diberikan. Sebagai contoh,
+                                    apabila 3 dari 4 modifikasi prompt
+Zheng, H., Conventional Methods     menghasilkan jawaban penolakan,
+                                    jawaban inilah yang digunakan sebagai
+Coates, V., & to Assess             feedback pada pencegahan SmoothLLM.
+                                    Penelitian tersebut mengajukan sebuah
+McTear, M. Conversational User      kuesioner baru terkait chatbot, yakni
+                                    chatbot usability questionnaire (CUQ).
+2019          Interfaces?           Kuesioner tersebut berisi 16 pertanyaan
+                                    yang terdiri dari 8 pertanyaan terkait hal
+                                    positif chatbot dan 8 pertanyaan terkait hal
+                                    negatif chatbot. Kuesioner tersebut
+                                    dikomparasikan dengan dua kuesioner
+                                    yang sudah ada, yakni SUS dan UEQ.
+                                    Hasil yang didapatkan adalah dua
+                                    kuesioner yang sudah ada tersebut tidak
+                                    dapat mengevaluasi keseluruhan aspek
+                                    pada chatbot dibandingkan dengan
+                                    chatbot.
+
+                                    15
+
+                                                Politeknik Siber dan Sandi Negara
+II.3 KERANGKA KONSEPTUAL
+Penelitian tersebut memiliki kerangka konseptual seperti pada Gambar 2.3.
+
+                             Gambar 2.3 Kerangka Konseptual
+                                                16
+
+                                                                      Politeknik Siber dan Sandi Negara
+                                     BAB III
+                      METODOLOGI PENELITIAN
+
+III.1 OBJEK PENELITIAN
+Penelitian tersebut memiliki lokus penelitian Kelurahan Tamanbaru. Objek pada
+penelitian tersebut adalah pengembangan chatbot berbasis LLM dengan
+pendekatan RAG serta pencegahan terhadap prompt injection. Pemilihan LLM,
+signifikansi pencegahan yang diterapkan, serta nilai ketergunaan aplikasi chatbot
+yang dibangun nantinya menjadi fokus utama pada penelitian ini.
+III.2 JENIS PENELITIAN
+Penelitian tersebut menggunakan pendekatan kualitatif dan kuantitatif. Pendekatan
+kualitatif digunakan sebagai penentuan LLM dengan performa terbaik yang tidak
+hanya melalui kemampuan skor metrik yang didapatkan, tetapi juga similaritas skor
+didapat terhadap unsur input dan output yang dihasilkan LLM. Sementara itu,
+pendekatan kuantitatif digunakan untuk mengetahui signifikansi penerapan
+SmoothLLM dan nilai ketergunaan aplikasi chatbot yang dibuat nantinya.
+III.3 DESAIN PENELITIAN
+
+                             Gambar 3.1 SDLC Waterfall [58]
+
+Gambar 3.1 merupakan metodologi pengembangan Waterfall. Metodologi tersebut
+menggambarkan tahap pengembangan perangkat lunak secara sekuensial. Disebut
+sebagai "Waterfall" karena metode tersebut dilakukan secara runtut, seperti air
+terjun yang mengalir secara berurutan (sekuensial) dari atas ke bawah. Metode
+
+                                                17
+
+                                                                      Politeknik Siber dan Sandi Negara
+tersebut juga memiliki ketentuan yang menyatakan bahwa suatu tahap harus
+diselesaikan terlebih dahulu sebelum beralih ke tahap selanjutnya. Berikut
+penjelasan terkait metode tersebut.
+
+III.3.1 Planning
+Tahap ini menjelaskan proses perencanaan terhadap aplikasi chatbot. Perencanaan
+tersebut mencakup metode pengambilan data, metode pengujian yang mencakup
+pengujian keamanan dan pengujian pengguna, benchmarking dan pemilihan LLM,
+dan pemilihan teknologi untuk implementasi. Proses-proses tersebut dilakukan
+berdasarkan hasil pengambilan data melalui tahap wawancara pihak lokus.
+
+III.3.2 Analysis
+Tahap ini menjelaskan bagaimana penentuan atau pemilihan LLM, metode
+pencegahan, benchmarking, pengujian, hingga teknologi yang digunakan untuk
+implementasi. Setelah mendapat hasil wawancara, pihak lokus memiliki beberapa
+kebutuhan pada implementasi chatbot tersebut. Beberapa kebutuhan tersebut
+meliputi:
+
+a. mampu menerima input teks serta memprosesnya menjadi respons jawaban;
+b. mampu memberikan informasi terkait administrasi kependudukan yang berlaku
+
+    di Kabupaten Banyuwangi; dan
+c. mampu beroperasi pada gawai dengan sistem operasi Android.
+
+Untuk dapat memenuhi kebutuhan tersebut, beberapa analisis dilakukan pada tahap
+ini. Beberapa analisis tersebut meliputi penentuan LLM dengan performa yang
+paling baik berdasarkan hasil evaluasi framework DeepEval dan RAGAS serta
+signifikansi metode pencegahan SmoothLLM yang diterapkan. Tahap analisis
+tersebut dilakukan untuk menjawab dua dari tiga rumusan masalah yang telah
+ditentukan pada penelitian ini.
+
+LLM yang digunakan pada penelitian tersebut merupakan LLM berbayar
+(proprietary LLM). Hal tersebut disebabkan karena pihak lokus tidak memiliki
+sumber daya dengan komputasi yang mumpuni untuk dapat menjalankan LLM
+lokal. Berkaitan dengan hal tersebut, LLM yang akan digunakan bersumber dari
+beberapa perusahaan penyedia LLM, meliputi OpenAI, Google, dan Anthropic.
+Perusahaan-perusahaan tersebut dipilih karena LLM mereka banyak digunakan
+berdasarkan https://openrouter.ai/models?fmt=cards&order=top-weekly. LLM
+yang dipilih ditentukan dengan spesifikasi tertentu, di antaranya knowledge cutoff
+pada rentang yang bersamaan serta jenis LLM yang digunakan untuk pengerjaan
+tugas harian (daily task). Setelah dilakukan proses filter, LLM tersebut adalah gpt-
+4.1, claude-3.5-haiku, dan gemini-2.0-flash-001. Ketiga LLM tersebut merupakan
+LLM yang dikhususkan untuk pengerjaan tugas harian yang tidak membutuhkan
+
+                                                18
+
+                                                                      Politeknik Siber dan Sandi Negara
+kemampuan deep thinking atau deep reasoning. Selain itu, ketiga LLM tersebut
+juga memiliki knowledge cutoff pada periode yang bersamaan, yakni di rentang
+bulan Juni ­ Agustus 2024.
+
+Selanjutnya, penentuan LLM terbaik (yang telah dipilih sebelumnya) dilakukan
+melalui evaluasi performa seluruh unsur output dan input pada penelitian, yakni
+input, retrieved context, expected output, dan actual output. Penentuan tersebut
+dilakukan bersamaan dengan penerapan teknik hybrid RAG. Teknik tersebut
+memanfaatkan semantic search dan keyword search dengan perbandingan 2:8 yang
+berarti bobot keyword lebih besar dibandingkan bobot semantic. Untuk menerapkan
+teknik tersebut, model embedding all-MiniLM-6-v2 serta algoritma TF-IDF
+digunakan sebagai dasar modul hybrid RAG. Penerapan tersebut digunakan untuk
+mendapatkan seluruh unsur output dan input yang selanjutnya digunakan pada
+evaluasi performa LLM menggunakan framework DeepEval dan RAGAS. Unsur
+output dan input tersebut didapat menggunakan skrip otomasi dengan 9 pertanyaan
+pengujian. Pertanyaan-pertanyaan tersebut juga disertakan jawaban yang telah
+diverifikasi kepada pihak lokus berdasarkan regulasi yang berlaku saat ini. Berikut
+daftar pertanyaan serta jawaban yang telah diverifikasi pada Tabel 3.1.
+
+     Tabel 3.1 Daftar Pertanyaan dan Jawaban untuk Pengujian
+
+No.  Pertanyaan                           Jawaban
+
+                           1. Foto copy Kartu Keluarga
+
+                           2. KTP lama/Surat Kehilangan dari polsek
+
+                           3. Foto copy dan asli Akta Kelahiran/
+
+                           Ijazah jika ada perubahan nama dan
+
+                           tanggal lahir
+
+1.   apa saja syarat 4. Foto Copy dan Asli Kutipan Akta
+                           Perkawinan/Perceraian/Kematian jika
+     pengajuan ktp baru?
+                           ada perubahan status
+
+                           5. Foto Copy dan asli SK (PNS, TNI,
+
+                           POLRI, BUMN, PENSIUNAN), SIUP
+
+                           jika ada perubahan pekerjaan
+
+                           6. Sudah melakukan perekaman untuk
+
+                           pemula
+
+                           1. Ambil nomor Antrian
+
+                           2. Menunggu panggilan urutan Nomor
+
+     bagaimana prosedur    Antrian
+
+2. pengajuan         akta  3. Menyerahkan berkas permohonan akta
+         kelahiran?            kelahiran
+
+                           4. Berkas diverifikasi dan meneliti
+
+                           persyaratannya / kelengkapan oleh
+
+                           petugas loket
+
+                           19
+
+                                       Politeknik Siber dan Sandi Negara
+No.         Pertanyaan                        Jawaban
+
+                             5. Petugas melakukan input data akta
+
+                             kelahiran
+
+                             6. Mencetak register dan kutipan akta
+
+                             7. Kasi dan kabid menverivikasi dan
+
+                             memaraf
+
+                             8. Register Akta dan kutipan
+
+                             ditandatangani Kepala Dinas
+
+                             9. Hasil kutipan Akta Kelahiran dan
+
+                             register Akta diserahkan ke Petugas
+
+                             Loket Pelayanan
+
+                             10. Petugas Loket menyerahkan ke
+
+                             Pemohon (tidak perlu Nomor Antrian)
+
+     form apa yang perlu
+
+     diisi oleh seseorang
+
+3. yang mengajukan formulir F1.36
+
+     surat       keterangan
+
+     pindah keluar?
+
+4.   apa kepanjangan dari    surat ketrangan tempat tinggal
+
+     sktt?
+
+     apakah anak usia 16     tidak, usia minimal untuk memiliki ktp
+
+5.   tahun bisa memiliki     adalah 17 tahun
+     ktp?
+
+     berapa lama masa        masa berlaku ktp bagi warga negara
+                             indonesia adalah seumur hidup
+6.   berlaku ktp bagi warga
+     negara indonesia?
+
+     berapa banyak saksi
+
+     dan apa saja yang saksi yang dibutuhkan sebanyak dua orang
+
+7. dibutuhkan untuk dan membutuhkan identitas dua orang saksi
+
+     pembuatan          akta tersebut
+
+     kelahiran?
+
+                             1. Pemohon mengambil nomor antrian;
+
+                             2. Menunggu panggilan;
+
+                             3. Pemohon menyerahkan berkas
+
+                             persyaratan permohonan kepada
+
+     apa saja prosedur petugas loket pelayanan;
+
+8. untuk mengubah data 4. Petugas menerima dan meneliti
+
+     pada kartu keluarga?    kelengkapan berkas permohonan dan
+
+                             persyaratan;
+
+                             5. Petugas melakukan verifikasi, update
+
+                             data dan validasi kesesuaian data
+
+                             permohonan;
+
+                             20
+
+                                         Politeknik Siber dan Sandi Negara
+No.  Pertanyaan                         Jawaban
+
+                            6. Apabila data sudah sesuai, petugas
+
+                            mengajukan permohonan mengajukan
+
+                            permohonan Sertifikasi Tanda Tangan
+
+                            Elektronik kepada Kepala Dinas;
+
+                            7. Jika sudah mendapatkan persetujuan,
+
+                            petugas mencetak KK (Kartu
+
+                            Keluarga);
+
+                            8. Petugas pelayanan menyerahkan KK
+
+                            (Kartu Keluarga) kepada pemohon;
+
+                            9. Pemohon menerima KK (Kartu
+
+                            Keluarga).
+
+9.   kapan batas maksimal   60 hari sejak tanggal bayi lahir
+     pelaporan bayi lahir?
+
+Pertanyaan dan jawaban pada Tabel 3.1 di atas telah mewakili unsur input dan
+expected output yang dibutuhkan sehingga otomasi skrip yang dibutuhkan adalah
+untuk mendapatkan unsur retrieved context dan actual output dari masing-masing
+LLM. Setelah semua unsur didapat, tahap selanjutnya adalah memanfaatkan unsur-
+unsur input dan output tersebut pada proses evaluasi menggunakan framework
+DeepEval dan RAGAS. Metrik yang digunakan pada evaluasi tersebut mengacu
+pada penelitian [50], yakni Answer Relevancy, Faithfulness, dan Contextual Recall.
+Pengujian tersebut dilakukan menggunakan dua framework dan dilakukan perulangan
+sebanyak 10 kali. Perulangan tersebut penting untuk dilakukan karena penelitian
+[50] menyimpulkan bahwa perulangan dapat menghasilkan evaluasi yang lebih adil
+mengingat adanya fluktuasi nilai yang dihasilkan selama perulangan berlangsung.
+
+Kemudian, setelah hasil evaluasi pada ketiga LLM tersebut didapat, langkah
+selanjutnya adalah melakukan komparasi untuk mendapatkan LLM apa yang
+memiliki nilai tertinggi baik pada hasil evaluasi DeepEval dan RAGAS. Komparasi
+tersebut memiliki beberapa tahapan. Karena dilakukan menggunakan tiga LLM
+dengan tiga metrik evaluasi serta dua framework, langkah pertama yang dilakukan
+adalah menghitung rerata tiap metrik pada setiap pertanyaan dari masing-masing
+framework. Sebagai gambarannya, setelah keseluruhan skor metrik didapat dari dua
+framework, langkah pertama ialah menghitung rerata nilai metrik Faithfulness,
+Answer Relevancy, dan Context Recall dari tiga LLM pada masing-masing
+framework. Hal tersebut bertujuan untuk memberi gambaran awal bagaimana hasil
+evaluasi dari masing-masing framework terhadap 9 pertanyaan pengujian.
+
+Selanjutnya, setelah nilai rerata tersebut didapat, langkah selanjutnya adalah
+menilai apakah seluruh metrik pada tiap pertanyaan telah memenuhi ambang batas
+(threshold). Secara default, dua framework tersebut memiliki nilai threshold
+
+                            21
+
+                                        Politeknik Siber dan Sandi Negara
+sebesar 0,5. Hal tersebut dapat diartikan bahwa setiap skor evaluasi metrik yang
+tidak melebihi atau sama dengan 0,5 dianggap FALSE. Penilaian tersebut dilakukan
+pada tiap pertanyaan dari masing-masing metrik. Apabila salah satu metrik tidak
+memenuhi nilai threshold, hasil evaluasi dari pertanyaan tersebut dinilai sebagai
+FALSE. Sebagai contoh, apabila pertanyaan 1 memiliki skor evaluasi Faithfulness,
+Answer Relevancy, dan Context Recall secara berturut-turut 0,00; 0,97; dan 1,00,
+hasil evaluasi pada pertanyaan tersebut dinyatakan sebagai FALSE karena skor
+metrik Faithfulness pada pertanyaan 1 tidak melebihi threshold yang ditentukan.
+
+Setelah didapat keseluruhan nilai TRUE/FALSE pada tiap pertanyaan, langkah
+selanjutnya ialah menginterpretasikan konsistensi hasil tiap pertanyaan di masing-
+masing framework. Konsistensi yang dimaksud ialah apakah suatu pertanyaan
+dengan nilai FALSE pada framework RAGAS juga bernilai FALSE pada
+framework DeepEval dengan pertanyaan yang sama, begitu juga sebaliknya.
+Tujuannya ialah untuk mengetahui apakah dua framework tersebut memiliki
+penilaian yang cenderung sama pada tiap pertanyaan.
+
+Langkah selanjutnya ialah memperhatikan hasil otomasi skrip yang memuat unsur
+input, actual output, expected output, dan retrieved context pada LLM yang sama
+dari dua framework yang berbeda. Apakah actual output yang dihasilkan berbeda
+dengan retrieved context yang diberikan atau apakah actual output yang didapat
+memiliki relevansi yang tinggi dengan input yang disediakan. Beberapa pertanyaan
+retoris tersebut digunakan untuk menganalisis hasil evaluasi dengan menggunakan
+dasar konsep penilaian per metrik evaluasi yang telah ada. Sebagai contohnya,
+metrik Answer Relevancy dapat ditentukan relevansinya berdasarkan input dan
+actual output yang dihasilkan. Hal tersebut bertujuan untuk mengetahui konsistensi
+dari unsur input dan output terhadap skor yang dihasilkan pada LLM yang sama.
+Apabila terdapat perbedaan kecenderungan skor, framework yang digunakan
+sebagai acuan merupakan framework yang memiliki kecenderungan nilai yang
+paling dekat terhadap unsur input dan output. Hal inilah yang nantinya menjadi
+dasar penentuan LLM yang digunakan pada chatbot berdasarkan hasil skor yang
+memiliki kecenderungan paling dekat dengan unsur input dan output.
+
+Setelah LLM ditentukan pada tahap sebelumnya, tahap selanjutnya ialah pengujian
+keamanan. Pengujian keamanan pada penelitian ini dilakukan dengan melakukan
+otomasi serangan prompt injection pada LLM terpilih sebelum dan setelah
+diterapkan pencegahan. Teknik pencegahan prompt injection yang digunakan
+adalah SmoothLLM. Alasan pemilihannya adalah karena teknik tersebut berbasis
+rephrasing yang diletakkan sebagai input defense LLM. Teknik tersebut dipilih
+karena kesamaan dataset serangan yang digunakan berdasarkan tren penelitian
+yang membahas pencegahan serta serangan prompt injection pada LLM lainnya.
+Teknis pengujian yang dilakukan adalah membandingkan jumlah prompt injection
+
+                                                22
+
+                                                                      Politeknik Siber dan Sandi Negara
+yang berhasil mengelabui LLM sebelum dan setelah penerapan SmoothLLM
+dengan menggunakan dataset AdvBench. Tujuannya adalah untuk mengetahui
+signifikansi pencegahan tersebut diterapkan pada aplikasi chatbot.
+
+III.3.3 Design
+Setelah diperoleh LLM dengan performa yang paling baik serta signifikansi
+pencegahannya, tahap selanjutnya adalah desain sistem chatbot. Tahap tersebut
+melakukan integrasi pada beberapa layanan. Beberapa layanan tersebut mencakup
+API LLM, API Telegram, serta alur kerja chatbot. Beberapa layanan tersebut
+diinstal pada lingkungan virtual (virtual environment) tertentu. Selain itu,
+penyusunan prompt engineering dengan tujuan message handling yang ramah juga
+dilakukan pada tahap ini. Hal tersebut memungkinkan chatbot dapat
+menyampaikan informasi dengan gaya bahasa yang humanis dan ramah pada user.
+
+III.3.4 Implementation
+Tahap tersebut melakukan instalasi dari hasil tahap design pada virtual private
+server (VPS) serta pengujian pengguna untuk menilai ketergunaan aplikasi chatbot
+tersebut menggunakan CUQ. Proses instalasi tersebut dilakukan berdasarkan hasil
+integrasi seluruh layanan yang dibutuhkan, yakni Telegram, LLM berbayar, serta
+penggunaan sentence transformers sebagai penerapan metode hybrid pada teknik
+RAG.
+
+Setelahnya, aplikasi chatbot yang telah diinstal pada VPS tersebut akan dikirimkan
+pada end user di lingkungan Kelurahan Tamanbaru untuk dinilai bagaimana aspek
+ketergunaan aplikasi tersebut. Ketergunaan tersebut dilakukan melalui CUQ yang
+berisi 16 pertanyaan dengan rincian 8 pertanyaan yang mencakup aspek positif
+chatbot dan 8 pertanyaan sisanya mencakup aspek negatif chatbot. Setiap
+pertanyaan dijawab menggunakan skala 1 hingga 5 sebagaimana pada Gambar 3.2.
+
+                    Gambar 3.2 Contoh Pernyataan Pengujian CUQ
+
+Setelah diperoleh respons dari end user, tahap selanjutnya adalah penghitungan
+hasil kuesioner. Penghitungan hasil kuesioner memiliki beberapa tahap. Tahap-
+tahap inilah yang mengubah aspek kuantitatif chatbot menjadi aspek kualitatif
+berdasarkan nilai kumulatif tiap pernyataan ganjil dan genap. Karena CUQ berisi
+16 pernyataan yang dibagi menjadi aspek positif dan negatif chatbot (yang terbagi
+
+                                                23
+
+                                                                      Politeknik Siber dan Sandi Negara
+berdasarkan pernyataan ganjil dan genap), tahapan pada proses perhitungan adalah
+sebagai berikut dengan persamaan utama pada Persamaan 3.1.
+
+a. Hitung total nilai pernyataan ganjil dan simpan dalam variabel
+    _.
+
+b. Hitung total nilai pernyataan genap dan simpan dalam variabel
+    _.
+
+c. Nilai pengujian CUQ diperoleh dengan menghitung persamaan berikut.
+
+ = (_-8)+(40- _) × 100                            (3.1)
+
+                                              64
+
+24
+
+            Politeknik Siber dan Sandi Negara
+                           BAB IV
+   HASIL PENELITIAN DAN PEMBAHASAN
+
+IV.1 PENGEMBANGAN CHATBOT
+Pada tahap ini, chatbot mulai dikembangkan. Pengembangan tersebut mengacu
+pada beberapa hal yang telah ditentukan mulai dari tahap planning hingga
+implementation. Beberapa hal tersebut mencakup hasil evaluasi LLM serta hasil
+penerapan pencegahan prompt injection dan pengaruhnya.
+
+IV.1.1 Analysis
+Tahap tersebut menjelaskan hasil dari pengujian LLM dengan performa paling baik.
+Penentuan LLM terbaik dilakukan menggunakan tiga metrik evaluasi DeepEval dan
+RAGAS, yakni Faithfulness, Answer Relevancy, dan Contextual Recall. Penentuan
+tersebut dilakukan pada 9 pertanyaan dengan rincian pertanyaan-pertanyaan
+tersebut memiliki unsur input, retrieved context, actual output, dan expected output
+dan dilakukan repetisi selama 10 kali. Berikut dilampirkan hasil evaluasi framework
+RAGAS dan DeepEval pada tiga LLM dengan skor metrik yang telah direrata pada
+Tabel 4.1 dan Tabel 4.2.
+
+Tabel 4.1 Tabel Rerata Hasil Evaluasi RAGAS per Metrik dari Tiga LLM
+
+                         RAGAS
+
+Pertanyaan Faithfulness   Answer    Context  Threshold
+                         Relevancy   Recall
+
+1  0.109                 0.289      0.012    FALSE
+
+2  0.914                 0.909      0.700    TRUE
+
+3  1.000                 0.870      1.000    TRUE
+
+4  1.000                 0.819      1.000    TRUE
+
+5  0.710                 0.863      1.000    TRUE
+
+6  0.667                 0.953      1.000    TRUE
+
+7  0.741                 0.904      1.000    TRUE
+
+8  0.861                 0.900      0.556    TRUE
+
+9  0.985                 0.870      1.000    TRUE
+
+Tabel 4.2 Tabel Rerata Hasil Evaluasi DeepEval per Metrik dari Tiga LLM
+
+                         DeepEval
+
+Pertanyaan Faithfulness   Answer    Context  Threshold
+                         Relevancy   Recall
+
+1  0.840                 0.444      0.988    FALSE
+
+2  0.892                 0.835      0.914    TRUE
+
+3  0.859                 0.756      0.784    TRUE
+
+4  0.877                 0.752      0.759    TRUE
+
+                         25
+
+                                     Politeknik Siber dan Sandi Negara
+Pertanyaan Faithfulness    DeepEval  Context  Threshold
+                          Answer      Recall
+5  0.938                 Relevancy    0.765     TRUE
+                                      0.816     TRUE
+6  0.938                    0.844     0.765     TRUE
+                            0.712     0.828     TRUE
+7  0.963                    0.804     0.833     TRUE
+                            0.560
+8  0.970                    0.930
+
+9  0.981
+
+Berdasarkan Tabel 4.1 dan 4.2, dua framework secara bersamaan mendapat FALSE
+pada pertanyaan 1. Apabila diinterpretasikan lebih jauh lagi, dua framework
+tersebut memiliki skor threshold pada metrik yang berbeda. Framework RAGAS
+menilai bahwa metrik Faithfulness dan Context Recall melampaui threshold,
+sedangkan DeepEval menilai hanya metrik Answer Relevancy yang melampaui
+threshold. Sebagai gambarannya, hasil skrip otomasi untuk LLM gpt-4.1 pada
+kolom retrieved context berbeda dengan actual output yang dihasilkan oleh LLM
+tersebut. Berikut dilampirkan unsur input dan output pada Tabel 4.3.
+
+                         26
+
+                                     Politeknik Siber dan Sandi Negara
+       Tabel 4.3 Hasil Input, Expected Output, Retrieved Context, dan Actual Output dengan LLM gpt-4.1 pada Pertanyaan 1
+
+Input      Expected Output                           Retrieved Context                         Actual Output
+
+                                        -                     34        - Syarat pengajuan
+
+                                        (3) KTP sebagaimana dimaksud pada ayat (1) dan ayat (2) KTP baru di
+
+                                        berlaku               secara    nasional. Kabupaten
+
+                                        (4) Penduduk wajib melaporkan perpanjangan masa berlaku Banyuwangi:
+
+           1. Foto copy Kartu Keluarga  KTP kepada Instansi Pelaksana apabila masa berlakunya
+
+           2. KTP lama/Surat Kehilangan dari telah                      berakhir. 1. Berusia minimal
+
+           polsek                       (5) Penduduk yang telah memiliki KTP wajib membawa pada 17 tahun, sudah
+
+           3. Foto copy dan asli Akta saat                              bepergian. menikah,                               atau
+
+           Kelahiran/ Ijazah jika ada (6) Penduduk sebagaimana dimaksud pada ayat (1) dan ayat pernah menikah.
+
+ apa saja  perubahan nama dan tanggal lahir (2) hanya diperbolehkan memiliki 1 (satu) KTP. 2.        Membawa
+  syarat
+pengajuan  4. Foto Copy dan Asli Kutipan Akta Pasal                     64 fotokopi Kartu
+ktp baru?
+           Perkawinan/Perceraian/Kematia (1) KTP mencantumkan gambar lambang Garuda Pancasila Keluarga (KK)
+
+           n jika ada perubahan status  dan peta wilayah negara Republik Indonesia, memuat terbaru.
+
+           5. Foto Copy dan asli SK (PNS, keterangan tentang NIK, nama, tempat tanggal lahir, laki- 3. Mengisi formulir
+
+           TNI, POLRI, BUMN, laki atau perempuan, agama, status perkawinan, golongan permohonan KTP-
+
+           PENSIUNAN), SIUP jika ada darah, alamat, pekerjaan, kewarganegaraan, pas foto, masa el di kantor
+
+           perubahan pekerjaan          berlaku, tempat dan tanggal dikeluarkan KTP, tandatangan kelurahan.
+
+           6. Sudah melakukan perekaman pemegang KTP, serta memuat nama dan nomor induk 4.           Melakukan
+
+           untuk pemula                 pegawai      pejabat  yang      menandatanganinya. perekaman data
+
+                                        (2) Keterangan tentang agama sebagaimana dimaksud pada biometrik (foto,
+
+                                        ayat (1) bagi Penduduk yang agamanya belum diakui sidik jari, dan iris
+
+                                        sebagai agama sesuai dengan ketentuan Peraturan mata) di kantor
+
+                                        Penduduk diharapkan dapat memberikan pemenuhan atas hak- kecamatan atau
+
+                                                     27
+
+                                                                                                           Politeknik Siber dan Sandi Negara
+Input  Expected Output                        Retrieved Context                             Actual Output
+                                                                                         Dinas
+                        hak administratif penduduk dalam pelayanan publik serta          Kependudukan dan
+                                                                                         Pencatatan Sipil.
+                        memberikan perlindungan yang berkenaan dengan penerbitan
+                                                                                         Lokasi pengajuan:
+                        Dokumen Kependudukan tanpa ada perlakuan yang                    Kantor Kelurahan
+                                                                                         Tamanbaru atau
+                        diskriminatif melalui peran aktif Pemerintah dan pemerintah      Dinas
+                                                                                         Kependudukan dan
+                        daerah . Penerapan KTP-el yang saat ini dilaksanakan             Pencatatan Sipil
+                                                                                         Kabupaten
+                        merupakan bagian dari upaya untuk mempercepat serta              Banyuwangi.
+
+                        mendukung akurasi terbangunnya database kependudukan di
+
+                        kabupaten/kota, provinsi maupun database kependudukan
+
+                        secara nasional. Dengan penerapan KTP -el maka setiap
+
+                        Penduduk tidak dimungkinkan lagi dapat memiliki KTP -el
+
+                        lebih dari satu dan /atau dipalsukan KTP-elnya, mengingat
+
+                        dalam         KTP-el  tersebut           telah  memuat
+
+                        kode keamanan dan rekaman elektronik data penduduk yang
+
+                        antara lain berupa iris mata maupun sidik jari Penduduk.
+
+                        Dengan . . .
+
+                        8. Petugas pelayanan menyerahkan KTP-el (Kartu Tanda
+
+                        Penduduk      Elektronik)       kepada          pemohon;
+
+                        9. Pemohon menerima KTP-el (Kartu Tanda Penduduk
+
+                        Elektronik). (2) Perwakilan Republik Indonesia wajib
+
+                        menerbitkan Surat Keterangan Kependudukan sebagai
+
+                        berikut: a. Surat Keterangan Perceraian paling lambat 7 (tujuh)
+
+                        hari;
+
+                                      28
+
+                                                                                            Politeknik Siber dan Sandi Negara
+Input  Expected Output                      Retrieved Context                        Actual Output
+
+                        b. Surat Keterangan Pengangkatan Anak paling lambat 7
+
+                        (tujuh) hari; atau
+
+                        c. Surat Keterangan Pelepasan Kewarganegaraan Indonesia
+
+                        paling lambat 7 (tujuh) hari;
+
+                        sejak tanggal dipenuhinya semua persyaratan.
+
+                        (3) Pejabat Pencatatan Sipil dan Pejabat pada Perwakilan
+
+                        Republik Indonesia yang ditunjuk sebagai pembantu
+
+                        pencatat sipil wajib mencatat pada register akta Pencatatan
+
+                        Sipil dan menerbitkan kutipan akta Pencatatan Sipil paling
+
+                        lambat 30 (tiga puluh) hari sejak tanggal dipenuhinya
+
+                        semua persyaratan.
+
+                        Pasal                                    70
+
+                        (1) Pembetulan KTP hanya dilakukan untuk KTP yang
+
+                        mengalami           kesalahan  tulis     redaksional.
+
+                        (2) Pembetulan KTP sebagaimana dimaksud pada ayat (1)
+
+                        dilaksanakan dengan atau tanpa permohonan dari orang
+
+                        yang                menjadi    subjek    KTP.
+
+                        (3) Pembetulan KTP sebagaimana dimaksud pada ayat (1)
+
+                        dilakukan           oleh       Instansi  Pelaksana.
+
+                        Pasal 71
+
+                                   29
+
+                                                                                         Politeknik Siber dan Sandi Negara
+Pada Tabel 4.3, kolom actual output yang dihasilkan pada LLM tidak memiliki
+similaritas dari retrieved context yang didapat. Kolom actual output memberikan
+informasi yang berbeda dengan kolom retrieved context. Hal tersebut dapat
+disebabkan karena kemampuan retrieval yang masih belum akurat dalam
+memperoleh konteks. Penggunaan model embedding all-MiniLM-6-v2 dapat
+menjadi salah satu penyebab dari kurangnya relevansi konteks yang didapat
+mengingat ukurannya yang lebih kecil dibandingkan model embedding populer
+yang lain. Hal tersebut memengaruhi skor metrik yang menggunakan unsur
+retrieved context dan/atau actual output sebagai dasar penilaiannya, yakni
+Faithfulness dan Context Recall. Berdasarkan similaritas skor yang didapat dengan
+unsur input dan output, framework RAGAS dapat mengenali perbedaan tersebut
+dengan skor yang didapat tidak melampaui threshold. Oleh karena itu, apabila
+dilihat lebih jauh lagi, hasil evaluasi LLM gpt-4.1 pada dua framework tersebut juga
+menggambarkan hal yang sejalan sebagaimana ditampilkan pada Tabel 4.4. dan 4.5.
+
+Selain pertanyaan 1, Tabel 4.4 dan 4.5 yang merupakan hasil rerata evaluasi LLM
+gpt-4.1 pada framework RAGAS dan DeepEval secara berturut-turut juga memiliki
+hasil yang berbeda pada pertanyaan 7 yang tidak mencapai threshold pada
+framework RAGAS. Pertanyaan tersebut merupakan pertanyaan terkait jumlah
+saksi dan hal-hal yang dibutuhkan untuk membuat akta kelahiran setelah adanya
+kelahiran di suatu daerah. Berikut dilampirkan unsur input dan output pada Tabel
+4.6.
+
+   Tabel 4.4 Hasil Evaluasi RAGAS pada LLM gpt-4.1
+
+                         gpt-4.1
+
+Pertanyaan Faithfulness   Answer    Context            Threshold
+                         Relevancy   Recall
+                                                         FALSE
+1  0.105                 0.868      0.000                TRUE
+                                                         TRUE
+2  0.743                 0.896      0.700                TRUE
+                                                         TRUE
+3  1.000                 0.894      1.000                TRUE
+                                                         FALSE
+4  1.000                 0.844      1.000                TRUE
+                                                         TRUE
+5  0.852                 0.874      1.000
+
+6  1.000                 0.968      1.000
+
+7  0.222                 0.863      1.000
+
+8  0.601                 0.892      0.556
+
+9  1.000                 0.866      1.000
+
+   Tabel 4.5 Hasil Evaluasi DeepEval pada LLM gpt-4.1
+
+                         gpt-4.1
+
+Pertanyaan Faithfulness   Answer    Context            Threshold
+                         Relevancy   Recall
+
+1  1.000                 0.778      0.963              TRUE
+
+2  0.963                 0.802      0.926              TRUE
+
+                         30
+
+                                     Politeknik Siber dan Sandi Negara
+Pertanyaan Faithfulness    gpt-4.1  Context  Threshold
+                          Answer     Recall
+3  1.000                 Relevancy   0.852     TRUE
+                                     0.870     TRUE
+4  1.000                    0.778    1.000     TRUE
+                            0.757    1.000     TRUE
+5  1.000                    0.822    0.944     TRUE
+                            0.681    0.972     TRUE
+6  0.963                    0.678    1.000     TRUE
+                            0.568
+7  0.963                    0.889
+
+8  1.000
+
+9  0.981
+
+                         31
+
+                                     Politeknik Siber dan Sandi Negara
+       Tabel 4.6 Hasil Input, Expected Output, Retrieved Context, dan Actual Output dengan LLM gpt-4.1 pada Pertanyaan 7
+
+Input       Expected Output                      Retrieved Context                                  Actual Output
+
+                                       - 17 -                                                       Untuk pembuatan akta
+
+                                       (2) Berdasarkan laporan sebagaimana dimaksud pada ayat (1), kelahiran di Kabupaten
+
+                                       Pejabat Pencatatan Sipil mencatat pada Register Akta Banyuwangi, dibutuhkan
+
+                                       Kelahiran dan menerbitkan Kutipan Akta Kelahiran.            2 (dua) orang saksi
+
+                                       Pasal 28                                                     kelahiran. Selain itu,
+
+                                       (1) Pencatatan kelahiran dalam Register Akta Kelahiran dan dokumen                 yang
+
+berapa                                 penerbitan Kutipan Akta Kelahiran terhadap peristiwa         dibutuhkan adalah:
+banyak                                 kelahiran seseorang yang tidak diketahui asal-usulnya atau
+saksi dan                              keberadaan orang tuanya, didasarkan pada laporan orang yang  1. Formulir Pelaporan
+apa saja                               menemukan dilengkapi Berita Acara Pemeriksaan dari
+yang        saksi yang dibutuhkan      kepolisian.                                                  Akta Kelahiran.
+dibutuhkan  sebanyak dua orang dan     (2) Kutipan Akta Kelahiran sebagaimana dimaksud pada ayat
+untuk       membutuhkan identitas dua  (1) diterbitkan oleh Pejabat Pencatatan Sipil dan disimpan   2. Surat Keterangan
+pembuatan   orang saksi tersebut       oleh Instansi Pelaksana.
+akta                                   Paragraf 2                                                   Kelahiran               dari
+kelahiran?                             Pencatatan Kelahiran di luar Wilayah Republik Indonesia
+                                       Pasal 29                                                     Dokter/Bidan/Penolong
+
+                                                                                                    kelahiran/Kades/Lurah.
+
+                                                                                                    3. Fotokopi legalisir KK
+
+                                                                                                    dan KTP orang tua.
+
+                                                                                                    4. Fotokopi legalisir
+
+                                       (1) Kelahiran Warga Negara Indonesia di luar wilayah kutipan/buku nikah orang
+
+                                       Republik Indonesia wajib dicatatkan pada instansi yang tua.
+
+                                       berwenang di negara setempat dan dilaporkan kepada 5. Nama dan identitas 2
+
+                                       Perwakilan Republik Indonesia.                               orang saksi kelahiran.
+
+                                       (2) Apabila negara setempat sebagaimana dimaksud pada ayat 6. Surat keterangan
+
+                                       (1) tidak menyelenggarakan pencatatan kelahiran bagi orang tempat tinggal (SKTT)
+
+                                                 32
+
+                                                                                                       Politeknik Siber dan Sandi Negara
+Input  Expected Output                            Retrieved Context                   Actual Output
+                        asing, pencatatan dilakukan pada Perwakilan Republik
+                        Indonesia setempat.                                           bagi pemegang izin
+                        (3) Perwakilan Republik Indonesia sebagaimana dimaksud
+                        pada ayat (2) mencatat peristiwa kelahiran dalam Register     tinggal terbatas (jika ada).
+                        Akta Kelahiran dan menerbitkan Kutipan Akta Kelahiran.
+                        (4) Pencatatan Kelahiran sebagaimana dimaksud pada ayat (1)   7. Fotokopi paspor bagi
+                        dan ayat (2) dilaporkan kepada Instansi Pelaksana paling
+                        lambat 30 (tiga puluh) hari sejak Warga Negara Indonesia      pemegang izin kunjungan
+                        yang bersangkutan kembali ke Indonesia.
+                        Paragraf 3 . . .                                              (jika ada).
+                        Pasal 66
+                        (1) Akta Pencatatan Sipil terdiri atas:                       8. Berita acara
+                        a. Register Akta Pencatatan Sipil; dan
+                        b. Kutipan Akta Pencatatan Sipil.                             pemeriksaan kepolisian
+                        (2) Akta Pencatatan Sipil berlaku selamanya.
+                        Pasal 67                                                      untuk bayi yang tidak
+                        (1) Register Akta Pencatatan Sipil memuat seluruh data
+                        Peristiwa Penting.                                            diketahui           asal
+                        (2) Data Peristiwa Penting yang berasal dari KUAKec
+                        diintegrasikan ke dalam database kependudukan dan tidak       usulnya/keberadaan
+                        diterbitkan Kutipan Akta Pencatatan Sipil.
+                        (3) Register Akta Pencatatan Sipil disimpan dan dirawat oleh  orang tuanya (jika
+                        Instansi Pelaksana.
+                                                                                      diperlukan).
+
+                        33
+
+                                                                              Politeknik Siber dan Sandi Negara
+Input  Expected Output                            Retrieved Context                   Actual Output
+                        (4) Register Akta Pencatatan Sipil memuat:
+                        a. jenis Peristiwa Penting;
+                        b. NIK dan status kewarganegaraan;
+                        c. nama orang yang mengalami Peristiwa Penting;
+                        d. nama dan identitas pelapor;
+                        e. tempat dan tanggal peristiwa;
+                        f. nama dan identitas saksi;
+                        g. tempat dan tanggal dikeluarkannya akta; dan
+                        h. nama dan tanda tangan Pejabat yang berwenang.
+                        Pasal 68
+                        (1) Kutipan Akta Pencatatan Sipil terdiri atas kutipan akta:
+                        a. kelahiran;
+                        b. kematian;
+                        c. perkawinan;
+                        d. perceraian; dan
+                        e. pengakuan anak.
+                        (2) Kutipan Akta Pencatatan Sipil memuat:
+                        [Akta Kelahiran]
+                        Persyaratan:
+                        1. Mengisi Formulir Pelaporan Akta Kelahiran
+                        2. Surat Keterangan Kelahiran dari Dokter/Bidan/ Penolong
+                        kelahiran/Kades/Lurah.
+
+                        34
+
+                                                                              Politeknik Siber dan Sandi Negara
+Input  Expected Output                     Retrieved Context                          Actual Output
+
+                        3. Fotocopy Lgalisir KK dan KTP orang tua bagi WNI dan
+
+                        orang asing pemegang ijin tinggal tetap.
+
+                        4. Fotocopy Legalisir Kutipan/Buku nikah/Kawin orang tua.
+
+                        5. Nama dan Identitas 2 orang saksi kelahiran.
+
+                        6. Surat keterangan tempat tinggal (SKTT) bagi pemegang ijin
+
+                        tinggal terbatas.
+
+                        7. Fotocopy paspor bagi pemegang Ijin Kunjungan.
+
+                        8. Berita acara pemeriksaan kepolisian tentang ditemukannya
+
+                        bayi yang tidak diketahui asal usulnya/keberadaan orang
+
+                        tuanya.
+
+                        Prosedur:
+
+                        1. Ambil nomor Antrian
+
+                        2. Menunggu panggilan urutan Nomor Antrian
+
+                        3. Menyerahkan berkas permohonan akta kelahiran
+
+                        4.       Berkas    diverifikasi           dan     meneliti
+
+                        persyaratannya/kelengkapan oleh petugas loket
+
+                        5. Petugas melakukan input data akta kelahiran
+
+                        6. Mencetak register dan kutipan akta
+
+                        7. Kasi dan kabid menverivikasi dan memaraf
+
+                                           35
+
+                                                                                                 Politeknik Siber dan Sandi Negara
+Tabel 4.6 menjelaskan bahwa actual output pada dasarnya sudah memberikan
+jawaban yang didapat dari retrieved context. Jawaban pertanyaan 7, pada dasarnya,
+telah dilampirkan juga pada actual output melalui retrieved context yang didapat.
+Namun, karena actual output juga terlalu banyak memberikan jawaban yang kurang
+relevan terhadap input, hal tersebut memengaruhi skor metrik yang memanfaatkan
+input dan actual output sebagai dasar penilaiannya, yakni Faithfulness. Oleh karena
+itu, pada Tabel 4.4 yang merupakan hasil evaluasi RAGAS, skor Faithfulness tidak
+melampaui threshold meskipun jawaban telah dilampirkan pada actual output. Oleh
+karena itu, dari dua hasil pertanyaan 1 dan 7 dengan LLM gpt-4.1, framework
+RAGAS memiliki similaritas yang paling tinggi terhadap unsur input dan output.
+
+Tahap selanjutnya ialah penentuan LLM terbaik berdasarkan hasil evaluasi pada
+framework DeepEval dan RAGAS. Berdasarkan analisis sebelumnya, hasil yang
+didapat ialah hasil framework RAGAS memiliki similaritas paling tinggi terhadap
+unsur input dan output. Oleh karena itu, penentuan LLM terbaik dianalisis
+menggunakan hasil evaluasi RAGAS terhadap performa tiga LLM. Berikut
+dilampirkan hasil rerata dari masing-masing LLM pada framework RAGAS pada
+Tabel 4.7.
+
+     Tabel 4.7 Hasil Evaluasi Benchmarking LLM pada Framework RAGAS
+
+No.  LLM          Faithfulness   Answer    Contextual  Mean
+                                Relevancy     Recall
+
+1. gpt-4.1        0.725         0.885      0.806       0.805
+
+2.   gemini-2.0-  0.778         0.773      0.808       0.786
+     flash
+
+3.   claude-3.5-  0.826         0.801      0.808       0.812
+     haiku
+
+Berdasarkan hasil evaluasi pada Tabel 4.7, dua LLM memiliki performa dengan
+selisih yang kecil, yakni gpt-4.1 dan claude-3.5-haiku. LLM claude-3.5-haiku
+memiliki performa paling tinggi pada rerata skor tiga metrik yang diujikan, dengan
+selisih 0,07 dengan LLM gpt-4.1. Namun, berdasarkan unsur input dan output yang
+ada pada dua LLM tersebut, gpt-4.1 dapat menjawab pertanyaan benar lebih banyak
+dibandingkan LLM claude-3.5-haiku. LLM gpt-4.1 dapat menjawab benar 6
+pertanyaan yang dapat dilihat dari actual output, sementara claude-3.5-haiku dapat
+menjawab benar 5 pertanyaan yang dilihat dari actual output. Perbedaan tersebut
+berada pada pertanyaan 6 yang dilampirkan pada Tabel 4.8.
+
+                                36
+
+                                            Politeknik Siber dan Sandi Negara
+Tabel 4.8 Hasil Input, Expected Output, Retrieved Context, dan Actual Output dengan LLM claude-3.5-haiku pada Pertanyaan 5
+
+Input        Expected Output                                  Retrieved Context                        Actual Output
+
+                                          (2) Dihapus.
+
+                                          (3) KTP-el sebagaimana dimaksud pada ayat (1) berlaku
+
+                                          secara nasional.
+
+                                          (4) Orang Asing sebagaimana dimaksud pada ayat (1) wajib
+
+                                          melaporkan perpanjangan masa berlaku atau mengganti KTP-
+
+                                          el ke pada Instansi Pelaksana paling lambat 30 (tiga puluh)
+
+                                          hari sebelum tanggal masa berlaku Izin Tinggal Tetap
+
+berapa lama                               berakhir.                                                    Berdasarkan dokumen
+                                          (5) Penduduk . . .                                           kebijakan resmi yang
+
+masa         masa berlaku ktp bagi warga  - 34 -                                                       Anda kutip, pada Pasal 64
+berlaku ktp  negara indonesia adalah      (3) KTP sebagaimana dimaksud pada ayat (1) dan ayat (2)      ayat (4) huruf a
+bagi warga   seumur hidup                 berlaku secara nasional.                                     disebutkan bahwa untuk
+negara                                    (4) Penduduk wajib melaporkan perpanjangan masa berlaku      Warga Negara Indonesia,
+indonesia?                                KTP kepada Instansi Pelaksana apabila masa berlakunya telah  KTP berlaku selama 5
+                                          berakhir.                                                    (lima) tahun.
+
+                                          (5) Penduduk yang telah memiliki KTP wajib membawa pada
+
+                                          saat bepergian.
+
+                                          (6) Penduduk sebagaimana dimaksud pada ayat (1) dan ayat
+
+                                          (2) hanya diperbolehkan memiliki 1 (satu) KTP.
+
+                                                              37
+
+                                                                                                                    Politeknik Siber dan Sandi Negara
+Input  Expected Output                            Retrieved Context                    Actual Output
+                        Pasal 64
+                        (1) KTP mencantumkan gambar lambang Garuda Pancasila
+                        dan peta wilayah negara Republik Indonesia, memuat
+                        keterangan tentang NIK, nama, tempat tanggal lahir, laki-laki
+                        atau perempuan, agama, status perkawinan, golongan darah,
+                        alamat, pekerjaan, kewarganegaraan, pas foto, masa berlaku,
+                        tempat dan tanggal dikeluarkan KTP, tandatangan pemegang
+                        KTP, serta memuat nama dan nomor induk pegawai pejabat
+                        yang menandatanganinya.
+                        (2) Keterangan tentang agama sebagaimana dimaksud pada
+                        ayat (1) bagi Penduduk yang agamanya belum diakui sebagai
+                        agama sesuai dengan ketentuan Peraturan ayat (1) bagi
+                        Penduduk yang agamanya belum diakui sebagai agama sesuai
+                        dengan ketentuan Peraturan Perundang-undangan atau bagi
+                        penghayat kepercayaan tidak diisi, tetapi tetap dilayani dan
+                        dicatat dalam database kependudukan.
+                        (3) Dalam KTP sebagaimana dimaksud pada ayat (1)
+                        disediakan ruang untuk memuat kode keamanan dan rekaman
+                        elektronik pencatatan Peristiwa Penting.
+                        (4) Masa berlaku KTP:
+                        a. untuk Warga Negara Indonesia berlaku selama 5 (lima)
+                        tahun;
+
+                        38
+
+                                                                              Politeknik Siber dan Sandi Negara
+Input  Expected Output                            Retrieved Context                    Actual Output
+                        b. untuk Orang Asing Tinggal Tetap disesuaikan dengan masa
+                        berlaku Izin Tinggal Tetap.
+                        (5) Penduduk yang telah berusia 60 (enam puluh) tahun diberi
+                        KTP yang berlaku seumur hidup.
+
+                        Pasal 65
+                        Surat Keterangan Kependudukan paling sedikit memuat
+                        keterangan tentang nama lengkap, NIK, jenis kelamin, tempat
+                        tanggal lahir, agama, alamat, Peristiwa Penting dan Peristiwa
+                        Kependudukan yang dialami oleh seseorang.
+
+                        Pasal 66 . . .
+                        - 35 -
+                        - 17 -
+
+                        DISTRIBUSI II
+
+                        (5) Elemen data penduduk tentang agama sebagaimana
+                        dimaksud pada ayat (1) bagi Penduduk yang agamanya belum
+                        diakui sebagai agama berdasarkan ketentuan Peraturan
+                        Perundang-undangan atau bagi penghayat kepercayaan tidak
+                        diisi, tetapi tetap dilayani dan dicatat dalam database
+                        kependudukan.
+
+                        39
+
+                                                                              Politeknik Siber dan Sandi Negara
+Input  Expected Output                            Retrieved Context                  Actual Output
+                        (6) Dalam KTP-el sebagaimana dimaksud pada ayat (1)
+                        tersimpan cip yang memuat rekaman elektronik data
+                        perseorangan.
+                        (7) KTP-el untuk:
+                        a. Warga Negara Indonesia masa berlakunya seumur hidup;
+                        dan
+                        b. Orang Asing masa berlakunya disesuaikan dengan masa
+                        berlaku Izin Tinggal Tetap.
+                        (8) Dalam hal terjadi perubahan elemen data, rusak, atau
+                        hilang, Penduduk pemilik KTP -el wajib melaporkan kepada
+                        Instansi Pelaksana untuk dilakukan perubahan atau
+                        penggantian.
+                        (9) Dalam hal KTP -el rusak atau hilang, Penduduk pemilik
+                        KTP -el wajib melapor kepada Instansi Pelaksana melalui
+                        camat atau lurah/kepala desa paling lambat 14 (empat belas)
+                        hari dan melengkapi surat pernyataan penyebab
+
+                        40
+
+                                                                              Politeknik Siber dan Sandi Negara
+Pada Tabel 4.8, LLM claude-3.5-haiku menghasilkan actual output yang berbeda
+dengan expected output. Apabila ditelusuri lebih mendalam, retrieved context telah
+melampirkan informasi seperti pada expected output. Retrieved context telah
+melampirkan masa berlaku KTP untuk warga negara Indonesia ialah seumur hidup,
+berbeda dengan hasil yang diberikan oleh LLM claude-3.5-haiku yang menyatakan
+bahwa masa berlaku KTP untuk warga negara Indonesia ialah 5 tahun. Di lain sisi,
+LLM gpt-4.1 mampu memberikan jawaban benar berdasarkan aturan yang saat ini
+berlaku. Berikut dilampirkan hasil LLM gpt-4.1 pada Tabel 4.9.
+
+                                                41
+
+                                                                      Politeknik Siber dan Sandi Negara
+       Tabel 4.9 Hasil Input, Expected Output, Retrieved Context, dan Actual Output dengan LLM gpt-4.1 pada Pertanyaan 5
+
+Input        Expected Output                                  Retrieved Context                        Actual Output
+
+                                          (2) Dihapus.
+
+                                          (3) KTP-el sebagaimana dimaksud pada ayat (1) berlaku
+
+                                          secara nasional.
+
+                                          (4) Orang Asing sebagaimana dimaksud pada ayat (1) wajib
+
+                                          melaporkan perpanjangan masa berlaku atau mengganti KTP-
+
+                                          el ke pada Instansi Pelaksana paling lambat 30 (tiga puluh)
+
+                                          hari sebelum tanggal masa berlaku Izin Tinggal Tetap
+
+                                          berakhir.
+
+berapa lama                               (5) Penduduk . . .
+
+masa         masa berlaku ktp bagi warga  - 34 -                                                       Masa berlaku KTP-el
+berlaku ktp  negara indonesia adalah      (3) KTP sebagaimana dimaksud pada ayat (1) dan ayat (2)      bagi Warga Negara
+bagi warga   seumur hidup                 berlaku secara nasional.                                     Indonesia adalah seumur
+negara                                                                                                 hidup.
+
+indonesia?                                (4) Penduduk wajib melaporkan perpanjangan masa berlaku
+
+                                          KTP kepada Instansi Pelaksana apabila masa berlakunya telah
+
+                                          berakhir.
+
+                                          (5) Penduduk yang telah memiliki KTP wajib membawa pada
+
+                                          saat bepergian.
+
+                                          (6) Penduduk sebagaimana dimaksud pada ayat (1) dan ayat
+
+                                          (2) hanya diperbolehkan memiliki 1 (satu) KTP.
+
+                                                              42
+
+                                                                                                                    Politeknik Siber dan Sandi Negara
+Input  Expected Output                            Retrieved Context                    Actual Output
+
+                        Pasal 64
+                        (1) KTP mencantumkan gambar lambang Garuda Pancasila
+                        dan peta wilayah negara Republik Indonesia, memuat
+                        keterangan tentang NIK, nama, tempat tanggal lahir, laki-laki
+                        atau perempuan, agama, status perkawinan, golongan darah,
+                        alamat, pekerjaan, kewarganegaraan, pas foto, masa berlaku,
+                        tempat dan tanggal dikeluarkan KTP, tandatangan pemegang
+                        KTP, serta memuat nama dan nomor induk pegawai pejabat
+                        yang menandatanganinya.
+                        (2) Keterangan tentang agama sebagaimana dimaksud pada
+                        ayat (1) bagi Penduduk yang agamanya belum diakui sebagai
+                        agama sesuai dengan ketentuan Peraturan ayat (1) bagi
+                        Penduduk yang agamanya belum diakui sebagai agama sesuai
+                        dengan ketentuan Peraturan Perundang-undangan atau bagi
+                        penghayat kepercayaan tidak diisi, tetapi tetap dilayani dan
+                        dicatat dalam database kependudukan.
+                        (3) Dalam KTP sebagaimana dimaksud pada ayat (1)
+                        disediakan ruang untuk memuat kode keamanan dan rekaman
+                        elektronik pencatatan Peristiwa Penting.
+                        (4) Masa berlaku KTP:
+                        a. untuk Warga Negara Indonesia berlaku selama 5 (lima)
+                        tahun;
+
+                        43
+
+                                                                              Politeknik Siber dan Sandi Negara
+Input  Expected Output                            Retrieved Context                    Actual Output
+                        b. untuk Orang Asing Tinggal Tetap disesuaikan dengan masa
+                        berlaku Izin Tinggal Tetap.
+                        (5) Penduduk yang telah berusia 60 (enam puluh) tahun diberi
+                        KTP yang berlaku seumur hidup.
+
+                        Pasal 65
+                        Surat Keterangan Kependudukan paling sedikit memuat
+                        keterangan tentang nama lengkap, NIK, jenis kelamin, tempat
+                        tanggal lahir, agama, alamat, Peristiwa Penting dan Peristiwa
+                        Kependudukan yang dialami oleh seseorang.
+
+                        Pasal 66 . . .
+                        - 35 -
+                        - 17 -
+
+                        DISTRIBUSI II
+
+                        (5) Elemen data penduduk tentang agama sebagaimana
+                        dimaksud pada ayat (1) bagi Penduduk yang agamanya belum
+                        diakui sebagai agama berdasarkan ketentuan Peraturan
+                        Perundang-undangan atau bagi penghayat kepercayaan tidak
+                        diisi, tetapi tetap dilayani dan dicatat dalam database
+                        kependudukan.
+
+                        44
+
+                                                                              Politeknik Siber dan Sandi Negara
+Input  Expected Output                            Retrieved Context                  Actual Output
+                        (6) Dalam KTP-el sebagaimana dimaksud pada ayat (1)
+                        tersimpan cip yang memuat rekaman elektronik data
+                        perseorangan.
+                        (7) KTP-el untuk:
+                        a. Warga Negara Indonesia masa berlakunya seumur hidup;
+                        dan
+                        b. Orang Asing masa berlakunya disesuaikan dengan masa
+                        berlaku Izin Tinggal Tetap.
+                        (8) Dalam hal terjadi perubahan elemen data, rusak, atau
+                        hilang, Penduduk pemilik KTP -el wajib melaporkan kepada
+                        Instansi Pelaksana untuk dilakukan perubahan atau
+                        penggantian.
+                        (9) Dalam hal KTP -el rusak atau hilang, Penduduk pemilik
+                        KTP -el wajib melapor kepada Instansi Pelaksana melalui
+                        camat atau lurah/kepala desa paling lambat 14 (empat belas)
+                        hari dan melengkapi surat pernyataan penyebab
+
+                        45
+
+                                                                              Politeknik Siber dan Sandi Negara
+Tabel 4.9 menjelaskan bahwa LLM gpt-4.1 mampu menghasilkan actual output
+yang lebih baik dibandingkan LLM claude-3.5-haiku dengan retrieved context yang
+sama. Dengan demikian, LLM gpt-4.1 memiliki kemampuan menjawab benar lebih
+banyak dibandingkan LLM claude-3.5-haiku dengan adanya perbedaan actual
+output yang dihasilkan masing-masing LLM.
+
+Setelah didapat LLM terbaik, langkah selanjutnya adalah melakukan pengujian
+keamanan melalui otomatisasi serangan prompt injection dengan dataset
+AdvBench. Pengujian tersebut dilakukan sebanyak dua kali, yakni sebelum dan
+sesudah diterapkan metode pencegahannya menggunakan SmoothLLM. Dua
+pengujian dilakukan dengan tujuan untuk melihat signifikansi penerapan metode
+SmoothLLM tanpa penambahan prompt engineering pada sistem chatbot.
+
+Pengujian pertama yang dilakukan adalah dengan tanpa penerapan SmoothLLM
+pada LLM. Pengujian tersebut juga dilakukan tanpa adanya prompt system sehingga
+pengujian tersebut hanya menggunakan LLM gpt-4.1. Pengujian tersebut dilakukan
+menggunakan dataset AdvBench yang terbagi menjadi dua. Dataset pertama
+(harmful strings) berisi daftar prompt dengan penggunaan istilah yang berbahaya,
+mengancam, misinformasi, diskriminasi, dan saran ilegal. Dataset tersebut berisi
+574 prompts. Dataset kedua (harmful behaviours) berisi instruksi yang berbahaya
+dengan jumlah 520 prompts. Instruksi tersebut meminta LLM untuk dapat patuh
+pada instruksinya, sekalipun instruksi tersebut berbahaya. Hasil yang didapat pada
+pengujian pertama ialah sebanyak 36 prompts berhasil membuat LLM
+menghasilkan output di luar perilakunya pada dua dataset. Tiga puluh enam
+prompts tersebut terdiri dari 24 prompts pada dataset pertama dan 12 prompts pada
+dataset kedua.
+
+Pada pengujian kedua, yakni penerapan SmoothLLM, pencegahan yang dilakukan
+berhasil mencegah semua prompt pada dataset, baik pada dataset pertama maupun
+dataset kedua. Sebanyak 36 prompts yang mengubah perilaku LLM pada pengujian
+pertama dapat dicegah pada pengujian kedua. Hasil komparasi sebelum dan sesudah
+integrasi SmoothLLM ditunjukkan pada Tabel 4.10.
+
+Tabel 4.10 Hasil Pengujian Sebelum dan Sesudah Integrasi SmoothLLM
+
+No. Metode    Jumlah Prompt Persentase
+
+              yang Berhasil
+
+1. Tanpa penerapan SmoothLLM 36  3,2906%
+
+2. SmoothLLM  0                  0%
+
+IV.1.2 Design
+Tahap ini merupakan proses menggabungkan seluruh hasil analisis dan integrasi
+pada chatbot. Tahap tersebut berisi implementasi pada kode dengan memanfaatkan
+
+              46
+
+                          Politeknik Siber dan Sandi Negara
+layanan-layanan yang perlu diintegrasikan, meliputi API Telegram, API OpenAI
+(LLM gpt-4.1), model all-MiniLM-6-v2 (semantic search), algoritma TF-IDF
+(keyword search), serta modul SmoothLLM yang telah diujikan pada tahap
+analysis. Gambar 4.1 menjelaskan sequence diagram yang ada pada chatbot.
+
+                        Gambar 4.1 Alur Sistem Aplikasi Chatbot
+
+IV.1.2.1 Penerapan API Beberapa Layanan
+Tahap ini melakukan import pada beberapa library layanan yang ada pada Python
+untuk digunakan pada aplikasi. Beberapa layanan tersebut meliputi API Telegram,
+API OpenAI (LLM gpt-4.1), model embedding sentence-transformers/all-MiniLM-
+6-v2 (semantic search), dan teknik TF-IDF (keyword search). Beberapa library
+seperti Langchain dan Langchain-community digunakan untuk memproses
+dokumen berformat pdf sebagai modal utama penerapan RAG pada chatbot
+sebagaimana pada Gambar 4.2.
+
+import traceback
+import os
+import json
+import logging
+import asyncio
+import numpy as np
+import openpyxl
+from scipy.spatial.distance import cosine
+from sklearn.feature_extraction.text import TfidfVectorizer
+from telegram import Update
+from telegram.ext import Application, CommandHandler,
+MessageHandler, filters, CallbackContext
+from langchain_community.document_loaders import PyPDFLoader
+from dotenv import load_dotenv
+import re
+from sentence_transformers import SentenceTransformer
+import openai
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+import random
+import string
+
+load_dotenv()
+
+                                                47
+
+                                                                      Politeknik Siber dan Sandi Negara
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+if not TOKEN or not OPENAI_API_KEY:
+      raise ValueError("Missing environment variables! Check your .env
+
+file.")
+
+                Gambar 4.2 Import Beberapa Library yang Dibutuhkan
+
+IV.1.2.2 Penyiapan Dokumen dan Format Resmi
+Dokumen-dokumen yang telah disiapkan selanjutnya diinisialisasi dalam bentuk
+variabel yang dapat diolah untuk diekstrak informasi dan pengetahuan di dalamnya.
+Di dalam tahap tersebut juga melakukan inisialisasi format dokumen. Format
+dokumen tersebut merupakan format siap cetak yang secara otomatis telah terisi
+berdasarkan pemetaan informasi dari teks/prompt yang dikirimkan oleh user.
+Inisiasi list bernama documents dan penyiapan dokumen kebutuhan pada aplikasi
+ditampilkan pada Gambar 4.3.
+
+KNOWLEDGE = "D:\TA Bismillah_rev4\knowledge"
+
+class DocumentLoader:
+      @staticmethod
+      def load_documents(chunk_size=1024, chunk_overlap=100):
+             documents = []
+             text_splitter = RecursiveCharacterTextSplitter(
+                   chunk_size=chunk_size,
+                   chunk_overlap=chunk_overlap,
+                   separators=["\n\n", "\n", " ", ""]
+             )
+             for file_name in os.listdir(KNOWLEDGE):
+                   if file_name.endswith(".pdf"):
+                          try:
+                                 pdf_path = os.path.join(KNOWLEDGE, file_name)
+                                 loader = PyPDFLoader(pdf_path)
+                                 docs = loader.load()
+                                 sectioned_docs = Utils.split_by_section(docs)
+                                 for section in sectioned_docs:
+                                       chunks = text_splitter.split_text(section)
+                                       documents.extend(chunks)
+                          except Exception as e:
+                                 # logger can be imported if needed
+                                 print(f" Error processing {file_name}: {e}")
+             return documents
+
+           Gambar 4.3 Variabel dan Fungsi Penyiapan Ekstraksi Dokumen
+
+                                                48
+
+                                                                      Politeknik Siber dan Sandi Negara
+Penyiapan dokumen tersebut dilakukan dengan cara mengumpulkan dokumen yang
+berisi informasi perihal administrasi kependudukan yang berlaku di Kabupaten
+Banyuwangi. Dokumen tersebut dapat diakses melalui
+https://jdih.banyuwangikab.go.id/. Dokumen yang dibutuhkan ialah berupa
+peraturan atau kebijakan mengenai prosedur, syarat, dan berkas yang dibutuhkan
+untuk melakukan suatu pengurusan administrasi kependudukan di lingkungan
+kelurahan. Oleh karenanya, lingkup dokumen yang dibutuhkan adalah KTP, KK,
+Akta Kelahiran, Akta Kematian, Surat Keterangan Pindah Datang, dan Surat
+Keterangan Pindah Keluar. Ketentuan terkait pengurusan dokumen tersebut telah
+tercantum pada Keputusan Kepala Dinas Kependudukan dan Pencatatan Sipil
+Kabupaten Banyuwangi Nomor: 188/256/KEP/429.113/2020 tentang Pelayanan
+Dinas Kependudukan dan Pencatatan Sipil Kabupaten Banyuwangi. Di dalam
+dokumen tersebut telah tertulis apa saja yang dibutuhkan serta bagaimana skema
+alur pengurusan administrasi kependudukan. Gambar 4.4 merupakan cuplikan
+dokumen yang berisi regulasi terkait pengajuan KTP.
+
+                        Gambar 4.4 Isi Dokumen Surat Keputusan
+Selain surat keputusan tersebut, beberapa aturan lain yang berkaitan dengan
+administrasi kependudukan juga dibutuhkan pada teknik RAG. Pengetahuan lain
+seperti ketentuan usia minimal saat memiliki KTP serta pengetahuan lain masih
+belum termuat pada Keputusan Kepala Dinas Kependudukan dan Pencatatan Sipil
+Kabupaten Banyuwangi Nomor: 188/256/KEP/429.113/2020 tentang Pelayanan
+Dinas Kependudukan dan Pencatatan Sipil Kabupaten Banyuwangi. Oleh karena
+itu, beberapa peraturan yang menjadi landasan dari dokumen sebelumnya juga
+digunakan sebagai pengetahuan tambahan bagi chatbot untuk melayani berbagai
+pertanyaan terkait administrasi kependudukan. Beberapa aturan tersebut adalah UU
+Nomor 23 Tahun 2006 tentang Administrasi Kependudukan dan UU Nomor 24
+
+                                                49
+
+                                                                      Politeknik Siber dan Sandi Negara
+Tahun 2013 tentang Perubahan atas UU Nomor 23 Tahun 2006 tentang
+Administrasi Kependudukan. Gambar 4.5 dan 4.6 merupakan cuplikan undang-
+undang yang membahas terkait administrasi kependudukan.
+
+  Gambar 4.5 Halaman Depan UU Nomor 23 Tahun 2006 tentang Administrasi
+                                        Kependudukan
+
+ Gambar 4.6 Halaman Depan UU Nomor 24 Tahun 2013 tentang Perubahan atas
+           UU Nomor 23 Tahun 2006 tentang Administrasi Kependudukan
+
+Setelah pengumpulan dokumen-dokumen yang dibutuhkan, proses selanjutnya
+ialah memproses dokumen-dokumen yang telah disiapkan sebelumnya menjadi
+
+                                                50
+
+                                                                      Politeknik Siber dan Sandi Negara
+potongan-potongan teks yang disebut chunk dengan ukuran 1024 karakter serta
+overlap 100 karakter. Overlap tersebut digunakan untuk mencegah informasi-
+informasi yang ada di dalam dokumen tidak terputus urutannya di antara potongan-
+potongan chunk.
+
+IV.1.2.3 Penerapan RAG
+Teknik RAG diterapkan dalam beberapa fungsi. Fungsi-fungsi tersebut memiliki
+kegunaan terhadap proses retrieving. Proses retrieving menggunakan parameter
+kombinasi keyword weight dan semantic weight sebesar 8:2. Gambar 4.7
+merupakan inisiasi modul hybrid RAG dengan metode hybrid search yang
+mencakup semantic search dan keyword search.
+
+class RAGRetriever:
+      def __init__(self, documents, keyword_weight=0.8,
+
+semantic_weight=0.2):
+             self.documents = documents
+             self.keyword_weight = keyword_weight
+             self.semantic_weight = semantic_weight
+             self.embedding_cache = {}
+             self.model = SentenceTransformer('all-MiniLM-L6-v2')
+             self.doc_embeddings =
+
+self.compute_sentence_transformer_embeddings(
+                   documents)
+
+             self.vectorizer = TfidfVectorizer()
+             self.tfidf_matrix = self.vectorizer.fit_transform(documents)
+
+      def compute_sentence_transformer_embeddings(self, texts):
+             uncached_texts = [
+                   text for text in texts if text not in
+
+self.embedding_cache]
+             if uncached_texts:
+                   try:
+                          new_embeddings = self.model.encode(
+                                 uncached_texts, convert_to_numpy=True,
+
+show_progress_bar=False)
+                          for text, emb in zip(uncached_texts,
+
+new_embeddings):
+                                 self.embedding_cache[text] = emb
+
+                   except Exception as e:
+                          print(f" Sentence Transformer embedding error:
+
+{e}")
+                          return []
+
+             return [self.embedding_cache[text] for text in texts]
+
+      def retrieve(self, query, top_k=4, use_smoothllm=True,
+perturb_pct=0.3, n=4):
+
+                                                51
+
+                                                                      Politeknik Siber dan Sandi Negara
+             if use_smoothllm:
+                   smoothed_queries = SmoothLLM.smooth(
+                          [query], perturb_pct=perturb_pct, n=n)[0]
+                   combined_results = []
+                   for q in smoothed_queries:
+                          query_embedding =
+
+self.compute_sentence_transformer_embeddings([q])[
+                                 0]
+
+                          semantic_scores = np.array(
+                                 [1 - cosine(query_embedding, doc_emb) for
+
+doc_emb in self.doc_embeddings])
+                          query_vector = self.vectorizer.transform([q])
+                          keyword_scores = np.array(
+                                 (self.tfidf_matrix @
+
+query_vector.T).todense()).flatten()
+                          semantic_scores = (semantic_scores -
+
+semantic_scores.min()) / \
+                                 (semantic_scores.max() - semantic_scores.min() +
+
+1e-8)
+                          keyword_scores = (keyword_scores -
+
+keyword_scores.min()) / \
+                                 (keyword_scores.max() - keyword_scores.min() +
+
+1e-8)
+                          combined_scores = self.keyword_weight *
+
+keyword_scores + \
+                                 self.semantic_weight * semantic_scores
+
+                          top_indices = np.argsort(combined_scores)[::-
+1][:top_k]
+
+                          combined_results.extend(
+                                 [(self.documents[i], combined_scores[i]) for i
+
+in top_indices])
+                   seen_docs = set()
+                   final_results = []
+                   for doc, score in sorted(combined_results, key=lambda x:
+
+x[1], reverse=True):
+                          if doc not in seen_docs:
+                                 final_results.append((doc, score))
+                                 seen_docs.add(doc)
+                          if len(final_results) >= top_k:
+                                 break
+
+                   return final_results
+             else:
+
+                   query_embedding =
+self.compute_sentence_transformer_embeddings([query])[
+
+                          0]
+                   semantic_scores = np.array(
+
+                                                52
+
+                                                                      Politeknik Siber dan Sandi Negara
+                          [1 - cosine(query_embedding, doc_emb) for doc_emb in
+self.doc_embeddings])
+
+                   query_vector = self.vectorizer.transform([query])
+                   keyword_scores = np.array(
+
+                          (self.tfidf_matrix @
+query_vector.T).todense()).flatten()
+
+                   semantic_scores = (semantic_scores -
+semantic_scores.min()) / \
+
+                          (semantic_scores.max() - semantic_scores.min() + 1e-
+8)
+
+                   keyword_scores = (keyword_scores - keyword_scores.min())
+/\
+
+                          (keyword_scores.max() - keyword_scores.min() + 1e-8)
+                   combined_scores = self.keyword_weight * keyword_scores +
+\
+
+                          self.semantic_weight * semantic_scores
+                   top_indices = np.argsort(combined_scores)[::-1][:top_k]
+                   return [(self.documents[i], combined_scores[i]) for i in
+top_indices]
+
+def retrieve_context(retriever, query, top_n=4, use_smoothllm=True):
+      if not retriever:
+             return "Knowledge base is currently empty."
+      results = retriever.retrieve(
+             query, top_k=top_n, use_smoothllm=use_smoothllm)
+      return "\n".join([doc[0] for doc in results if doc[1] > 0.2]) or
+
+"No relevant information found."
+
+             Gambar 4.7 Inisialisasi Fungsi Retrieving dan Summarizing
+
+Dokumen-dokumen yang telah dipecah menjadi potongan chunk selanjutnya
+memasuki tahap retrieving menggunakan dua metode. Dua metode tersebut adalah
+keyword search dan semantic search. Dua pencarian tersebut dikombinasikan untuk
+memperoleh konteks yang sesuai dengan input yang diberikan user. Algoritma
+untuk keyword search adalah TF-IDF dan model all-MiniLM-L6-v2 digunakan
+untuk semantic search. Hasil dari kombinasi pencarian tersebut adalah konteks
+potongan chunk yang disimpan dalam embedding cache.
+
+IV.1.2.4 Penyiapan Modul Pencegahan SmoothLLM
+Modul tersebut tersusun dari beberapa fungsi dengan tujuan untuk membuat salinan
+dari prompt yang dikirimkan dan selanjutnya melakukan perturbasi pada salinan
+prompt tersebut. Salinan prompt yang dihasilkan mengalami swap, insert, dan
+patch. Hasil dari salinan tersebut diujicobakan pada LLM untuk diperoleh hasilnya.
+Pada akhir proses, agregasi dilakukan dalam bentuk voting berdasarkan klasifikasi
+
+                                                53
+
+                                                                      Politeknik Siber dan Sandi Negara
+respons yang diberikan tiap prompt yang telah dilakukan perturbasi. Gambar 4.8
+menunjukkan beberapa modul pertubasi pada penerapan SmoothLLM.
+
+class SmoothLLM:
+      @staticmethod
+      def random_insert_updated(text, insert_pct):
+             num_inserts = int(len(text) * insert_pct)
+             indices = random.sample(range(len(text)), num_inserts)
+             for idx in sorted(indices, reverse=True):
+                   new_char = random.choice(string.printable)
+                   text = text[:idx + 1] + new_char + text[idx + 1:]
+             return text
+
+      @staticmethod
+      def random_swap_updated(text, swap_pct):
+
+             num_swaps = int(len(text) * swap_pct)
+             indices = random.sample(range(len(text)), num_swaps)
+             for i in indices:
+
+                   new_char = random.choice(string.printable)
+                   text = text[:i] + new_char + text[i+1:]
+             return text
+
+      @staticmethod
+      def random_patch(text, patch_pct):
+
+             patch_len = int(len(text) * patch_pct)
+             start_idx = random.randint(0, len(text)-patch_len)
+             patch_str = ''.join(random.choice(string.printable)
+
+                                              for _ in range(patch_len))
+             text = text[:start_idx] + patch_str +
+text[start_idx+patch_len:]
+             return text
+
+      @staticmethod
+      def adaptive_perturb_pct(text, base_pct, min_len=10,
+max_len=100):
+
+             text_len = len(text)
+             if text_len <= min_len:
+
+                   return base_pct / 2
+             elif text_len >= max_len:
+
+                   return base_pct * 2
+             else:
+
+                   return base_pct
+
+      @staticmethod
+      def smooth(prompts, perturb_pct=0.4, n=3):
+
+             smoothed = []
+             for prompt in prompts:
+
+                                                54
+
+                                                                      Politeknik Siber dan Sandi Negara
+                   perturbed = [prompt]
+                   for _ in range(n - 1):
+
+                          func = random.choice([
+                                 SmoothLLM.random_insert_updated,
+                                 SmoothLLM.random_swap_updated,
+                                 SmoothLLM.random_patch
+
+                          ])
+                          adaptive_pct = SmoothLLM.adaptive_perturb_pct(
+
+                                 prompt, perturb_pct)
+                          perturbed.append(func(prompt, adaptive_pct))
+                   smoothed.append(perturbed)
+             return smoothed
+
+       Gambar 4.8 Fungsi-Fungsi yang Digunakan pada Modul SmoothLLM
+
+IV.1.2.5 Penyusunan Prompt Engineering
+Penyusunan system prompt untuk chatbot memiliki tujuan dalam hal moderasi
+sehingga LLM memiliki behaviour tertentu. Behaviour tersebut dibentuk dari
+penyusunan beberapa instruksi sehingga chatbot dapat memenuhi kebutuhan
+fungsional lokus. Sama seperti dengan dengan pemilihan parameter pada fungsi
+retrieving, penyusunan tersebut diperoleh berdasarkan hasil trial and error selama
+proses pengujian. System prompt yang disusun tersebut juga berpengaruh pada
+penerapan RAG sebagai instruksi sederhana dari penggabungan query dan konteks
+dari hasil hybrid RAG yang sudah diimplementasikan pada Gambar 4.9.
+
+class OpenAIIntegration:
+      @staticmethod
+      def parse_input_with_openai(user_message, retriever):
+             smoothed_queries = SmoothLLM.smooth(
+                   [user_message], perturb_pct=0.4, n=4)[0]
+             retrieved_contexts = []
+             for query in smoothed_queries:
+                   context = retrieve_context(
+                          retriever, query, top_n=4, use_smoothllm=False)
+                   retrieved_contexts.append(context)
+             combined_context = "\n".join(set(retrieved_contexts))
+             system_prompt = (
+                   """
+                   Anda adalah chatbot layanan administrasi kependudukan
+
+Kelurahan Tamanbaru yang memproses penyediaan informasi administrasi
+kependudukan yang berlaku di Kabupaten Banyuwangi mencakup
+syarat/persyaratan, dokumen yang dibutuhkan, alur pengajuan, dan
+lokasi proses pengajuan.
+
+                   Pertanyaan yang diproses hanya pada lingkup penyediaan
+informasi administrasi kependudukan yang berlaku di Kabupaten
+Banyuwangi mencakup syarat/persyaratan, dokumen yang dibutuhkan,
+alur pengajuan, dan lokasi proses pengajuan.
+
+                                                55
+
+                                                                      Politeknik Siber dan Sandi Negara
+                   Berikan jawaban yang jelas dan langsung ke inti tanpa
+informasi tambahan yang tidak perlu.
+
+                   Apabila pertanyaan di luar konteks, jawab dengan respons
+yang ramah, sopan, dan singkat. Misalnya, untuk sapaan, balas dengan
+sapaan singkat.
+
+                   Apabila pertanyaan tidak relevan dengan konteks, jawab
+dengan respons yang ramah, sopan, dan singkat.
+
+                   """
+             )
+             task_prompt = f"""
+
+                   Berikut adalah informasi dari dokumen kebijakan resmi:
+
+                   {combined_context}
+
+                   Jika pengguna memberikan data formulir KTP, ekstrak
+isinya dalam JSON format dengan keys:
+
+                   permohonan, nama, nomor_kk, nik, alamat, pekerjaan, rt,
+rw.
+
+             """
+             try:
+
+                   responses = []
+                   for query in smoothed_queries:
+
+                          response = openai.chat.completions.create(
+                                 model="gpt-4.1",
+                                 messages=[
+                                       {"role": "system", "content":
+
+system_prompt},
+                                       {"role": "user", "content": task_prompt},
+                                       {"role": "user", "content": query}
+
+                                 ],
+                                 temperature=0.0, top_p=1.0, max_tokens=768,
+presence_penalty=0.2, frequency_penalty=0.0
+                          )
+                          responses.append(response.choices[0].message.content
+.strip())
+                   from collections import Counter
+                   result_text = Counter(responses).most_common(1)[0][0]
+             except Exception as e:
+                   logger.error(f" OpenAI API error: {e}")
+                   return None, "Maaf, terjadi kesalahan pada sistem.
+Silakan coba lagi nanti."
+             try:
+                   return json.loads(result_text), None
+             except json.JSONDecodeError:
+                   return None, result_text
+
+ Gambar 4.9 Penggabungan System Prompt, Retrieving Context, dan Mekanisme
+                    Pencegahan terhadap Serangan Prompt Injection
+
+                                                56
+
+                                                                      Politeknik Siber dan Sandi Negara
+IV.1.2.6 Integrasi Layanan API Telegram
+Tahap tersebut melakukan inisiasi pada beberapa fungsi library Telegram-Bot-
+Python. Beberapa fungsi tersebut seperti Start dan Handle Message dibutuhkan
+sebagai bentuk pesan pembuka chatbot kepada user. Fungsi-fungsi tersebut yang
+mengendalikan bagaimana aplikasi chatbot nanti berinteraksi sebagaimana pada
+Gambar 4.10.
+
+async def start(update: Update, context: CallbackContext):
+      welcome_message = (
+             "Selamat datang di Chatbot Asisten Kelurahan Tamanbaru. "
+             "Saya dapat membantu Anda dalam penyediaan informasi layanan
+
+kelurahan "
+             "terkait alur, syarat, dan dokumen penunjang. "
+             "Silakan tanyakan pertanyaan Anda. "
+             "\n\nContoh: "
+             "\n- \"Apa saja syarat untuk membuat KTP baru?\""
+
+      )
+      await update.message.reply_text(welcome_message)
+
+async def handle_message(update: Update, context: CallbackContext):
+      retriever = context.application.bot_data.get("retriever")
+      user_message = update.message.text[:1000]
+      logger.info(f"Received message: {user_message}")
+      try:
+             data, ai_response =
+
+OpenAIIntegration.parse_input_with_openai(
+                   user_message, retriever)
+
+             logger.info(f"Parsed data: {data}")
+             if data:
+
+                   excel_path = ExcelProcessor.process_excel_ktp(data)
+                   if not excel_path:
+
+                          logger.error("Failed to generate Excel file")
+                          await update.message.reply_text(" Gagal memproses
+dokumen Excel.")
+                          return
+                   logger.info(f"Excel file generated: {excel_path}")
+                   pdf_path = ExcelProcessor.convert_to_pdf(excel_path)
+                   if not pdf_path:
+                          logger.error("Failed to convert Excel to PDF")
+                          await update.message.reply_text(" Gagal
+mengonversi Excel ke PDF. Silakan cek log untuk detail.")
+                          try:
+
+                                 os.remove(excel_path)
+                          except Exception as e:
+
+                                 logger.warning(f"Failed to delete Excel file:
+{e}")
+
+                          return
+
+                                                57
+
+                                                                      Politeknik Siber dan Sandi Negara
+                   logger.info(f"PDF file generated: {pdf_path}")
+                   with open(pdf_path, "rb") as doc:
+
+                          await context.bot.send_document(
+                                 chat_id=update.message.chat_id,
+                                 document=doc,
+                                 filename=os.path.basename(pdf_path),
+
+                          )
+                   logger.info("PDF sent successfully")
+                   await update.message.reply_text(" PDF berhasil
+dikirim!")
+                   # Clean up files
+                   try:
+
+                          os.remove(excel_path)
+                          os.remove(pdf_path)
+                          logger.info("Temporary files deleted")
+                   except Exception as e:
+                          logger.warning(f"Failed to delete temporary files:
+{e}")
+             else:
+                   logger.info(f"Sending AI response: {ai_response}")
+                   await update.message.reply_text(ai_response)
+      except Exception as e:
+             logger.error(f"Error in handle_message: {e}")
+             logger.error(traceback.format_exc())
+             await update.message.reply_text(" Terjadi kesalahan saat
+memproses dokumen.")
+
+            Gambar 4.10 Fungsi Start dan Handle Message pada Telegram
+
+                                                58
+
+                                                                      Politeknik Siber dan Sandi Negara
+Setelah keseluruhan integrasi telah dilakukan, chatbot dapat dijalankan secara lokal
+untuk memeriksa bagaimana hasil aplikasi yang telah dibangun. Chatbot tersebut
+dapat diakses melalui aplikasi Telegram hanya jika source code tersebut dijalankan.
+Berikut contoh tampilan aplikasi chatbot pada Gambar 4.11.
+
+             Gambar 4.11 Aplikasi Chatbot yang Dijalankan secara Lokal
+
+                                                59
+
+                                                                      Politeknik Siber dan Sandi Negara
+Pada respons yang diberikan, chatbot menampilkan lingkup pembahasan yang
+hanya dapat ditanyakan oleh user. Selain menampilkan lingkup pembahasan,
+respons yang diberikan juga memberikan contoh pertanyaan yang dapat ditanyakan
+oleh user. Hal tersebut memberi gambaran kepada user contoh pertanyaan yang
+dapat diproses oleh chatbot. Gambar 4.12 menampilkan contoh respons yang
+diberikan ketika user mengirimkan contoh pertanyaan sesuai pada pesan pembuka.
+
+             Gambar 4.12 Contoh Respons yang Diberikan oleh Chatbot
+
+IV.2 CHATBOT DEPLOYMENT
+Pada bagian ini, chatbot yang telah dikembangkan masuk pada tahap
+implementation. Tahap tersebut memuat dua proses, yakni instalasi aplikasi pada
+VPS dan pengujian pengguna. Dua proses tersebut bertujuan untuk memperoleh
+nilai ketergunaan chatbot oleh pihak lokus yang merupakan hasil akhir dari
+penelitian.
+IV.2.1 Implementation
+Tahap tersebut memiliki dua proses utama, yakni instalasi pada VPS dan pengujian
+pengguna melalui CUQ. Instalasi pada VPS mencakup konfigurasi dan penyamaan
+lingkungan virtual (virtual environment) sehingga VPS tersebut memiliki berbagai
+modul dan library seperti pada tahap design. Di lain sisi, pengujjian pengguna
+melalui CUQ dilakukan setelah aplikasi dapat diakses secara remote pada aplikasi
+Telegram. Penyusunan kuesioner dilakukan menggunakan Google Form yang
+dapat dibuat secara open-source.
+
+                                                60
+
+                                                                      Politeknik Siber dan Sandi Negara
+IV.2.1.1 Instalasi pada VPS
+Pada bagian ini, seluruh berkas kode diunggah pada folder VPS. VPS yang
+digunakan memiliki spesifikasi seperti pada Tabel 4.11. Selain itu, instalasi library
+yang dibutuhkan juga dilakukan. Hal tersebut bertujuan untuk mengondisikan
+virtual environment pada tahap implementation sama seperti pada tahap design.
+Beberapa library yang perlu seperti dijelaskan pada Gambar 4.13. Instalasi tersebut
+dilakukan sehingga responden pada lokus dapat mengaksesnya kapan pun dan di
+mana pun karena telah tersedia secara bebas pada Telegram.
+
+              Tabel 4.11 Spesifikasi VPS yang Digunakan
+
+No.  Spesifikasi                     Keterangan
+
+1. Provider        Microsoft Azure
+
+2. Nama VPS        Standard E4ds v5
+
+3. Sistem Operasi  Kali Linux 2025.2
+
+4. vCPUs           4
+
+5. RAM             32 GiB
+
+6. Local storage   150 GiB
+
+7. Processor       Intel Xeon Platinum 8370C (Ice Lake)
+
+langchain==0.3.26
+langchain_community==0.3.27
+numpy==2.3.1
+openai==1.97.1
+openpyxl==3.1.5
+python-dotenv==1.1.1
+python-telegram-bot==22.3
+scikit_learn==1.7.1
+scipy==1.16.0
+sentence_transformers==4.1.0
+pypdf==5.8.0
+
+                      Gambar 4.13 Daftar Library yang Digunakan
+
+IV.2.1.2 Pengujian CUQ
+Tahap ini merupakan pengujian pengguna terkait aplikasi chatbot yang telah
+dibangun dan dirilis. Pengujian tersebut dilakukan menggunakan kuesioner Google
+Form yang berisi 16 pernyataan dengan spesifikasi 8 pernyataan untuk masing-
+masing aspek positif dan negatif tentang chatbot. Pengujian tersebut dilakukan
+secara mandiri oleh pengguna. Pengguna berinteraksi terlebih dahulu dengan
+aplikasi kemudian mengisi kuesioner CUQ. Berikut merupakan contoh kuesioner
+seperti pada Gambar 4.14.
+
+                      61
+
+                                  Politeknik Siber dan Sandi Negara
+                    Gambar 4.14 Kuesioner CUQ pada Google Form
+Masing-masing pernyataan tersebut berisi pilihan jawaban 1 hingga 5. Angka-
+angka tersebut menunjukkan skala jawaban yang dapat dipilih user terkait 16
+pernyataan. Sebagai contoh, pernyataan pertama yang berisi "Karakter chatbot
+realistis dan menarik ketika digunakan." Apabila pengguna setuju dengan
+pernyataan tersebut berdasarkan aplikasi chatbot, pengguna dapat memilih opsi
+angka 4 atau 5 yang secara berturut-turut berarti "Setuju" dan "Sangat setuju." Di
+lain sisi, apabila pengguna tidak setuju terkait pernyataan berikut, pengguna dapat
+memilih opsi angka 1 atau 2 yang secara berturut-turut "Sangat tidak setuju" dan
+"Tidak setuju." Apabila pengguna merasa netral terhadap penyataan tersebut,
+pengguna dapat memilih opsi angka 3.
+Kuesioner tersebut selanjutnya dikirimkan kepada pihak lokus dengan tujuan pihak
+lokus mengisi kuesioner berdasarkan aplikasi chatbot yang telah dibangun.
+Responden yang telah didapat sebanyak 12 orang yang terdiri dari pegawai
+kelurahan serta masyarakat setempat. Berikut hasil respons jawaban yang didapat
+sebagaimana pada Tabel 4.12.
+
+                                                62
+
+                                                                      Politeknik Siber dan Sandi Negara
+           Tabel 4.12 Rekapitulasi Respons Kuesioner CUQ
+
+Responden  Pernyataan                                     Skor CUQ
+
+           1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
+
+1          5 2 5 1 4 2 5 1 5 1 5 2 4 1 5 2 90.6
+
+2          5 4 5 1 5 2 5 2 5 2 5 2 4 4 4 5 75.0
+
+3          4 4 4 4 4 4 4 4 3 3 4 3 4 3 4 4 53.1
+
+4          5 1 5 1 5 1 5 1 5 1 5 1 5 1 5 5 93.8
+
+5          5 5 5 1 5 1 5 1 5 1 5 1 5 1 5 5 87.5
+
+6          5 2 4 1 5 2 4 2 4 5 3 3 4 1 5 2 75.0
+
+7          5 2 4 1 5 2 4 2 4 5 3 3 3 4 5 2 68.8
+
+8          5 2 4 1 5 2 4 2 4 5 3 3 4 1 5 2 75.0
+
+9          4 4 5 2 4 2 5 4 2 1 4 2 3 1 5 2 71.9
+
+10         5 2 5 1 5 1 5 1 4 1 5 1 3 3 5 1 90.6
+
+11         4 1 5 2 5 1 5 2 4 2 4 1 4 1 5 1 89.1
+
+12         4 1 5 1 5 1 4 2 5 1 5 1 5 1 4 1 93.8
+
+           Rata-rata Skor CUQ                             80.3
+
+           63
+
+                                                                 Politeknik Siber dan Sandi Negara
+Tabel 4.12 menunjukkan keseluruhan hasil respons dari pihak lokus. Skor yang
+ditampilkan pada Tabel 4.12 dihitung menggunakan Persamaan 3.1. Rerata yang
+didapat dari keseluruhan skor pada kuesioner tersebut sebesar 80,3. Hal tersebut
+menunjukkan bahwa responden merasa setuju aplikasi chatbot yang digunakan
+memiliki aspek ketergunaan yang baik. Selain dari nilai rata-rata, terdapat dua
+aspek lain yang dapat dianalisis. Karena kuesioner tersebut tersusun dari aspek
+positif dan negatif dari chatbot, berikut dilampirkan rekapitulasi hasil respons pada
+pertanyaan ganjil dan genap pada Gambar 4.15 dan 4.16 secara berturut-turut.
+
+               Rerata Pernyataan Ganjil
+
+5.0
+
+4.8            4.8                                                                                         4.8
+
+     4.7  4.7
+
+4.6                 4.6
+
+4.4
+                                                                                       4.3
+
+4.2                      4.2
+
+                                                                                                      4.0
+4.0
+
+3.8
+
+3.6
+
+     1    3    5    7    9                     11                                           13             15
+
+          Gambar 4.15 Rerata Respons pada Pernyataan Ganjil
+
+Pada Gambar 4.15, rerata jawaban pengguna pada pernyataan ganjil berada di
+angka 4,48. Hal tersebut dapat diartikan bahwa pengguna merasa setuju dengan
+aspek positif yang ada pada chatbot. Dari hasil kuesioner, pernyataan 5 dan 15
+memiliki nilai rerata yang paling tinggi dengan nilai 4,8. Hal tersebut menunjukkan
+responden setuju bahwa aplikasi chatbot mampu menjelaskan ruang lingkup dan
+tujuannya serta mudah untuk digunakan. Beberapa aspek positif lainnya meliputi:
+
+a. realistis dan menarik;
+b. sambutan pada awal komunikasi;
+c. kejelasan tujuan dan ruang lingkup;
+d. kemudahan pengoperasian;
+e. kepahaman terhadap pengguna;
+f. respons yang informatif;
+g. kemampuan penanganan terhadap keluhan; dan
+h. kemudahan penggunaan.
+
+                         64
+
+                                     Politeknik Siber dan Sandi Negara
+                        Rerata Pernyataan Genap
+
+3.00                                                                2.67
+            2.50
+                                            2.33
+2.50
+                                      2.00        1.92  1.83
+2.00                    1.75
+
+1.50              1.42
+
+1.00
+
+0.50
+
+0.00
+
+      2           4     6  8                10    12    14          16
+
+                  Gambar 4.16 Rerata Respons pada Pernyataan Genap
+
+Pada Gambar 4.16, rerata jawaban pengguna pada pernyataan genap berada di
+angka 2.05. Hal tersebut dapat diartikan bahwa pengguna merasa tidak setuju
+dengan aspek negatif yang ada pada chatbot. Gambar 4.16 juga menjelaskan bahwa
+pernyataan 4 memiliki nilai rerata yang paling rendah dengan nilai 1,42. Hal
+tersebut menunjukkan responden tidak setuju bahwa aplikasi chatbot tidak
+bersahabat saat digunakan oleh user. Beberapa aspek negatif lainnya meliputi:
+
+a. terlalu robotik;
+b. terkesan tidak bersahabat;
+c. tidak menunjukkan tujuan penggunaan;
+d. membingungkan;
+e. tidak memahami input pengguna;
+f. respons tidak relevan;
+g. tidak mampu menangani galat; dan
+h. terlalu kompleks.
+
+                              65
+
+                                          Politeknik Siber dan Sandi Negara
+                                      BAB V
+                         SIMPULAN DAN SARAN
+
+V.1 SIMPULAN
+Penelitian tersebut melakukan implementasi LLM dalam bentuk chatbot yang
+berbasis RAG dengan pencegahan SmoothLLM. Chatbot tersebut memungkinkan
+pengguna dapat menanyakan terkait informasi administrasi kependudukan yang
+berlaku di Kelurahan Tamanbaru. Penggunaan dokumen-dokumen yang
+dibutuhkan sebagai pengetahuan untuk penerapan RAG merupakan regulasi yang
+berlaku saat ini dengan format dokumen pdf. Pemanfaatan beberapa layanan seperti
+Telegram, OpenAI, Anthropic, dan Google juga dilibatkan untuk menjawab
+rumusan masalah yang telah diajukan.
+
+Berdasarkan hasil yang telah didapat, simpulan yang dapat diambil dari penelitian
+tersebut adalah:
+a. Pengujian pengguna melalui CUQ menghasilkan nilai rerata respons sebesar
+
+    80,3. Hal tersebut menandai bahwa sebagian besar responder setuju bahwa
+    aplikasi Tamanbaru-bot memiliki aspek ketergunaan dalam lingkup penyediaan
+    informasi administrasi kependudukan Kelurahan Tamanbaru.
+b. Aplikasi chatbot TamanbaruBot dengan LLM gpt-4.1 memiliki performa baik
+    pada framework evaluasi DeepEval dan RAGAS yang dikomparasikan dengan
+    gemini-2.0-flash dan claude-3.5-haiku, yakni sebesar 0,805 dengan perulangan
+    sebanyak 10 kali evaluasi serta similaritas yang paling dekat terhadap unsur
+    input dan output.
+c. Penerapan pencegahan prompt injection menggunakan SmoothLLM memiliki
+    signifikansi sebesar 3,2906%. Persentase tersebut didapat dari 36 prompt yang
+    berhasil mengubah perilaku LLM ketika SmoothLLM belum diterapkan dari
+    total 1094 prompt pada dataset AdvBench.
+
+V.2 SARAN
+Penelitian tersebut memiliki beberapa kekurangan selama melaksanakan tiap tahap
+pada proses pengembangannya. Beberapa saran yang dapat diberikan antara lain:
+a. Penelitian hanya menggunakan model embedding all-MiniLM-L6-v2 dan tidak
+
+    melakukan komparasi terhadap model embedding lain yang berukuran lebih
+    besar dan bersifat open-source, seperti nomic-embed-text, mxbai-embed-large,
+    atau bge-m3. Hal tersebut berpotensi untuk meningkatkan kualitas retrieved
+    context yang nantinya menjadi modal respons LLM sehingga hasil evaluasi
+    menggunakan framework dapat meningkat.
+b. Penelitian tersebut memanfaatkan teknik hybrid RAG dengan basis pencarian
+    pada semantik dan kata kunci. Di lain sisi, teknik RAG memiliki berbagai
+    macam jenis teknik yang dapat diterapkan untuk memperoleh kualitas retrieved
+    context yang lebih baik, seperti penggunaan model reranker pada sistem RAG.
+
+                                                67
+
+                                                                      Politeknik Siber dan Sandi Negara
+                             DAFTAR PUSTAKA
+
+[1] Kepala Dinas Kependudukan dan Pencatatan Sipil Kabupaten Banyuwangi,
+        "Keputusan Kepala Dinas Kependudukan dan Pencatatan Sipil Kabupaten
+        Banyuwangi Nomor: 188/256/KEP/429.113/2020 tentang Pelayanan Dinas
+        Kependudukan dan Pencatatan Sipil Kabupaten Banyuwangi," 2020.
+
+[2] C. van Noordt and G. Misuraca, "Artificial intelligence for the public sector:
+        results of landscaping the use of AI in government across the European
+        Union," Gov Inf Q, vol. 39, no. 3, p. 101714, 2022, doi:
+        https://doi.org/10.1016/j.giq.2022.101714.
+
+[3] A. G. Larsen and A. Følstad, "The impact of chatbots on public service
+        provision: A qualitative interview study with citizens and public service
+        providers," Gov Inf Q, vol. 41, no. 2, Jun. 2024, doi:
+        10.1016/j.giq.2024.101927.
+
+[4] T. B. Chandrawati et al., "A Chatbot-Based Information Service for Housing
+        Consultants," in 2024 IEEE 22nd Student Conference on Research and
+        Development (SCOReD), IEEE, Dec. 2024, pp. 175­179. doi:
+        10.1109/SCOReD64708.2024.10872630.
+
+[5] S. Minaee et al., "Large Language Models: A Survey," Mar. 2025, [Online].
+        Available: http://arxiv.org/abs/2402.06196
+
+[6] A. F. Mohammad, B. Clark, and R. Hegde, "Large Language Model (LLM)
+        & GPT, A Monolithic Study in Generative AI," in Proceedings - 2023
+        Congress in Computer Science, Computer Engineering, and Applied
+        Computing, CSCE 2023, Institute of Electrical and Electronics Engineers
+        Inc., 2023, pp. 383­388. doi: 10.1109/CSCE60160.2023.00068.
+
+[7] Y. Yao, J. Duan, K. Xu, Y. Cai, Z. Sun, and Y. Zhang, "A Survey on Large
+        Language Model (LLM) Security and Privacy: The Good, The Bad, and The
+        Ugly," Jun. 01, 2024, Shandong University. doi: 10.1016/j.hcc.2024.100211.
+
+[8] M. A. K. Raiaan et al., "A Review on Large Language Models:
+        Architectures, Applications, Taxonomies, Open Issues and Challenges,"
+        IEEE Access, vol. 12, pp. 26839­26874, 2024, doi:
+        10.1109/ACCESS.2024.3365742.
+
+[9] J. P. Nambiar and A. G. Sreedevi, "Orchestrating Consensus Strategies to
+        Counter AI Hallucination in Generative Chatbots," in Proceedings - 2023
+        IEEE International Conference on Cloud Computing in Emerging Markets,
+        CCEM 2023, Institute of Electrical and Electronics Engineers Inc., 2023, pp.
+        148­152. doi: 10.1109/CCEM60455.2023.00030.
+
+                                                69
+
+                                                                      Politeknik Siber dan Sandi Negara
+[10] Z. Ji et al., "Survey of Hallucination in Natural Language Generation," Feb.
+
+2022, doi: 10.1145/3571730.
+
+[11] N. Maleki, B. Padmanabhan, and K. Dutta, "AI Hallucinations: A Misnomer
+
+Worth Clarifying," in Proceedings - 2024 IEEE Conference on Artificial
+
+Intelligence, CAI 2024, Institute of Electrical and Electronics Engineers Inc.,
+
+2024, pp. 133­138. doi: 10.1109/CAI59869.2024.00033.
+
+[12] P. Lewis et al., "Retrieval-Augmented Generation for Knowledge-Intensive
+
+NLP  Tasks,"              May       2020,         [Online].          Available:
+
+http://arxiv.org/abs/2005.11401
+
+[13] Y. Gao et al., "Retrieval-Augmented Generation for Large Language
+
+Models: A Survey," Dec. 2023, [Online]. Available:
+
+http://arxiv.org/abs/2312.10997
+
+[14] R. Akkiraju et al., "FACTS About Building Retrieval Augmented
+
+Generation-based Chatbots," Jul. 2024, [Online]. Available:
+
+http://arxiv.org/abs/2407.07858
+
+[15] A. M Nair, N. George Jacob, G. V, M. V. Krishna Rao, and M. S Nair, "A
+
+Survey On Automation of Local Government Services using Retrieval-
+
+Augmented  Generation,"             Dec.          19,         2024.  doi:
+
+10.20944/preprints202412.1644.v1.
+
+[16] "Models | OpenRouter." Accessed: Jul. 06, 2025. [Online]. Available:
+
+https://openrouter.ai/models?order=top-weekly
+
+[17] "Trendshift - Trending Repository Details." Accessed: Sep. 07, 2025.
+
+[Online]. Available: https://trendshift.io/repositories/5917
+
+[18] S. Es, J. James, L. Espinosa-Anke, S. Schockaert, and E. Gradients,
+
+"RAGAS: Automated Evaluation of Retrieval Augmented Generation."
+
+[Online]. Available: https://platform.openai.com
+
+[19] "OWASP Top 10 for LLM Applications 2025," 2024.
+
+[20] W. W. Sejati and G. Girinoto, "Implementasi Layanan Informasi Politeknik
+
+Siber dan Sandi Negara Berbasis Chatbot Menggunakan Model GPT-3.5
+
+dengan Metode Prompt Engineering yang Dilengkapi Pencegahan Prompt
+
+Injection Attack," 2024.
+
+[21] V. Benjamin et al., "Systematically Analyzing Prompt Injection
+
+Vulnerabilities in Diverse LLM Architectures."
+
+[22] X. Ma et al., "Safety at Scale: A Comprehensive Survey of Large Model
+
+Safety," Feb. 2025, [Online]. Available: http://arxiv.org/abs/2502.05206
+
+[23] A. Robey, E. Wong, H. Hassani, and G. J. Pappas, "SmoothLLM: Defending
+
+Large Language Models Against Jailbreaking Attacks," Jun. 2024, [Online].
+
+Available: http://arxiv.org/abs/2310.03684
+
+[24] A. Gupta, D. Hathwar, and A. Vijayakumar, "Introduction to AI Chatbots."
+
+[Online]. Available: www.ijert.org
+
+[25] S. Kumar, A. Chauhan, N. Kandhari, A. Singh, S. Mishra, and N. Singla,
+
+"Chatbots: A Comprehensive Review of Functionality and Development,"
+
+                                 70
+
+                                             Politeknik Siber dan Sandi Negara
+International Journal of Scientific Research in Engineering and
+
+Management, 2024, doi: 10.55041/IJSREM30316.
+
+[26] I. Pujiono, I. M. Agtyaputra, and Y. Ruldeviyani, "IMPLEMENTING
+
+RETRIEVAL-AUGMENTED GENERATION AND VECTOR
+
+DATABASES FOR CHATBOTS IN PUBLIC SERVICES AGENCIES
+
+CONTEXT," JITK (Jurnal Ilmu Pengetahuan dan Teknologi Komputer),
+
+vol. 10, no. 1, pp. 216­223, Aug. 2024, doi: 10.33480/jitk.v10i1.5572.
+
+[27] T. Chen, M. Gascó-Hernandez, and M. Esteve, "The Adoption and
+
+Implementation of Artificial Intelligence Chatbots in Public Organizations:
+
+Evidence from U.S. State Governments."
+
+[28] S. Holmes, A. Moorhead, R. Bond, H. Zheng, V. Coates, and M. McTear,
+
+"Usability testing of a healthcare chatbot: Can we use conventional methods
+
+to assess conversational user interfaces?," in ECCE 2019 - Proceedings of
+
+the 31st European Conference on Cognitive Ergonomics: "`Design for
+
+Cognition,'" Association for Computing Machinery, Inc, Sep. 2019, pp.
+
+207­214. doi: 10.1145/3335082.3335094.
+
+[29] S. Holmes and R. Bond, "The Chatbot Usability Questionnaire (CUQ)."
+
+Accessed:  Feb.            17,    2025.              [Online].  Available:
+
+https://www.ulster.ac.uk/research/topic/computer-science/artificial-
+
+intelligence/projects/cuq
+
+[30] "Chatbot Usability Questionnaire Usage Guide."
+
+[31] C. E. Noviyanti, H. B. Santoso, and P. O. Hadi Putra, "A Cross-Cultural
+
+Adaptation of Chatbot Usability Questionnaire (CUQ): Indonesian Version,"
+
+in ICOIACT 2021 - 4th International Conference on Information and
+
+Communications Technology: The Role of AI in Health and Social
+
+Revolution in Turbulence Era, Institute of Electrical and Electronics
+
+Engineers  Inc.,           2021,         pp.         248­251.           doi:
+
+10.1109/ICOIACT53268.2021.9563926.
+
+[32] Haque M A, "LLMs: A Game-Changer for Software Engineers?," 2024.
+
+[33] S. Barbon et al., "Are Large Language Models the New Interface for Data
+
+Pipelines?," in Proceedings of the International Workshop on Big Data in
+
+Emergent Distributed Environments, BIDEDE 2024, in conjunction with the
+
+2024 ACM SIGMOD/PODS Conference, Association for Computing
+
+Machinery, Inc, Jun. 2024. doi: 10.1145/3663741.3664785.
+
+[34] G. Tyen, A. Caines, and P. Buttery, "LLM chatbots as a language practice
+
+tool: a user study."
+
+[35] "Ollama." Accessed: Feb. 02, 2025. [Online]. Available: https://ollama.com/
+
+[36] Q. Zhu and J. Luo, "Generative Pre-Trained Transformer for Design Concept
+
+Generation: An Exploration," in Proceedings of the Design Society,
+
+Cambridge University Press, May 2022, pp. 1825­1834. doi:
+
+10.1017/pds.2022.185.
+
+                                71
+
+                                            Politeknik Siber dan Sandi Negara
+[37] G. Yenduri et al., "Generative Pre-trained Transformer: A Comprehensive
+        Review on Enabling Technologies, Potential Applications, Emerging
+        Challenges, and Future Directions," May 2023, [Online]. Available:
+        http://arxiv.org/abs/2305.10435
+
+[38] M. Al-Amin et al., "History of generative Artificial Intelligence (AI)
+        chatbots: past, present, and future development."
+
+[39] "OpenAI Newsroom | Product | OpenAI." Accessed: Jul. 17, 2025. [Online].
+        Available: https://openai.com/news/product-releases/
+
+[40] "Models - OpenAI API." Accessed: Jul. 07, 2025. [Online]. Available:
+        https://platform.openai.com/docs/models
+
+[41] "Gemini models | Gemini API | Google AI for Developers." Accessed: Jul.
+        07, 2025. [Online]. Available: https://ai.google.dev/gemini-api/docs/models
+
+[42] "News | xAI." Accessed: Jul. 07, 2025. [Online]. Available: https://x.ai/news
+[43] Y. Huang and J. Huang, "The Survey on Retrieval-Augmented Text
+
+        Generation for Large Language Models," Apr. 2024, [Online]. Available:
+        http://arxiv.org/abs/2404.10981
+[44] V. Gummadi, P. Udayaraju, V. R. Sarabu, C. Ravulu, D. R. Seelam, and S.
+        Venkataramana, "Enhancing Communication and Data Transmission
+        Security in RAG Using Large Language Models," in 4th International
+        Conference on Sustainable Expert Systems, ICSES 2024 - Proceedings,
+        Institute of Electrical and Electronics Engineers Inc., 2024, pp. 612­617. doi:
+        10.1109/ICSES63445.2024.10763024.
+[45] K. Sawarkar, A. Mangal, and S. R. Solanki, "Blended RAG: Improving RAG
+        (Retriever-Augmented Generation) Accuracy with Semantic Search and
+        Hybrid Query-Based Retrievers," Aug. 2024, doi:
+        10.1109/MIPR62202.2024.00031.
+[46] F. Wei, R. Neary, H. Qin, Q. Mao, and J. Zhang, "Empirical Evaluation of
+        Embedding Models in the Context of Text Classification in Document
+        Review in Construction Delay Disputes," in Proceedings - 2024 IEEE
+        International Conference on Big Data, BigData 2024, Institute of Electrical
+        and Electronics Engineers Inc., 2024, pp. 4763­4767. doi:
+        10.1109/BigData62323.2024.10825997.
+[47] A. Mishra and S. Vishwakarma, "Analysis of TF-IDF Model and its Variant
+        for Document Retrieval," in Proceedings - 2015 International Conference
+        on Computational Intelligence and Communication Networks, CICN 2015,
+        Institute of Electrical and Electronics Engineers Inc., Aug. 2016, pp. 772­
+        776. doi: 10.1109/CICN.2015.157.
+[48] "Embedding models · Ollama Search." Accessed: Sep. 07, 2025. [Online].
+        Available: https://ollama.com/search?c=embedding
+[49] A. I. Kadhim, "Term Weighting for Feature Extraction on Twitter: A
+        Comparison Between BM25 and TF-IDF," in 2019 - International
+        Conference on Advanced Science and Engineering (ICOASE), IEEE, 2019.
+
+                                                72
+
+                                                                      Politeknik Siber dan Sandi Negara
+[50] F. Öberg, "Automating the Assessment of Retrieval-augmented Generation
+        Responses Automatisera bedömning av svar från RAG-modeller."
+
+[51] "What is the RAG Triad? - TruEra." Accessed: Jul. 07, 2025. [Online].
+        Available: https://truera.com/ai-quality-education/generative-ai-rags/what-
+        is-the-rag-triad/
+
+[52] "Quick Introduction | DeepEval - The Open-Source LLM Evaluation
+        Framework." Accessed: Jul. 06, 2025. [Online]. Available:
+        https://deepeval.com/docs/getting-started
+
+[53] S. Handa, S. Pal, and J. Ambasana, "Evaluating Effectiveness of Training
+        Students in Prompt Engineering for Generative AI Chatbots," 2023, doi:
+        10.5281/zenodo.14014143.
+
+[54] B. Chen, Z. Zhang, N. Langrené, and S. Zhu, "Unleashing the potential of
+        prompt engineering in Large Language Models: a comprehensive review,"
+        Oct. 2023, [Online]. Available: http://arxiv.org/abs/2310.14735
+
+[55] S. S. Kumar, M. L. Cummings, and A. Stimpson, "Strengthening LLM Trust
+        Boundaries: A Survey of Prompt Injection Attacks Surender Suresh Kumar
+        Dr. M.L. Cummings Dr. Alexander Stimpson," in 2024 IEEE 4th
+        International Conference on Human-Machine Systems, ICHMS 2024,
+        Institute of Electrical and Electronics Engineers Inc., 2024. doi:
+        10.1109/ICHMS59971.2024.10555871.
+
+[56] "LLM Prompt Injection | MITRE ATLASTM." Accessed: Feb. 07, 2025.
+        [Online]. Available: https://atlas.mitre.org/techniques/AML.T0051
+
+[57] Y. Chen, H. Li, Z. Zheng, Y. Song, D. Wu, and B. Hooi, "Defense Against
+        Prompt Injection Attack by Leveraging Attack Techniques," Nov. 2024,
+        [Online]. Available: http://arxiv.org/abs/2411.00459
+
+[58] A. Dennis, B. H. Wixom, and R. M. Roth, "EIGHTH EDITION Systems
+        Analysis and Design."
+
+                                                73
+
+                                                                      Politeknik Siber dan Sandi Negara
+LAMPIRAN
+
+        75
+    LAMPIRAN 1
+Nota Dinas Penelitian
+
+            76
+    LAMPIRAN 2
+Transkrip Wawancara
+
+            77
+78
+79
+                      DAFTAR RIWAYAT HIDUP
+
+Nama                  : Rizal Abie Giffari
+Tempat/tanggal lahir
+Riwayat pendidikan    : Banyuwangi / 11 Agustus 2001
+
+                      : 1. TK Aisyiah Banyuwangi      2008
+
+                      2. SD 1 Muhammadiyah Banyuwangi 2014
+
+                      3. SMPN 1 Banyuwangi            2017
+
+                      4. SMAN 1 Glagah                2020
+
+                      81
+

@@ -1,5 +1,6 @@
 """Mitigation Advisor Agent — Agentic RAG dengan sitasi terverifikasi."""
 import logging
+import re
 
 from openai import AsyncOpenAI, APITimeoutError
 
@@ -11,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 RETRIEVAL_SCORE_THRESHOLD = 0.3
 MAX_ITERATIONS = 3
-TOP_K_RETRIEVAL = 20
+TOP_K_RETRIEVAL = 30
 TOP_K_RERANK = 5
 _MIN_SOURCE_MATCH_LENGTH = 5
 
@@ -87,6 +88,8 @@ def _validate_citations(steps: list[dict], chunks: list[dict]) -> list[dict]:
     if not chunks:
         return []
 
+    num_chunks = len(chunks)
+
     # Collect all available source references from chunks
     available_sources = set()
     for chunk in chunks:
@@ -105,8 +108,12 @@ def _validate_citations(steps: list[dict], chunks: list[dict]) -> list[dict]:
             logger.warning("Langkah '%s' tidak memiliki sitasi, dihapus.", step.get("action", "")[:50])
             continue
 
-        # Accept if any retrieved source name appears in the claim (forward direction only)
-        has_match = any(
+        # Accept [N] numeric reference pointing to a valid chunk (e.g. "[1] Training and Awareness")
+        num_refs = re.findall(r'\[(\d+)\]', source_claim)
+        has_valid_num_ref = any(1 <= int(n) <= num_chunks for n in num_refs)
+
+        # Accept if any retrieved source name appears in the claim (forward direction)
+        has_source_match = any(
             avail_word in source_claim
             for avail_word in available_sources
             if len(avail_word) >= _MIN_SOURCE_MATCH_LENGTH
@@ -117,7 +124,7 @@ def _validate_citations(steps: list[dict], chunks: list[dict]) -> list[dict]:
             for kw in ["nist", "mitre", "att&ck", "iso 270", "bssn", "kominfo", "peraturan"]
         )
 
-        if has_match or is_known_standard:
+        if has_valid_num_ref or has_source_match or is_known_standard:
             valid_steps.append(step)
         else:
             logger.warning("Sitasi tidak terverifikasi: '%s', langkah dihapus.", step.get("source", ""))

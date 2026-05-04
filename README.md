@@ -56,7 +56,7 @@ Pegawai Kementan
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/agryzharfa/cybersec-helpdesk.git
+git clone https://github.com/gr0zhx/pusdatin-help.git
 cd cybersec-helpdesk
 
 # 2. Buat file environment
@@ -92,37 +92,6 @@ cp .env.example .env
 # Edit .env
 ./scripts/setup.sh
 docker compose up
-```
-
-## Struktur Proyek
-
-```
-cybersec-helpdesk/
-├── CLAUDE.md              # Konteks untuk Claude Code
-├── README.md              # File ini
-├── docs/
-│   ├── PRD.md             # Product Requirements
-│   ├── MASTERPLAN.md      # Arsitektur & desain teknis
-│   ├── PHASE_GUIDE.md     # Fase implementasi & checkpoint
-│   └── ARCHITECTURE_DIAGRAMS.md
-├── app/
-│   ├── main.py            # Entry FastAPI
-│   ├── config.py          # Konfigurasi
-│   ├── agents/            # Multi-agent (LangGraph)
-│   ├── security/          # Guardrails & keamanan
-│   ├── rag/               # Pipeline RAG
-│   ├── database/          # Models & repository
-│   ├── telegram/          # Bot Telegram
-│   └── utils/             # Logger, audit
-├── knowledge_base/
-│   └── documents/         # PDF sumber (NIST, MITRE ATT&CK)
-├── config/
-│   └── prompts/           # Template prompt agen
-├── tests/
-│   └── evaluation/        # Skenario evaluasi
-├── scripts/               # Script utilitas
-├── docker-compose.yml
-└── requirements.txt
 ```
 
 ## Penggunaan

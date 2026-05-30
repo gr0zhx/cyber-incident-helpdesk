@@ -72,7 +72,7 @@ class ChatService:
         graph: Any,
         orchestrator: Any,
         db: Any = None,
-        timeout: float = 30.0,
+        timeout: float = 60.0,
     ) -> dict:
         """Invoke pipeline dan return dict hasil untuk template."""
         history = self.get_history(session_id)
@@ -133,7 +133,42 @@ class ChatService:
         except asyncio.TimeoutError:
             logger.warning("Pipeline timeout session=%s", session_id[:8])
             self._save_history(session_id, history)
-            return {"error": True, "trace_id": session_id[:8]}
+            bot_text = (
+                "Maaf, sistem sedang sibuk memproses laporan Anda. "
+                "Silakan coba kirim ulang pesan dalam beberapa saat lagi."
+            )
+            history.append({"role": "assistant", "content": bot_text, "ts": ts})
+            self._save_history(session_id, history)
+            return {
+                "user_text": text,
+                "bot_text": bot_text,
+                "requires_clarification": False,
+                "ticket_id": None,
+                "incident_type": "",
+                "severity": "",
+                "escalation_level": "",
+                "confidence_score": 0.0,
+                "error": False,
+            }
+        except Exception as exc:
+            logger.exception("Pipeline error session=%s: %s", session_id[:8], exc)
+            bot_text = (
+                "Maaf, sistem mengalami kendala saat memproses laporan Anda. "
+                "Silakan coba lagi sebentar lagi."
+            )
+            history.append({"role": "assistant", "content": bot_text, "ts": ts})
+            self._save_history(session_id, history)
+            return {
+                "user_text": text,
+                "bot_text": bot_text,
+                "requires_clarification": False,
+                "ticket_id": None,
+                "incident_type": "",
+                "severity": "",
+                "escalation_level": "",
+                "confidence_score": 0.0,
+                "error": False,
+            }
 
         requires_clarification: bool = result.get("requires_clarification", False)
         ticket_id: Optional[str] = result.get("ticket_id") or None

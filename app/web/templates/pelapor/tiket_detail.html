@@ -215,7 +215,7 @@
   <nav class="tk-topbar">
     <div class="tk-topbar-brand">
       <div class="dot">🛡</div>
-      Pusdatin CSIRT
+      Tim Keamanan Siber
     </div>
     <a href="javascript:window.close();" class="tk-back"
        onclick="if(window.opener) { window.close(); } else { window.history.back(); } return false;">
@@ -326,7 +326,7 @@
           <div class="tl-item">
             <div class="tl-dot done">✓</div>
             <div class="tl-text">
-              <strong>Notifikasi CSIRT Terkirim</strong>
+              <strong>Notifikasi Terkirim</strong>
               <span>Tim keamanan siber telah diberitahu</span>
             </div>
           </div>
@@ -335,7 +335,7 @@
               {% if ticket.status in ['IN_PROGRESS','RESOLVED','CLOSED'] %}✓{% else %}⏳{% endif %}
             </div>
             <div class="tl-text">
-              <strong>Review oleh Analis CSIRT</strong>
+              <strong>Review oleh Analis </strong>
               <span>{% if ticket.status == 'PENDING_REVIEW' %}Menunggu analis{% elif ticket.reviewed_at %}{{ ticket.reviewed_at.strftime("%d %b %Y pukul %H:%M WIB") }}{% else %}Sedang diproses{% endif %}</span>
             </div>
           </div>
@@ -398,12 +398,12 @@
           {% elif stripped.startswith('Panduan umum:') %}
             <div style="margin-top:16px;padding:14px;background:#eff6ff;border-radius:8px;border-left:3px solid #3b82f6;">
               <p style="font-size:12px;font-weight:700;color:#1d4ed8;margin-bottom:4px;">PANDUAN UMUM</p>
-              <p style="font-size:13px;color:#1e3a5f;line-height:1.65;">{{ stripped[len('Panduan umum:'):].strip() }}</p>
+              <p style="font-size:13px;color:#1e3a5f;line-height:1.65;">{{ stripped.replace('Panduan umum:', '', 1).strip() }}</p>
             </div>
           {% elif stripped.startswith('Catatan eskalasi:') %}
             <div style="margin-top:12px;padding:14px;background:#fff7ed;border-radius:8px;border-left:3px solid #f59e0b;">
               <p style="font-size:12px;font-weight:700;color:#b45309;margin-bottom:4px;">CATATAN ESKALASI</p>
-              <p style="font-size:13px;color:#78350f;line-height:1.65;">{{ stripped[len('Catatan eskalasi:'):].strip() }}</p>
+              <p style="font-size:13px;color:#78350f;line-height:1.65;">{{ stripped.replace('Catatan eskalasi:', '', 1).strip() }}</p>
             </div>
           {% endif %}
         {% endfor %}
@@ -435,7 +435,7 @@
           <div style="flex:1;">
             <p style="font-weight:700;font-size:16px;color:#f8fafc;margin-bottom:4px;">Butuh bantuan lebih lanjut?</p>
             <p style="font-size:13px;color:#94a3b8;line-height:1.6;">
-              Hubungi tim CSIRT Pusdatin secara langsung untuk penanganan lebih lanjut atau jika insiden memerlukan respons segera.
+              Hubungi Tim Keamanan Siber Pusdatin secara langsung untuk penanganan lebih lanjut atau jika insiden memerlukan respons segera.
             </p>
           </div>
           <div style="display:flex;flex-direction:column;gap:8px;min-width:180px;">

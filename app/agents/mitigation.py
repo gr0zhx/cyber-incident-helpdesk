@@ -96,10 +96,13 @@ def _validate_citations(steps: list[dict], chunks: list[dict]) -> list[dict]:
         meta = chunk.get("metadata", {})
         source = meta.get("source", "")
         section = meta.get("section", "")
-        if source:
-            available_sources.add(source.lower())
-        if section:
-            available_sources.add(section.lower())
+        doc_title = meta.get("doc_title", "")
+        section_header = meta.get("section_header", "")
+        source_framework = meta.get("source_framework", "")
+        external_id = meta.get("external_id", "")
+        for value in (source, section, doc_title, section_header, source_framework, external_id):
+            if value:
+                available_sources.add(str(value).lower())
 
     valid_steps = []
     for step in steps:

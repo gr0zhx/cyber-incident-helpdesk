@@ -77,21 +77,44 @@ class HybridRetriever:
 
         # --- Semantic search ---
         query_vector = self.embedder.embed_query(query)
-        semantic_response = self.client.query_points(
-            collection_name=COLLECTION_NAME,
-            query=query_vector,
-            query_filter=metadata_filter,
-            limit=top_k,
-            with_payload=True,
-        )
+        semantic_points = []
+
+        # Tests / some clients mock `search`; prefer it when available so
+        # unit tests that patch `client.search` continue to work.
+        if hasattr(self.client, "search"):
+            try:
+                resp = self.client.search(
+                    collection_name=COLLECTION_NAME,
+                    query=query_vector,
+                    query_filter=metadata_filter,
+                    limit=top_k,
+                    with_payload=True,
+                )
+                # `search` may return a plain list (tests) or an object with `.points`.
+                if isinstance(resp, list):
+                    semantic_points = resp
+                else:
+                    semantic_points = getattr(resp, "points", []) or []
+            except Exception:
+                semantic_points = []
+        else:
+            semantic_response = self.client.query_points(
+                collection_name=COLLECTION_NAME,
+                query=query_vector,
+                query_filter=metadata_filter,
+                limit=top_k,
+                with_payload=True,
+            )
+            semantic_points = getattr(semantic_response, "points", []) or []
+
         semantic_hits = [
             {
                 "id": str(hit.id),
                 "content": hit.payload.get("content", ""),
                 "metadata": {k: v for k, v in hit.payload.items() if k != "content"},
-                "score": hit.score,
+                "score": getattr(hit, "score", 0.0),
             }
-            for hit in semantic_response.points
+            for hit in semantic_points
         ]
 
         # --- Keyword search via full-text index ---

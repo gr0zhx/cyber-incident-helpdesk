@@ -1,0 +1,302 @@
+{
+  "timestamp": "2026-05-25T05:08:46.747922+00:00",
+  "total_pairs": 20,
+  "valid_pairs": 20,
+  "metrics": {
+    "context_relevance": 0.165,
+    "answer_relevance": 0.23,
+    "faithfulness": 0.0
+  },
+  "targets": {
+    "context_relevance": 0.75,
+    "answer_relevance": 0.8,
+    "faithfulness": 0.85
+  },
+  "targets_met": {
+    "context_relevance": false,
+    "answer_relevance": false,
+    "faithfulness": false
+  },
+  "details": [
+    {
+      "id": "QA-001",
+      "question": "Apa langkah pertama yang harus dilakukan saat menerima email phishing?",
+      "answer_preview": "Sistem tidak menemukan panduan SOP yang relevan untuk jenis insiden ini. Silakan hubungi tim CSIRT secara langsung untuk penanganan lebih lanjut.",
+      "chunks_retrieved": 0,
+      "context_relevance": 0.0,
+      "answer_relevance": 0.2,
+      "faithfulness": 0.0,
+      "reasons": {
+        "context_relevance": "Konteks tidak mengandung informasi yang relevan atau terkait dengan langkah pertama yang harus dilakukan saat menerima email phishing.",
+        "answer_relevance": "Jawaban tidak langsung menjawab pertanyaan tentang langkah pertama yang harus diambil saat menerima email phishing, dan hanya menyarankan untuk menghubungi tim CSIRT.",
+        "faithfulness": "Jawaban sistem tidak didukung oleh konteks yang ada, karena tidak ada informasi yang relevan untuk menilai konsistensi atau keakuratan klaim."
+      }
+    },
+    {
+      "id": "QA-002",
+      "question": "Bagaimana cara mengisolasi sistem yang terinfeksi ransomware?",
+      "answer_preview": "Sistem tidak menemukan panduan SOP yang relevan untuk jenis insiden ini. Silakan hubungi tim CSIRT secara langsung untuk penanganan lebih lanjut.",
+      "chunks_retrieved": 0,
+      "context_relevance": 0.0,
+      "answer_relevance": 0.2,
+      "faithfulness": 0.0,
+      "reasons": {
+        "context_relevance": "Konteks yang diambil tidak mengandung informasi apapun yang relevan untuk menjawab pertanyaan tentang cara mengisolasi sistem yang terinfeksi ransomware.",
+        "answer_relevance": "Jawaban tidak memberikan informasi langsung tentang cara mengisolasi sistem yang terinfeksi ransomware, hanya menyarankan untuk menghubungi tim CSIRT.",
+        "faithfulness": "Jawaban sistem tidak didukung oleh konteks yang ada, karena tidak ada informasi yang relevan untuk menilai situasi atau memberikan panduan."
+      }
+    },
+    {
+      "id": "QA-003",
+      "question": "Apa yang harus dilakukan jika menemukan data sensitif bocor ke publik?",
+      "answer_preview": "Sistem tidak menemukan panduan SOP yang relevan untuk jenis insiden ini. Silakan hubungi tim CSIRT secara langsung untuk penanganan lebih lanjut.",
+      "chunks_retrieved": 0,
+      "context_relevance": 0.0,
+      "answer_relevance": 0.3,
+      "faithfulness": 0.0,
+      "reasons": {
+        "context_relevance": "Konteks tidak mengandung informasi apapun yang berkaitan dengan langkah-langkah yang harus diambil jika data sensitif bocor.",
+        "answer_relevance": "Jawaban tidak memberikan langkah-langkah konkret untuk menangani kebocoran data sensitif, hanya menyarankan untuk menghubungi tim CSIRT.",
+        "faithfulness": "Jawaban sistem tidak konsisten dengan konteks yang diambil, karena tidak ada konteks yang relevan untuk mendukung klaim tentang SOP atau tim CSIRT."
+      }
+    },
+    {
+      "id": "QA-004",
+      "question": "Bagaimana cara mendeteksi serangan DDoS pada server?",
+      "answer_preview": "Sistem tidak menemukan panduan SOP yang relevan untuk jenis insiden ini. Silakan hubungi tim CSIRT secara langsung untuk penanganan lebih lanjut.",
+      "chunks_retrieved": 0,
+      "context_relevance": 0.0,
+      "answer_relevance": 0.2,
+      "faithfulness": 0.0,
+      "reasons": {
+        "context_relevance": "Konteks yang diambil tidak mengandung informasi apapun yang relevan untuk menjawab pertanyaan tentang cara mendeteksi serangan DDoS pada server.",
+        "answer_relevance": "Jawaban tidak memberikan informasi tentang cara mendeteksi serangan DDoS, hanya menyarankan untuk menghubungi tim CSIRT.",
+        "faithfulness": "Jawaban sistem tidak konsisten dengan konteks karena tidak ada informasi yang relevan atau panduan SOP yang disebutkan dalam konteks."
+      }
+    },
+    {
+      "id": "QA-005",
+      "question": "Apa langkah mitigasi awal untuk serangan malware pada workstation?",
+      "answer_preview": "Sistem tidak menemukan panduan SOP yang relevan untuk jenis insiden ini. Silakan hubungi tim CSIRT secara langsung untuk penanganan lebih lanjut.",
+      "chunks_retrieved": 0,
+      "context_relevance": 0.0,
+      "answer_relevance": 0.2,
+      "faithfulness": 0.0,
+      "reasons": {
+        "context_relevance": "Konteks tidak mengandung informasi yang relevan atau terkait dengan langkah mitigasi awal untuk serangan malware pada workstation.",
+        "answer_relevance": "Jawaban tidak memberikan langkah mitigasi yang spesifik untuk serangan malware, hanya menyarankan untuk menghubungi tim CSIRT.",
+        "faithfulness": "Jawaban sistem tidak konsisten dengan konteks karena tidak ada informasi yang relevan untuk mendukung klaim tentang tidak adanya panduan SOP."
+      }
+    },
+    {
+      "id": "QA-006",
+      "question": "Bagaimana prosedur response saat akun admin dikompromis?",
+      "answer_preview": "Sistem tidak menemukan panduan SOP yang relevan untuk jenis insiden ini. Silakan hubungi tim CSIRT secara langsung untuk penanganan lebih lanjut.",
+      "chunks_retrieved": 0,
+      "context_relevance": 0.0,
+      "answer_relevance": 0.2,
+      "faithfulness": 0.0,
+      "reasons": {
+        "context_relevance": "Konteks yang diambil tidak mengandung informasi apapun yang relevan untuk menjawab pertanyaan tentang prosedur response saat akun admin dikompromis.",
+        "answer_relevance": "Jawaban tidak memberikan prosedur yang jelas untuk menangani akun admin yang dikompromis, hanya menyarankan untuk menghubungi tim CSIRT.",
+        "faithfulness": "Jawaban sistem tidak konsisten dengan konteks yang diambil, karena tidak ada konteks yang relevan untuk mendukung klaim tentang tidak adanya panduan SOP."
+      }
+    },
+    {
+      "id": "QA-007",
+      "question": "Apa indikator kompromi (IoC) yang umum pada serangan phishing?",
+      "answer_preview": "Sistem tidak menemukan panduan SOP yang relevan untuk jenis insiden ini. Silakan hubungi tim CSIRT secara langsung untuk penanganan lebih lanjut.",
+      "chunks_retrieved": 0,
+      "context_relevance": 0.0,
+      "answer_relevance": 0.1,
+      "faithfulness": 0.0,
+      "reasons": {
+        "context_relevance": "Konteks yang diberikan tidak mengandung informasi apapun yang relevan untuk menjawab pertanyaan tentang indikator kompromi (IoC) pada serangan phishing.",
+        "answer_relevance": "Jawaban tidak menjawab pertanyaan tentang indikator kompromi (IoC) pada serangan phishing dan hanya menyarankan untuk menghubungi tim CSIRT.",
+        "faithfulness": "Jawaban sistem tidak konsisten dengan konteks yang diambil, karena tidak ada konteks yang relevan untuk mendukung klaim tentang tidak adanya panduan SOP."
+      }
+    },
+    {
+      "id": "QA-008",
+      "question": "Bagaimana cara memulihkan sistem setelah serangan ransomware?",
+      "answer_preview": "Sistem tidak menemukan panduan SOP yang relevan untuk jenis insiden ini. Silakan hubungi tim CSIRT secara langsung untuk penanganan lebih lanjut.",
+      "chunks_retrieved": 0,
+      "context_relevance": 0.0,
+      "answer_relevance": 0.2,
+      "faithfulness": 0.0,
+      "reasons": {
+        "context_relevance": "Konteks yang diambil tidak mengandung informasi apapun yang relevan untuk menjawab pertanyaan tentang pemulihan sistem setelah serangan ransomware.",
+        "answer_relevance": "Jawaban tidak memberikan informasi atau langkah-langkah konkret untuk memulihkan sistem setelah serangan ransomware, hanya menyarankan untuk menghubungi tim CSIRT.",
+        "faithfulness": "Jawaban sistem tidak konsisten dengan konteks yang diambil, karena tidak ada konteks yang relevan untuk mendukung klaim tentang SOP atau tim CSIRT."
+      }
+    },
+    {
+      "id": "QA-009",
+      "question": "Apa perbedaan antara incident response dan disaster recovery?",
+      "answer_preview": "Sistem tidak menemukan panduan SOP yang relevan untuk jenis insiden ini. Silakan hubungi tim CSIRT secara langsung untuk penanganan lebih lanjut.",
+      "chunks_retrieved": 0,
+      "context_relevance": 0.0,
+      "answer_relevance": 0.1,
+      "faithfulness": 0.0,
+      "reasons": {
+        "context_relevance": "Konteks yang diambil tidak mengandung informasi apapun yang relevan untuk menjawab pertanyaan tentang perbedaan antara incident response dan disaster recovery.",
+        "answer_relevance": "Jawaban tidak menjawab pertanyaan tentang perbedaan antara incident response dan disaster recovery, hanya memberikan instruksi untuk menghubungi tim CSIRT.",
+        "faithfulness": "Jawaban sistem tidak konsisten dengan konteks karena tidak ada informasi yang relevan untuk mendukung klaim tentang tidak adanya panduan SOP."
+      }
+    },
+    {
+      "id": "QA-010",
+      "question": "Bagaimana cara mengamankan akun dari serangan brute force?",
+      "answer_preview": "Sistem tidak menemukan panduan SOP yang relevan untuk jenis insiden ini. Silakan hubungi tim CSIRT secara langsung untuk penanganan lebih lanjut.",
+      "chunks_retrieved": 0,
+      "context_relevance": 0.0,
+      "answer_relevance": 0.2,
+      "faithfulness": 0.0,
+      "reasons": {
+        "context_relevance": "Konteks yang diambil tidak mengandung informasi apapun yang relevan untuk menjawab pertanyaan tentang cara mengamankan akun dari serangan brute force.",
+        "answer_relevance": "Jawaban tidak memberikan informasi atau langkah-langkah untuk mengamankan akun dari serangan brute force, hanya menyarankan untuk menghubungi tim CSIRT.",
+        "faithfulness": "Jawaban sistem tidak konsisten dengan konteks yang diambil, karena tidak ada konteks yang relevan untuk mendukung klaim tentang tidak adanya panduan SOP."
+      }
+    },
+    {
+      "id": "QA-011",
+      "question": "Saya menerima email yang mengatasnamakan atasan dengan nada mendesak dan meminta saya melakukan login ulang melalui tautan tertentu. Apakah ini perlu dianggap sebagai ancaman keamanan?",
+      "answer_preview": "Sistem tidak menemukan panduan SOP yang relevan untuk jenis insiden ini. Silakan hubungi tim CSIRT secara langsung untuk penanganan lebih lanjut.",
+      "chunks_retrieved": 0,
+      "context_relevance": 0.8,
+      "answer_relevance": 0.3,
+      "faithfulness": 0.0,
+      "reasons": {
+        "context_relevance": "Konteks yang diberikan menjelaskan situasi yang umum terjadi dalam serangan phishing, di mana penyerang menyamar sebagai atasan untuk mendapatkan informasi login. Meskipun tidak memberikan detail spesifik tentang ancaman, konteks tersebut sangat relevan untuk memahami potensi risiko.",
+        "answer_relevance": "Jawaban tidak secara langsung menjawab pertanyaan tentang ancaman keamanan dari email tersebut, meskipun menyarankan untuk menghubungi tim CSIRT.",
+        "faithfulness": "Jawaban sistem tidak konsisten dengan konteks yang diambil, karena tidak ada konteks yang relevan untuk mendukung klaim tentang tidak adanya panduan SOP."
+      }
+    },
+    {
+      "id": "QA-012",
+      "question": "Saya menerima email dengan lampiran invoice dari pengirim yang tidak saya kenal, dan setelah dibuka perangkat saya menjadi tidak normal. Kemungkinan kejadian ini apa?",
+      "answer_preview": "Sistem tidak menemukan panduan SOP yang relevan untuk jenis insiden ini. Silakan hubungi tim CSIRT secara langsung untuk penanganan lebih lanjut.",
+      "chunks_retrieved": 0,
+      "context_relevance": 0.2,
+      "answer_relevance": 0.3,
+      "faithfulness": 0.0,
+      "reasons": {
+        "context_relevance": "Konteks tidak memberikan informasi spesifik tentang jenis ancaman atau tindakan yang harus diambil, meskipun ada hubungan dengan email dan lampiran yang mencurigakan.",
+        "answer_relevance": "Jawaban tidak secara langsung menjelaskan kemungkinan kejadian dari email dan lampiran yang mencurigakan, meskipun menyarankan untuk menghubungi tim CSIRT.",
+        "faithfulness": "Jawaban sistem tidak konsisten dengan konteks karena tidak ada informasi yang relevan untuk mendukung klaim tentang tidak adanya panduan SOP."
+      }
+    },
+    {
+      "id": "QA-013",
+      "question": "File pada shared drive tiba-tiba terenkripsi dan muncul pesan permintaan tebusan. Apa langkah awal yang sebaiknya dilakukan?",
+      "answer_preview": "Sistem tidak menemukan panduan SOP yang relevan untuk jenis insiden ini. Silakan hubungi tim CSIRT secara langsung untuk penanganan lebih lanjut.",
+      "chunks_retrieved": 0,
+      "context_relevance": 0.0,
+      "answer_relevance": 0.3,
+      "faithfulness": 0.0,
+      "reasons": {
+        "context_relevance": "Konteks yang diberikan tidak mengandung informasi yang relevan atau membantu untuk menjawab pertanyaan tentang langkah awal yang harus diambil setelah file terenkripsi dan muncul pesan permintaan tebusan.",
+        "answer_relevance": "Jawaban tidak memberikan langkah awal yang jelas untuk menangani insiden enkripsi file, hanya menyarankan untuk menghubungi tim CSIRT tanpa memberikan informasi tambahan.",
+        "faithfulness": "Jawaban sistem tidak konsisten dengan konteks yang diambil, karena tidak ada konteks yang relevan untuk mendukung klaim tentang tidak adanya panduan SOP."
+      }
+    },
+    {
+      "id": "QA-014",
+      "question": "Halaman utama website berubah tanpa izin dan menampilkan pesan yang tidak dikenal. Apakah ini termasuk insiden prioritas tinggi?",
+      "answer_preview": "Sistem tidak menemukan panduan SOP yang relevan untuk jenis insiden ini. Silakan hubungi tim CSIRT secara langsung untuk penanganan lebih lanjut.",
+      "chunks_retrieved": 0,
+      "context_relevance": 0.0,
+      "answer_relevance": 0.3,
+      "faithfulness": 0.0,
+      "reasons": {
+        "context_relevance": "Konteks yang diberikan tidak mengandung informasi yang relevan untuk menilai apakah insiden tersebut merupakan prioritas tinggi.",
+        "answer_relevance": "Jawaban tidak secara langsung menjawab pertanyaan tentang apakah insiden tersebut termasuk prioritas tinggi, dan lebih fokus pada prosedur penanganan tanpa memberikan penilaian yang jelas.",
+        "faithfulness": "Jawaban sistem tidak didukung oleh konteks yang ada, karena tidak ada informasi yang relevan untuk menilai konsistensi atau keakuratan klaim."
+      }
+    },
+    {
+      "id": "QA-015",
+      "question": "Aplikasi yang terhubung ke internet tiba-tiba dapat diakses oleh pihak tidak sah, padahal tidak ada penggunaan akun admin. Biasanya ini disebabkan oleh apa?",
+      "answer_preview": "Sistem tidak menemukan panduan SOP yang relevan untuk jenis insiden ini. Silakan hubungi tim CSIRT secara langsung untuk penanganan lebih lanjut.",
+      "chunks_retrieved": 0,
+      "context_relevance": 0.2,
+      "answer_relevance": 0.2,
+      "faithfulness": 0.0,
+      "reasons": {
+        "context_relevance": "Konteks tidak memberikan informasi spesifik tentang penyebab akses tidak sah, sehingga relevansinya sangat rendah.",
+        "answer_relevance": "Jawaban tidak secara langsung menjawab pertanyaan tentang penyebab akses tidak sah, melainkan hanya menyarankan untuk menghubungi tim CSIRT tanpa memberikan penjelasan atau analisis yang relevan.",
+        "faithfulness": "Jawaban sistem tidak konsisten dengan konteks yang diambil, karena tidak ada konteks yang relevan untuk mendukung klaim tentang SOP atau tim CSIRT."
+      }
+    },
+    {
+      "id": "QA-016",
+      "question": "Terdapat login berhasil menggunakan akun pegawai, namun pemilik akun menyatakan tidak pernah melakukan login tersebut. Indikasi apakah ini?",
+      "answer_preview": "Sistem tidak menemukan panduan SOP yang relevan untuk jenis insiden ini. Silakan hubungi tim CSIRT secara langsung untuk penanganan lebih lanjut.",
+      "chunks_retrieved": 0,
+      "context_relevance": 0.2,
+      "answer_relevance": 0.2,
+      "faithfulness": 0.0,
+      "reasons": {
+        "context_relevance": "Konteks tidak memberikan informasi yang relevan atau tambahan untuk menjawab pertanyaan tentang login yang tidak dikenali.",
+        "answer_relevance": "Jawaban tidak langsung menjawab pertanyaan tentang indikasi login yang tidak sah, dan lebih fokus pada prosedur penanganan tanpa memberikan analisis atau penjelasan terkait insiden.",
+        "faithfulness": "Jawaban sistem tidak konsisten dengan konteks yang diambil, karena tidak ada informasi yang mendukung klaim tentang tidak adanya panduan SOP."
+      }
+    },
+    {
+      "id": "QA-017",
+      "question": "Trafik mendadak meledak sehingga layanan publik drop, apa yang terjadi?",
+      "answer_preview": "Sistem tidak menemukan panduan SOP yang relevan untuk jenis insiden ini. Silakan hubungi tim CSIRT secara langsung untuk penanganan lebih lanjut.",
+      "chunks_retrieved": 0,
+      "context_relevance": 0.0,
+      "answer_relevance": 0.2,
+      "faithfulness": 0.0,
+      "reasons": {
+        "context_relevance": "Konteks yang diambil tidak memberikan informasi apapun yang berkaitan dengan penyebab atau dampak dari trafik mendadak yang menyebabkan layanan publik drop.",
+        "answer_relevance": "Jawaban tidak secara langsung menjelaskan penyebab atau solusi untuk trafik mendadak yang menyebabkan layanan publik drop, hanya menyarankan untuk menghubungi tim CSIRT.",
+        "faithfulness": "Jawaban sistem tidak konsisten dengan konteks yang diambil, karena tidak ada konteks yang relevan untuk mendukung klaim tentang tidak adanya panduan SOP."
+      }
+    },
+    {
+      "id": "QA-018",
+      "question": "Saya melihat adanya unggahan dokumen internal ke layanan berbagi file publik tanpa persetujuan. Apakah ini dapat mengindikasikan kebocoran data?",
+      "answer_preview": "Sistem tidak menemukan panduan SOP yang relevan untuk jenis insiden ini. Silakan hubungi tim CSIRT secara langsung untuk penanganan lebih lanjut.",
+      "chunks_retrieved": 0,
+      "context_relevance": 0.9,
+      "answer_relevance": 0.3,
+      "faithfulness": 0.0,
+      "reasons": {
+        "context_relevance": "Konteks yang diberikan secara langsung berkaitan dengan kebocoran data, karena unggahan dokumen internal ke layanan publik tanpa persetujuan jelas menunjukkan potensi risiko keamanan.",
+        "answer_relevance": "Jawaban tidak secara langsung menjawab pertanyaan tentang indikasi kebocoran data, meskipun menyarankan untuk menghubungi tim CSIRT.",
+        "faithfulness": "Jawaban sistem tidak didukung oleh konteks yang ada, karena tidak ada informasi yang relevan untuk menilai konsistensi atau keakuratan klaim."
+      }
+    },
+    {
+      "id": "QA-019",
+      "question": "Saya menemukan file atau skrip yang tidak dikenal muncul di perangkat, terlihat seperti tool atau aplikasi pihak ketiga. Dari mana file ini bisa datang dan apakah perlu dilaporkan?",
+      "answer_preview": "Sistem tidak menemukan panduan SOP yang relevan untuk jenis insiden ini. Silakan hubungi tim CSIRT secara langsung untuk penanganan lebih lanjut.",
+      "chunks_retrieved": 0,
+      "context_relevance": 0.2,
+      "answer_relevance": 0.4,
+      "faithfulness": 0.0,
+      "reasons": {
+        "context_relevance": "Konteks tidak memberikan informasi spesifik tentang asal-usul file atau skrip yang tidak dikenal, sehingga tidak relevan untuk menjawab pertanyaan.",
+        "answer_relevance": "Jawaban tidak secara langsung menjelaskan kemungkinan asal file atau skrip yang tidak dikenal, dan hanya menyarankan untuk menghubungi tim CSIRT tanpa memberikan informasi tambahan yang relevan.",
+        "faithfulness": "Jawaban sistem tidak didukung oleh konteks yang ada, karena tidak ada informasi yang relevan untuk menilai konsistensi atau keakuratan klaim."
+      }
+    },
+    {
+      "id": "QA-020",
+      "question": "Saya sempat mengunduh dan menjalankan file yang dikirim lewat chat karena dikira dokumen kerja. Setelah itu laptop terasa lambat dan muncul pop-up aneh. Ini biasanya mengarah ke apa?",
+      "answer_preview": "Sistem tidak menemukan panduan SOP yang relevan untuk jenis insiden ini. Silakan hubungi tim CSIRT secara langsung untuk penanganan lebih lanjut.",
+      "chunks_retrieved": 0,
+      "context_relevance": 0.8,
+      "answer_relevance": 0.2,
+      "faithfulness": 0.0,
+      "reasons": {
+        "context_relevance": "Konteks memberikan informasi yang relevan tentang potensi infeksi malware setelah mengunduh file yang mencurigakan, yang berkaitan langsung dengan pertanyaan tentang gejala yang dialami.",
+        "answer_relevance": "Jawaban tidak langsung menjawab pertanyaan tentang kemungkinan dampak dari mengunduh file berbahaya, dan hanya menyarankan untuk menghubungi tim CSIRT tanpa memberikan informasi tambahan.",
+        "faithfulness": "Jawaban sistem tidak konsisten dengan konteks yang diambil, karena tidak ada konteks yang relevan untuk mendukung klaim tentang SOP atau tim CSIRT."
+      }
+    }
+  ]
+}

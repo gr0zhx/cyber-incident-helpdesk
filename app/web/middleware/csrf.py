@@ -33,8 +33,10 @@ class CSRFMiddleware(BaseHTTPMiddleware):
         session = request.session if "session" in request.scope else None
 
         if request.method in SAFE_METHODS:
-            if session is not None and SESSION_KEY not in session:
-                session[SESSION_KEY] = secrets.token_urlsafe(32)
+            # Selalu pastikan token ada di session (tidak perlu baru jika sudah ada)
+            if session is not None:
+                if SESSION_KEY not in session:
+                    session[SESSION_KEY] = secrets.token_urlsafe(32)
             return await call_next(request)
 
         if session is None or SESSION_KEY not in session:

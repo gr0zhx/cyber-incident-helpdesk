@@ -21,6 +21,10 @@ def report_page(
     admin: Admin = Depends(get_current_admin),
     db: Session = Depends(get_db_session),
 ):
+    import secrets
+    # Ensure csrf_token exists in session (fallback if middleware didn't set)
+    if "csrf_token" not in request.session:
+        request.session["csrf_token"] = secrets.token_urlsafe(32)
     return templates.TemplateResponse(
         "admin/report.html",
         {

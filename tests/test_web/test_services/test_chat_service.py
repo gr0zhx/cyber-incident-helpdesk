@@ -109,7 +109,7 @@ def test_handle_message_ticket_created(tmp_path):
     db.add.assert_called_once()
 
 
-def test_handle_message_timeout_returns_error(tmp_path):
+def test_handle_message_timeout_returns_fallback_message(tmp_path):
     import asyncio as _asyncio
     r = fakeredis.FakeStrictRedis(decode_responses=False)
     orch = _make_orchestrator()
@@ -126,7 +126,8 @@ def test_handle_message_timeout_returns_error(tmp_path):
         reporter_contact="", text="test", graph=graph, orchestrator=orch,
         timeout=0.01,
     ))
-    assert result["error"] is True
+    assert result["error"] is False
+    assert "sistem sedang sibuk" in result["bot_text"].lower()
 
 
 def test_clear_history(tmp_path):

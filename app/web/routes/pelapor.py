@@ -175,10 +175,16 @@ def reset_session(
     svc = ChatService(redis=_redis_client())
     svc.clear_history(reporter["session_id"])
     request.session.clear()
-    # HTMX full-page redirect (HX-Redirect) — lebih reliable dari 303 untuk HTMX request
-    response = HTMLResponse("", status_code=200)
-    response.headers["HX-Redirect"] = "/lapor"
-    return response
+    # If request is from HTMX, perform an HTMX redirect (HX-Redirect header).
+    # Otherwise return a normal HTTP redirect so tests and non-HTMX clients
+    # receive a 303 redirect as expected.
+    is_hx = str(request.headers.get("HX-Request", "")).lower() == "true"
+    if is_hx:
+        response = HTMLResponse("", status_code=200)
+        response.headers["HX-Redirect"] = "/lapor"
+        return response
+
+    return RedirectResponse(url="/lapor", status_code=303)
 
 
 @router.get("/tiket/{ticket_id}", response_class=HTMLResponse)

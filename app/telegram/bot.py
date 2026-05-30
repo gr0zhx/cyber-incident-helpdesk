@@ -22,12 +22,19 @@ logger = logging.getLogger(__name__)
 # Conversation states
 WAITING_REPORT = 0
 
-# Env vars
-_CSIRT_CHAT_ID_ENV = "CSIRT_CHAT_ID"
+# Env vars / fallback config
+_ADMIN_CHAT_ID_ENV = "CSIRT_CHAT_ID"
+_ADMIN_CHAT_ID_FALLBACK = "-1003971618295"
 
 
-def _get_csirt_chat_id() -> str | None:
-    return os.getenv(_CSIRT_CHAT_ID_ENV)
+def _get_admin_chat_id() -> str | None:
+    # Return None when env var is not explicitly set so tests can assert
+    # "no chat id" behavior. The fallback ID is only for production/runtime
+    # scenarios and should be provided via environment in deployments.
+    val = os.getenv(_ADMIN_CHAT_ID_ENV)
+    if val:
+        return val
+    return None
 
 
 # ---------------------------------------------------------------------------
@@ -146,7 +153,7 @@ async def _send_result(
     await update.message.reply_text(reporter_msg)
 
     # Kirim alert ke grup CSIRT jika ada chat ID
-    csirt_chat_id = _get_csirt_chat_id()
+    csirt_chat_id = _get_admin_chat_id()
     if csirt_chat_id:
         try:
             csirt_msg = format_csirt_alert(

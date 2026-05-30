@@ -1,0 +1,2208 @@
+[
+  {
+    "id": "QA-001",
+    "question": "Apa langkah pertama yang harus dilakukan saat menerima email phishing?",
+    "ground_truth": "Jangan klik link atau lampiran apapun. Segera laporkan ke tim IT/CSIRT dan tandai email sebagai phishing.",
+    "candidate_answer": "1. Berikan pelatihan kepada karyawan untuk mengenali upaya phishing, termasuk cara mengidentifikasi email mencurigakan, tautan berbahaya, dan lampiran yang tidak dikenal.\n2. Sosialisasikan kepada karyawan untuk tidak membagikan informasi sensitif melalui email atau media sosial, serta menghindari klik pada tautan yang mencurigakan.\n3. Pastikan karyawan memverifikasi keaslian pengirim email sebelum membuka lampiran atau mengklik tautan, terutama jika email tersebut tidak diharapkan.\n4. Laporkan email phishing yang mencurigakan kepada tim keamanan siber internal untuk analisis lebih lanjut dan tindakan pencegahan.\n5. Kembangkan kebijakan internal untuk menangani insiden phishing, termasuk prosedur pelaporan dan langkah-langkah mitigasi awal.\n\nPanduan umum: Langkah-langkah mitigasi awal harus fokus pada peningkatan kesadaran karyawan terhadap ancaman phishing, penguatan kebijakan internal, dan pelaporan insiden kepada tim keamanan siber untuk analisis lebih lanjut.\nCatatan eskalasi: Jika insiden phishing mengarah pada kebocoran data atau akses tidak sah, segera eskalasi ke tim keamanan siber nasional atau pihak berwenang terkait untuk investigasi lebih lanjut.\n\nSumber:\n[1] [1] Training and Awareness: Educate employees on identifying phishing attempts.\n[2] [4] Teknik Serangan MITRE ATT&CK: Phishing for Information (T1598): Adversaries may send phishing messages to elicit sensitive information.\n[3] [3] Teknik Serangan MITRE ATT&CK: Spearphishing Link (T1192): Spearphishing dengan tautan sering digunakan untuk mengunduh malware melalui email.\n[4] [2] Teknik Serangan MITRE ATT&CK: Phishing (T1566): Phishing adalah teknik yang digunakan untuk mendapatkan akses awal melalui pesan elektronik.\n[5] [1] Training and Awareness: Avoiding information leaks.",
+    "retrieved_chunks": [
+      {
+        "id": "9d414522-c882-469f-9734-21821872386e",
+        "content": "Training and Awareness:\n\n- Educate employees on identifying phishing attempts, securing their social media, and avoiding information leaks.\n\nTeknik yang dimitigasi (84):\n  - T1583.001: Domains\n  - T1583.002: DNS Server\n  - T1583.003: Virtual Private Server\n  - T1583.004: Server\n  - T1583.005: Botnet\n  - T1583.006: Web Services\n  - T1583.007: Serverless\n  - T1583.008: Malvertising\n  - T1583: Acquire Infrastructure\n  - T1584.001: Domains\n  - T1584.002: DNS Server\n  - T1584.003: Virtual Private Server\n  - T1584.004: Server\n  - T1584.005: Botnet\n  - T1584.006: Web Services\n  - T1584.007: Serverless\n  - T1584.008: Network Devices\n  - T1584: Compromise Infrastructure\n  - T1585.001: Social Media Accounts\n  - T1585.002: Email Accounts",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "general"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 617
+        },
+        "score": 0.56974614,
+        "rrf_score": 0.01639344262295082,
+        "final_score": 0.4971829537377049
+      },
+      {
+        "id": "629b5b06-ba2f-4df0-be6a-20ad1213aba8",
+        "content": "Teknik Serangan MITRE ATT&CK: Phishing (T1566)\nTaktik: initial-access\n\nAdversaries may send phishing messages to gain access to victim systems. All forms of phishing are electronically delivered social engineering. Phishing can be targeted, known as spearphishing. In spearphishing, a specific individual, company, or industry will be targeted by the adversary. More generally, adversaries can conduct non-targeted phishing, such as in mass malware spam campaigns.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "phishing"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1228
+        },
+        "score": 0.5589889,
+        "rrf_score": 0.016129032258064516,
+        "final_score": 0.48806642354838703
+      },
+      {
+        "id": "3ddd69fc-b067-413d-b2c6-63c279728a9a",
+        "content": "Teknik Serangan MITRE ATT&CK: Spearphishing Link (T1192)\nTaktik: initial-access\n\nSpearphishing with a link is a specific variant of spearphishing. It is different from other forms of spearphishing in that it employs the use of links to download malware contained in email, instead of attaching malicious files to the email itself, to avoid defenses that may inspect email attachments.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "phishing"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 828
+        },
+        "score": 0.53972435,
+        "rrf_score": 0.015873015873015872,
+        "final_score": 0.4730451402380952
+      },
+      {
+        "id": "a9c29cdd-8de8-4d7b-b206-f0a22e8caac2",
+        "content": "Teknik Serangan MITRE ATT&CK: Phishing for Information (T1598)\nTaktik: reconnaissance\n\nAdversaries may send phishing messages to elicit sensitive information that can be used during targeting. Phishing for information is an attempt to trick targets into divulging information, frequently credentials or other actionable information. Phishing for information is different from [Phishing](https://attack.mitre.org/techniques/T1566) in that the objective is gathering data from the victim rather than executing malicious code.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "general"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1340
+        },
+        "score": 0.52540445,
+        "rrf_score": 0.015625,
+        "final_score": 0.461533115
+      },
+      {
+        "id": "74e07885-fa41-4b12-8085-525a1d092cab",
+        "content": "Teknik Serangan MITRE ATT&CK: Spearphishing Attachment (T1193)\nTaktik: initial-access\n\nSpearphishing attachment is a specific variant of spearphishing. Spearphishing attachment is different from other forms of spearphishing in that it employs the use of malware attached to an email. All forms of spearphishing are electronically delivered social engineering targeted at a specific individual, company, or industry. In this scenario, adversaries attach a file to the spearphishing email and usually rely upon [User Execution](https://attack.mitre.org/techniques/T1204) to gain execution.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "phishing"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1053
+        },
+        "score": 0.5117235,
+        "rrf_score": 0.015384615384615385,
+        "final_score": 0.45051414230769227
+      }
+    ]
+  },
+  {
+    "id": "QA-002",
+    "question": "Bagaimana cara mengisolasi sistem yang terinfeksi ransomware?",
+    "ground_truth": "Segera putuskan koneksi jaringan (cabut kabel LAN atau matikan WiFi), jangan matikan komputer, dan hubungi tim CSIRT segera.",
+    "candidate_answer": "1. Identifikasi file, folder, atau direktori yang mungkin telah dikecualikan oleh pelaku ancaman dari enkripsi atau manipulasi untuk menghindari deteksi. Pastikan untuk memeriksa file dengan ekstensi seperti `.dll`, `.exe`, dan `.lnk` yang mungkin sengaja tidak dienkripsi.\n2. Pastikan bahwa sistem pemulihan data seperti backup dan layanan pemulihan sistem tetap aktif dan tidak dimatikan oleh pelaku ancaman. Lakukan audit terhadap layanan ini untuk memastikan integritasnya.\n3. Lakukan inventarisasi file yang terenkripsi, terutama file yang sering menjadi target ransomware seperti dokumen Office, PDF, gambar, video, dan file kode sumber. Identifikasi pola penamaan file yang tidak biasa atau ekstensi file yang telah diubah.\n4. Periksa akses akun pengguna yang mungkin telah dihapus, dikunci, atau dimanipulasi oleh pelaku ancaman. Pastikan bahwa akun-akun penting tetap memiliki akses yang diperlukan untuk proses pemulihan.\n5. Pastikan bahwa sistem tidak dimatikan atau di-reboot secara tidak sah oleh pelaku ancaman, karena ini dapat mengakibatkan perubahan berbahaya diterapkan atau data tambahan hilang.\n\nPanduan umum: Langkah-langkah mitigasi awal ini bertujuan untuk mengidentifikasi dan mengamankan sistem yang terinfeksi ransomware. Penting untuk segera melibatkan tim keamanan siber internal atau pihak ketiga yang berkompeten untuk analisis lebih lanjut dan pemulihan sistem. Hindari melakukan tindakan teknis langsung tanpa panduan dari ahli keamanan siber.\nCatatan eskalasi: Jika insiden ini tidak dapat ditangani secara internal, segera eskalasi ke Badan Siber dan Sandi Negara (BSSN) untuk mendapatkan bantuan lebih lanjut. Pastikan semua bukti digital disimpan dengan aman untuk mendukung investigasi lebih lanjut.\n\nSumber:\n[1] [1] Teknik Serangan MITRE ATT&CK: Selective Exclusion (T1679)\n[2] [2] Teknik Serangan MITRE ATT&CK: Inhibit System Recovery (T1490)\n[3] [4] Teknik Serangan MITRE ATT&CK: Data Encrypted for Impact (T1486)\n[4] [5] Teknik Serangan MITRE ATT&CK: Account Access Removal (T1531)",
+    "retrieved_chunks": [
+      {
+        "id": "79c2ed14-5df4-4363-83c5-e2bcb9d89790",
+        "content": "Teknik Serangan MITRE ATT&CK: Selective Exclusion (T1679)\nTaktik: defense-evasion\n\nAdversaries may intentionally exclude certain files, folders, directories, file types, or system components from encryption or tampering during a ransomware or malicious payload execution. Some file extensions that adversaries may avoid encrypting include `.dll`, `.exe`, and `.lnk`.(Citation: Palo Alto Unit 42 Medusa Group Medusa Ransomware January 2024)  \n\nAdversaries may perform this behavior to avoid alerting users, to evade detection by security tools and analysts, or, in the case of ransomware, to ensure that the system remains operational enough to deliver the ransom notice.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "malware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1180
+        },
+        "score": 0.58998954,
+        "rrf_score": 0.01639344262295082,
+        "final_score": 0.5113533337377049
+      },
+      {
+        "id": "e0a8d770-525b-4d20-a2e1-bb617eca1f89",
+        "content": "Teknik Serangan MITRE ATT&CK: Inhibit System Recovery (T1490)\nTaktik: impact\n\nAdversaries may delete or remove built-in data and turn off services designed to aid in the recovery of a corrupted system to prevent recovery.(Citation: Talos Olympic Destroyer 2018)(Citation: FireEye WannaCry 2017) This may deny access to available backups and recovery options.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "ddos",
+            "ransomware",
+            "web_defacement"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1462
+        },
+        "score": 0.56439734,
+        "rrf_score": 0.016129032258064516,
+        "final_score": 0.49185233154838703
+      },
+      {
+        "id": "21ed8812-84e8-4eea-8f8f-a29850e91cf0",
+        "content": "Teknik Serangan MITRE ATT&CK: Data Encrypted for Impact (T1486)\nTaktik: impact\n\nAdversaries may encrypt data on target systems or on large numbers of systems in a network to interrupt availability to system and network resources. They can attempt to render stored data inaccessible by encrypting files or data on local and remote drives and withholding access to a decryption key. This may be done in order to extract monetary compensation from a victim in exchange for decryption or a decryption key (ransomware) or to render data permanently inaccessible in cases where the key is not saved or transmitted.(Citation: US-CERT Ransomware 2016)(Citation: FireEye WannaCry 2017)(Citation: US-CERT NotPetya 2017)(Citation: US-CERT SamSam 2018)",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "ddos",
+            "ransomware",
+            "web_defacement"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1270
+        },
+        "score": 0.55371463,
+        "rrf_score": 0.015873015873015872,
+        "final_score": 0.4828383362380952
+      },
+      {
+        "id": "1dc10fbf-48ea-4a60-912e-4a9fc9ca46da",
+        "content": "In the case of ransomware, it is typical that common user files like Office documents, PDFs, images, videos, audio, text, and source code files will be encrypted (and often renamed and/or tagged with specific file markers). Adversaries may need to first employ other behaviors, such as [File and Directory Permissions Modification](https://attack.mitre.org/techniques/T1222) or [System Shutdown/Reboot](https://attack.mitre.org/techniques/T1529), in order to unlock and/or gain access to manipulate these files.(Citation: CarbonBlack Cont",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "ddos",
+            "ransomware",
+            "web_defacement"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1271
+        },
+        "score": 0.52086365,
+        "rrf_score": 0.015625,
+        "final_score": 0.458354555
+      },
+      {
+        "id": "0b8ccc1a-83a4-4d1c-9d6f-6919f46ab482",
+        "content": "Teknik Serangan MITRE ATT&CK: Account Access Removal (T1531)\nTaktik: impact\n\nAdversaries may interrupt availability of system and network resources by inhibiting access to accounts utilized by legitimate users. Accounts may be deleted, locked, or manipulated (ex: changed credentials, revoked permissions for SaaS platforms such as Sharepoint) to remove access to accounts.(Citation: Obsidian Security SaaS Ransomware June 2023) Adversaries may also subsequently log off and/or perform a [System Shutdown/Reboot](https://attack.mitre.org/techniques/T1529) to set malicious changes into place.(Citation: CarbonBlack LockerGoga 2019)(Citation: Unit42 LockerGoga 2019)",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "ddos",
+            "ransomware",
+            "web_defacement"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1253
+        },
+        "score": 0.5096052,
+        "rrf_score": 0.015384615384615385,
+        "final_score": 0.44903133230769227
+      }
+    ]
+  },
+  {
+    "id": "QA-003",
+    "question": "Apa yang harus dilakukan jika menemukan data sensitif bocor ke publik?",
+    "ground_truth": "Laporkan segera ke tim CSIRT, dokumentasikan bukti, identifikasi sumber kebocoran, dan patuhi prosedur notifikasi insiden sesuai regulasi.",
+    "candidate_answer": "1. Edukasi karyawan untuk mengenali upaya phishing, mengamankan media sosial mereka, dan menghindari kebocoran informasi. Hal ini penting untuk mencegah eksploitasi lebih lanjut terhadap data sensitif yang bocor.\n2. Segera beri tahu pihak eksternal yang terdampak oleh insiden kebocoran data sebelum informasi tersebut tersebar melalui media atau pihak eksternal lainnya. Pastikan informasi yang diberikan relevan dan tidak mengungkapkan detail investigasi internal.\n3. Lakukan peninjauan terhadap domain, server, dan infrastruktur yang digunakan untuk memastikan tidak ada kompromi lebih lanjut yang dapat memperburuk kebocoran data.\n4. Gunakan alat open source seperti OpenVAS, OWASP ZAP, atau Nmap dengan skrip NSE untuk memindai kerentanan pada jaringan dan aplikasi yang mungkin menjadi penyebab kebocoran data.\n5. Pantau database teknis terbuka seperti WHOIS, DNS Dumpster, dan Shodan untuk memastikan tidak ada informasi sensitif organisasi yang tersedia secara publik dan dapat digunakan oleh pihak yang tidak bertanggung jawab.\n\nPanduan umum: Prioritaskan komunikasi yang transparan dengan pihak terdampak, tingkatkan kesadaran keamanan siber di internal organisasi, dan lakukan peninjauan menyeluruh terhadap infrastruktur untuk mencegah insiden serupa di masa depan.\nCatatan eskalasi: Jika insiden kebocoran data melibatkan informasi yang sangat sensitif atau berdampak besar pada operasional organisasi, segera eskalasi ke tim keamanan siber nasional atau pihak berwenang terkait untuk mendapatkan dukungan lebih lanjut.\n\nSumber:\n[1] [1] Training and Awareness\n[2] [3] COMPUTER SECURITY INCIDENT HANDLING GUIDE, Bagian 13\n[3] [1] Teknik yang dimitigasi: T1583 dan T1584\n[4] [4] Tools for Implementation\n[5] [5] Teknik Serangan MITRE ATT&CK: Search Open Technical Databases (T1596)",
+    "retrieved_chunks": [
+      {
+        "id": "9d414522-c882-469f-9734-21821872386e",
+        "content": "Training and Awareness:\n\n- Educate employees on identifying phishing attempts, securing their social media, and avoiding information leaks.\n\nTeknik yang dimitigasi (84):\n  - T1583.001: Domains\n  - T1583.002: DNS Server\n  - T1583.003: Virtual Private Server\n  - T1583.004: Server\n  - T1583.005: Botnet\n  - T1583.006: Web Services\n  - T1583.007: Serverless\n  - T1583.008: Malvertising\n  - T1583: Acquire Infrastructure\n  - T1584.001: Domains\n  - T1584.002: DNS Server\n  - T1584.003: Virtual Private Server\n  - T1584.004: Server\n  - T1584.005: Botnet\n  - T1584.006: Web Services\n  - T1584.007: Serverless\n  - T1584.008: Network Devices\n  - T1584: Compromise Infrastructure\n  - T1585.001: Social Media Accounts\n  - T1585.002: Email Accounts",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "general"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 617
+        },
+        "score": 0.48807114,
+        "rrf_score": 0.01639344262295082,
+        "final_score": 0.4400104537377049
+      },
+      {
+        "id": "e8ba0650-0a0c-4f0e-b45e-7515c6f824a6",
+        "content": "Teknik Serangan MITRE ATT&CK: Data Destruction (T1485)\nTaktik: impact",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "ddos",
+            "ransomware",
+            "web_defacement"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1371
+        },
+        "score": 0.4860181,
+        "rrf_score": 0.016129032258064516,
+        "final_score": 0.4369868635483871
+      },
+      {
+        "id": "7f3cbd2a-9b93-4fde-a6b1-81ef265eecfc",
+        "content": "COMPUTER SECURITY INCIDENT HANDLING GUIDE \n13 \nit. Another way in which external parties may be affected is if an attacker gains access to sensitive \ninformation regarding them, such as credit card information. In some jurisdictions, organizations are \nrequired to notify all parties that are affected by such an incident. Regardless of the circumstances, it \nis preferable for the organization to notify affected external parties of an incident before the media or \nother external organizations do so. Handlers should be careful to give out only appropriate \ninformation—the affected parties may request details about internal investigations that should not be \nrevealed publicly. \n \nOMB Memorandum M-07-16, Safeguarding Against and Responding to the Breach of Personally",
+        "metadata": {
+          "doc_id": "nist-800-61-rev2",
+          "doc_title": "Computer Security Incident Handling Guide",
+          "source_framework": "NIST",
+          "language": "en",
+          "incident_types": [
+            "phishing",
+            "malware",
+            "ransomware",
+            "akses_tidak_sah",
+            "kebocoran_data",
+            "general"
+          ],
+          "page_number": 22,
+          "section_header": "",
+          "chunk_index": 84
+        },
+        "score": 0.45163625,
+        "rrf_score": 0.015873015873015872,
+        "final_score": 0.41138347023809524
+      },
+      {
+        "id": "25cf2059-8110-47be-b536-1546f764be98",
+        "content": "*Tools for Implementation*\n\nOpen Source Tools:\n\n- OpenVAS: Comprehensive network and system vulnerability scanning.\n- OWASP ZAP: Dynamic scanning of web applications for vulnerabilities.\n- Nmap with NSE Scripts: Network scanning with scripts to detect vulnerabilities.\n\nTeknik yang dimitigasi (5):\n  - T1190: Exploit Public-Facing Application\n  - T1195.001: Compromise Software Dependencies and Development Tools\n  - T1195.002: Compromise Software Supply Chain\n  - T1195: Supply Chain Compromise\n  - T1210: Exploitation of Remote Services",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "malware",
+            "phishing"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 537
+        },
+        "score": 0.4501772,
+        "rrf_score": 0.015625,
+        "final_score": 0.40887404
+      },
+      {
+        "id": "08485c22-3b8a-46dc-b227-ce9ed50e6492",
+        "content": "Teknik Serangan MITRE ATT&CK: Search Open Technical Databases (T1596)\nTaktik: reconnaissance\n\nAdversaries may search freely available technical databases for information about victims that can be used during targeting. Information about victims may be available in online databases and repositories, such as registrations of domains/certificates as well as public collections of network data/artifacts gathered from traffic and/or scans.(Citation: WHOIS)(Citation: DNS Dumpster)(Citation: Circl Passive DNS)(Citation: Medium SSL Cert)(Citation: SSLShopper Lookup)(Citation: DigitalShadows CDN)(Citation: Shodan)",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "general"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 996
+        },
+        "score": 0.4436276,
+        "rrf_score": 0.015384615384615385,
+        "final_score": 0.4028470123076923
+      }
+    ]
+  },
+  {
+    "id": "QA-004",
+    "question": "Bagaimana cara mendeteksi serangan DDoS pada server?",
+    "ground_truth": "Pantau lonjakan trafik yang tidak normal, periksa log server untuk pola permintaan berulang dari banyak IP, dan gunakan tools monitoring jaringan.",
+    "candidate_answer": "1. Identifikasi layanan yang terdampak dan pastikan bahwa layanan tersebut memiliki kapasitas yang cukup untuk menangani lonjakan trafik. Hal ini dapat membantu mengurangi dampak serangan DoS pada endpoint atau jaringan.\n2. Pantau trafik jaringan secara aktif untuk mendeteksi pola yang tidak biasa, seperti lonjakan trafik yang tiba-tiba atau permintaan yang berulang dari sumber yang sama. Hal ini dapat membantu mendeteksi serangan DDoS lebih awal.\n3. Gunakan layanan mitigasi DDoS pihak ketiga atau penyedia layanan internet (ISP) untuk membantu menyaring dan mengelola trafik yang mencurigakan sebelum mencapai server internal.\n4. Pastikan bahwa sistem memiliki log yang cukup untuk mencatat aktivitas jaringan dan endpoint. Log ini dapat digunakan untuk analisis lebih lanjut dan membantu mengidentifikasi sumber serangan.\n5. Edukasi staf internal tentang tanda-tanda serangan DDoS, seperti penurunan performa layanan secara tiba-tiba, sehingga mereka dapat melaporkan insiden dengan cepat.\n\nPanduan umum: Serangan DDoS dapat menyebabkan gangguan signifikan pada layanan penting. Penting untuk memiliki rencana respons insiden yang jelas, termasuk prosedur eskalasi dan komunikasi dengan pihak terkait, seperti penyedia layanan internet atau tim keamanan siber.\nCatatan eskalasi: Jika serangan DDoS terus berlanjut atau dampaknya meningkat, segera eskalasi insiden ini ke tim keamanan siber nasional (CSIRT) atau Badan Siber dan Sandi Negara (BSSN) untuk mendapatkan dukungan lebih lanjut.\n\nSumber:\n[1] Dokumen Referensi [1] dan [3]: Endpoint Denial of Service (T1499) dan Network Denial of Service (T1498)\n[2] Dokumen Referensi [3]: Network Denial of Service (T1498)",
+    "retrieved_chunks": [
+      {
+        "id": "d5a2c071-2662-4eba-8f7f-cd420c22ed14",
+        "content": "Teknik Serangan MITRE ATT&CK: Endpoint Denial of Service (T1499)\nTaktik: impact\n\nAdversaries may perform Endpoint Denial of Service (DoS) attacks to degrade or block the availability of services to users. Endpoint DoS can be performed by exhausting the system resources those services are hosted on or exploiting the system to cause a persistent crash condition. Example services include websites, email services, DNS, and web-based applications. Adversaries have been observed conducting DoS attacks for political purposes(Citation: FireEye OpPoisonedHandover February 2016) and to support other malicious activities, including distraction(Citation: FSISAC FraudNetDoS September 2012), hacktivism, and extortion.(Citation: Symantec DDoS October 2014)",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "ddos",
+            "ransomware",
+            "web_defacement"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1321
+        },
+        "score": 0.576669,
+        "rrf_score": 0.01639344262295082,
+        "final_score": 0.5020289557377049
+      },
+      {
+        "id": "dd5e037c-55af-47a5-8576-865fb13652a4",
+        "content": "Teknik Serangan MITRE ATT&CK: Domain Trust Discovery (T1482)\nTaktik: discovery",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "malware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1088
+        },
+        "score": 0.57376623,
+        "rrf_score": 0.016129032258064516,
+        "final_score": 0.4984105545483871
+      },
+      {
+        "id": "528da653-4bc6-4e8e-b7e6-383ca57f0ba6",
+        "content": "Teknik Serangan MITRE ATT&CK: Network Denial of Service (T1498)\nTaktik: impact\n\nAdversaries may perform Network Denial of Service (DoS) attacks to degrade or block the availability of targeted resources to users. Network DoS can be performed by exhausting the network bandwidth services rely on. Example resources include specific websites, email services, DNS, and web-based applications. Adversaries have been observed conducting network DoS attacks for political purposes(Citation: FireEye OpPoisonedHandover February 2016) and to support other malicious activities, including distraction(Citation: FSISAC FraudNetDoS September 2012), hacktivism, and extortion.(Citation: Symantec DDoS October 2014)",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "ddos",
+            "ransomware",
+            "web_defacement"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1384
+        },
+        "score": 0.569388,
+        "rrf_score": 0.015873015873015872,
+        "final_score": 0.4938096952380952
+      },
+      {
+        "id": "d362f8a5-8544-487f-b4bb-c67f664bb455",
+        "content": "Teknik Serangan MITRE ATT&CK: System Owner/User Discovery (T1033)\nTaktik: discovery",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "malware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 747
+        },
+        "score": 0.56493604,
+        "rrf_score": 0.015625,
+        "final_score": 0.48920522799999994
+      },
+      {
+        "id": "496faa27-7511-4a70-b3df-955eefa05af3",
+        "content": "Teknik Serangan MITRE ATT&CK: System Network Configuration Discovery (T1016)\nTaktik: discovery\n\nAdversaries may look for details about the network configuration and settings, such as IP and/or MAC addresses, of systems they access or through information discovery of remote systems. Several operating system administration utilities exist that can be used to gather this information. Examples include [Arp](https://attack.mitre.org/software/S0099), [ipconfig](https://attack.mitre.org/software/S0100)/[ifconfig](https://attack.mitre.org/software/S0101), [nbtstat](https://attack.mitre.org/software/S0102), and [route](https://attack.mitre.org/software/S0103).",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "malware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1071
+        },
+        "score": 0.54521096,
+        "rrf_score": 0.015384615384615385,
+        "final_score": 0.4739553643076923
+      }
+    ]
+  },
+  {
+    "id": "QA-005",
+    "question": "Apa langkah mitigasi awal untuk serangan malware pada workstation?",
+    "ground_truth": "Isolasi perangkat dari jaringan, jalankan full scan antivirus, dokumentasikan proses mencurigakan yang berjalan, dan laporkan ke CSIRT.",
+    "candidate_answer": "1. Lakukan audit terhadap konfigurasi dan keberadaan alat keamanan seperti antivirus, firewall, dan sensor untuk memastikan tidak ada yang dinonaktifkan atau dimodifikasi oleh penyerang.\n2. Identifikasi perangkat lunak keamanan yang terinstal pada workstation untuk mendeteksi potensi manipulasi atau penghapusan oleh penyerang.\n3. Tinjau log sistem dan event untuk mendeteksi aktivitas mencurigakan yang terkait dengan Windows Management Instrumentation (WMI) Event Subscription, yang dapat digunakan untuk mempertahankan akses persisten.\n4. Pastikan bahwa semua modul kernel dan ekstensi yang dimuat pada sistem adalah sah dan berasal dari sumber terpercaya untuk mencegah penyalahgunaan oleh penyerang.\n\nPanduan umum: Langkah-langkah mitigasi awal ini bertujuan untuk mengidentifikasi dan mengurangi dampak serangan malware pada workstation. Penting untuk segera melibatkan tim keamanan siber internal untuk investigasi lebih lanjut dan memastikan bahwa langkah-langkah mitigasi ini diterapkan dengan benar.\nCatatan eskalasi: Jika ditemukan bukti bahwa serangan telah meluas atau berdampak signifikan, segera eskalasi insiden ini ke tim respons insiden keamanan siber nasional (CSIRT) untuk penanganan lebih lanjut.\n\nSumber:\n[1] [2] Teknik Serangan MITRE ATT&CK: Disabling Security Tools (T1089)\n[2] [3] Teknik Serangan MITRE ATT&CK: Security Software Discovery (T1063)\n[3] [1] Teknik Serangan MITRE ATT&CK: Windows Management Instrumentation Event Subscription (T1084)\n[4] [4] Teknik Serangan MITRE ATT&CK: Kernel Modules and Extensions (T1215)",
+    "retrieved_chunks": [
+      {
+        "id": "4a22dfa5-fbb7-408e-b6d3-47eb445c70ae",
+        "content": "Teknik Serangan MITRE ATT&CK: Windows Management Instrumentation Event Subscription (T1084)\nTaktik: persistence",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "malware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1430
+        },
+        "score": 0.5953112,
+        "rrf_score": 0.01639344262295082,
+        "final_score": 0.5150784957377049
+      },
+      {
+        "id": "0dd0737f-5588-4d38-ad10-363f199fd2bb",
+        "content": "Teknik Serangan MITRE ATT&CK: Disabling Security Tools (T1089)\nTaktik: defense-evasion\n\nAdversaries may disable security tools to avoid possible detection of their tools and activities. This can take the form of killing security software or event logging processes, deleting Registry keys so that tools do not start at run time, or other methods to interfere with security scanning or event reporting.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "malware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 859
+        },
+        "score": 0.58693516,
+        "rrf_score": 0.016129032258064516,
+        "final_score": 0.5076288055483871
+      },
+      {
+        "id": "3059a067-01ac-4f25-b3a4-5ef4ee711a95",
+        "content": "Teknik Serangan MITRE ATT&CK: Security Software Discovery (T1063)\nTaktik: discovery\n\nAdversaries may attempt to get a listing of security software, configurations, defensive tools, and sensors that are installed on the system. This may include things such as local firewall rules and anti-virus. Adversaries may use the information from [Security Software Discovery](https://attack.mitre.org/techniques/T1063) during automated discovery to shape follow-on behaviors, including whether or not the adversary fully infects the target and/or attempts specific actions.\n\n\n### Windows",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "malware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 845
+        },
+        "score": 0.5833767,
+        "rrf_score": 0.015873015873015872,
+        "final_score": 0.5036017852380952
+      },
+      {
+        "id": "a941bcc7-805f-4375-95c0-eadd8e1e2452",
+        "content": "Teknik Serangan MITRE ATT&CK: Kernel Modules and Extensions (T1215)\nTaktik: persistence",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "malware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1057
+        },
+        "score": 0.58273387,
+        "rrf_score": 0.015625,
+        "final_score": 0.501663709
+      },
+      {
+        "id": "8e3fcd91-f9d7-406a-8c62-6b6c5d5231f9",
+        "content": "Teknik Serangan MITRE ATT&CK: HISTCONTROL (T1148)\nTaktik: defense-evasion",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "malware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 762
+        },
+        "score": 0.5822218,
+        "rrf_score": 0.015384615384615385,
+        "final_score": 0.4998629523076923
+      }
+    ]
+  },
+  {
+    "id": "QA-006",
+    "question": "Bagaimana prosedur response saat akun admin dikompromis?",
+    "ground_truth": "Segera nonaktifkan akun yang dikompromis, reset semua kredensial terkait, audit log akses, dan investigasi sumber kompromi.",
+    "candidate_answer": "1. Lakukan analisis terhadap akun yang dikompromi untuk mengidentifikasi aktivitas mencurigakan, seperti perubahan kredensial atau grup izin. Hal ini sesuai dengan teknik MITRE ATT&CK T1098: Account Manipulation, yang menyebutkan bahwa pelaku ancaman dapat memanipulasi akun untuk mempertahankan atau meningkatkan akses.\n2. Segera nonaktifkan atau suspend akun yang dikompromi untuk mencegah akses lebih lanjut oleh pelaku ancaman. Teknik MITRE ATT&CK T1078: Valid Accounts menyebutkan bahwa akun yang valid dapat digunakan untuk menghindari deteksi dan meningkatkan akses.\n3. Berikan pelatihan kepada staf terkait untuk mengenali tanda-tanda serangan berbasis rekayasa sosial, karena pelaku ancaman dapat menggunakan persona online untuk membangun kepercayaan dan mengkompromi akun. Hal ini sesuai dengan teknik MITRE ATT&CK T1586: Compromise Accounts.\n4. Terapkan kebijakan rotasi kata sandi secara berkala untuk mencegah pelaku ancaman memanfaatkan kredensial yang telah dikompromi dalam jangka waktu lama. Teknik MITRE ATT&CK T1098 menyebutkan bahwa pelaku ancaman dapat melakukan pembaruan kata sandi secara iteratif untuk menghindari kebijakan durasi kata sandi.\n5. Evaluasi dan perkuat kebijakan autentikasi, termasuk penerapan autentikasi multi-faktor (MFA) untuk semua akun sensitif, guna mengurangi risiko serangan seperti credential stuffing atau password spraying. Teknik yang dimitigasi mencakup T1110.004: Credential Stuffing dan T1621: Multi-Factor Authentication Request Generation.\n\nPanduan umum: Langkah-langkah mitigasi awal ini bertujuan untuk membatasi dampak dari kompromi akun admin dan mencegah eskalasi lebih lanjut. Penting untuk segera mengidentifikasi sumber serangan, mengamankan sistem, dan meningkatkan kesadaran keamanan di seluruh organisasi.\nCatatan eskalasi: Jika insiden ini berkembang menjadi pelanggaran yang lebih serius atau melibatkan data sensitif, segera eskalasi ke tim keamanan siber nasional (BSSN) untuk mendapatkan dukungan lebih lanjut dan koordinasi respons insiden.\n\nSumber:\n[1] [3] Teknik Serangan MITRE ATT&CK: Account Manipulation (T1098)\n[2] [1] Teknik Serangan MITRE ATT&CK: Valid Accounts (T1078)\n[3] [2] Teknik Serangan MITRE ATT&CK: Compromise Accounts (T1586)\n[4] [5] Teknik yang dimitigasi (10)",
+    "retrieved_chunks": [
+      {
+        "id": "85b1a9b6-86b1-4a05-8b6b-22cb9f1f8d6b",
+        "content": "Teknik Serangan MITRE ATT&CK: Valid Accounts (T1078)\nTaktik: defense-evasion, persistence, privilege-escalation, initial-access",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "malware",
+            "phishing"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1246
+        },
+        "score": 0.45152277,
+        "rrf_score": 0.01639344262295082,
+        "final_score": 0.41442659473770493
+      },
+      {
+        "id": "235f94a0-60ef-48fe-bfb0-c87af49a9443",
+        "content": "Teknik Serangan MITRE ATT&CK: Compromise Accounts (T1586)\nTaktik: resource-development\n\nAdversaries may compromise accounts with services that can be used during targeting. For operations incorporating social engineering, the utilization of an online persona may be important. Rather than creating and cultivating accounts (i.e. [Establish Accounts](https://attack.mitre.org/techniques/T1585)), adversaries may compromise existing accounts. Utilizing an existing persona may engender a level of trust in a potential victim if they have a relationship, or knowledge of, the compromised persona.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "general"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1129
+        },
+        "score": 0.44660872,
+        "rrf_score": 0.016129032258064516,
+        "final_score": 0.40940029754838714
+      },
+      {
+        "id": "03191a72-9bec-4d69-a659-5f32b931ecb0",
+        "content": "Teknik Serangan MITRE ATT&CK: Account Manipulation (T1098)\nTaktik: persistence, privilege-escalation\n\nAdversaries may manipulate accounts to maintain and/or elevate access to victim systems. Account manipulation may consist of any action that preserves or modifies adversary access to a compromised account, such as modifying credentials or permission groups.(Citation: FireEye SMOKEDHAM June 2021) These actions could also include account activity designed to subvert security policies, such as performing iterative password updates to bypass password duration policies and preserve the life of compromised credentials.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "malware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1213
+        },
+        "score": 0.43606898,
+        "rrf_score": 0.015873015873015872,
+        "final_score": 0.4004863812380952
+      },
+      {
+        "id": "221fda01-c1a0-4a46-bd20-9d6f3fb9d0c8",
+        "content": "Teknik yang dimitigasi (17):\n  - T1078: Valid Accounts\n  - T1195.001: Compromise Software Dependencies and Development Tools\n  - T1195: Supply Chain Compromise\n  - T1212: Exploitation for Credential Access\n  - T1496.003: SMS Pumping\n  - T1550.001: Application Access Token\n  - T1550: Use Alternate Authentication Material\n  - T1559.003: XPC Services\n  - T1559: Inter-Process Communication\n  - T1564.009: Resource Forking\n  - T1564.012: File/Path Exclusions\n  - T1564: Hide Artifacts\n  - T1574.001: DLL\n  - T1574: Hijack Execution Flow\n  - T1593.003: Code Repositories\n  - T1593: Search Open Websites/Domains\n  - T1647: Plist File Modification",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "ddos",
+            "general",
+            "malware",
+            "phishing",
+            "ransomware",
+            "web_defacement"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 563
+        },
+        "score": 0.432991,
+        "rrf_score": 0.015625,
+        "final_score": 0.39684369999999997
+      },
+      {
+        "id": "6ad1107e-df8e-40ab-b6f0-3eca88fad2c3",
+        "content": "Teknik yang dimitigasi (10):\n  - T1078.004: Cloud Accounts\n  - T1078: Valid Accounts\n  - T1110.001: Password Guessing\n  - T1110.003: Password Spraying\n  - T1110.004: Credential Stuffing\n  - T1110: Brute Force\n  - T1550.001: Application Access Token\n  - T1550: Use Alternate Authentication Material\n  - T1621: Multi-Factor Authentication Request Generation\n  - T1648: Serverless Execution",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "malware",
+            "phishing",
+            "ransomware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 725
+        },
+        "score": 0.4175365,
+        "rrf_score": 0.015384615384615385,
+        "final_score": 0.38458324230769225
+      }
+    ]
+  },
+  {
+    "id": "QA-007",
+    "question": "Apa indikator kompromi (IoC) yang umum pada serangan phishing?",
+    "ground_truth": "Email dari domain mirip tapi berbeda, link menuju URL yang tidak sesuai, permintaan kredensial mendesak, dan lampiran berekstensi tidak biasa.",
+    "candidate_answer": "1. Melakukan pelatihan dan peningkatan kesadaran kepada seluruh pegawai terkait cara mengidentifikasi upaya phishing, mengamankan media sosial, dan mencegah kebocoran informasi. Hal ini dapat membantu mengurangi risiko serangan phishing yang bertujuan untuk mendapatkan informasi sensitif.\n2. Mendorong pegawai untuk tidak membagikan informasi sensitif, seperti kredensial atau data pribadi, melalui email atau platform komunikasi yang tidak aman, terutama jika permintaan tersebut mencurigakan.\n3. Mengimplementasikan kebijakan internal untuk memverifikasi permintaan informasi sensitif, terutama jika permintaan tersebut berasal dari sumber yang tidak dikenal atau mencurigakan.\n4. Meningkatkan pengawasan terhadap aktivitas email internal untuk mendeteksi potensi spearphishing internal yang dapat digunakan untuk pergerakan lateral di dalam organisasi.\n5. Mendorong penggunaan autentikasi multi-faktor (MFA) untuk semua akun organisasi guna mengurangi risiko kompromi kredensial akibat serangan phishing.\n\nPanduan umum: Langkah-langkah mitigasi ini bertujuan untuk meningkatkan kesadaran dan keamanan organisasi terhadap ancaman phishing, baik yang bertujuan untuk mendapatkan informasi sensitif maupun untuk mendapatkan akses awal ke sistem.\nCatatan eskalasi: Jika serangan phishing telah terdeteksi atau dicurigai, segera eskalasi ke tim keamanan siber internal atau otoritas terkait untuk investigasi lebih lanjut dan mitigasi teknis.\n\nSumber:\n[1] Dokumen [3]: Training and Awareness\n[2] Dokumen [1]: Phishing for Information (T1598)\n[3] Dokumen [4]: Internal Spearphishing (T1534)\n[4] Dokumen [2]: Phishing (T1566)",
+    "retrieved_chunks": [
+      {
+        "id": "a9c29cdd-8de8-4d7b-b206-f0a22e8caac2",
+        "content": "Teknik Serangan MITRE ATT&CK: Phishing for Information (T1598)\nTaktik: reconnaissance\n\nAdversaries may send phishing messages to elicit sensitive information that can be used during targeting. Phishing for information is an attempt to trick targets into divulging information, frequently credentials or other actionable information. Phishing for information is different from [Phishing](https://attack.mitre.org/techniques/T1566) in that the objective is gathering data from the victim rather than executing malicious code.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "general"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1340
+        },
+        "score": 0.61731994,
+        "rrf_score": 0.01639344262295082,
+        "final_score": 0.5304846137377048
+      },
+      {
+        "id": "629b5b06-ba2f-4df0-be6a-20ad1213aba8",
+        "content": "Teknik Serangan MITRE ATT&CK: Phishing (T1566)\nTaktik: initial-access\n\nAdversaries may send phishing messages to gain access to victim systems. All forms of phishing are electronically delivered social engineering. Phishing can be targeted, known as spearphishing. In spearphishing, a specific individual, company, or industry will be targeted by the adversary. More generally, adversaries can conduct non-targeted phishing, such as in mass malware spam campaigns.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "phishing"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1228
+        },
+        "score": 0.60377395,
+        "rrf_score": 0.016129032258064516,
+        "final_score": 0.5194159585483871
+      },
+      {
+        "id": "9d414522-c882-469f-9734-21821872386e",
+        "content": "Training and Awareness:\n\n- Educate employees on identifying phishing attempts, securing their social media, and avoiding information leaks.\n\nTeknik yang dimitigasi (84):\n  - T1583.001: Domains\n  - T1583.002: DNS Server\n  - T1583.003: Virtual Private Server\n  - T1583.004: Server\n  - T1583.005: Botnet\n  - T1583.006: Web Services\n  - T1583.007: Serverless\n  - T1583.008: Malvertising\n  - T1583: Acquire Infrastructure\n  - T1584.001: Domains\n  - T1584.002: DNS Server\n  - T1584.003: Virtual Private Server\n  - T1584.004: Server\n  - T1584.005: Botnet\n  - T1584.006: Web Services\n  - T1584.007: Serverless\n  - T1584.008: Network Devices\n  - T1584: Compromise Infrastructure\n  - T1585.001: Social Media Accounts\n  - T1585.002: Email Accounts",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "general"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 617
+        },
+        "score": 0.6003283,
+        "rrf_score": 0.015873015873015872,
+        "final_score": 0.5154679052380953
+      },
+      {
+        "id": "84036298-7a14-48d5-9551-4b7a4641d4a4",
+        "content": "Teknik Serangan MITRE ATT&CK: Internal Spearphishing (T1534)\nTaktik: lateral-movement\n\nAfter they already have access to accounts or systems within the environment, adversaries may use internal spearphishing to gain access to additional information or compromise other users within the same organization. Internal spearphishing is multi-staged campaign where a legitimate account is initially compromised either by controlling the user's device or by compromising the account credentials of the user. Adversaries may then attempt to take advantage of the trusted internal account to increase the likelihood of tricking more victims into falling for phish attempts, often incorporating [Impersonation](https://attack.mitre.org/techniques/T1656).(Citation: Trend Micro - Int SP)",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "malware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1202
+        },
+        "score": 0.5813644,
+        "rrf_score": 0.015625,
+        "final_score": 0.5007050799999999
+      },
+      {
+        "id": "5b204b48-437a-47a3-920a-47955cbd4097",
+        "content": "Teknik Serangan MITRE ATT&CK: Indicator Blocking (T1054)\nTaktik: defense-evasion",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "malware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1048
+        },
+        "score": 0.57905906,
+        "rrf_score": 0.015384615384615385,
+        "final_score": 0.49764903430769225
+      }
+    ]
+  },
+  {
+    "id": "QA-008",
+    "question": "Bagaimana cara memulihkan sistem setelah serangan ransomware?",
+    "ground_truth": "Jangan bayar tebusan. Restore dari backup bersih yang terverifikasi, scan sistem sebelum reconnect ke jaringan, dan laporkan ke penegak hukum.",
+    "candidate_answer": "1. Identifikasi dan isolasi sistem yang terinfeksi untuk mencegah penyebaran lebih lanjut ke jaringan lain. Pastikan sistem yang terinfeksi tidak terhubung ke jaringan internal atau internet.\n2. Evaluasi status backup data yang tersedia dan pastikan backup tersebut tidak terpengaruh oleh serangan. Backup yang aman dapat digunakan untuk memulihkan data yang terenkripsi.\n3. Pastikan bahwa fitur pemulihan sistem seperti volume shadow copies dan backup catalog tidak dinonaktifkan atau dihapus oleh penyerang. Jika fitur ini masih tersedia, gunakan untuk memulihkan data.\n4. Lakukan komunikasi internal untuk memberi tahu semua pihak terkait tentang insiden ini dan memberikan panduan agar tidak membuka file mencurigakan atau mengakses sistem yang terinfeksi.\n5. Kumpulkan informasi tentang serangan, termasuk file yang terenkripsi, pesan tebusan, atau pola serangan, untuk membantu analisis lebih lanjut dan pelaporan kepada otoritas terkait.\n\nPanduan umum: Langkah-langkah mitigasi awal ini bertujuan untuk membatasi dampak serangan ransomware dan mempersiapkan proses pemulihan. Pastikan untuk tidak membayar tebusan kepada penyerang, karena hal ini tidak menjamin pemulihan data dan dapat mendorong serangan lebih lanjut.\nCatatan eskalasi: Jika langkah-langkah mitigasi awal ini tidak cukup untuk memulihkan sistem, segera eskalasi insiden ini ke tim keamanan siber nasional (BSSN) untuk mendapatkan bantuan lebih lanjut dan melaporkan insiden sesuai dengan prosedur yang berlaku.\n\nSumber:\n[1] Dokumen [2], Teknik MITRE ATT&CK: Data Encrypted for Impact (T1486)\n[2] Dokumen [1], Teknik MITRE ATT&CK: Inhibit System Recovery (T1490)\n[3] Dokumen [5], Teknik MITRE ATT&CK: Inhibit System Recovery (T1490)\n[4] Dokumen [4], Teknik MITRE ATT&CK: Data Encrypted for Impact (T1486)",
+    "retrieved_chunks": [
+      {
+        "id": "e0a8d770-525b-4d20-a2e1-bb617eca1f89",
+        "content": "Teknik Serangan MITRE ATT&CK: Inhibit System Recovery (T1490)\nTaktik: impact\n\nAdversaries may delete or remove built-in data and turn off services designed to aid in the recovery of a corrupted system to prevent recovery.(Citation: Talos Olympic Destroyer 2018)(Citation: FireEye WannaCry 2017) This may deny access to available backups and recovery options.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "ddos",
+            "ransomware",
+            "web_defacement"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1462
+        },
+        "score": 0.58931196,
+        "rrf_score": 0.01639344262295082,
+        "final_score": 0.5108790277377049
+      },
+      {
+        "id": "21ed8812-84e8-4eea-8f8f-a29850e91cf0",
+        "content": "Teknik Serangan MITRE ATT&CK: Data Encrypted for Impact (T1486)\nTaktik: impact\n\nAdversaries may encrypt data on target systems or on large numbers of systems in a network to interrupt availability to system and network resources. They can attempt to render stored data inaccessible by encrypting files or data on local and remote drives and withholding access to a decryption key. This may be done in order to extract monetary compensation from a victim in exchange for decryption or a decryption key (ransomware) or to render data permanently inaccessible in cases where the key is not saved or transmitted.(Citation: US-CERT Ransomware 2016)(Citation: FireEye WannaCry 2017)(Citation: US-CERT NotPetya 2017)(Citation: US-CERT SamSam 2018)",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "ddos",
+            "ransomware",
+            "web_defacement"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1270
+        },
+        "score": 0.5521512,
+        "rrf_score": 0.016129032258064516,
+        "final_score": 0.483280033548387
+      },
+      {
+        "id": "79c2ed14-5df4-4363-83c5-e2bcb9d89790",
+        "content": "Teknik Serangan MITRE ATT&CK: Selective Exclusion (T1679)\nTaktik: defense-evasion\n\nAdversaries may intentionally exclude certain files, folders, directories, file types, or system components from encryption or tampering during a ransomware or malicious payload execution. Some file extensions that adversaries may avoid encrypting include `.dll`, `.exe`, and `.lnk`.(Citation: Palo Alto Unit 42 Medusa Group Medusa Ransomware January 2024)  \n\nAdversaries may perform this behavior to avoid alerting users, to evade detection by security tools and analysts, or, in the case of ransomware, to ensure that the system remains operational enough to deliver the ransom notice.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "malware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1180
+        },
+        "score": 0.54066086,
+        "rrf_score": 0.015873015873015872,
+        "final_score": 0.4737006972380952
+      },
+      {
+        "id": "1dc10fbf-48ea-4a60-912e-4a9fc9ca46da",
+        "content": "In the case of ransomware, it is typical that common user files like Office documents, PDFs, images, videos, audio, text, and source code files will be encrypted (and often renamed and/or tagged with specific file markers). Adversaries may need to first employ other behaviors, such as [File and Directory Permissions Modification](https://attack.mitre.org/techniques/T1222) or [System Shutdown/Reboot](https://attack.mitre.org/techniques/T1529), in order to unlock and/or gain access to manipulate these files.(Citation: CarbonBlack Cont",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "ddos",
+            "ransomware",
+            "web_defacement"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1271
+        },
+        "score": 0.53202915,
+        "rrf_score": 0.015625,
+        "final_score": 0.46617040499999995
+      },
+      {
+        "id": "93e53743-a636-427a-a902-d17362485c4c",
+        "content": "Operating systems may contain features that can help fix corrupted systems, such as a backup catalog, volume shadow copies, and automatic repair features. Adversaries may disable or delete system recovery features to augment the effects of [Data Destruction](https://attack.mitre.org/techniques/T1485) and [Data Encrypted for Impact](https://attack.mitre.org/techniques/T1486).(Citation: Talos Olympic Destroyer 2018)(Citation: FireEye WannaCry 2017) Furthermore, adversaries may disable recovery notifications, then corrupt backups.(Citation: disable_notif_synology_ransom)\n\nA number of native Windows utilities have been used by adversaries to disable or delete system recovery features:",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "ddos",
+            "ransomware",
+            "web_defacement"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1463
+        },
+        "score": 0.523262,
+        "rrf_score": 0.015384615384615385,
+        "final_score": 0.4585910923076923
+      }
+    ]
+  },
+  {
+    "id": "QA-009",
+    "question": "Apa perbedaan antara incident response dan disaster recovery?",
+    "ground_truth": "Incident response fokus pada mengatasi ancaman keamanan aktif, sedangkan disaster recovery fokus pada pemulihan sistem dan data setelah insiden selesai.",
+    "candidate_answer": "1. Mulai prosedur pemulihan selama atau setelah proses respons insiden untuk memastikan sistem dapat kembali beroperasi secara normal.\n2. Informasikan kepada semua individu yang memiliki tanggung jawab pemulihan tentang rencana pemulihan dan otorisasi yang diperlukan untuk melaksanakan setiap aspek rencana tersebut.\n3. Pilih tindakan pemulihan berdasarkan kriteria yang telah ditentukan dalam rencana respons insiden dan sumber daya yang tersedia, dengan mempertimbangkan ketepatan waktu, presisi, dan keandalan.\n4. Verifikasi integritas cadangan dan aset pemulihan lainnya untuk memastikan tidak ada indikator kompromi, kerusakan file, atau masalah integritas lainnya sebelum digunakan untuk pemulihan.\n5. Pastikan layanan penting dipulihkan dalam urutan yang sesuai, bekerja sama dengan pemilik sistem untuk mengonfirmasi keberhasilan pemulihan sistem dan kembalinya operasi normal.\n\nPanduan umum: Respons insiden berfokus pada deteksi, penanganan, dan mitigasi insiden keamanan siber, sedangkan pemulihan bencana (disaster recovery) berfokus pada pemulihan sistem dan layanan ke kondisi normal setelah insiden terjadi. Keduanya saling melengkapi dalam siklus manajemen insiden.\nCatatan eskalasi: Jika insiden berkembang menjadi tingkat keparahan yang lebih tinggi atau melibatkan data sensitif, segera eskalasi ke tim keamanan siber tingkat lanjut atau otoritas terkait untuk penanganan lebih lanjut.\n\nSumber:\n[1] [3] RC.RP-01, R1\n[2] [3] RC.RP-01, R2\n[3] [3] RC.RP-02, R1\n[4] [5] RC.RP-03, R1\n[5] [5] RC.RP-04, R1 & R2",
+    "retrieved_chunks": [
+      {
+        "id": "f32c7f15-d656-429e-8f65-a5c35624e24f",
+        "content": "extensive expertise in minimizing operational disruption during severe circumstances, they may be \nvaluable in planning responses to certain situations, such as denial of service (DoS) conditions.  \n Physical Security and Facilities Management. Some computer security incidents occur through \nbreaches of physical security or involve coordinated logical and physical attacks. The incident \nresponse team also may need access to facilities during incident handling—for example, to acquire a \ncompromised workstation from a locked office.  \n2.5 Incident Response Team Services \nThe main focus of an incident response team is performing incident response, but it is fairly rare for a \nteam to perform incident response only. The following are examples of other services a team might offer:",
+        "metadata": {
+          "doc_id": "nist-800-61-rev2",
+          "doc_title": "Computer Security Incident Handling Guide",
+          "source_framework": "NIST",
+          "language": "en",
+          "incident_types": [
+            "phishing",
+            "malware",
+            "ransomware",
+            "akses_tidak_sah",
+            "kebocoran_data",
+            "general"
+          ],
+          "page_number": 27,
+          "section_header": "2.5 Incident Response Team Services",
+          "chunk_index": 116
+        },
+        "score": 0.560094,
+        "rrf_score": 0.01639344262295082,
+        "final_score": 0.4904264557377049
+      },
+      {
+        "id": "ff833d6d-076e-49ba-8731-b67cf639664d",
+        "content": "• Detect, Respond, and Recover help organizations discover, manage, prioritize, contain, \neradicate, and recover from cybersecurity incidents, as well as perform incident \nreporting, notification, and other incident-related communications.  \nMany individuals, teams, and third parties hold a wide variety of roles and responsibilities \nacross all of the Functions that support an organization’s incident response. Organizations have \nno direct control over the tactics and techniques used by their adversaries, nor are they certain \nabout the timing of a future incident other than knowing that another incident is inevitable. \nHowever, organizations can use an incident response life cycle framework or model that best",
+        "metadata": {
+          "doc_id": "nist-800-61-rev3",
+          "doc_title": "Incident Response Recommendations and Considerations for Cybersecurity Risk Management",
+          "source_framework": "NIST",
+          "language": "en",
+          "incident_types": [
+            "phishing",
+            "malware",
+            "ransomware",
+            "akses_tidak_sah",
+            "kebocoran_data",
+            "ddos",
+            "web_defacement",
+            "general"
+          ],
+          "page_number": 8,
+          "section_header": "",
+          "chunk_index": 375
+        },
+        "score": 0.5517233,
+        "rrf_score": 0.016129032258064516,
+        "final_score": 0.48298050354838706
+      },
+      {
+        "id": "ad4829ca-e919-4443-a772-54f87bf9e778",
+        "content": "recovery plans and plan execution, see \n[SP800-184]. \nRC.RP-01 The recovery portion of the \nincident response plan is \nexecuted once initiated from the \nincident response process \nHigh R1: Begin recovery procedures during or \nafter incident response processes. \nR2: Inform all individuals with recovery \nresponsibilities about the plans for \nrecovery and the authorizations required to \nimplement each aspect of the plans. \nRC.RP-02 Recovery actions are selected, \nscoped, prioritized, and \nperformed \nHigh R1: Recovery actions should take \ntimeliness, precision, and reliability (e.g., \nrestoring only the affected files versus \nrestoring all files) into account. \nR2: Select recovery actions based on the \ncriteria defined in the incident response \nplan and available resources.",
+        "metadata": {
+          "doc_id": "nist-800-61-rev3",
+          "doc_title": "Incident Response Recommendations and Considerations for Cybersecurity Risk Management",
+          "source_framework": "NIST",
+          "language": "en",
+          "incident_types": [
+            "phishing",
+            "malware",
+            "ransomware",
+            "akses_tidak_sah",
+            "kebocoran_data",
+            "ddos",
+            "web_defacement",
+            "general"
+          ],
+          "page_number": 41,
+          "section_header": "",
+          "chunk_index": 510
+        },
+        "score": 0.55124074,
+        "rrf_score": 0.015873015873015872,
+        "final_score": 0.4811066132380952
+      },
+      {
+        "id": "0df79559-070f-4532-954c-2928600879c4",
+        "content": "necessary or is performed during recovery.  \nIn recovery, administrators restore systems to normal operation, confirm that the systems are functioning \nnormally, and (if applicable) remediate vulnerabilities to prevent similar incidents. Recovery may involve \nsuch actions as restoring systems from clean backups, rebuilding systems from scratch, replacing \ncompromised files with clean versions, installing patches, changing passwords, and tightening network \nperimeter security (e.g., firewall rulesets, boundary router access control lists). Higher levels of system \nlogging or network monitoring are often part of the recovery process. Once a resource is successfully \nattacked, it is often attacked again, or other resources within the organization are attacked in a similar \nmanner.",
+        "metadata": {
+          "doc_id": "nist-800-61-rev2",
+          "doc_title": "Computer Security Incident Handling Guide",
+          "source_framework": "NIST",
+          "language": "en",
+          "incident_types": [
+            "phishing",
+            "malware",
+            "ransomware",
+            "akses_tidak_sah",
+            "kebocoran_data",
+            "general"
+          ],
+          "page_number": 46,
+          "section_header": "",
+          "chunk_index": 212
+        },
+        "score": 0.54971606,
+        "rrf_score": 0.015625,
+        "final_score": 0.47855124199999993
+      },
+      {
+        "id": "468c238e-6412-43d7-b824-a4fa5c188593",
+        "content": "criteria defined in the incident response \nplan and available resources. \nR3: Change planned recovery actions based \non a reassessment of organizational needs \nand resources. \nRC.RP-03 The integrity of backups and \nother restoration assets is \nverified before using them for \nrestoration \nHigh R1: Check restoration assets for indicators \nof compromise, file corruption, and other \nintegrity issues before use. \nRC.RP-04 Critical mission functions and \ncybersecurity risk management \nare considered to establish post-\nincident operational norms \nHigh R1: Validate that essential services are \nrestored in the appropriate order. \nR2: Work with system owners to confirm \nthe successful restoration of systems and \nthe return to normal operations. \nR3: Monitor the performance of restored",
+        "metadata": {
+          "doc_id": "nist-800-61-rev3",
+          "doc_title": "Incident Response Recommendations and Considerations for Cybersecurity Risk Management",
+          "source_framework": "NIST",
+          "language": "en",
+          "incident_types": [
+            "phishing",
+            "malware",
+            "ransomware",
+            "akses_tidak_sah",
+            "kebocoran_data",
+            "ddos",
+            "web_defacement",
+            "general"
+          ],
+          "page_number": 41,
+          "section_header": "",
+          "chunk_index": 511
+        },
+        "score": 0.5493016,
+        "rrf_score": 0.015384615384615385,
+        "final_score": 0.47681881230769224
+      }
+    ]
+  },
+  {
+    "id": "QA-010",
+    "question": "Bagaimana cara mengamankan akun dari serangan brute force?",
+    "ground_truth": "Aktifkan multi-factor authentication, terapkan kebijakan lockout akun setelah beberapa kali gagal login, dan gunakan password yang kuat dan unik.",
+    "candidate_answer": "1. Terapkan kebijakan kata sandi yang kuat, termasuk panjang minimum, kombinasi karakter (huruf besar, huruf kecil, angka, dan simbol), serta pembaruan kata sandi secara berkala untuk mengurangi risiko serangan brute force.\n2. Aktifkan mekanisme penguncian akun setelah sejumlah upaya login yang gagal untuk mencegah serangan brute force yang berulang.\n3. Gunakan autentikasi multi-faktor (MFA) untuk menambahkan lapisan keamanan tambahan pada akun, sehingga meskipun kata sandi berhasil ditebak, akses tetap tidak dapat diperoleh tanpa faktor tambahan.\n4. Pantau log aktivitas akun untuk mendeteksi pola login yang mencurigakan, seperti banyaknya upaya login yang gagal dalam waktu singkat.\n5. Edukasi pengguna tentang pentingnya menjaga kerahasiaan kata sandi dan mengenali tanda-tanda serangan siber, seperti email phishing yang mencoba mencuri kredensial.\n\nPanduan umum: Langkah-langkah mitigasi ini dirancang untuk mengurangi risiko serangan brute force pada akun pengguna. Penting untuk mengintegrasikan kebijakan keamanan ini ke dalam prosedur operasional organisasi secara menyeluruh.\nCatatan eskalasi: Jika serangan terus berlanjut atau dampaknya meningkat, segera eskalasi insiden ini ke tim keamanan siber nasional (BSSN) untuk mendapatkan dukungan lebih lanjut.\n\nSumber:\n[1] Dokumen [1], Teknik Serangan MITRE ATT&CK: Brute Force (T1110)",
+    "retrieved_chunks": [
+      {
+        "id": "bd0b1676-322e-4db6-b617-afee13c98253",
+        "content": "Teknik Serangan MITRE ATT&CK: Brute Force (T1110)\nTaktik: credential-access\n\nAdversaries may use brute force techniques to gain access to accounts when passwords are unknown or when password hashes are obtained.(Citation: TrendMicro Pawn Storm Dec 2020) Without knowledge of the password for an account or set of accounts, an adversary may systematically guess the password using a repetitive or iterative mechanism.(Citation: Dragos Crashoverride 2018) Brute forcing passwords can take place via interaction with a service that will check the validity of those credentials or offline against previously acquired credential data, such as password hashes.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "phishing"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1232
+        },
+        "score": 0.6637864,
+        "rrf_score": 0.01639344262295082,
+        "final_score": 0.5630111357377049
+      },
+      {
+        "id": "85b1a9b6-86b1-4a05-8b6b-22cb9f1f8d6b",
+        "content": "Teknik Serangan MITRE ATT&CK: Valid Accounts (T1078)\nTaktik: defense-evasion, persistence, privilege-escalation, initial-access",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "malware",
+            "phishing"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1246
+        },
+        "score": 0.6385008,
+        "rrf_score": 0.016129032258064516,
+        "final_score": 0.543724753548387
+      },
+      {
+        "id": "a6c2dc08-206f-4ec5-a8be-b1108a1a9caa",
+        "content": "Teknik Serangan MITRE ATT&CK: Login Item (T1162)\nTaktik: persistence",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "malware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 889
+        },
+        "score": 0.60538703,
+        "rrf_score": 0.015873015873015872,
+        "final_score": 0.5190090162380953
+      },
+      {
+        "id": "3f20fdee-f246-4955-89c7-b87eaee3a782",
+        "content": "Teknik Serangan MITRE ATT&CK: Create Account (T1136)\nTaktik: persistence\n\nAdversaries may create an account to maintain access to victim systems.(Citation: Symantec WastedLocker June 2020) With a sufficient level of access, creating such accounts may be used to establish secondary credentialed access that do not require persistent remote access tools to be deployed on the system.\n\nAccounts may be created on the local system or within a domain or cloud tenant. In cloud environments, adversaries may create accounts that only have access to specific services, which can reduce the chance of detection.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "malware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1404
+        },
+        "score": 0.5873364,
+        "rrf_score": 0.015625,
+        "final_score": 0.50488548
+      },
+      {
+        "id": "8260eb94-e54c-4424-86ff-c5986d8b0d35",
+        "content": "Teknik Serangan MITRE ATT&CK: Steal or Forge Kerberos Tickets (T1558)\nTaktik: credential-access",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "phishing"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 920
+        },
+        "score": 0.56168735,
+        "rrf_score": 0.015384615384615385,
+        "final_score": 0.4854888373076923
+      }
+    ]
+  },
+  {
+    "id": "QA-011",
+    "question": "Saya menerima email yang mengatasnamakan atasan dengan nada mendesak dan meminta saya melakukan login ulang melalui tautan tertentu. Apakah ini perlu dianggap sebagai ancaman keamanan?",
+    "ground_truth": "Ya, ini indikasi kuat phishing. Pola mendesak + ajakan klik/login ulang adalah ciri umum upaya pencurian kredensial. Saran mitigasi awal: isolasi email dan blok domain/URL mencurigakan di gateway, edukasi cepat ke user terdampak agar tidak klik tautan serupa, dan perkuat filter email serta proteksi endpoint.",
+    "candidate_answer": "1. Berikan pelatihan dan kesadaran kepada pegawai tentang cara mengenali upaya phishing, termasuk spearphishing dengan tautan, serta pentingnya tidak mengklik tautan yang mencurigakan atau tidak dikenal.\n2. Sampaikan kepada pegawai untuk selalu memverifikasi keaslian email yang mengatasnamakan atasan, terutama jika email tersebut memiliki nada mendesak atau meminta tindakan segera.\n3. Dorong penggunaan mekanisme autentikasi multi-faktor (MFA) untuk semua akun penting, dan edukasi pegawai tentang cara mengenali upaya bypass MFA seperti permintaan MFA yang tidak sah.\n4. Pastikan pegawai memahami pentingnya melaporkan insiden atau email mencurigakan kepada tim keamanan siber internal untuk investigasi lebih lanjut.\n5. Evaluasi dan perbarui kebijakan keamanan siber organisasi untuk mencakup prosedur penanganan insiden phishing, termasuk langkah-langkah mitigasi awal dan eskalasi ke tim keamanan siber.\n\nPanduan umum: Email yang mengatasnamakan atasan dengan nada mendesak dan meminta login ulang melalui tautan tertentu dapat menjadi indikasi serangan spearphishing. Pegawai harus berhati-hati dan tidak langsung mengklik tautan tersebut tanpa verifikasi lebih lanjut.\nCatatan eskalasi: Jika email mencurigakan ini telah diakses atau tautan telah diklik, segera laporkan insiden ini kepada tim keamanan siber internal untuk investigasi lebih lanjut dan mitigasi potensi dampak.\n\nSumber:\n[1] [3] Training and Awareness: Educate employees on identifying phishing attempts.\n[2] [4] Teknik Serangan MITRE ATT&CK: Phishing (T1566): Adversaries may send phishing messages to gain access to victim systems.\n[3] [5] Teknik Serangan MITRE ATT&CK: Multi-Factor Authentication Request Generation (T1621): Adversaries may attempt to bypass multi-factor authentication mechanisms.\n[4] [4] Teknik Serangan MITRE ATT&CK: Phishing (T1566): Phishing can be targeted, known as spearphishing.\n[5] [3] Training and Awareness: Educate employees on avoiding information leaks.",
+    "retrieved_chunks": [
+      {
+        "id": "a6c2dc08-206f-4ec5-a8be-b1108a1a9caa",
+        "content": "Teknik Serangan MITRE ATT&CK: Login Item (T1162)\nTaktik: persistence",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "malware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 889
+        },
+        "score": 0.51601696,
+        "rrf_score": 0.01639344262295082,
+        "final_score": 0.45957252773770485
+      },
+      {
+        "id": "3ddd69fc-b067-413d-b2c6-63c279728a9a",
+        "content": "Teknik Serangan MITRE ATT&CK: Spearphishing Link (T1192)\nTaktik: initial-access\n\nSpearphishing with a link is a specific variant of spearphishing. It is different from other forms of spearphishing in that it employs the use of links to download malware contained in email, instead of attaching malicious files to the email itself, to avoid defenses that may inspect email attachments.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "phishing"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 828
+        },
+        "score": 0.5054178,
+        "rrf_score": 0.016129032258064516,
+        "final_score": 0.4505666535483871
+      },
+      {
+        "id": "9d414522-c882-469f-9734-21821872386e",
+        "content": "Training and Awareness:\n\n- Educate employees on identifying phishing attempts, securing their social media, and avoiding information leaks.\n\nTeknik yang dimitigasi (84):\n  - T1583.001: Domains\n  - T1583.002: DNS Server\n  - T1583.003: Virtual Private Server\n  - T1583.004: Server\n  - T1583.005: Botnet\n  - T1583.006: Web Services\n  - T1583.007: Serverless\n  - T1583.008: Malvertising\n  - T1583: Acquire Infrastructure\n  - T1584.001: Domains\n  - T1584.002: DNS Server\n  - T1584.003: Virtual Private Server\n  - T1584.004: Server\n  - T1584.005: Botnet\n  - T1584.006: Web Services\n  - T1584.007: Serverless\n  - T1584.008: Network Devices\n  - T1584: Compromise Infrastructure\n  - T1585.001: Social Media Accounts\n  - T1585.002: Email Accounts",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "general"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 617
+        },
+        "score": 0.49372235,
+        "rrf_score": 0.015873015873015872,
+        "final_score": 0.4408437402380952
+      },
+      {
+        "id": "629b5b06-ba2f-4df0-be6a-20ad1213aba8",
+        "content": "Teknik Serangan MITRE ATT&CK: Phishing (T1566)\nTaktik: initial-access\n\nAdversaries may send phishing messages to gain access to victim systems. All forms of phishing are electronically delivered social engineering. Phishing can be targeted, known as spearphishing. In spearphishing, a specific individual, company, or industry will be targeted by the adversary. More generally, adversaries can conduct non-targeted phishing, such as in mass malware spam campaigns.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "phishing"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1228
+        },
+        "score": 0.4878662,
+        "rrf_score": 0.015625,
+        "final_score": 0.43525634
+      },
+      {
+        "id": "31b45376-3f50-4061-bb8a-7d158f1b9140",
+        "content": "Teknik Serangan MITRE ATT&CK: Multi-Factor Authentication Request Generation (T1621)\nTaktik: credential-access\n\nAdversaries may attempt to bypass multi-factor authentication (MFA) mechanisms and gain access to accounts by generating MFA requests sent to users.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "phishing"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1172
+        },
+        "score": 0.48614997,
+        "rrf_score": 0.015384615384615385,
+        "final_score": 0.43261267130769226
+      }
+    ]
+  },
+  {
+    "id": "QA-012",
+    "question": "Saya menerima email dengan lampiran invoice dari pengirim yang tidak saya kenal, dan setelah dibuka perangkat saya menjadi tidak normal. Kemungkinan kejadian ini apa?",
+    "ground_truth": "Ini merupakan spearphishing attachment: file berbahaya disamarkan sebagai dokumen kerja. Saran mitigasi awal: karantina endpoint yang membuka lampiran dan hentikan penyebaran file serupa, batasi tipe file berisiko tinggi dari email/web, dan sosialisasi ulang prosedur buka lampiran yang aman.",
+    "candidate_answer": "1. Tingkatkan kesadaran dan pelatihan karyawan untuk mengenali email phishing, termasuk email dengan lampiran mencurigakan seperti invoice dari pengirim yang tidak dikenal.\n2. Berikan panduan kepada karyawan untuk memeriksa header email guna memastikan keaslian pengirim, karena header email dapat dimodifikasi untuk tujuan spoofing.\n3. Hindari membuka lampiran atau mengklik tautan dalam email yang mencurigakan, terutama jika email tersebut berasal dari pengirim yang tidak dikenal.\n4. Segera laporkan email mencurigakan kepada tim keamanan siber internal untuk dilakukan analisis lebih lanjut dan mitigasi potensi ancaman.\n5. Pastikan kebijakan keamanan email organisasi mencakup pemeriksaan otomatis terhadap lampiran dan tautan untuk mendeteksi potensi malware.\n\nPanduan umum: Insiden ini kemungkinan besar terkait dengan serangan spearphishing menggunakan lampiran berbahaya (T1193). Penting untuk meningkatkan kesadaran karyawan tentang ancaman ini dan memastikan kebijakan keamanan email yang kuat diterapkan.\nCatatan eskalasi: Jika perangkat yang terinfeksi menunjukkan perilaku tidak normal, segera isolasi perangkat tersebut dari jaringan organisasi dan hubungi tim respons insiden untuk analisis lebih lanjut.\n\nSumber:\n[1] [2] Training and Awareness\n[2] [1] Teknik Serangan MITRE ATT&CK: Email Spoofing (T1672)\n[3] [5] Teknik Serangan MITRE ATT&CK: Spearphishing Attachment (T1193)",
+    "retrieved_chunks": [
+      {
+        "id": "904b754e-a651-4787-8b58-5a0a96c1eb46",
+        "content": "Teknik Serangan MITRE ATT&CK: Email Spoofing (T1672)\nTaktik: defense-evasion\n\nAdversaries may fake, or spoof, a sender’s identity by modifying the value of relevant email headers in order to establish contact with victims under false pretenses.(Citation: Proofpoint TA427 April 2024) In addition to actual email content, email headers (such as the FROM header, which contains the email address of the sender) may also be modified. Email clients display these headers when emails appear in a victim's inbox, which may cause modified emails to appear as if they were from the spoofed entity.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "malware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1405
+        },
+        "score": 0.45430654,
+        "rrf_score": 0.01639344262295082,
+        "final_score": 0.4163752337377049
+      },
+      {
+        "id": "9d414522-c882-469f-9734-21821872386e",
+        "content": "Training and Awareness:\n\n- Educate employees on identifying phishing attempts, securing their social media, and avoiding information leaks.\n\nTeknik yang dimitigasi (84):\n  - T1583.001: Domains\n  - T1583.002: DNS Server\n  - T1583.003: Virtual Private Server\n  - T1583.004: Server\n  - T1583.005: Botnet\n  - T1583.006: Web Services\n  - T1583.007: Serverless\n  - T1583.008: Malvertising\n  - T1583: Acquire Infrastructure\n  - T1584.001: Domains\n  - T1584.002: DNS Server\n  - T1584.003: Virtual Private Server\n  - T1584.004: Server\n  - T1584.005: Botnet\n  - T1584.006: Web Services\n  - T1584.007: Serverless\n  - T1584.008: Network Devices\n  - T1584: Compromise Infrastructure\n  - T1585.001: Social Media Accounts\n  - T1585.002: Email Accounts",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "general"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 617
+        },
+        "score": 0.44747096,
+        "rrf_score": 0.016129032258064516,
+        "final_score": 0.4100038655483871
+      },
+      {
+        "id": "ca753e03-c52a-40b8-b01a-7ba59d0898ec",
+        "content": "Teknik Serangan MITRE ATT&CK: Email Collection (T1114)\nTaktik: collection\n\nAdversaries may target user email to collect sensitive information. Emails may contain sensitive data, including trade secrets or personal information, that can prove valuable to adversaries. Emails may also contain details of ongoing incident response operations, which may allow adversaries to adjust their techniques in order to maintain persistence or evade defenses.(Citation: TrustedSec OOB Communications)(Citation: CISA AA20-352A 2021) Adversaries can collect or forward email from mail servers or clients.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "kebocoran_data"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 801
+        },
+        "score": 0.43516368,
+        "rrf_score": 0.015873015873015872,
+        "final_score": 0.3998526712380952
+      },
+      {
+        "id": "3ddd69fc-b067-413d-b2c6-63c279728a9a",
+        "content": "Teknik Serangan MITRE ATT&CK: Spearphishing Link (T1192)\nTaktik: initial-access\n\nSpearphishing with a link is a specific variant of spearphishing. It is different from other forms of spearphishing in that it employs the use of links to download malware contained in email, instead of attaching malicious files to the email itself, to avoid defenses that may inspect email attachments.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "phishing"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 828
+        },
+        "score": 0.4107536,
+        "rrf_score": 0.015625,
+        "final_score": 0.38127752
+      },
+      {
+        "id": "74e07885-fa41-4b12-8085-525a1d092cab",
+        "content": "Teknik Serangan MITRE ATT&CK: Spearphishing Attachment (T1193)\nTaktik: initial-access\n\nSpearphishing attachment is a specific variant of spearphishing. Spearphishing attachment is different from other forms of spearphishing in that it employs the use of malware attached to an email. All forms of spearphishing are electronically delivered social engineering targeted at a specific individual, company, or industry. In this scenario, adversaries attach a file to the spearphishing email and usually rely upon [User Execution](https://attack.mitre.org/techniques/T1204) to gain execution.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "phishing"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1053
+        },
+        "score": 0.40980393,
+        "rrf_score": 0.015384615384615385,
+        "final_score": 0.3791704433076923
+      }
+    ]
+  },
+  {
+    "id": "QA-013",
+    "question": "File pada shared drive tiba-tiba terenkripsi dan muncul pesan permintaan tebusan. Apa langkah awal yang sebaiknya dilakukan?",
+    "ground_truth": "Ini indikasi ransomware tipe enkripsi data untuk mengganggu ketersediaan layanan. Saran mitigasi awal: isolasi host terdampak dan hentikan proses enkripsi lanjutan, siapkan pemulihan dari backup bersih yang terverifikasi, dan bekukan akun/sesi yang dicurigai jadi jalur awal serangan (operasional lokal).",
+    "candidate_answer": "1. Segera putuskan koneksi jaringan dari sistem yang terindikasi terkena serangan untuk mencegah penyebaran lebih lanjut ke sistem lain melalui shared drive.\n2. Identifikasi dan dokumentasikan semua shared drive yang ada di jaringan untuk memahami potensi area yang terdampak dan mengurangi risiko penyebaran lebih lanjut.\n3. Lakukan audit terhadap akses ke shared drive, termasuk memeriksa hak akses pengguna dan memastikan hanya pengguna yang berwenang yang memiliki akses ke folder atau drive tertentu.\n4. Hentikan sementara penggunaan shared drive yang tidak kritis untuk operasional, terutama yang tidak memiliki perlindungan keamanan yang memadai, guna mengurangi risiko pengumpulan data lebih lanjut oleh pelaku.\n\nPanduan umum: Langkah-langkah mitigasi awal ini bertujuan untuk membatasi penyebaran serangan ransomware melalui shared drive dan meminimalkan dampak terhadap sistem lain. Penting untuk segera melibatkan tim keamanan informasi untuk investigasi lebih lanjut dan memastikan bahwa langkah-langkah mitigasi ini diterapkan secara konsisten.\nCatatan eskalasi: Jika serangan terus berlanjut atau dampaknya meluas, segera eskalasi insiden ini ke Badan Siber dan Sandi Negara (BSSN) untuk mendapatkan bantuan lebih lanjut dalam penanganan insiden keamanan siber.\n\nSumber:\n[1] [1] Teknik Serangan MITRE ATT&CK: Network Share Discovery (T1135)\n[2] [3] Teknik Serangan MITRE ATT&CK: Windows Admin Shares (T1077)\n[3] [4] Teknik Serangan MITRE ATT&CK: Data from Network Shared Drive (T1039)",
+    "retrieved_chunks": [
+      {
+        "id": "bce1821b-bd81-4805-81f2-3b0324e018c2",
+        "content": "Teknik Serangan MITRE ATT&CK: Network Share Discovery (T1135)\nTaktik: discovery\n\nAdversaries may look for folders and drives shared on remote systems as a means of identifying sources of information to gather as a precursor for Collection and to identify potential systems of interest for Lateral Movement. Networks often contain shared network drives and folders that enable users to access file directories on various systems across a network.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "malware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 881
+        },
+        "score": 0.51194096,
+        "rrf_score": 0.01639344262295082,
+        "final_score": 0.4567193277377049
+      },
+      {
+        "id": "b2e71986-e091-4727-b4db-6ae76c8f13a5",
+        "content": "Teknik Serangan MITRE ATT&CK: Network Share Connection Removal (T1126)\nTaktik: defense-evasion\n\nAdversaries may remove share connections that are no longer useful in order to clean up traces of their operation. Windows shared drive and [Windows Admin Shares](https://attack.mitre.org/techniques/T1077) connections can be removed when no longer needed. [Net](https://attack.mitre.org/software/S0039) is an example utility that can be used to remove network share connections with the net use \\\\system\\share /delete command. (Citation: Technet Net Use)",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "malware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1425
+        },
+        "score": 0.5093338,
+        "rrf_score": 0.016129032258064516,
+        "final_score": 0.453307853548387
+      },
+      {
+        "id": "859a76ad-d916-4aa6-9abc-fdc7697614a1",
+        "content": "Teknik Serangan MITRE ATT&CK: Windows Admin Shares (T1077)\nTaktik: lateral-movement\n\nWindows systems have hidden network shares that are accessible only to administrators and provide the ability for remote file copy and other administrative functions. Example network shares include C$, ADMIN$, and IPC$.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "malware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1479
+        },
+        "score": 0.4798929,
+        "rrf_score": 0.015873015873015872,
+        "final_score": 0.43116312523809525
+      },
+      {
+        "id": "c359bcc8-9118-4a4b-8243-cae9527225a6",
+        "content": "Teknik Serangan MITRE ATT&CK: Data from Network Shared Drive (T1039)\nTaktik: collection\n\nAdversaries may search network shares on computers they have compromised to find files of interest. Sensitive data can be collected from remote systems via shared network drives (host shared directory, network file server, etc.) that are accessible from the current system prior to Exfiltration. Interactive command shells may be in use, and common functionality within [cmd](https://attack.mitre.org/software/S0106) may be used to gather information.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "kebocoran_data"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1242
+        },
+        "score": 0.47972852,
+        "rrf_score": 0.015625,
+        "final_score": 0.42955996399999996
+      },
+      {
+        "id": "85dc8953-77e4-42b0-a39a-ad982b2670ca",
+        "content": "Teknik Serangan MITRE ATT&CK: Disk Content Wipe (T1488)\nTaktik: impact\n\nAdversaries may erase the contents of storage devices on specific systems as well as large numbers of systems in a network to interrupt availability to system and network resources.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "ddos",
+            "ransomware",
+            "web_defacement"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1272
+        },
+        "score": 0.46581835,
+        "rrf_score": 0.015384615384615385,
+        "final_score": 0.4183805373076923
+      }
+    ]
+  },
+  {
+    "id": "QA-014",
+    "question": "Halaman utama website berubah tanpa izin dan menampilkan pesan yang tidak dikenal. Apakah ini termasuk insiden prioritas tinggi?",
+    "ground_truth": "Ya, ini indikasi defacement dan berdampak langsung pada integritas serta reputasi layanan publik. Saran mitigasi awal: takedown sementara halaman terdampak dan aktifkan halaman cadangan darurat, pulihkan konten dari sumber tepercaya/backup bersih, serta simpan artefak perubahan untuk investigasi lanjutan.",
+    "candidate_answer": "1. Segera lakukan analisis terhadap perubahan konten pada halaman utama website untuk mengidentifikasi apakah ini merupakan serangan defacement. Fokus pada integritas konten yang telah diubah dan catat semua pesan atau elemen visual yang tidak dikenal.\n2. Komunikasikan insiden ini kepada tim keamanan siber internal dan pihak manajemen untuk memastikan semua pihak yang relevan mengetahui adanya potensi ancaman.\n3. Tinjau log akses server web untuk mengidentifikasi aktivitas mencurigakan, seperti IP yang tidak dikenal atau pola akses yang tidak biasa, yang mungkin terkait dengan perubahan konten.\n4. Periksa apakah ada kerentanan yang dapat dieksploitasi pada sistem, seperti kerentanan yang memungkinkan serangan drive-by compromise, dan pastikan semua perangkat lunak yang digunakan pada server web telah diperbarui ke versi terbaru.\n5. Evaluasi dan perkuat kontrol akses terhadap server web, termasuk memastikan bahwa hanya personel yang berwenang yang memiliki akses untuk mengubah konten website.\n\nPanduan umum: Insiden ini termasuk dalam kategori serangan defacement yang dapat memengaruhi reputasi organisasi. Penting untuk segera mengamankan sistem, mengidentifikasi sumber serangan, dan memulihkan konten website ke kondisi semula. Selain itu, lakukan komunikasi yang transparan kepada pemangku kepentingan terkait langkah-langkah mitigasi yang sedang diambil.\nCatatan eskalasi: Insiden ini memiliki tingkat keparahan sedang, namun dapat meningkat menjadi prioritas tinggi jika ditemukan bukti bahwa serangan ini merupakan bagian dari kampanye serangan yang lebih besar atau jika data sensitif turut terkompromi. Disarankan untuk melibatkan tim respons insiden nasional (CSIRT) jika diperlukan.\n\nSumber:\n[1] MITRE ATT&CK T1491 (Defacement)\n[2] NIST SP 800-61, Bagian 3.4.1 (Koordinasi Insiden)\n[3] MITRE ATT&CK T1189 (Drive-by Compromise)",
+    "retrieved_chunks": [
+      {
+        "id": "3190ded6-f6bb-49de-94d2-965be95a2180",
+        "content": "Teknik Serangan MITRE ATT&CK: Defacement (T1491)\nTaktik: impact\n\nAdversaries may modify visual content available internally or externally to an enterprise network, thus affecting the integrity of the original content. Reasons for [Defacement](https://attack.mitre.org/techniques/T1491) include delivering messaging, intimidation, or claiming (possibly false) credit for an intrusion. Disturbing or offensive images may be used as a part of [Defacement](https://attack.mitre.org/techniques/T1491) in order to cause user discomfort, or to pressure compliance with accompanying messages.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "ddos",
+            "ransomware",
+            "web_defacement"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1012
+        },
+        "score": 0.5272991,
+        "rrf_score": 0.01639344262295082,
+        "final_score": 0.4674700257377049
+      },
+      {
+        "id": "d2cc47cf-05ce-4f66-917d-913e5bebc0de",
+        "content": "Teknik Serangan MITRE ATT&CK: Drive-by Compromise (T1189)\nTaktik: initial-access\n\nAdversaries may gain access to a system through a user visiting a website over the normal course of browsing. Multiple ways of delivering exploit code to a browser exist (i.e., [Drive-by Target](https://attack.mitre.org/techniques/T1608/004)), including:",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "phishing"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1381
+        },
+        "score": 0.5013753,
+        "rrf_score": 0.016129032258064516,
+        "final_score": 0.447736903548387
+      },
+      {
+        "id": "89b2e78c-7250-4724-b376-ffd340f52f6a",
+        "content": "Teknik Serangan MITRE ATT&CK: Shared Webroot (T1051)\nTaktik: lateral-movement\n\n**This technique has been deprecated and should no longer be used.**\n\nAdversaries may add malicious content to an internally accessible website through an open network file share that contains the website's webroot or Web content directory (Citation: Microsoft Web Root OCT 2016) (Citation: Apache Server 2018) and then browse to that content with a Web browser to cause the server to execute the malicious content. The malicious content will typically run under the context and permissions of the Web server process, often resulting in local system or administrative privileges, depending on how the Web server is configured.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "malware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1127
+        },
+        "score": 0.48391932,
+        "rrf_score": 0.015873015873015872,
+        "final_score": 0.4339816192380952
+      },
+      {
+        "id": "98eef6ee-a268-436d-a64c-3d1d0ffa6d1a",
+        "content": "Teknik Serangan MITRE ATT&CK: Subvert Trust Controls (T1553)\nTaktik: defense-evasion\n\nAdversaries may undermine security controls that will either warn users of untrusted activity or prevent execution of untrusted programs. Operating systems and security products may contain mechanisms to identify programs or websites as possessing some level of trust. Examples of such features would include a program being allowed to run because it is signed by a valid code signing certificate, a program prompting the user with a warning because it has an attribute set from being downloaded from the Internet, or getting an indication that you are about to connect to an untrusted site.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "malware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1276
+        },
+        "score": 0.48084706,
+        "rrf_score": 0.015625,
+        "final_score": 0.43034294199999995
+      },
+      {
+        "id": "cf2ec2a5-6084-4c76-b317-8cce520587cb",
+        "content": "Teknik Serangan MITRE ATT&CK: Browser Session Hijacking (T1185)\nTaktik: collection\n\nAdversaries may take advantage of security vulnerabilities and inherent functionality in browser software to change content, modify user-behaviors, and intercept information as part of various browser session hijacking techniques.(Citation: Wikipedia Man in the Browser)",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "kebocoran_data"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 990
+        },
+        "score": 0.48078877,
+        "rrf_score": 0.015384615384615385,
+        "final_score": 0.4288598313076923
+      }
+    ]
+  },
+  {
+    "id": "QA-015",
+    "question": "Aplikasi yang terhubung ke internet tiba-tiba dapat diakses oleh pihak tidak sah, padahal tidak ada penggunaan akun admin. Biasanya ini disebabkan oleh apa?",
+    "ground_truth": "Salah satu kemungkinan utama: eksploitasi celah aplikasi publik untuk akses awal. Saran mitigasi awal: lakukan scan kerentanan dan patch prioritas kritikal, segmentasi layanan publik dari jaringan internal, serta terapkan filtering trafik dan isolasi aplikasi bila perlu.",
+    "candidate_answer": "1. Lakukan penilaian kerentanan pada aplikasi yang terhubung ke internet untuk mengidentifikasi kelemahan seperti bug perangkat lunak, kesalahan konfigurasi, atau celah keamanan lainnya yang dapat dieksploitasi. Pastikan untuk memprioritaskan perbaikan pada kelemahan yang ditemukan.\n2. Tinjau dan perbarui kebijakan akses aplikasi untuk memastikan bahwa hanya pengguna yang berwenang yang dapat mengakses sistem. Pastikan bahwa autentikasi multi-faktor (MFA) diterapkan untuk semua akun yang memiliki akses ke aplikasi.\n3. Evaluasi hubungan dengan pihak ketiga yang memiliki akses ke sistem atau aplikasi. Pastikan bahwa koneksi dan akses mereka diaudit secara berkala untuk menghindari penyalahgunaan hubungan terpercaya.\n4. Berikan pelatihan kepada pengguna internal untuk meningkatkan kesadaran tentang ancaman keamanan siber, termasuk risiko yang terkait dengan mengunjungi situs web yang tidak terpercaya atau mencurigakan.\n5. Pantau log akses dan aktivitas sistem secara berkala untuk mendeteksi aktivitas mencurigakan, seperti upaya akses yang tidak sah atau pola penggunaan yang tidak biasa.\n\nPanduan umum: Langkah-langkah mitigasi awal ini dirancang untuk mengidentifikasi dan mengurangi risiko yang terkait dengan akses tidak sah ke aplikasi yang terhubung ke internet. Penting untuk segera mengimplementasikan langkah-langkah ini untuk mencegah eskalasi insiden lebih lanjut.\nCatatan eskalasi: Jika insiden ini tidak dapat ditangani dengan langkah-langkah mitigasi awal, segera eskalasikan ke tim respons insiden keamanan siber tingkat lanjut atau penyedia layanan keamanan siber eksternal untuk investigasi lebih lanjut dan mitigasi lanjutan.\n\nSumber:\n[1] Dokumen [1], Teknik MITRE ATT&CK: Exploit Public-Facing Application (T1190)\n[2] Dokumen [4], Teknik MITRE ATT&CK: Valid Accounts (T1078)\n[3] Dokumen [5], Teknik MITRE ATT&CK: Trusted Relationship (T1199)\n[4] Dokumen [2], Teknik MITRE ATT&CK: Drive-by Compromise (T1189)",
+    "retrieved_chunks": [
+      {
+        "id": "dc78a2aa-3f17-4714-9f80-80ab04ab9d00",
+        "content": "Teknik Serangan MITRE ATT&CK: Exploit Public-Facing Application (T1190)\nTaktik: initial-access\n\nAdversaries may attempt to exploit a weakness in an Internet-facing host or system to initially access a network. The weakness in the system can be a software bug, a temporary glitch, or a misconfiguration.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "phishing"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 916
+        },
+        "score": 0.5297926,
+        "rrf_score": 0.01639344262295082,
+        "final_score": 0.46921547573770483
+      },
+      {
+        "id": "d2cc47cf-05ce-4f66-917d-913e5bebc0de",
+        "content": "Teknik Serangan MITRE ATT&CK: Drive-by Compromise (T1189)\nTaktik: initial-access\n\nAdversaries may gain access to a system through a user visiting a website over the normal course of browsing. Multiple ways of delivering exploit code to a browser exist (i.e., [Drive-by Target](https://attack.mitre.org/techniques/T1608/004)), including:",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "phishing"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1381
+        },
+        "score": 0.5151197,
+        "rrf_score": 0.016129032258064516,
+        "final_score": 0.4573579835483871
+      },
+      {
+        "id": "146fde60-cd8e-4a73-825c-17a89413c080",
+        "content": "Teknik Serangan MITRE ATT&CK: Application Access Token (T1527)\nTaktik: defense-evasion, lateral-movement\n\nAdversaries may use application access tokens to bypass the typical authentication process and access restricted accounts, information, or services on remote systems. These tokens are typically stolen from users and used in lieu of login credentials.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "malware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 851
+        },
+        "score": 0.49487388,
+        "rrf_score": 0.015873015873015872,
+        "final_score": 0.4416498112380952
+      },
+      {
+        "id": "85b1a9b6-86b1-4a05-8b6b-22cb9f1f8d6b",
+        "content": "Teknik Serangan MITRE ATT&CK: Valid Accounts (T1078)\nTaktik: defense-evasion, persistence, privilege-escalation, initial-access",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "malware",
+            "phishing"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1246
+        },
+        "score": 0.4868846,
+        "rrf_score": 0.015625,
+        "final_score": 0.43456922
+      },
+      {
+        "id": "f2fd5ddf-22e6-42ab-ae3c-ff9e25ff1350",
+        "content": "Teknik Serangan MITRE ATT&CK: Trusted Relationship (T1199)\nTaktik: initial-access\n\nAdversaries may breach or otherwise leverage organizations who have access to intended victims. Access through trusted third party relationship abuses an existing connection that may not be protected or receives less scrutiny than standard mechanisms of gaining access to a network.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "phishing"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1206
+        },
+        "score": 0.48577905,
+        "rrf_score": 0.015384615384615385,
+        "final_score": 0.43235302730769226
+      }
+    ]
+  },
+  {
+    "id": "QA-016",
+    "question": "Terdapat login berhasil menggunakan akun pegawai, namun pemilik akun menyatakan tidak pernah melakukan login tersebut. Indikasi apakah ini?",
+    "ground_truth": "Ini indikasi penyalahgunaan akun valid. Saran mitigasi awal: nonaktifkan sementara atau suspend sesi aktif akun terdampak, perketat kebijakan password dan kredensial, serta tinjau hak akses istimewa akun terkait.",
+    "candidate_answer": "1. Segera lakukan analisis terhadap akun yang digunakan untuk login mencurigakan, termasuk memeriksa aktivitas login sebelumnya dan lokasi geografis yang tidak biasa untuk mengidentifikasi potensi penyalahgunaan akun.\n2. Tinjau kebijakan akses akun dan pastikan bahwa hanya pengguna yang berwenang memiliki akses ke sistem. Pertimbangkan untuk menonaktifkan atau menghapus akun yang tidak digunakan atau mencurigakan.\n3. Implementasikan Multi-Factor Authentication (MFA) untuk semua akun pengguna guna mengurangi risiko akses tidak sah melalui kredensial yang valid.\n4. Berikan pelatihan kepada pegawai tentang pentingnya menjaga kerahasiaan kredensial dan mengenali tanda-tanda phishing atau serangan rekayasa sosial.\n5. Lakukan audit terhadap sistem untuk mendeteksi akun yang dibuat secara tidak sah, baik di sistem lokal maupun di lingkungan cloud, dan pastikan tidak ada akun yang memiliki akses berlebihan.\n\nPanduan umum: Insiden ini menunjukkan kemungkinan penyalahgunaan kredensial yang valid. Penting untuk segera mengidentifikasi sumber akses tidak sah dan memperkuat kebijakan keamanan akun untuk mencegah insiden serupa di masa depan.\nCatatan eskalasi: Jika analisis awal menunjukkan adanya potensi pelanggaran keamanan yang lebih besar, seperti akses ke data sensitif atau eskalasi hak istimewa, segera eskalasi insiden ini ke tim keamanan siber tingkat lanjut untuk investigasi lebih lanjut.\n\nSumber:\n[1] Dokumen [2], Teknik MITRE ATT&CK: Valid Accounts (T1078)\n[2] Dokumen [5], Teknik MITRE ATT&CK: Create Account (T1136)\n[3] Dokumen [4], Teknik yang dimitigasi: T1621 (Multi-Factor Authentication Request Generation)",
+    "retrieved_chunks": [
+      {
+        "id": "a6c2dc08-206f-4ec5-a8be-b1108a1a9caa",
+        "content": "Teknik Serangan MITRE ATT&CK: Login Item (T1162)\nTaktik: persistence",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "malware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 889
+        },
+        "score": 0.48810178,
+        "rrf_score": 0.01639344262295082,
+        "final_score": 0.4400319017377049
+      },
+      {
+        "id": "85b1a9b6-86b1-4a05-8b6b-22cb9f1f8d6b",
+        "content": "Teknik Serangan MITRE ATT&CK: Valid Accounts (T1078)\nTaktik: defense-evasion, persistence, privilege-escalation, initial-access",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "malware",
+            "phishing"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1246
+        },
+        "score": 0.4466544,
+        "rrf_score": 0.016129032258064516,
+        "final_score": 0.40943227354838707
+      },
+      {
+        "id": "d362f8a5-8544-487f-b4bb-c67f664bb455",
+        "content": "Teknik Serangan MITRE ATT&CK: System Owner/User Discovery (T1033)\nTaktik: discovery",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "malware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 747
+        },
+        "score": 0.44163945,
+        "rrf_score": 0.015873015873015872,
+        "final_score": 0.4043857102380952
+      },
+      {
+        "id": "6ad1107e-df8e-40ab-b6f0-3eca88fad2c3",
+        "content": "Teknik yang dimitigasi (10):\n  - T1078.004: Cloud Accounts\n  - T1078: Valid Accounts\n  - T1110.001: Password Guessing\n  - T1110.003: Password Spraying\n  - T1110.004: Credential Stuffing\n  - T1110: Brute Force\n  - T1550.001: Application Access Token\n  - T1550: Use Alternate Authentication Material\n  - T1621: Multi-Factor Authentication Request Generation\n  - T1648: Serverless Execution",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "malware",
+            "phishing",
+            "ransomware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 725
+        },
+        "score": 0.44094133,
+        "rrf_score": 0.015625,
+        "final_score": 0.40240893099999997
+      },
+      {
+        "id": "3f20fdee-f246-4955-89c7-b87eaee3a782",
+        "content": "Teknik Serangan MITRE ATT&CK: Create Account (T1136)\nTaktik: persistence\n\nAdversaries may create an account to maintain access to victim systems.(Citation: Symantec WastedLocker June 2020) With a sufficient level of access, creating such accounts may be used to establish secondary credentialed access that do not require persistent remote access tools to be deployed on the system.\n\nAccounts may be created on the local system or within a domain or cloud tenant. In cloud environments, adversaries may create accounts that only have access to specific services, which can reduce the chance of detection.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "malware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1404
+        },
+        "score": 0.43663824,
+        "rrf_score": 0.015384615384615385,
+        "final_score": 0.3979544603076923
+      }
+    ]
+  },
+  {
+    "id": "QA-017",
+    "question": "Trafik mendadak meledak sehingga layanan publik drop, apa yang terjadi?",
+    "ground_truth": "Ini merupakan indikasi Network Denial of Service yaitu serangan yang menghabiskan kapasitas jaringan sehingga layanan jadi lambat atau tidak tersedia.",
+    "candidate_answer": "1. Segera lakukan analisis awal terhadap pola trafik jaringan untuk mengidentifikasi apakah ada indikasi serangan seperti 'Traffic Duplication' (T1020.001) atau 'Exfiltration Over Alternative Protocol' (T1048). Fokus pada anomali yang signifikan.\n2. Pastikan segmentasi jaringan diterapkan dengan baik untuk membatasi akses ke layanan kritikal. Gunakan solusi seperti pfSense untuk isolasi jaringan jika diperlukan.\n3. Tinjau konfigurasi firewall dan sistem IDS/IPS untuk memastikan bahwa trafik yang mencurigakan dapat diblokir atau diisolasi. Fokus pada teknik 'Exfiltration Over C2 Channel' (T1041) dan 'Exfiltration Over Web Service' (T1567).\n4. Lakukan audit terhadap perangkat removable media dan USB untuk mencegah teknik 'Exfiltration Over USB' (T1052.001) atau 'Data from Removable Media' (T1025).\n5. Komunikasikan kepada seluruh staf untuk meningkatkan kewaspadaan terhadap potensi serangan, termasuk phishing atau akses tidak sah ke akun cloud yang dapat digunakan untuk 'Transfer Data to Cloud Account' (T1537).\n\nPanduan umum: Langkah-langkah mitigasi awal ini bertujuan untuk mengidentifikasi dan membatasi dampak insiden keamanan siber yang sedang terjadi. Penting untuk segera mengaktifkan prosedur respons insiden yang telah ditetapkan dan melibatkan tim keamanan siber internal untuk investigasi lebih lanjut.\nCatatan eskalasi: Jika insiden tidak dapat dikendalikan dengan langkah-langkah awal ini, segera eskalasi ke Badan Siber dan Sandi Negara (BSSN) untuk mendapatkan dukungan teknis dan operasional lebih lanjut.\n\nSumber:\n[1] Dokumen Referensi [1] dan [4]\n[2] Dokumen Referensi [3]\n[3] Dokumen Referensi [1] dan [2]\n[4] Dokumen Referensi [1]",
+    "retrieved_chunks": [
+      {
+        "id": "1e693d25-0bd1-4356-b960-62ad6b5fcdfa",
+        "content": "Teknik yang dimitigasi (12):\n  - T1005: Data from Local System\n  - T1020.001: Traffic Duplication\n  - T1025: Data from Removable Media\n  - T1041: Exfiltration Over C2 Channel\n  - T1048.002: Exfiltration Over Asymmetric Encrypted Non-C2 Protocol\n  - T1048.003: Exfiltration Over Unencrypted Non-C2 Protocol\n  - T1048: Exfiltration Over Alternative Protocol\n  - T1052.001: Exfiltration over USB\n  - T1052: Exfiltration Over Physical Medium\n  - T1537: Transfer Data to Cloud Account\n  - T1567.004: Exfiltration Over Webhook\n  - T1567: Exfiltration Over Web Service",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "kebocoran_data"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 605
+        },
+        "score": 0.40139145,
+        "rrf_score": 0.01639344262295082,
+        "final_score": 0.3793346707377049
+      },
+      {
+        "id": "7aeff194-09b1-4a5f-9165-a4dbe5423bfc",
+        "content": "Teknik yang dimitigasi (59):\n  - T1001.001: Junk Data\n  - T1001.002: Steganography\n  - T1001.003: Protocol or Service Impersonation\n  - T1001: Data Obfuscation\n  - T1008: Fallback Channels\n  - T1029: Scheduled Transfer\n  - T1030: Data Transfer Size Limits\n  - T1041: Exfiltration Over C2 Channel\n  - T1046: Network Service Discovery\n  - T1048.001: Exfiltration Over Symmetric Encrypted Non-C2 Protocol\n  - T1048.002: Exfiltration Over Asymmetric Encrypted Non-C2 Protocol\n  - T1048.003: Exfiltration Over Unencrypted Non-C2 Protocol\n  - T1048: Exfiltration Over Alternative Protocol\n  - T1071.001: Web Protocols\n  - T1071.002: File Transfer Protocols\n  - T1071.003: Mail Protocols\n  - T1071.004: DNS\n  - T1071.005: Publish/Subscribe Protocols\n  - T1071: Application Layer Protocol",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "kebocoran_data",
+            "malware",
+            "phishing",
+            "ransomware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 531
+        },
+        "score": 0.39969218,
+        "rrf_score": 0.016129032258064516,
+        "final_score": 0.37655871954838704
+      },
+      {
+        "id": "a21c98dc-7708-45a3-b17e-9bae80263dd1",
+        "content": "Network Segmentation:\n\n- pfSense for open-source network isolation\n\nTeknik yang dimitigasi (19):\n  - T1021.001: Remote Desktop Protocol\n  - T1021.002: SMB/Windows Admin Shares\n  - T1021: Remote Services\n  - T1133: External Remote Services\n  - T1190: Exploit Public-Facing Application\n  - T1200: Hardware Additions\n  - T1542.005: TFTP Boot\n  - T1542: Pre-OS Boot\n  - T1546.008: Accessibility Features\n  - T1552.005: Cloud Instance Metadata API\n  - T1552.007: Container API\n  - T1552: Unsecured Credentials\n  - T1557.002: ARP Cache Poisoning\n  - T1557: Adversary-in-the-Middle\n  - T1563.002: RDP Hijacking\n  - T1609: Container Administration Command\n  - T1610: Deploy Container\n  - T1612: Build Image on Host\n  - T1613: Container and Resource Discovery",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "kebocoran_data",
+            "malware",
+            "phishing",
+            "ransomware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 541
+        },
+        "score": 0.3926741,
+        "rrf_score": 0.015873015873015872,
+        "final_score": 0.37010996523809525
+      },
+      {
+        "id": "64078e4d-2989-44ee-aed4-00002f2cdf06",
+        "content": "Teknik yang dimitigasi (120):\n  - T1006: Direct Volume Access\n  - T1020.001: Traffic Duplication\n  - T1021.001: Remote Desktop Protocol\n  - T1021.004: SSH\n  - T1021.008: Direct Cloud VM Connections\n  - T1021: Remote Services\n  - T1036.010: Masquerade Account Name\n  - T1036: Masquerading\n  - T1040: Network Sniffing\n  - T1047: Windows Management Instrumentation\n  - T1048: Exfiltration Over Alternative Protocol\n  - T1053.002: At\n  - T1053.003: Cron\n  - T1053.005: Scheduled Task\n  - T1053.006: Systemd Timers\n  - T1053.007: Container Orchestration Job\n  - T1053: Scheduled Task/Job\n  - T1059.008: Network Device CLI\n  - T1072: Software Deployment Tools\n  - T1078.002: Domain Accounts",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "ddos",
+            "kebocoran_data",
+            "malware",
+            "phishing",
+            "ransomware",
+            "web_defacement"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 652
+        },
+        "score": 0.38436964,
+        "rrf_score": 0.015625,
+        "final_score": 0.362808748
+      },
+      {
+        "id": "06b53ea7-9c7b-4c24-bd1c-a69f38cff68d",
+        "content": "Teknik Serangan MITRE ATT&CK: Service Stop (T1489)\nTaktik: impact\n\nAdversaries may stop or disable services on a system to render those services unavailable to legitimate users. Stopping critical services or processes can inhibit or stop response to an incident or aid in the adversary's overall objectives to cause damage to the environment.(Citation: Talos Olympic Destroyer 2018)(Citation: Novetta Blockbuster)",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "ddos",
+            "ransomware",
+            "web_defacement"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 831
+        },
+        "score": 0.3792445,
+        "rrf_score": 0.015384615384615385,
+        "final_score": 0.3577788423076923
+      }
+    ]
+  },
+  {
+    "id": "QA-018",
+    "question": "Saya melihat adanya unggahan dokumen internal ke layanan berbagi file publik tanpa persetujuan. Apakah ini dapat mengindikasikan kebocoran data?",
+    "ground_truth": "Ya, ini selaras dengan exfiltration melalui layanan web. Saran mitigasi awal: terapkan pembatasan akses ke web service berisiko tinggi, aktifkan kontrol DLP pada trafik keluar, dan audit akun atau endpoint yang melakukan upload.",
+    "candidate_answer": "1. Segera lakukan audit terhadap akses dan izin pada folder atau drive jaringan yang dibagikan untuk memastikan hanya pengguna yang berwenang yang memiliki akses. Hal ini dapat mencegah pengumpulan data dari drive bersama oleh pihak yang tidak berwenang.\n2. Tinjau dan batasi penggunaan layanan berbagi file publik untuk dokumen internal. Pastikan kebijakan organisasi melarang penggunaan layanan berbagi file publik tanpa persetujuan resmi.\n3. Pantau aktivitas transfer data ke akun cloud eksternal, termasuk transfer data dalam penyedia cloud yang sama, untuk mendeteksi potensi eksfiltrasi data.\n4. Lakukan pelatihan kesadaran keamanan siber kepada seluruh pegawai untuk meningkatkan pemahaman tentang risiko berbagi dokumen internal ke platform publik tanpa izin.\n5. Terapkan kebijakan enkripsi untuk dokumen sensitif yang disimpan di drive bersama atau diunggah ke cloud, sehingga data tetap terlindungi meskipun terjadi akses tidak sah.\n\nPanduan umum: Insiden ini dapat mengindikasikan potensi kebocoran data. Penting untuk segera mengidentifikasi sumber unggahan dokumen dan memastikan bahwa kebijakan keamanan data diterapkan secara konsisten di seluruh organisasi.\nCatatan eskalasi: Jika insiden ini melibatkan data sensitif atau rahasia negara, segera eskalasi ke tim keamanan siber nasional (BSSN) untuk investigasi lebih lanjut dan mitigasi yang lebih mendalam.\n\nSumber:\n[1] [1] Teknik Serangan MITRE ATT&CK: Network Share Discovery (T1135)\n[2] [4] Teknik Serangan MITRE ATT&CK: Data from Information Repositories (T1213)\n[3] [2] Teknik Serangan MITRE ATT&CK: Transfer Data to Cloud Account (T1537)\n[4] [5] Teknik Serangan MITRE ATT&CK: Data from Network Shared Drive (T1039)",
+    "retrieved_chunks": [
+      {
+        "id": "bce1821b-bd81-4805-81f2-3b0324e018c2",
+        "content": "Teknik Serangan MITRE ATT&CK: Network Share Discovery (T1135)\nTaktik: discovery\n\nAdversaries may look for folders and drives shared on remote systems as a means of identifying sources of information to gather as a precursor for Collection and to identify potential systems of interest for Lateral Movement. Networks often contain shared network drives and folders that enable users to access file directories on various systems across a network.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "malware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 881
+        },
+        "score": 0.47706386,
+        "rrf_score": 0.01639344262295082,
+        "final_score": 0.4323053577377049
+      },
+      {
+        "id": "82c23a41-fac4-4023-9e40-a0655eea505b",
+        "content": "Teknik Serangan MITRE ATT&CK: Transfer Data to Cloud Account (T1537)\nTaktik: exfiltration\n\nAdversaries may exfiltrate data by transferring the data, including through sharing/syncing and creating backups of cloud environments, to another cloud account they control on the same service.\n\nA defender who is monitoring for large transfers to outside the cloud environment through normal file transfers or over command and control channels may not be watching for data transfers to another account within the same cloud provider. Such transfers may utilize existing cloud provider APIs and the internal address space of the cloud provider to blend into normal traffic or avoid data transfers over external network interfaces.(Citation: TLDRSec AWS Attacks)",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "kebocoran_data"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1375
+        },
+        "score": 0.46489286,
+        "rrf_score": 0.016129032258064516,
+        "final_score": 0.42219919554838714
+      },
+      {
+        "id": "546da34e-e542-45ac-8262-f8702eb2a3b4",
+        "content": "Teknik Serangan MITRE ATT&CK: Data from Cloud Storage (T1530)\nTaktik: collection\n\nAdversaries may access data from cloud storage.\n\nMany IaaS providers offer solutions for online data object storage such as Amazon S3, Azure Storage, and Google Cloud Storage. Similarly, SaaS enterprise platforms such as Office 365 and Google Workspace provide cloud-based document storage to users through services such as OneDrive and Google Drive, while SaaS application providers such as Slack, Confluence, Salesforce, and Dropbox may provide cloud storage solutions as a peripheral or primary use case of their platform.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "kebocoran_data"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 879
+        },
+        "score": 0.4605592,
+        "rrf_score": 0.015873015873015872,
+        "final_score": 0.4176295352380952
+      },
+      {
+        "id": "8541369e-13bc-4822-bb51-3c3578822656",
+        "content": "Teknik Serangan MITRE ATT&CK: Data from Information Repositories (T1213)\nTaktik: collection\n\nAdversaries may leverage information repositories to mine valuable information. Information repositories are tools that allow for storage of information, typically to facilitate collaboration or information sharing between users, and can store a wide variety of data that may aid adversaries in further objectives, such as Credential Access, Lateral Movement, or Defense Evasion, or direct access to the target information. Adversaries may also abuse external sharing features to share sensitive documents with recipients outside of the organization (i.e., [Transfer Data to Cloud Account](https://attack.mitre.org/techniques/T1537)).",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "kebocoran_data"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1355
+        },
+        "score": 0.45801008,
+        "rrf_score": 0.015625,
+        "final_score": 0.41435705599999995
+      },
+      {
+        "id": "c359bcc8-9118-4a4b-8243-cae9527225a6",
+        "content": "Teknik Serangan MITRE ATT&CK: Data from Network Shared Drive (T1039)\nTaktik: collection\n\nAdversaries may search network shares on computers they have compromised to find files of interest. Sensitive data can be collected from remote systems via shared network drives (host shared directory, network file server, etc.) that are accessible from the current system prior to Exfiltration. Interactive command shells may be in use, and common functionality within [cmd](https://attack.mitre.org/software/S0106) may be used to gather information.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "kebocoran_data"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1242
+        },
+        "score": 0.44045657,
+        "rrf_score": 0.015384615384615385,
+        "final_score": 0.4006272913076923
+      }
+    ]
+  },
+  {
+    "id": "QA-019",
+    "question": "Saya menemukan file atau skrip yang tidak dikenal muncul di perangkat, terlihat seperti tool atau aplikasi pihak ketiga. Dari mana file ini bisa datang dan apakah perlu dilaporkan?",
+    "ground_truth": "File atau tool yang tidak dikenal kemungkinan ditransfer oleh penyerang untuk melakukan aktivitas lanjutan. Ini perlu dilaporkan segera sebagai dugaan transfer tool berbahaya. Saran mitigasi awal: karantina endpoint dan isolasi perangkat dari jaringan, blok transfer file dari sumber yang tidak terpercaya, serta monitor dan batasi transfer file atau tool ke endpoint.",
+    "candidate_answer": "1. Lakukan whitelist aplikasi menggunakan AppLocker untuk memastikan hanya aplikasi yang sah dan telah disetujui yang dapat dijalankan di perangkat Windows.\n2. Gunakan Windows Defender Application Control (WDAC) untuk membatasi eksekusi pustaka atau file yang tidak sah.\n3. Verifikasi tanda tangan digital file atau skrip yang mencurigakan menggunakan Signtool untuk memastikan keasliannya.\n4. Pantau aktivitas pemuatan pustaka dinamis (DLL) menggunakan Sysmon untuk mendeteksi kejadian yang mencurigakan (Event ID 7).\n5. Gunakan solusi lintas platform seperti Wazuh atau OSSEC untuk memantau integritas file dan mendeteksi perubahan yang tidak sah pada file atau direktori.\n\nPanduan umum: File atau skrip yang tidak dikenal dapat menjadi indikasi adanya aktivitas berbahaya, seperti upaya eksekusi kode tidak sah atau eksploitasi kerentanan. Penting untuk segera mengidentifikasi sumber file tersebut, memverifikasi keasliannya, dan memastikan bahwa sistem memiliki kebijakan keamanan yang ketat untuk mencegah eksekusi file yang tidak sah.\nCatatan eskalasi: Jika file atau skrip yang mencurigakan tidak dapat diverifikasi keasliannya atau menunjukkan tanda-tanda aktivitas berbahaya, segera laporkan insiden ini ke tim keamanan siber internal atau CSIRT (Computer Security Incident Response Team) untuk investigasi lebih lanjut.\n\nSumber:\n[1] [1] Tools for Implementation - Windows-Specific Tools: AppLocker\n[2] [1] Tools for Implementation - Windows-Specific Tools: Windows Defender Application Control (WDAC)\n[3] [1] Tools for Implementation - Windows-Specific Tools: Signtool\n[4] [1] Tools for Implementation - Windows-Specific Tools: Sysmon\n[5] [1] Tools for Implementation - Cross-Platform Solutions: Wazuh or OSSEC",
+    "retrieved_chunks": [
+      {
+        "id": "e209c5bd-43f8-4174-afdb-cf461553680d",
+        "content": "*Tools for Implementation*\n\nWindows-Specific Tools:\n\n- AppLocker: Application whitelisting for DLLs.\n- Windows Defender Application Control (WDAC): Restrict unauthorized library execution.\n- Signtool: Verify and enforce code signing.\n- Sysmon: Monitor DLL load events (Event ID 7).\n\nLinux-Specific Tools:\n\n- auditd: Monitor changes to library paths and critical files.\n- SELinux/AppArmor: Define policies to restrict library loading.\n- ldconfig and chattr: Secure LD configuration files and prevent unauthorized modifications.\n\nCross-Platform Solutions:\n\n- Wazuh or OSSEC: File integrity monitoring for library changes.\n- Tripwire: Detect and alert on unauthorized library modifications.\n\nTeknik yang dimitigasi (3):\n  - T1547.008: LSASS Driver\n  - T1574.001: DLL\n  - T1574: Hijack Execution Flow",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "malware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 713
+        },
+        "score": 0.49611032,
+        "rrf_score": 0.01639344262295082,
+        "final_score": 0.4456378797377049
+      },
+      {
+        "id": "ac2047bf-9f27-47a4-be91-2369096626c8",
+        "content": "Teknik Serangan MITRE ATT&CK: File and Directory Discovery (T1083)\nTaktik: discovery\n\nAdversaries may enumerate files and directories or may search in specific locations of a host or network share for certain information within a file system. Adversaries may use the information from [File and Directory Discovery](https://attack.mitre.org/techniques/T1083) during automated discovery to shape follow-on behaviors, including whether or not the adversary fully infects the target and/or attempts specific actions.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "malware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1098
+        },
+        "score": 0.49230793,
+        "rrf_score": 0.016129032258064516,
+        "final_score": 0.4413897445483871
+      },
+      {
+        "id": "bce1821b-bd81-4805-81f2-3b0324e018c2",
+        "content": "Teknik Serangan MITRE ATT&CK: Network Share Discovery (T1135)\nTaktik: discovery\n\nAdversaries may look for folders and drives shared on remote systems as a means of identifying sources of information to gather as a precursor for Collection and to identify potential systems of interest for Lateral Movement. Networks often contain shared network drives and folders that enable users to access file directories on various systems across a network.",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "malware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 881
+        },
+        "score": 0.48592913,
+        "rrf_score": 0.015873015873015872,
+        "final_score": 0.43538848623809523
+      },
+      {
+        "id": "cbe4cd5e-c0c7-47a7-be38-64981e94d8d0",
+        "content": "Teknik yang dimitigasi (80):\n  - T1036.005: Match Legitimate Resource Name or Location\n  - T1036.008: Masquerade File Type\n  - T1036: Masquerading\n  - T1047: Windows Management Instrumentation\n  - T1059.001: PowerShell\n  - T1059.002: AppleScript\n  - T1059.003: Windows Command Shell\n  - T1059.004: Unix Shell\n  - T1059.005: Visual Basic\n  - T1059.006: Python\n  - T1059.007: JavaScript\n  - T1059.008: Network Device CLI\n  - T1059.009: Cloud API\n  - T1059.010: AutoHotKey & AutoIT\n  - T1059.011: Lua\n  - T1059.013: Container CLI/API\n  - T1059: Command and Scripting Interpreter\n  - T1068: Exploitation for Privilege Escalation\n  - T1080: Taint Shared Content\n  - T1106: Native API",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "ddos",
+            "malware",
+            "ransomware",
+            "web_defacement"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 589
+        },
+        "score": 0.48518294,
+        "rrf_score": 0.015625,
+        "final_score": 0.433378058
+      },
+      {
+        "id": "3059a067-01ac-4f25-b3a4-5ef4ee711a95",
+        "content": "Teknik Serangan MITRE ATT&CK: Security Software Discovery (T1063)\nTaktik: discovery\n\nAdversaries may attempt to get a listing of security software, configurations, defensive tools, and sensors that are installed on the system. This may include things such as local firewall rules and anti-virus. Adversaries may use the information from [Security Software Discovery](https://attack.mitre.org/techniques/T1063) during automated discovery to shape follow-on behaviors, including whether or not the adversary fully infects the target and/or attempts specific actions.\n\n\n### Windows",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "malware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 845
+        },
+        "score": 0.48505285,
+        "rrf_score": 0.015384615384615385,
+        "final_score": 0.43184468730769227
+      }
+    ]
+  },
+  {
+    "id": "QA-020",
+    "question": "Saya sempat mengunduh dan menjalankan file yang dikirim lewat chat karena dikira dokumen kerja. Setelah itu laptop terasa lambat dan muncul pop-up aneh. Ini biasanya mengarah ke apa?",
+    "ground_truth": "Ini merupakan indikasi malware. Ketika korban menjalankan file yang sebenarnya berbahaya, itu selaras dengan pola penyerang yang mengandalkan aksi pengguna untuk mengeksekusi kode berbahaya.",
+    "candidate_answer": "2. Lakukan audit terhadap registry key yang terkait dengan Winlogon untuk memastikan tidak ada modifikasi yang mencurigakan, seperti yang dijelaskan dalam teknik Winlogon Helper DLL (T1004).\n3. Tinjau penggunaan proses rundll32.exe pada sistem untuk mendeteksi potensi penyalahgunaan oleh aktor ancaman, seperti yang dijelaskan dalam teknik Rundll32 (T1085).\n4. Pastikan sistem memiliki kebijakan pembatasan eksekusi skrip yang tidak dikenal atau tidak terpercaya untuk mencegah proxy execution melalui trusted scripts, seperti yang dijelaskan dalam teknik System Script Proxy Execution (T1216).\n5. Tingkatkan kesadaran pengguna tentang risiko serangan drive-by compromise, termasuk menghindari mengunjungi situs web yang mencurigakan atau tidak terpercaya, seperti yang dijelaskan dalam teknik Drive-by Compromise (T1189).\n\nPanduan umum: Berdasarkan laporan pengguna, insiden ini kemungkinan besar terkait dengan eksekusi file berbahaya yang dapat memanfaatkan teknik seperti Winlogon Helper DLL (T1004), Rundll32 (T1085), atau System Script Proxy Execution (T1216). Langkah-langkah mitigasi awal harus difokuskan pada edukasi pengguna, audit sistem, dan pembatasan eksekusi file atau skrip yang tidak terpercaya.\nCatatan eskalasi: Jika setelah langkah-langkah mitigasi awal ini dilakukan, gejala seperti performa lambat atau pop-up mencurigakan tetap terjadi, segera eskalasi insiden ini ke tim keamanan siber internal atau penyedia layanan keamanan siber untuk investigasi lebih lanjut dan tindakan lanjutan.\n\nSumber:\n[1] [1] Teknik Serangan MITRE ATT&CK: Winlogon Helper DLL (T1004)\n[2] [3] Teknik Serangan MITRE ATT&CK: Rundll32 (T1085)\n[3] [4] Teknik Serangan MITRE ATT&CK: System Script Proxy Execution (T1216)\n[4] [5] Teknik Serangan MITRE ATT&CK: Drive-by Compromise (T1189)",
+    "retrieved_chunks": [
+      {
+        "id": "73cd9471-1fe0-466c-bf18-d5a128c9e0f7",
+        "content": "Teknik Serangan MITRE ATT&CK: Winlogon Helper DLL (T1004)\nTaktik: persistence\n\nWinlogon.exe is a Windows component responsible for actions at logon/logoff as well as the secure attention sequence (SAS) triggered by Ctrl-Alt-Delete. Registry entries in HKLM\\Software\\[Wow6432Node\\]Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\ and HKCU\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\ are used to manage additional helper programs and functionalities that support Winlogon. (Citation: Cylance Reg Persistence Sept 2013) \n\nMalicious modifications to these Registry keys may cause Winlogon to load and execute malicious DLLs and/or executables. Specifically, the following subkeys have been known to be possibly vulnerable to abuse: (Citation: Cylance Reg Persistence Sept 2013)",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "malware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 969
+        },
+        "score": 0.45464343,
+        "rrf_score": 0.01639344262295082,
+        "final_score": 0.41661105673770493
+      },
+      {
+        "id": "e4e5d48d-7988-49f9-98f3-e400a0a5bf3d",
+        "content": "Teknik Serangan MITRE ATT&CK: Input Prompt (T1141)\nTaktik: credential-access\n\nWhen programs are executed that need additional privileges than are present in the current user context, it is common for the operating system to prompt the user for proper credentials to authorize the elevated privileges for the task (ex: [Bypass User Account Control](https://attack.mitre.org/techniques/T1088)).",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "phishing"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1160
+        },
+        "score": 0.4447881,
+        "rrf_score": 0.016129032258064516,
+        "final_score": 0.4081258635483871
+      },
+      {
+        "id": "37cb3093-f1c3-4584-992d-1ff33fb06fd2",
+        "content": "Teknik Serangan MITRE ATT&CK: Rundll32 (T1085)\nTaktik: defense-evasion, execution\n\nThe rundll32.exe program can be called to execute an arbitrary binary. Adversaries may take advantage of this functionality to proxy execution of code to avoid triggering security tools that may not monitor execution of the rundll32.exe process because of whitelists or false positives from Windows using rundll32.exe for normal operations.\n\nRundll32.exe can be used to execute Control Panel Item files (.cpl) through the undocumented shell32.dll functions Control_RunDLL and Control_RunDLLAsUser. Double-clicking a .cpl file also causes rundll32.exe to execute. (Citation: Trend Micro CPL)",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "malware",
+            "ransomware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1024
+        },
+        "score": 0.44458038,
+        "rrf_score": 0.015873015873015872,
+        "final_score": 0.4064443612380952
+      },
+      {
+        "id": "10325bdf-f138-488d-941c-e56817b1470b",
+        "content": "Teknik Serangan MITRE ATT&CK: System Script Proxy Execution (T1216)\nTaktik: defense-evasion\n\nAdversaries may use trusted scripts, often signed with certificates, to proxy the execution of malicious files. Several Microsoft signed scripts that have been downloaded from Microsoft or are default on Windows installations can be used to proxy execution of other files.(Citation: LOLBAS Project) This behavior may be abused by adversaries to execute malicious files that could bypass application control and signature validation on systems.(Citation: GitHub Ultimate AppLocker Bypass List)",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "malware"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1465
+        },
+        "score": 0.44353336,
+        "rrf_score": 0.015625,
+        "final_score": 0.404223352
+      },
+      {
+        "id": "d2cc47cf-05ce-4f66-917d-913e5bebc0de",
+        "content": "Teknik Serangan MITRE ATT&CK: Drive-by Compromise (T1189)\nTaktik: initial-access\n\nAdversaries may gain access to a system through a user visiting a website over the normal course of browsing. Multiple ways of delivering exploit code to a browser exist (i.e., [Drive-by Target](https://attack.mitre.org/techniques/T1608/004)), including:",
+        "metadata": {
+          "doc_id": "mitre-attack-enterprise",
+          "doc_title": "MITRE ATT&CK Enterprise",
+          "source_framework": "MITRE",
+          "language": "en",
+          "incident_types": [
+            "akses_tidak_sah",
+            "phishing"
+          ],
+          "page_number": 0,
+          "section_header": "",
+          "chunk_index": 1381
+        },
+        "score": 0.44144818,
+        "rrf_score": 0.015384615384615385,
+        "final_score": 0.4013214183076923
+      }
+    ]
+  }
+]

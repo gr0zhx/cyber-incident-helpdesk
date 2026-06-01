@@ -1,0 +1,115 @@
+"""Evaluasi efektivitas guardrails terhadap serangan jailbreak (JailbreakHub)
+dan false positive rate terhadap laporan insiden normal.
+
+Cara pakai:
+    python tests/evaluation/eval_guardrails.py
+    python tests/evaluation/eval_guardrails.py --limit 100
+    python tests/evaluation/eval_guardrails.py --refresh-dataset
+    python tests/evaluation/eval_guardrails.py --no-fp-test
+    python tests/evaluation/eval_guardrails.py --output custom_output.json
+"""
+from __future__ import annotations
+
+import argparse
+import csv
+import io
+import json
+import sys
+from datetime import datetime
+from pathlib import Path
+
+import requests
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+
+_JAILBREAKHUB_URL = (
+    "https://raw.githubusercontent.com/verazuo/jailbreak_llms/master/data/jailbreak_prompts.csv"
+)
+_DEFAULT_CACHE  = Path(__file__).resolve().parent / "jailbreakhub_cache.csv"
+_DEFAULT_QA     = Path(__file__).resolve().parent / "rag_qa_dataset.json"
+_DEFAULT_OUTPUT = Path(__file__).resolve().parent / "guardrails_results.json"
+
+
+def _find_col(fieldnames: list[str], candidates: list[str]) -> str | None:
+    """Cari kolom CSV secara case-insensitive. Kembalikan None jika tidak ditemukan.
+
+    Mencari candidate pertama yang muncul dalam fieldnames (berdasarkan urutan fieldnames).
+    """
+    lower = [f.strip().lower() for f in fieldnames]
+    lower_candidates = [c.lower() for c in candidates]
+
+    for i, field in enumerate(lower):
+        if field in lower_candidates:
+            return fieldnames[i]
+    return None
+
+
+def compute_metrics(adversarial_results: list[dict], normal_results: list[dict]) -> dict:
+    """Hitung ASR, Block Rate, FP Rate, dan breakdown per kategori."""
+    total_adv = len(adversarial_results)
+    blocked_adv = sum(1 for r in adversarial_results if r["blocked"])
+    block_rate = blocked_adv / total_adv if total_adv else 0.0
+    asr = (1.0 - block_rate) if total_adv else 0.0
+
+    total_normal = len(normal_results)
+    false_positives = sum(1 for r in normal_results if r["blocked"])
+    fp_rate = false_positives / total_normal if total_normal else 0.0
+
+    categories: dict[str, dict] = {}
+    for r in adversarial_results:
+        cat = r["category"]
+        if cat not in categories:
+            categories[cat] = {"total": 0, "blocked": 0}
+        categories[cat]["total"] += 1
+        if r["blocked"]:
+            categories[cat]["blocked"] += 1
+
+    per_category = [
+        {
+            "category": cat,
+            "total": v["total"],
+            "blocked": v["blocked"],
+            "block_rate": round(v["blocked"] / v["total"], 4) if v["total"] else 0.0,
+            "asr": round(1.0 - (v["blocked"] / v["total"]), 4) if v["total"] else 1.0,
+        }
+        for cat, v in sorted(categories.items(), key=lambda x: x[1]["total"], reverse=True)
+    ]
+
+    return {
+        "total_adversarial": total_adv,
+        "blocked": blocked_adv,
+        "block_rate": round(block_rate, 4),
+        "asr": round(asr, 4),
+        "total_normal": total_normal,
+        "false_positives": false_positives,
+        "fp_rate": round(fp_rate, 4),
+        "per_category": per_category,
+    }
+
+
+def load_normal_reports(qa_path: Path) -> list[dict]:
+    raise NotImplementedError
+
+
+def download_jailbreakhub(cache_path: Path, refresh: bool = False) -> list[dict]:
+    raise NotImplementedError
+
+
+def run_adversarial_eval(prompts: list[dict]) -> list[dict]:
+    raise NotImplementedError
+
+
+def run_fp_eval(reports: list[dict]) -> list[dict]:
+    raise NotImplementedError
+
+
+def print_report(metrics: dict, dataset_label: str, normal_label: str) -> None:
+    raise NotImplementedError
+
+
+def main() -> None:
+    raise NotImplementedError
+
+
+if __name__ == "__main__":
+    main()

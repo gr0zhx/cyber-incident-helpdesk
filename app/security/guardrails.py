@@ -1,6 +1,7 @@
 """Guardrails — entry point lapisan keamanan pipeline."""
 import logging
 
+from app.security.llm_judge import LLMJudge
 from app.security.pii_redactor import PIIRedactor
 from app.security.prompt_injection import PromptInjectionDetector
 from app.security.sanitizer import InputSanitizer
@@ -10,6 +11,7 @@ logger = logging.getLogger(__name__)
 _sanitizer = InputSanitizer()
 _detector = PromptInjectionDetector()
 _redactor = PIIRedactor()
+_judge = LLMJudge()
 
 
 class GuardrailsResult:
@@ -33,8 +35,9 @@ def run_input_guardrails(raw_input: str) -> GuardrailsResult:
 
     Urutan:
     1. Sanitasi (HTML strip, kontrol char, panjang)
-    2. Deteksi prompt injection → blokir jika positif (fail-closed)
-    3. Redaksi PII → kirim versi ter-redaksi ke LLM
+    2. Deteksi prompt injection regex → blokir jika positif (fail-closed)
+    3. LLM judge → blokir jika positif (hanya jika token tersedia, fail-open)
+    4. Redaksi PII → kirim versi ter-redaksi ke LLM
 
     Returns:
         GuardrailsResult dengan sanitized_input, pii_mapping, dan blocked flag.
@@ -42,7 +45,7 @@ def run_input_guardrails(raw_input: str) -> GuardrailsResult:
     # 1. Sanitasi
     sanitized = _sanitizer.sanitize(raw_input)
 
-    # 2. Deteksi injeksi
+    # 2. Deteksi injeksi regex
     detection = _detector.detect(sanitized)
     if detection["is_injection"]:
         logger.warning(
@@ -57,7 +60,17 @@ def run_input_guardrails(raw_input: str) -> GuardrailsResult:
             block_reason=f"Input diblokir: terdeteksi pola '{detection['matched_pattern']}'",
         )
 
-    # 3. Redaksi PII
+    # 3. LLM judge (skip jika tidak tersedia)
+    if _judge.is_available() and _judge.is_jailbreak(sanitized):
+        logger.warning("LLM judge: jailbreak terdeteksi: %.80s", sanitized)
+        return GuardrailsResult(
+            sanitized_input="",
+            pii_mapping={},
+            blocked=True,
+            block_reason="Input diblokir: terdeteksi jailbreak oleh LLM judge",
+        )
+
+    # 4. Redaksi PII
     redacted, pii_mapping = _redactor.redact(sanitized)
 
     if pii_mapping:

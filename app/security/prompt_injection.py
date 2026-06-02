@@ -31,6 +31,31 @@ _RAW_PATTERNS: list[tuple[str, str]] = [
     (r"jailbreak", "jailbreak"),
     (r"do\s+anything\s+now", "jailbreak"),
     (r"developer\s+mode", "jailbreak"),
+
+    # Persona AI buatan (contoh: "BasedGPT", "FreeSpeechGPT", "CumGPT")
+    (r"\b\w{2,}gpt\b", "persona_switch"),
+    (r"an?\s+(?:ai|bot|model|assistant)\s+named", "persona_switch"),
+    (r"from\s+now\s+(?:on\s+)?you\s+are", "persona_switch"),
+    (r"always\s+stays?\s+in\s+character", "persona_switch"),
+
+    # Konten amoral / tanpa filter
+    (r"\bamoral\b", "jailbreak"),
+    (r"\buncensored\b", "jailbreak"),
+    (r"\bunfiltered\b", "jailbreak"),
+    (r"\bno\s+restrictions?\b", "jailbreak"),
+
+    # Instruksi untuk tidak menolak
+    (r"never\s+refus", "jailbreak"),
+    (r"answer\s+any\s+(?:request|question|prompt)", "jailbreak"),
+
+    # Framing dua mode / dua kepribadian
+    (r"two\s+(?:different\s+)?(?:ways?|modes?|responses?|personalities?)", "jailbreak"),
+
+    # Framing hipotetikal / cerita fiksi
+    (r"in\s+this\s+(?:fictional|hypothetical)\s+(?:story|scenario|world|universe|reality)", "jailbreak"),
+
+    # Blok konfigurasi karakter (rules={, settings:{)
+    (r"rules\s*[=:]\s*\{", "jailbreak"),
 ]
 
 _COMPILED: list[tuple[re.Pattern, str]] = [

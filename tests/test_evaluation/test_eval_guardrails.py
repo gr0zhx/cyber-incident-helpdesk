@@ -3,7 +3,11 @@ import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from tests.evaluation.eval_guardrails import _find_col, compute_metrics
+import json
+import tempfile
+from pathlib import Path
+
+from tests.evaluation.eval_guardrails import _find_col, compute_metrics, load_normal_reports
 
 
 class TestFindCol:
@@ -80,3 +84,37 @@ class TestComputeMetrics:
         assert m["block_rate"] == 0.0
         assert m["asr"] == 0.0
         assert m["fp_rate"] == 0.0
+
+
+class TestLoadNormalReports:
+    def _write_qa(self, data: list[dict]) -> Path:
+        tmp = tempfile.NamedTemporaryFile(
+            mode="w", suffix=".json", delete=False, encoding="utf-8"
+        )
+        json.dump(data, tmp)
+        tmp.close()
+        return Path(tmp.name)
+
+    def test_loads_questions(self):
+        qa = self._write_qa([
+            {"id": "QA-001", "question": "Apa itu phishing?", "ground_truth": "..."},
+            {"id": "QA-002", "question": "Bagaimana cara mitigasi ransomware?", "ground_truth": "..."},
+        ])
+        result = load_normal_reports(qa)
+        assert len(result) == 2
+        assert result[0]["id"] == "QA-001"
+        assert result[0]["question"] == "Apa itu phishing?"
+
+    def test_skips_empty_questions(self):
+        qa = self._write_qa([
+            {"id": "QA-001", "question": "valid"},
+            {"id": "QA-002", "question": ""},
+            {"id": "QA-003"},
+        ])
+        result = load_normal_reports(qa)
+        assert len(result) == 1
+        assert result[0]["id"] == "QA-001"
+
+    def test_returns_empty_list_for_empty_file(self):
+        qa = self._write_qa([])
+        assert load_normal_reports(qa) == []

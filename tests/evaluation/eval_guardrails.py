@@ -88,7 +88,17 @@ def compute_metrics(adversarial_results: list[dict], normal_results: list[dict])
 
 
 def load_normal_reports(qa_path: Path) -> list[dict]:
-    raise NotImplementedError
+    """Load pertanyaan normal dari rag_qa_dataset.json.
+
+    Returns list[dict] dengan field: id (str), question (str).
+    Melewati entry dengan question kosong.
+    """
+    data = json.loads(qa_path.read_text(encoding="utf-8"))
+    return [
+        {"id": item.get("id", ""), "question": item.get("question", "")}
+        for item in data
+        if item.get("question")
+    ]
 
 
 def download_jailbreakhub(cache_path: Path, refresh: bool = False) -> list[dict]:

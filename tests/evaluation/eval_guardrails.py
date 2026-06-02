@@ -102,15 +102,74 @@ def load_normal_reports(qa_path: Path) -> list[dict]:
 
 
 def download_jailbreakhub(cache_path: Path, refresh: bool = False) -> list[dict]:
-    raise NotImplementedError
+    """Download JailbreakHub CSV dan parse ke list of dict.
+
+    Returns list[dict] dengan field: prompt (str), category (str).
+    Hanya menyertakan baris dengan kolom jailbreak=True (jika kolom ada).
+    Hasil di-cache ke cache_path untuk menghindari download berulang.
+    """
+    if not refresh and cache_path.exists():
+        print(f"Menggunakan cache: {cache_path}")
+        raw = cache_path.read_text(encoding="utf-8")
+    else:
+        print(f"Mengunduh JailbreakHub dari {_JAILBREAKHUB_URL} ...")
+        resp = requests.get(_JAILBREAKHUB_URL, timeout=30)
+        resp.raise_for_status()
+        raw = resp.text
+        cache_path.write_text(raw, encoding="utf-8")
+        print(f"Dataset disimpan ke cache: {cache_path}")
+
+    reader = csv.DictReader(io.StringIO(raw))
+    fieldnames: list[str] = list(reader.fieldnames or [])
+
+    prompt_col    = _find_col(fieldnames, ["prompt", "text", "query", "jailbreak_query"])
+    category_col  = _find_col(fieldnames, ["type", "category", "attack_type"])
+    jailbreak_col = _find_col(fieldnames, ["jailbreak", "is_jailbreak", "label"])
+
+    rows: list[dict] = []
+    for row in reader:
+        if jailbreak_col:
+            val = row.get(jailbreak_col, "").strip().lower()
+            if val not in {"true", "1", "yes"}:
+                continue
+        prompt = (row.get(prompt_col, "") if prompt_col else "").strip()
+        if not prompt:
+            continue
+        category = (row.get(category_col, "Unknown") if category_col else "Unknown").strip()
+        rows.append({"prompt": prompt, "category": category})
+
+    print(f"Prompt adversarial dimuat: {len(rows)}")
+    return rows
 
 
 def run_adversarial_eval(prompts: list[dict]) -> list[dict]:
-    raise NotImplementedError
+    """Jalankan guardrails pada setiap adversarial prompt dan catat hasilnya."""
+    from app.security.guardrails import run_input_guardrails
+    results = []
+    for item in prompts:
+        r = run_input_guardrails(item["prompt"])
+        results.append({
+            "prompt": item["prompt"],
+            "category": item["category"],
+            "blocked": r.blocked,
+            "block_reason": r.block_reason,
+        })
+    return results
 
 
 def run_fp_eval(reports: list[dict]) -> list[dict]:
-    raise NotImplementedError
+    """Jalankan guardrails pada laporan insiden normal untuk mendeteksi false positive."""
+    from app.security.guardrails import run_input_guardrails
+    results = []
+    for item in reports:
+        r = run_input_guardrails(item["question"])
+        results.append({
+            "id": item["id"],
+            "question": item["question"],
+            "blocked": r.blocked,
+            "block_reason": r.block_reason,
+        })
+    return results
 
 
 def print_report(metrics: dict, dataset_label: str, normal_label: str) -> None:

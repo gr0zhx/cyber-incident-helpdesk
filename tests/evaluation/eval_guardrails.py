@@ -173,11 +173,119 @@ def run_fp_eval(reports: list[dict]) -> list[dict]:
 
 
 def print_report(metrics: dict, dataset_label: str, normal_label: str) -> None:
-    raise NotImplementedError
+    """Cetak ringkasan hasil evaluasi ke terminal."""
+    print("\n=== Hasil Evaluasi Guardrails ===")
+    print(f"Dataset  : {dataset_label}")
+    print(f"Normal   : {normal_label}")
+    print(f"Dijalankan: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+
+    print("\n--- Pengujian Keamanan (Adversarial) ---")
+    total   = metrics["total_adversarial"]
+    blocked = metrics["blocked"]
+    asr_n   = total - blocked
+    print(f"Total Adversarial : {total}")
+    print(f"Berhasil Diblokir : {blocked:4d}  ({metrics['block_rate'] * 100:.2f}%)")
+    print(f"ASR (Lolos)       : {asr_n:4d}  ({metrics['asr'] * 100:.2f}%)")
+
+    if metrics["per_category"]:
+        print("\n--- Breakdown Per Kategori ---")
+        col_w = 40
+        header = f"{'Kategori':<{col_w}} {'Total':>6}  {'Blocked':>7}  {'Block Rate':>10}  {'ASR':>6}"
+        print(header)
+        print("-" * len(header))
+        for row in metrics["per_category"]:
+            cat = row["category"][:col_w]
+            print(
+                f"{cat:<{col_w}} {row['total']:>6}  {row['blocked']:>7}"
+                f"  {row['block_rate'] * 100:>9.1f}%  {row['asr'] * 100:>5.1f}%"
+            )
+
+    if metrics["total_normal"] > 0:
+        print("\n--- False Positive Rate ---")
+        print(f"Total Laporan Normal : {metrics['total_normal']}")
+        print(f"Salah Diblokir       : {metrics['false_positives']:3d}  ({metrics['fp_rate'] * 100:.2f}%)")
 
 
 def main() -> None:
-    raise NotImplementedError
+    parser = argparse.ArgumentParser(
+        description="Evaluasi efektivitas guardrails terhadap JailbreakHub."
+    )
+    parser.add_argument("--refresh-dataset", action="store_true",
+                        help="Force re-download JailbreakHub CSV dari GitHub.")
+    parser.add_argument("--limit", type=int, default=None,
+                        help="Batasi jumlah adversarial prompt (berguna untuk testing cepat).")
+    parser.add_argument("--no-fp-test", action="store_true",
+                        help="Skip false positive test terhadap laporan normal.")
+    parser.add_argument("--output", default=str(_DEFAULT_OUTPUT),
+                        help="Path file output JSON.")
+    parser.add_argument("--cache", default=str(_DEFAULT_CACHE),
+                        help="Path file cache CSV JailbreakHub.")
+    parser.add_argument("--qa-file", default=str(_DEFAULT_QA),
+                        help="Path rag_qa_dataset.json untuk false positive test.")
+    args = parser.parse_args()
+
+    cache_path  = Path(args.cache)
+    output_path = Path(args.output)
+    qa_path     = Path(args.qa_file)
+
+    # 1. Download / load dataset adversarial
+    jailbreak_prompts = download_jailbreakhub(cache_path, refresh=args.refresh_dataset)
+    if args.limit:
+        jailbreak_prompts = jailbreak_prompts[: args.limit]
+
+    # 2. Load laporan normal
+    normal_reports: list[dict] = []
+    if not args.no_fp_test and qa_path.exists():
+        normal_reports = load_normal_reports(qa_path)
+        print(f"Laporan normal dimuat: {len(normal_reports)}")
+
+    # 3. Run evaluasi
+    print("\nMenjalankan pengujian adversarial...")
+    adv_results = run_adversarial_eval(jailbreak_prompts)
+
+    fp_results: list[dict] = []
+    if normal_reports:
+        print("Menjalankan false positive test...")
+        fp_results = run_fp_eval(normal_reports)
+
+    # 4. Hitung metrik
+    metrics = compute_metrics(adv_results, fp_results)
+
+    # 5. Susun output JSON
+    output = {
+        "meta": {
+            "dataset": "JailbreakHub",
+            "dataset_url": _JAILBREAKHUB_URL,
+            "total_adversarial": metrics["total_adversarial"],
+            "total_normal": metrics["total_normal"],
+            "run_at": datetime.now().isoformat(),
+        },
+        "summary": {
+            "blocked": metrics["blocked"],
+            "block_rate": metrics["block_rate"],
+            "asr": metrics["asr"],
+            "false_positives": metrics["false_positives"],
+            "fp_rate": metrics["fp_rate"],
+        },
+        "per_category": metrics["per_category"],
+        "bypassed_prompts": [r for r in adv_results if not r["blocked"]],
+        "false_positive_cases": [r for r in fp_results if r["blocked"]],
+    }
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(
+        json.dumps(output, indent=2, ensure_ascii=False), encoding="utf-8"
+    )
+
+    # 6. Cetak laporan
+    dataset_label = f"JailbreakHub ({metrics['total_adversarial']} prompt)"
+    normal_label  = (
+        f"{qa_path.name} ({metrics['total_normal']} laporan)"
+        if normal_reports
+        else "Dilewati (--no-fp-test)"
+    )
+    print_report(metrics, dataset_label, normal_label)
+    print(f"\nHasil disimpan: {output_path}")
 
 
 if __name__ == "__main__":

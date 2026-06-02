@@ -19,8 +19,12 @@ from datetime import datetime
 from pathlib import Path
 
 import requests
+from dotenv import load_dotenv
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+
+# Load .env BEFORE any app imports to ensure GITHUB_TOKEN, OPENAI_API_KEY are available
+load_dotenv(Path(__file__).resolve().parents[2] / ".env")
 
 _JAILBREAKHUB_URL = (
     "https://raw.githubusercontent.com/verazuo/jailbreak_llms/main/data/prompts/jailbreak_prompts_2023_12_25.csv"
@@ -231,6 +235,10 @@ def main() -> None:
 
     # Kontrol LLM judge
     from app.security import guardrails as _gmod
+    if args.with_llm_judge:
+        # Re-initialize judge AFTER dotenv is loaded to pick up env vars
+        from app.security.llm_judge import LLMJudge as _LLMJudge
+        _gmod._judge = _LLMJudge()
     if not args.with_llm_judge:
         _gmod._judge.disable()
     else:

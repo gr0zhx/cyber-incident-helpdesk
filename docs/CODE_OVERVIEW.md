@@ -2,7 +2,7 @@
 
 > Dokumen komprehensif untuk persiapan sidang skripsi: penjelasan **setiap file, setiap fungsi, setiap class**, logika internal, dan keterkaitan antar-modul.
 > Target pembaca: penulis (recall cepat) dan dosen penguji (verifikasi teknis).
-> Terakhir diperbarui: 2026-04-21 (+ Security Audit & Fixes).
+> Terakhir diperbarui: 2026-06-02 (+ Pembaruan RAG pipeline, evaluasi RAGAS v2, security fixes tambahan).
 
 ---
 
@@ -28,6 +28,8 @@
 18. [Peta Interaksi Modul](#18-peta-interaksi-modul)
 19. [Security Audit & Fixes (2026-04-21)](#19-security-audit--fixes-2026-04-21)
 20. [Tabel Q&A Sidang](#20-tabel-qa-sidang)
+21. [Perubahan Terbaru (2026-05-30)](#21-perubahan-terbaru-2026-05-30)
+22. [Perubahan Terbaru (2026-06-02)](#22-perubahan-terbaru-2026-06-02)
 
 ---
 
@@ -227,6 +229,8 @@ pusdatin-help/
 │   ├── test_telegram/      ← 1 file (bot handlers)
 │   ├── test_web/           ← 30+ file (routes, services, middleware, integrasi)
 │   └── evaluation/         ← eval_rag.py, eval_tcr.py, eval_report.py
+│       │                      eval_ragas.py (baru), rag_qa_dataset.json
+│       │                      rag_results.json (baru), rag_ragas_results.json (baru)
 │
 ├── docker-compose.yml      ← PostgreSQL, Redis, Qdrant
 ├── Dockerfile              ← Image FastAPI
@@ -465,9 +469,9 @@ Fungsi `run_pipeline(raw_input, reporter_*)` adalah **satu-satunya entry point p
 
 | Konstanta | Nilai | Makna |
 |-----------|-------|-------|
-| `RETRIEVAL_SCORE_THRESHOLD` | `0.3` | Batas minimum skor chunk dianggap relevan |
+| `RETRIEVAL_SCORE_THRESHOLD` | `0.22` | Batas minimum skor chunk dianggap relevan (diturunkan dari 0.3 agar recall lebih tinggi) |
 | `MAX_ITERATIONS` | `3` | Maksimum iterasi RAG sebelum berhenti |
-| `TOP_K_RETRIEVAL` | `20` | Jumlah chunk diambil per iterasi |
+| `TOP_K_RETRIEVAL` | `30` | Jumlah chunk diambil per iterasi (dinaikkan dari 20) |
 | `TOP_K_RERANK` | `5` | Jumlah chunk setelah reranking |
 
 **Fungsi-fungsi internal:**
@@ -478,7 +482,7 @@ Fungsi `run_pipeline(raw_input, reporter_*)` adalah **satu-satunya entry point p
 | `_check_adequacy(chunks)` | `list[dict] → bool` | True jika ada chunk dengan `final_score >= RETRIEVAL_SCORE_THRESHOLD` |
 | `_expand_query(query, incident_type, iteration)` | `str, str, int → str` | Buat query lebih spesifik dengan prefix keyword incident_type + kata "teknis" |
 | `_merge_results(results1, results2)` | `list, list → list` | Deduplikasi chunk berdasarkan `id`, gabungkan dari dua iterasi |
-| `_validate_citations(steps, chunks)` | `list, list → list` | Filter: hanya pertahankan step yang sumber-nya ada di chunk (string match) |
+| `_validate_citations(steps, chunks)` | `list, list → list` | Filter: hanya pertahankan step yang sumber-nya ada di chunk. Mengecek 6 field metadata: `source`, `section`, `doc_title`, `section_header`, `source_framework`, `external_id` (sebelumnya hanya `source` dan `section`). Referensi numerik `[N]` dan keyword standar (nist, mitre, bssn, dll.) juga diterima. |
 | `_build_citations(steps)` | `list → list` | Ekstrak `{source, step}` dari validated steps |
 | `_compute_rag_confidence(chunks)` | `list → float` | Rata-rata `final_score` top chunks; 0.0 jika kosong |
 
@@ -558,9 +562,14 @@ return {
 
 ### `app/agents/notifier.py` — Notifikasi Dual-Channel
 
-**Konstanta:** `HIGH_PRIORITY_SEVERITIES = {"Kritis", "Tinggi"}`
+**Konstanta:**
 
-**Fungsi `_get_csirt_recipients(severity) -> list[str]`:** Selalu sertakan `CSIRT_CHAT_ID`. Untuk severity tinggi, tambah `CSIRT_MANAGER_CHAT_ID`.
+| Konstanta | Nilai | Makna |
+|-----------|-------|-------|
+| `HIGH_PRIORITY_SEVERITIES` | `{"Kritis", "Tinggi"}` | Severity yang dikirim juga ke manager |
+| `_CSIRT_CHAT_ID_ENV` | `"CSIRT_CHAT_ID"` | Nama environment variable Chat ID CSIRT |
+
+**Fungsi `_get_csirt_recipients(severity) -> list[str]`:** Ambil `CSIRT_CHAT_ID` via `os.getenv(_CSIRT_CHAT_ID_ENV, "")` — jika env var tidak diset, list penerima kosong (tidak kirim Telegram). Untuk severity tinggi, tambah `CSIRT_MANAGER_CHAT_ID`.
 
 **Class `NotifierAgent`:**
 
@@ -676,6 +685,8 @@ Mendukung dua format: **PDF** (NIST SP 800-61) dan **STIX JSON** (MITRE ATT&CK).
 
 **Alur `retrieve()`:**
 1. Embed query → semantic search Qdrant (cosine similarity).
+   - **Compatibility shim:** jika `client` memiliki method `search` (untuk backward compatibility dengan test mock), gunakan itu; jika tidak ada, gunakan `client.query_points()`. Ini memastikan unit test yang mem-patch `client.search` tetap berfungsi.
+   - `score` diakses via `getattr(hit, "score", 0.0)` agar robust terhadap objek yang tidak selalu memiliki atribut `score`.
 2. Full-text search Qdrant (keyword via scroll API).
 3. RRF merge kedua hasil.
 4. Return top-K.
@@ -914,7 +925,15 @@ return GuardrailsResult(sanitized_input=redacted, pii_mapping=mapping)
 
 ### `app/telegram/bot.py` — PTB Handlers
 
-**Konstanta:** `WAITING_REPORT = 0` (state ConversationHandler)
+**Konstanta:**
+
+| Konstanta | Nilai | Makna |
+|-----------|-------|-------|
+| `WAITING_REPORT` | `0` | State ConversationHandler saat menunggu laporan |
+| `_ADMIN_CHAT_ID_ENV` | `"CSIRT_CHAT_ID"` | Nama env var Chat ID admin/CSIRT |
+| `_ADMIN_CHAT_ID_FALLBACK` | `"-1003971618295"` | Fallback production (tidak dipakai di test) |
+
+**Fungsi `_get_admin_chat_id() -> str | None`** (sebelumnya `_get_csirt_chat_id()`): Return nilai `CSIRT_CHAT_ID` dari env var, atau `None` jika tidak di-set. Berbeda dengan notifier — **tidak menggunakan fallback** agar test isolation terjaga (test bisa assert "tidak ada chat id" dengan tidak men-set env var).
 
 **Handler functions:**
 
@@ -1021,7 +1040,7 @@ return GuardrailsResult(sanitized_input=redacted, pii_mapping=mapping)
 #### `app/web/middleware/csrf.py` — CSRFMiddleware
 
 **Class `CSRFMiddleware(BaseHTTPMiddleware)`:**
-- **Safe methods** (GET, HEAD, OPTIONS): Generate token baru jika belum ada di session.
+- **Safe methods** (GET, HEAD, OPTIONS): Selalu pastikan token tersedia di session — generate baru jika `SESSION_KEY` belum ada di session (`if SESSION_KEY not in session`). Ini memastikan token selalu ada setelah GET request pertama.
 - **Unsafe methods** (POST/PUT/PATCH/DELETE): Verifikasi token dari header `X-CSRF-Token` atau form field `csrf_token`.
 - **Exempt:** Semua path `/api/*` bypass CSRF.
 - Return **HTTP 403** jika token invalid atau hilang.
@@ -1052,6 +1071,7 @@ Export `limiter = Limiter(key_func=get_remote_address)` untuk dipakai di routes 
 | | `GET /lapor/chat` | Reporter session | Chat interface |
 | | `POST /lapor/chat/message` | Reporter session | Invoke pipeline via `ChatService`, return HTMX fragment (rate limit 20/min) |
 | | `POST /lapor/chat/upload` | Reporter session | `UploadService.save_pending()` |
+| | `POST /lapor/chat/reset` | Reporter session | `reset_session()` — bersihkan histori Redis dan session. **HTMX-aware:** jika header `HX-Request: true`, return `HTMLResponse` (200) dengan header `HX-Redirect: /lapor`; jika bukan HTMX, return `RedirectResponse` 303 ke `/lapor`. |
 | `admin_auth.py` | `GET /admin/login` | None | Form login |
 | | `POST /admin/login` | None | `AuthService.authenticate()`, set session (rate limit 5/min) |
 | | `POST /admin/logout` | None | Clear session |
@@ -1065,7 +1085,21 @@ Export `limiter = Limiter(key_func=get_remote_address)` untuk dipakai di routes 
 | | `POST /admin/tiket/{id}/attachment` | Admin | Upload lampiran |
 | `admin_rag.py` | `GET /admin/rag` | Admin | Halaman manajemen knowledge base |
 | | `POST /admin/rag/ingest` | Admin | Ingest PDF/STIX baru ke Qdrant |
-| `admin_report.py` | `GET /admin/tiket/{id}/laporan` | Admin | Download HTML report via `ReportService` |
+| `admin_report.py` | `GET /admin/report` | Admin | Halaman form laporan. Memiliki fallback: jika `csrf_token` belum ada di session (middleware belum set), generate via `secrets.token_urlsafe(32)` secara eksplisit. |
+| | `POST /admin/report/generate` | Admin | Generate HTML report via `ReportService`, kirim sebagai `FileResponse` |
+
+---
+
+### Template Branding
+
+Label organisasi di halaman-halaman pelapor dan admin telah diperbarui untuk bersifat lebih netral/generik:
+
+| File Template | Perubahan |
+|--------------|-----------|
+| `app/web/templates/admin/login.html` | "Pusdatin CSIRT" → "Helpdesk" |
+| `app/web/templates/pelapor/chat.html` | "Pusdatin CSIRT" → "Helpdesk", "Kementerian Pertanian RI" → "Tim Keamanan Siber" |
+| `app/web/templates/pelapor/identitas.html` | Idem |
+| `app/web/templates/pelapor/tiket_detail.html` | Idem |
 
 ---
 
@@ -1097,9 +1131,16 @@ Export `limiter = Limiter(key_func=get_remote_address)` untuk dipakai di routes 
 | `get_history(session_id)` | str | `list[dict]` | Ambil dari Redis key `f"web:chat:{session_id}"` |
 | `_save_history(session_id, history)` | str, list | — | Simpan ke Redis TTL 24 jam |
 | `clear_history(session_id)` | str | — | Delete key |
-| `handle_message(session_id, reporter_info, message, graph, orchestrator, db)` | — | dict | Gabungkan 3 pesan terakhir → initialize_state → `graph.ainvoke()` timeout 30s → format response untuk template HTMX |
+| `handle_message(session_id, reporter_id, reporter_name, reporter_contact, text, graph, orchestrator, db, timeout)` | — | dict | Gabungkan pesan kontekstual → initialize_state → `graph.ainvoke()` timeout 60s → format response untuk template HTMX |
 
-**Multi-turn context:** Concatenate last 3 user messages dari history untuk mempertahankan konteks percakapan.
+**Multi-turn context:** Mengirim konteks percakapan kepada orchestrator:
+- Jika bot sudah pernah minta klarifikasi (`clarification_rounds >= 1`): kirim max 8 pesan terakhir (4 pasang Q&A) sebagai dialog lengkap.
+- Jika percakapan baru: kirim max 3 pesan user terakhir saja.
+
+**Timeout & Error Handling (diperbarui):**
+- Timeout default naik dari `30.0` → **`60.0` detik** untuk mengakomodasi pipeline yang lebih complex.
+- `asyncio.TimeoutError`: return dict dengan `bot_text` user-friendly ("Maaf, sistem sedang sibuk...") dan `error: False` — pipeline tidak crash, pesan tersimpan di history.
+- `Exception` umum: juga return dict dengan `bot_text` user-friendly ("Maaf, sistem mengalami kendala...") dan `error: False` — resilient terhadap semua error tak terduga.
 
 ---
 
@@ -1342,6 +1383,10 @@ Export `limiter = Limiter(key_func=get_remote_address)` untuk dipakai di routes 
 | `evaluation/` | `eval_rag.py` | RAGAs metrics: Context Relevance, Answer Relevance, Faithfulness |
 | | `eval_tcr.py` | Task Completion Rate: 35 skenario insiden |
 | | `eval_report.py` | Kelengkapan format laporan HTML |
+| | `eval_ragas.py` *(baru)* | Script evaluasi menggunakan RAGAS framework secara langsung terhadap pipeline |
+| | `rag_qa_dataset.json` *(diperbarui)* | Dataset QA berbasis skenario nyata MITRE ATT&CK. QA-011 s/d QA-020 direvisi; QA-021–QA-030 dihapus. |
+| | `rag_results.json` *(baru)* | Hasil raw evaluasi RAG (per-query metrics) |
+| | `rag_ragas_results.json` *(baru)* | Hasil evaluasi RAGAS framework (context relevance, answer relevance, faithfulness) |
 
 ### Pola Testing
 
@@ -1787,6 +1832,319 @@ Regression test: `test_attachment_download_streams_file` diperbaiki via monkeypa
 | **Kenapa ada dua kanal (Telegram + Web)?** | Telegram familiar bagi pelapor awam tanpa butuh akun baru. Web HTMX menyediakan dashboard admin yang lebih kaya fitur (filter, attachment, laporan) tanpa kompleksitas React. |
 | **Bagaimana sistem mencegah tiket duplikat?** | `check_duplicate()` di repository: cari tiket dari `reporter_id` yang sama dengan deskripsi identik dalam 24 jam. Jika ada, kembalikan tiket lama dengan `is_duplicate=True`. → `app/agents/ticket_manager.py`, `app/database/repository.py` |
 | **Bagaimana Redis dipakai di sistem ini?** | Tiga kegunaan: 1) Rate-limit & lockout login admin (`auth_service.py`); 2) Riwayat chat multi-turn pelapor TTL 24h (`chat_service.py`); 3) Metadata file pending upload per session (`upload_service.py`). |
+
+---
+
+## 21. Perubahan Terbaru (2026-05-30)
+
+Perubahan berikut dicommit ke branch `feat/web-plan-a`. Ringkasan per komponen:
+
+### 21.1 `app/agents/mitigation.py` — Perbaikan Citation Validation
+
+**`_validate_citations(steps, chunks)`** kini mengecek **6 field metadata** dari setiap chunk (sebelumnya hanya 2):
+
+| Field (sebelum) | Field (sekarang) |
+|----------------|-----------------|
+| `source` | `source` |
+| `section` | `section` |
+| — | `doc_title` *(baru)* |
+| — | `section_header` *(baru)* |
+| — | `source_framework` *(baru)* |
+| — | `external_id` *(baru)* |
+
+Ini meningkatkan recall validation: referensi ke framework ID (misal `M1049`) atau judul dokumen resmi kini bisa terdeteksi meski tidak match persis dengan field `source`.
+
+Variabel `reranked` diinisialisasi sebelum loop iterasi RAG dimulai untuk menghindari `UnboundLocalError` jika loop tidak pernah berjalan.
+
+---
+
+### 21.2 `app/agents/notifier.py` — Konstanta Fallback Chat ID
+
+Dua konstanta baru ditambahkan untuk meningkatkan maintainability dan production reliability:
+
+```python
+_CSIRT_CHAT_ID_ENV = "CSIRT_CHAT_ID"
+_CSIRT_CHAT_ID_FALLBACK = "-1003971618295"
+```
+
+`_get_csirt_recipients()` menggunakan `os.getenv(_CSIRT_CHAT_ID_ENV, _CSIRT_CHAT_ID_FALLBACK)` sehingga selalu ada nilai fallback jika env var tidak tersedia. Berbeda dengan `bot.py` yang sengaja return `None` untuk test isolation.
+
+---
+
+### 21.3 `app/rag/retriever.py` — Compatibility Shim untuk Test Mock
+
+`HybridRetriever.retrieve()` kini memiliki **compatibility shim** pada tahap semantic search:
+
+```python
+if hasattr(self.client, "search"):
+    # Pakai client.search() — backward compatible dengan mock lama
+    ...
+else:
+    # Pakai client.query_points() — Qdrant client API baru
+    ...
+```
+
+Field `score` diakses via `getattr(hit, "score", 0.0)` agar robust. Perubahan ini memastikan test suite yang masih menggunakan mock `client.search` tidak perlu diubah.
+
+---
+
+### 21.4 `app/telegram/bot.py` — Rename Fungsi + Perilaku Test-Safe
+
+Fungsi `_get_csirt_chat_id()` **diganti nama** menjadi `_get_admin_chat_id()`. Perilaku berubah:
+
+| Kondisi | Sebelum | Sekarang |
+|---------|---------|---------|
+| Env var di-set | Return nilai env var | Return nilai env var |
+| Env var tidak di-set | Return fallback ID | Return `None` |
+
+Dengan return `None` saat env var tidak diset, test dapat meng-assert perilaku "tidak ada chat ID" tanpa harus meng-unset/override env var secara eksplisit.
+
+---
+
+### 21.5 `app/web/middleware/csrf.py` — Token Session Guarantee
+
+Logika safe method dipertegas: token **selalu** dijamin ada di session setelah GET request. Kondisi pengecekan menggunakan `if SESSION_KEY not in session` (bukan check kosong), sehingga token yang sudah ada tidak di-overwrite. Perilaku fungsional tidak berubah, tapi lebih eksplisit dan robust.
+
+---
+
+### 21.6 `app/web/routes/admin_report.py` — CSRF Token Fallback
+
+Route `GET /admin/report` (`report_page`) kini memiliki fallback eksplisit:
+
+```python
+if "csrf_token" not in request.session:
+    request.session["csrf_token"] = secrets.token_urlsafe(32)
+```
+
+Ini mengatasi edge case di mana middleware belum sempat meng-inject token ke session sebelum route dipanggil (misalnya pada request pertama tanpa session cookie).
+
+---
+
+### 21.7 `app/web/routes/pelapor.py` — HTMX-Aware Reset
+
+`reset_session()` kini **membedakan HTMX request vs non-HTMX**:
+
+```python
+is_hx = str(request.headers.get("HX-Request", "")).lower() == "true"
+if is_hx:
+    response = HTMLResponse("", status_code=200)
+    response.headers["HX-Redirect"] = "/lapor"
+    return response
+return RedirectResponse(url="/lapor", status_code=303)
+```
+
+HTMX tidak mengikuti redirect HTTP standar — ia perlu header `HX-Redirect` untuk navigasi halaman penuh. Non-HTMX client (browser biasa, tes HTTP) mendapat redirect 303 standar.
+
+---
+
+### 21.8 `app/web/services/chat_service.py` — Timeout & Error Handling
+
+Tiga perubahan signifikan pada `handle_message()`:
+
+1. **Timeout naik: `30.0` → `60.0` detik** — mengakomodasi pipeline yang lebih lambat karena multi-agent + RAG iteratif.
+
+2. **`asyncio.TimeoutError` tidak lagi return `{"error": True}`** — sekarang return pesan user-friendly dengan `error: False`:
+   ```python
+   bot_text = "Maaf, sistem sedang sibuk memproses laporan Anda. Silakan coba kirim ulang pesan dalam beberapa saat lagi."
+   return {"bot_text": bot_text, "error": False, ...}
+   ```
+   Pesan tersimpan di history Redis sehingga percakapan tidak hilang.
+
+3. **Ditambah handler `except Exception`** — menangkap semua error tak terduga (koneksi DB, LLM error, dsb.) dengan pesan user-friendly yang sama, `error: False`.
+
+---
+
+### 21.9 Template Branding
+
+Label organisasi di 4 file template diperbarui menjadi lebih generik:
+- `app/web/templates/admin/login.html`
+- `app/web/templates/pelapor/chat.html`
+- `app/web/templates/pelapor/identitas.html`
+- `app/web/templates/pelapor/tiket_detail.html`
+
+Perubahan: "Pusdatin CSIRT" → **"Helpdesk"**, "Kementerian Pertanian RI" → **"Tim Keamanan Siber"**.
+
+---
+
+### 21.10 `tests/evaluation/` — Dataset & Hasil Evaluasi Baru
+
+| File | Status | Keterangan |
+|------|--------|-----------|
+| `eval_ragas.py` | Baru | Script evaluasi menggunakan RAGAS framework |
+| `rag_results.json` | Baru | Hasil raw evaluasi RAG per-query |
+| `rag_ragas_results.json` | Baru | Hasil evaluasi RAGAS (context relevance, answer relevance, faithfulness) |
+| `rag_qa_dataset.json` | Diperbarui | QA-011 s/d QA-020 direvisi dengan skenario nyata MITRE ATT&CK; QA-021–QA-030 dihapus |
+
+---
+
+---
+
+## 22. Perubahan Terbaru (2026-06-02)
+
+Perubahan berikut belum di-commit ke remote — merupakan penyempurnaan pipeline RAG, perbaikan keamanan tambahan, dan upgrade evaluasi RAGAS ke v2 API.
+
+---
+
+### 22.1 `app/agents/mitigation.py` — Tuning RAG Pipeline
+
+**Konstanta yang berubah:**
+
+| Konstanta | Nilai Lama | Nilai Baru | Alasan |
+|-----------|-----------|-----------|--------|
+| `RETRIEVAL_SCORE_THRESHOLD` | `0.3` | `0.22` | Threshold lama terlalu ketat, banyak chunk relevan terbuang |
+| `TOP_K_RETRIEVAL` | `20` | `30` | Lebih banyak kandidat → reranker punya ruang lebih untuk memilih |
+
+**`_assemble_context()` — Fallback metadata:**
+
+Source label kini menggunakan chain fallback: `source → doc_title → source_framework → "Dokumen tidak diketahui"`. Section juga fallback ke `section_header`. Ini penting karena banyak chunk MITRE ATT&CK tidak mengisi field `source` tapi punya `doc_title`.
+
+**`_expand_query()` — Query bersih pada iterasi 2:**
+
+Iterasi ke-2 kini menghasilkan query yang sepenuhnya bersih (`"mitigasi langkah respons {incident_type} {keywords}"`) alih-alih append ke query awal yang panjang. Ini membantu retriever menemukan chunk "Mitigasi MITRE ATT&CK" yang relevan tanpa terkontaminasi deskripsi skenario.
+
+**`generate_mitigation()` — Smart loop break condition:**
+
+Loop RAG tidak lagi berhenti begitu `_check_adequacy()` terpenuhi di iterasi 1. Jika lebih dari separuh chunk didominasi "Teknik Serangan MITRE ATT&CK" (deskripsi, bukan panduan tindakan), iterasi dilanjutkan ke iterasi 2 dengan `prefer_mitigations=True`. Ini memastikan output adalah langkah mitigasi aktual, bukan deskripsi ancaman.
+
+**Recommendation assembly — Anti-hallucination:**
+
+`general_guidance` dan `escalation_note` tidak lagi dimasukkan ke `recommendation_parts`. Kedua field ini tidak divalidasi sitasi, sehingga berpotensi halusinasi. Output rekomendasi kini hanya berisi step yang sudah lolos `_validate_citations()`.
+
+---
+
+### 22.2 `app/rag/retriever.py` — Parameter `prefer_mitigations` + Bug Fix
+
+**Bug fix:** Panggilan `client.search()` diperbaiki: argument `query=` diganti menjadi `query_vector=` (nama argument yang benar untuk Qdrant Python client).
+
+**Parameter baru `prefer_mitigations: bool = False`:**
+
+Ketika `True`, retriever menambahkan filter konten `MatchText(text="Mitigasi MITRE ATT&CK")` ke query Qdrant sehingga hanya chunk yang berisi panduan mitigasi yang dikembalikan. Digunakan oleh `mitigation.py` pada iterasi ke-2.
+
+---
+
+### 22.3 `app/rag/embedder.py` — Tambahan Field Payload
+
+`_build_payload()` kini menyimpan tiga field tambahan ke Qdrant payload:
+
+| Field | Keterangan |
+|-------|-----------|
+| `object_type` | Tipe objek MITRE ATT&CK (`course-of-action`, `attack-pattern`); kosong untuk non-MITRE |
+| `external_id` | ID eksternal MITRE (contoh: `M1049`, `T1566`); kosong untuk non-MITRE |
+| `source` | Field sumber dokumen dari metadata chunk |
+
+Ini memungkinkan `_validate_citations()` di `mitigation.py` mencocokkan referensi ke ID MITRE dengan benar.
+
+---
+
+### 22.4 `app/agents/notifier.py` — Hapus Hardcoded Fallback ID
+
+Konstanta `_CSIRT_CHAT_ID_FALLBACK = "-1003971618295"` dihapus. `_get_csirt_recipients()` kini menggunakan `os.getenv(_CSIRT_CHAT_ID_ENV, "")` — jika env var tidak diset, tidak ada pesan Telegram yang dikirim (fail-safe, tidak kirim ke ID hardcoded yang mungkin salah di lingkungan lain).
+
+---
+
+### 22.5 `app/web/services/auth_service.py` — Perbaikan Disabled Account Enumeration
+
+Sebelumnya, akun disabled dikembalikan sebagai `"account_disabled"` setelah pengecekan password berhasil — ini membocorkan informasi bahwa username dan password benar. Sekarang:
+
+```python
+# Sebelum: dua cek terpisah
+if admin is None:
+    bcrypt.verify(password, _DUMMY_HASH)  # timing defense
+    ...
+if not admin.is_active:
+    return AuthResult(success=False, error="account_disabled")  # ← bocor info
+
+# Sesudah: gabung di satu cek
+if admin is None or not admin.is_active:
+    bcrypt.verify(password, _DUMMY_HASH)  # timing defense untuk kedua kasus
+    return AuthResult(success=False, error="invalid_credentials")
+```
+
+Attacker tidak bisa lagi membedakan "user tidak ada", "password salah", atau "akun dinonaktifkan" dari response maupun timing.
+
+---
+
+### 22.6 `app/web/services/chat_service.py` — Dua Perbaikan
+
+**1. Clarification counter yang akurat:**
+
+`clarification_rounds` sebelumnya menghitung semua pesan bot yang tidak diawali "Tiket insiden" — ini salah menghitung pesan error/timeout. Sekarang hanya menghitung entry dengan `type="clarification"` yang di-tag secara eksplisit saat pesan klarifikasi disimpan:
+
+```python
+msg_entry: dict = {"role": "assistant", "content": bot_text, "ts": ts}
+if requires_clarification and not ticket_id:
+    msg_entry["type"] = "clarification"
+history.append(msg_entry)
+```
+
+**2. `_flush_pending_uploads()` — GET sebelum DELETE:**
+
+Pola pipeline Redis (GET+DELETE atomic) diganti dengan GET dulu, DELETE hanya setelah `db.commit()` sukses. Ini mencegah kehilangan data upload jika commit database gagal di tengah jalan (bug_054).
+
+---
+
+### 22.7 `app/web/routes/pelapor.py` — Authorization Check Tiket
+
+Endpoint `GET /lapor/tiket/{ticket_id}` sebelumnya tidak memverifikasi apakah pelapor yang sedang login adalah pemilik tiket. Sekarang:
+
+```python
+if ticket.reporter_id != reporter["reporter_id"]:
+    raise HTTPException(status_code=403, detail="Akses ditolak.")
+```
+
+Ini mencegah IDOR (Insecure Direct Object Reference): pelapor A tidak bisa melihat tiket pelapor B hanya dengan menebak ticket_id.
+
+Upload error response kini di-HTML-escape: `html.escape(str(exc))` mencegah XSS jika pesan error mengandung karakter HTML.
+
+---
+
+### 22.8 `config/prompts/mitigation.txt` — Prompt Rewrite
+
+Prompt mitigasi ditulis ulang untuk meningkatkan groundedness (kesetiaan ke dokumen):
+
+| Aspek | Sebelum | Sesudah |
+|-------|---------|---------|
+| Jumlah langkah max | 5 | 4 |
+| Panjang per action | Tidak dibatasi | Maks 2 kalimat |
+| Format citation | `"NIST SP 800-61, Bagian X"` | `"[1] Nama Dokumen, Bagian X"` (referensi nomor chunk) |
+| `general_guidance` | Terisi LLM | Kosong (`""`) — tidak digunakan |
+| `escalation_note` | Terisi LLM | Kosong (`""`) — tidak digunakan |
+| Aturan grounding | "berdasarkan HANYA dokumen" | Eksplisit DILARANG menambah pengetahuan di luar dokumen |
+
+---
+
+### 22.9 `requirements.txt` — Tambahan Dependency Evaluasi
+
+```
+ragas>=0.2.0    # framework evaluasi RAG (RAGAS v2+ API)
+datasets>=2.0.0 # HuggingFace datasets, dipakai ragas internaly
+```
+
+---
+
+### 22.10 `tests/evaluation/eval_ragas.py` — Upgrade ke RAGAS v2 API
+
+Script evaluasi ditulis ulang total menggunakan RAGAS v2+ API:
+
+| Aspek | Sebelum | Sesudah |
+|-------|---------|---------|
+| Dataset format | `Dataset.from_list(ragas_rows)` | `EvaluationDataset(samples=[SingleTurnSample(...)])` |
+| Field names | `question`, `answer`, `contexts` | `user_input`, `response`, `retrieved_contexts`, `reference` |
+| LLM wrapper | `ChatOpenAI` | RAGAS native `LangchainLLMWrapper` |
+| Metrics | Auto-detect | Eksplisit: `Faithfulness`, `AnswerRelevancy`, `ContextRelevancy` |
+| Rate limiting | Tidak ada | `RunConfig(max_workers=1, max_retries=3, timeout=120)` |
+| Argument baru | — | `--ids QA-004 QA-013` untuk jalankan subset soal |
+
+---
+
+### 22.11 File Baru di `tests/evaluation/`
+
+| File | Keterangan |
+|------|-----------|
+| `generate_qa_from_kb.py` | Script untuk generate QA pairs langsung dari knowledge base Qdrant via LLM |
+| `candidate_qa.json` | Dataset QA kandidat yang dihasilkan dari KB (belum final) |
+| `candidate_ragas_results.json` | Hasil evaluasi RAGAS untuk dataset kandidat |
+| `RAGAS_REPORT.md` | Laporan ringkas hasil evaluasi RAGAS untuk penulisan skripsi |
 
 ---
 

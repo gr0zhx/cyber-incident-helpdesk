@@ -10,7 +10,7 @@ from app.utils.prompt_loader import load_prompt
 
 logger = logging.getLogger(__name__)
 
-RETRIEVAL_SCORE_THRESHOLD = 0.3
+RETRIEVAL_SCORE_THRESHOLD = 0.22
 MAX_ITERATIONS = 3
 TOP_K_RETRIEVAL = 30
 TOP_K_RERANK = 5
@@ -33,8 +33,14 @@ def _assemble_context(chunks: list[dict]) -> str:
     lines = []
     for i, chunk in enumerate(chunks, 1):
         meta = chunk.get("metadata", {})
-        source = meta.get("source", "Dokumen tidak diketahui")
-        section = meta.get("section", "")
+        # source sering kosong di knowledge base — gunakan doc_title sebagai fallback
+        source = (
+            meta.get("source")
+            or meta.get("doc_title")
+            or meta.get("source_framework")
+            or "Dokumen tidak diketahui"
+        )
+        section = meta.get("section") or meta.get("section_header") or ""
         source_ref = f"{source}, {section}".strip(", ")
         lines.append(f"[{i}] Sumber: {source_ref}\n{chunk.get('content', '').strip()}")
     return "\n\n".join(lines)
@@ -56,18 +62,20 @@ def _check_adequacy(chunks: list[dict]) -> bool:
 def _expand_query(query: str, incident_type: str, iteration: int) -> str:
     """Expand query for subsequent retrieval iterations."""
     expansions = {
-        "Phishing": "mitigasi phishing email palsu social engineering langkah respons",
-        "Malware": "mitigasi malware trojan virus isolasi karantina endpoint",
-        "Ransomware": "mitigasi ransomware enkripsi backup pemulihan isolasi jaringan",
-        "Web Defacement": "mitigasi web defacement pemulihan website restore backup",
-        "DDoS": "mitigasi DDoS distributed denial of service rate limiting firewall",
-        "Akses Tidak Sah": "mitigasi akses tidak sah unauthorized access kontrol akun audit log",
-        "Kebocoran Data": "mitigasi kebocoran data data breach notifikasi PDPA",
-        "Lainnya": "mitigasi insiden keamanan siber respons prosedur SOP",
+        "Phishing": "mitigasi phishing email social engineering langkah respons insiden",
+        "Malware": "mitigasi malware trojan virus isolasi karantina endpoint langkah",
+        "Ransomware": "mitigasi ransomware enkripsi backup pemulihan isolasi jaringan langkah",
+        "Web Defacement": "mitigasi web defacement pemulihan website restore backup langkah",
+        "DDoS": "mitigasi DDoS denial of service rate limiting firewall langkah respons",
+        "Akses Tidak Sah": "mitigasi akses tidak sah unauthorized account use policies MFA audit log",
+        "Kebocoran Data": "mitigasi kebocoran data breach notifikasi data loss prevention langkah",
+        "Lainnya": "mitigasi insiden keamanan siber respons prosedur SOP langkah",
     }
-    keywords = expansions.get(incident_type, "mitigasi insiden keamanan siber")
+    keywords = expansions.get(incident_type, "mitigasi insiden keamanan siber langkah respons")
     if iteration == 2:
-        return f"{query} {keywords}"
+        # Query bersih khusus mitigasi — jangan append ke query skenario panjang
+        # agar retriever bisa menemukan chunk "Mitigasi MITRE ATT&CK" yang relevan
+        return f"mitigasi langkah respons {incident_type} {keywords}"
     return keywords
 
 
@@ -192,7 +200,14 @@ class MitigationAdvisorAgent:
         for iteration in range(1, MAX_ITERATIONS + 1):
             try:
                 current_query = query if iteration == 1 else _expand_query(query, incident_type, iteration)
-                new_chunks = self.retriever.retrieve(current_query, incident_type=incident_type, top_k=TOP_K_RETRIEVAL)
+                # Iterasi 2: cari khusus chunk mitigasi (bukan deskripsi serangan)
+                use_mitigation_filter = iteration == 2
+                new_chunks = self.retriever.retrieve(
+                    current_query,
+                    incident_type=incident_type,
+                    top_k=TOP_K_RETRIEVAL,
+                    prefer_mitigations=use_mitigation_filter,
+                )
             except Exception as exc:
                 logger.warning(
                     "Retrieval gagal pada iterasi %d (query=%r): %s",
@@ -208,10 +223,19 @@ class MitigationAdvisorAgent:
                 logger.error("Reranking gagal: %s", exc)
                 reranked = all_chunks[:TOP_K_RERANK]
 
+            # Lanjut ke iterasi 2 (mitigasi) hanya jika chunk iterasi 1 didominasi
+            # deskripsi serangan ("Teknik Serangan MITRE ATT&CK") — bukan panduan
+            # prosedur. Untuk soal prosedural/NIST, iterasi 1 sudah cukup.
             if _check_adequacy(reranked):
-                break
+                attack_chunks = sum(
+                    1 for c in reranked
+                    if c.get("content", "").startswith("Teknik Serangan MITRE ATT&CK")
+                )
+                is_dominated_by_attacks = attack_chunks >= len(reranked) // 2 + 1
+                if iteration >= 2 or not is_dominated_by_attacks:
+                    break
 
-            logger.info("Iterasi %d: tidak ada chunk cukup relevan, melanjutkan...", iteration)
+            logger.info("Iterasi %d: chunk didominasi deskripsi serangan, lanjut ke pass mitigasi...", iteration)
 
         # --- Fallback jika tidak ada dokumen relevan ---
         if not _check_adequacy(reranked if all_chunks else []):
@@ -255,18 +279,14 @@ class MitigationAdvisorAgent:
                 citations = _build_citations(valid_steps)
                 rag_confidence = _compute_rag_confidence(top_chunks)
 
-                # Re-assemble recommendation string — citations separated to bottom
+                # Re-assemble recommendation string dari validated steps saja.
+                # general_guidance dan escalation_note sengaja tidak dimasukkan
+                # karena tidak divalidasi sitasi — menghindari hallucination di output.
                 recommendation_parts = []
                 for s in valid_steps:
                     recommendation_parts.append(
                         f"{s.get('step', '?')}. {s.get('action', '')}"
                     )
-                general = parsed.get("general_guidance", "")
-                escalation = parsed.get("escalation_note", "")
-                if general:
-                    recommendation_parts.append(f"\nPanduan umum: {general}")
-                if escalation:
-                    recommendation_parts.append(f"Catatan eskalasi: {escalation}")
 
                 # Deduplicated citation block at the end
                 seen_src: set[str] = set()

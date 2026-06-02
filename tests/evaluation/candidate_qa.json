@@ -1,0 +1,448 @@
+[
+  {
+    "id": "CAND-001",
+    "question": "Saya melihat bahwa ada akses tidak biasa ke sistem penting di jaringan kami. Apa yang harus saya lakukan?",
+    "ground_truth": "Segmen sistem kritis untuk membatasi aliran lalu lintas dan mengurangi kemungkinan pergerakan lateral oleh penyerang. Terapkan kebijakan kontrol akses yang ketat menggunakan perangkat jaringan seperti firewall.",
+    "context_source": "MITRE ATT&CK",
+    "incident_types": [
+      "akses_tidak_sah",
+      "ddos",
+      "kebocoran_data",
+      "malware",
+      "phishing",
+      "ransomware",
+      "web_defacement"
+    ],
+    "source_chunk_preview": "Mitigasi MITRE ATT&CK: Network Segmentation (M1030)\n\nNetwork segmentation involves dividing a network into smaller, isolated segments to control and limit the flow of traffic between devices, systems,"
+  },
+  {
+    "id": "CAND-002",
+    "question": "Saya baru saja menerima pesan bahwa perangkat lunak yang ingin saya instal tidak memiliki tanda tangan digital yang valid. Apa yang harus saya lakukan?",
+    "ground_truth": "Anda harus menolak untuk menginstal perangkat lunak tersebut. Pastikan untuk hanya menjalankan kode yang memiliki tanda tangan digital yang valid dari sumber tepercaya untuk mencegah eksekusi kode yang tidak dipercaya atau berbahaya.",
+    "context_source": "MITRE ATT&CK",
+    "incident_types": [
+      "akses_tidak_sah",
+      "malware",
+      "ransomware"
+    ],
+    "source_chunk_preview": "Mitigasi MITRE ATT&CK: Code Signing (M1045)\n\nCode Signing is a security process that ensures the authenticity and integrity of software by digitally signing executables, scripts, and other code artifa"
+  },
+  {
+    "id": "CAND-003",
+    "question": "Saya baru saja menerima laporan bahwa aplikasi yang saya kembangkan rentan terhadap SQL Injection. Apa yang harus saya lakukan untuk mengatasinya?",
+    "ground_truth": "Terapkan praktik pengkodean yang aman dengan mencegah SQL Injection. Pastikan untuk memvalidasi dan membersihkan input dari pengguna sebelum memprosesnya dalam aplikasi.",
+    "context_source": "MITRE ATT&CK",
+    "incident_types": [
+      "akses_tidak_sah",
+      "ddos",
+      "general",
+      "malware",
+      "phishing",
+      "ransomware",
+      "web_defacement"
+    ],
+    "source_chunk_preview": "Mitigasi MITRE ATT&CK: Application Developer Guidance (M1013)\n\nApplication Developer Guidance focuses on providing developers with the knowledge, tools, and best practices needed to write secure code,"
+  },
+  {
+    "id": "CAND-004",
+    "question": "Saya baru saja mendengar bahwa sistem kami terkompromi. Apa yang harus saya lakukan untuk memastikan data kami aman?",
+    "ground_truth": "Segera pastikan bahwa Anda memiliki cadangan data yang teratur. Jadwalkan cadangan harian dan cadangan penuh mingguan untuk semua server dan sistem kritis.",
+    "context_source": "MITRE ATT&CK",
+    "incident_types": [
+      "ddos",
+      "ransomware",
+      "web_defacement"
+    ],
+    "source_chunk_preview": "Mitigasi MITRE ATT&CK: Data Backup (M1053)\n\nData Backup involves taking and securely storing backups of data from end-user systems and critical servers. It ensures that data remains available in the e"
+  },
+  {
+    "id": "CAND-005",
+    "question": "Saya baru saja menyadari bahwa saya tidak bisa menginstal perangkat lunak baru di komputer saya. Apa yang harus saya lakukan?",
+    "ground_truth": "Anda tidak diperbolehkan menginstal perangkat lunak yang tidak disetujui untuk mengurangi risiko aplikasi berbahaya. Jika Anda perlu perangkat lunak tertentu, silakan hubungi IT untuk mendapatkan izin atau meminta mereka untuk menginstalnya.",
+    "context_source": "MITRE ATT&CK",
+    "incident_types": [
+      "akses_tidak_sah",
+      "malware",
+      "phishing",
+      "ransomware"
+    ],
+    "source_chunk_preview": "Mitigasi MITRE ATT&CK: Limit Software Installation (M1033)\n\nPrevent users or groups from installing unauthorized or unapproved software to reduce the risk of introducing malicious or vulnerable applic"
+  },
+  {
+    "id": "CAND-006",
+    "question": "Saya mencoba masuk ke sistem, tetapi diminta untuk memasukkan kode verifikasi setelah memasukkan kata sandi saya. Apa yang harus saya lakukan?",
+    "ground_truth": "Masukkan kode verifikasi yang dikirimkan kepada Anda melalui metode yang telah disepakati, seperti aplikasi autentikator di ponsel Anda atau token fisik. Ini adalah langkah yang diperlukan dalam proses Multi-Factor Authentication (MFA) untuk mengakses sistem.",
+    "context_source": "MITRE ATT&CK",
+    "incident_types": [
+      "akses_tidak_sah",
+      "ddos",
+      "kebocoran_data",
+      "malware",
+      "phishing",
+      "ransomware",
+      "web_defacement"
+    ],
+    "source_chunk_preview": "Mitigasi MITRE ATT&CK: Multi-factor Authentication (M1032)\n\nMulti-Factor Authentication (MFA) enhances security by requiring users to provide at least two forms of verification to prove their identity"
+  },
+  {
+    "id": "CAND-007",
+    "question": "Saya melihat bahwa beberapa fitur di komputer saya aktif, tetapi saya tidak tahu apakah saya membutuhkannya. Apa yang harus saya lakukan?",
+    "ground_truth": "Nonaktifkan fitur yang tidak digunakan, seperti SMBv1, LLMNR, dan NetBIOS jika tidak diperlukan. Pastikan juga untuk menonaktifkan registry jarak jauh dan layanan yang tidak perlu.",
+    "context_source": "MITRE ATT&CK",
+    "incident_types": [
+      "akses_tidak_sah",
+      "ddos",
+      "kebocoran_data",
+      "malware",
+      "phishing",
+      "ransomware",
+      "web_defacement"
+    ],
+    "source_chunk_preview": "Mitigasi MITRE ATT&CK: Operating System Configuration (M1028)\n\nOperating System Configuration involves adjusting system settings and hardening the default configurations of an operating system (OS) to"
+  },
+  {
+    "id": "CAND-008",
+    "question": "Saya melihat bahwa beberapa variabel lingkungan di sistem saya tampaknya telah diubah tanpa izin. Apa yang harus saya lakukan?",
+    "ground_truth": "Segera laporkan perubahan tersebut kepada tim IT Anda. Pastikan untuk membatasi akses penulisan ke file konfigurasi variabel lingkungan dengan hanya mengizinkan pengguna atau proses yang sah untuk memodifikasinya.",
+    "context_source": "MITRE ATT&CK",
+    "incident_types": [
+      "malware"
+    ],
+    "source_chunk_preview": "Mitigasi MITRE ATT&CK: Environment Variable Permissions (M1039)\n\nRestrict the modification of environment variables to authorized users and processes by enforcing strict permissions and policies. This"
+  },
+  {
+    "id": "CAND-009",
+    "question": "Saya melihat program yang tidak dikenal mencoba berjalan di komputer saya. Apa yang harus saya lakukan?",
+    "ground_truth": "Segera blokir eksekusi program tersebut dengan menggunakan kontrol aplikasi yang telah diterapkan. Pastikan hanya kode yang terpercaya dan diizinkan yang dapat dijalankan untuk mengurangi risiko malware.",
+    "context_source": "MITRE ATT&CK",
+    "incident_types": [
+      "akses_tidak_sah",
+      "ddos",
+      "malware",
+      "ransomware",
+      "web_defacement"
+    ],
+    "source_chunk_preview": "Mitigasi MITRE ATT&CK: Execution Prevention (M1038)\n\nPrevent the execution of unauthorized or malicious code on systems by implementing application control, script blocking, and other execution preven"
+  },
+  {
+    "id": "CAND-010",
+    "question": "Saya baru saja menyalakan komputer dan melihat pesan yang mengatakan bahwa proses boot tidak aman. Apa yang harus saya lakukan?",
+    "ground_truth": "Pastikan untuk melakukan pemeriksaan integritas sistem dengan menggunakan mekanisme Secure Boot. Jika ada masalah, segera hubungi tim IT untuk mendapatkan bantuan dalam mengatasi masalah tersebut.",
+    "context_source": "MITRE ATT&CK",
+    "incident_types": [
+      "akses_tidak_sah",
+      "ddos",
+      "malware",
+      "phishing",
+      "ransomware",
+      "web_defacement"
+    ],
+    "source_chunk_preview": "Mitigasi MITRE ATT&CK: Boot Integrity (M1046)\n\nBoot Integrity ensures that a system starts securely by verifying the integrity of its boot process, operating system, and associated components. This mi"
+  },
+  {
+    "id": "CAND-011",
+    "question": "Saya mencoba mengakses situs web untuk mengunduh dokumen penting, tetapi saya mendapat pesan bahwa akses ditolak. Apa yang harus saya lakukan?",
+    "ground_truth": "Laporkan masalah ini kepada tim IT Anda. Mereka dapat memeriksa kebijakan yang diterapkan dan memastikan bahwa situs yang Anda coba akses tidak termasuk dalam kategori yang diblokir.",
+    "context_source": "MITRE ATT&CK",
+    "incident_types": [
+      "akses_tidak_sah",
+      "kebocoran_data",
+      "malware",
+      "phishing",
+      "ransomware"
+    ],
+    "source_chunk_preview": "Mitigasi MITRE ATT&CK: Restrict Web-Based Content (M1021)\n\nRestricting web-based content involves enforcing policies and technologies that limit access to potentially malicious websites, unsafe downlo"
+  },
+  {
+    "id": "CAND-012",
+    "question": "Saya baru saja menerima pemberitahuan bahwa akun saya telah dikunci setelah beberapa percobaan login gagal. Apa yang harus saya lakukan?",
+    "ground_truth": "Anda perlu mengikuti prosedur pemulihan akun yang ditetapkan oleh organisasi Anda. Biasanya, ini melibatkan menghubungi tim IT atau menggunakan sistem pemulihan akun untuk membuka kunci dan mengatur ulang kata sandi.",
+    "context_source": "MITRE ATT&CK",
+    "incident_types": [
+      "akses_tidak_sah",
+      "malware",
+      "phishing",
+      "ransomware"
+    ],
+    "source_chunk_preview": "Mitigasi MITRE ATT&CK: Account Use Policies (M1036)\n\nAccount Use Policies help mitigate unauthorized access by configuring and enforcing rules that govern how and when accounts can be used. These poli"
+  },
+  {
+    "id": "CAND-013",
+    "question": "Saya melihat ada perubahan tidak dikenal pada pengaturan registry di komputer saya. Apa yang harus saya lakukan?",
+    "ground_truth": "Segera lakukan review dan penyesuaian pada izin akses kunci registry yang sensitif, seperti 'Run' dan 'Services', untuk memastikan hanya pengguna yang berwenang yang memiliki akses. Anda juga dapat menggunakan alat seperti 'icacls' atau 'PowerShell' untuk mengotomatiskan penyesuaian izin tersebut.",
+    "context_source": "MITRE ATT&CK",
+    "incident_types": [
+      "akses_tidak_sah",
+      "ddos",
+      "malware",
+      "phishing",
+      "ransomware",
+      "web_defacement"
+    ],
+    "source_chunk_preview": "Mitigasi MITRE ATT&CK: Restrict Registry Permissions (M1024)\n\nRestricting registry permissions involves configuring access control settings for sensitive registry keys and hives to ensure that only au"
+  },
+  {
+    "id": "CAND-014",
+    "question": "Saya baru saja menyadari bahwa saya memiliki akses ke folder yang seharusnya tidak bisa saya buka. Apa yang harus saya lakukan?",
+    "ground_truth": "Segera laporkan masalah ini kepada tim IT atau keamanan siber. Mereka akan melakukan audit akses untuk memastikan bahwa hak akses Anda sesuai dengan prinsip hak akses paling sedikit dan akan mengambil langkah-langkah untuk membatasi akses yang tidak perlu.",
+    "context_source": "MITRE ATT&CK",
+    "incident_types": [
+      "akses_tidak_sah",
+      "kebocoran_data",
+      "malware",
+      "phishing",
+      "ransomware"
+    ],
+    "source_chunk_preview": "Mitigasi MITRE ATT&CK: Limit Access to Resource Over Network (M1035)\n\nRestrict access to network resources, such as file shares, remote systems, and services, to only those users, accounts, or systems"
+  },
+  {
+    "id": "CAND-015",
+    "question": "Saya melihat ada proses yang tidak dikenal berjalan di komputer saya dan tampaknya mengonsumsi banyak sumber daya. Apa yang harus saya lakukan?",
+    "ground_truth": "Segera laporkan proses mencurigakan tersebut kepada tim IT atau keamanan siber Anda. Mereka akan melakukan analisis lebih lanjut untuk menentukan apakah proses tersebut berbahaya dan mengambil tindakan yang diperlukan.",
+    "context_source": "MITRE ATT&CK",
+    "incident_types": [
+      "akses_tidak_sah",
+      "ddos",
+      "malware",
+      "phishing",
+      "ransomware",
+      "web_defacement"
+    ],
+    "source_chunk_preview": "Mitigasi MITRE ATT&CK: Behavior Prevention on Endpoint (M1040)\n\nBehavior Prevention on Endpoint refers to the use of technologies and strategies to detect and block potentially malicious activities by"
+  },
+  {
+    "id": "CAND-016",
+    "question": "Setelah mengalami insiden keamanan, apa yang harus saya lakukan untuk memulihkan sistem dan mencegah kejadian serupa di masa depan?",
+    "ground_truth": "Lakukan eradikasi dan pemulihan sistem, serta pastikan untuk mendokumentasikan semua langkah yang diambil. Setelah itu, lakukan aktivitas pasca-insiden untuk mengevaluasi pelajaran yang didapat dan menggunakan data insiden yang dikumpulkan untuk perbaikan di masa yang akan datang.",
+    "context_source": "NIST SP 800-61",
+    "incident_types": [
+      "phishing",
+      "malware",
+      "ransomware",
+      "akses_tidak_sah",
+      "kebocoran_data",
+      "general"
+    ],
+    "source_chunk_preview": "3.3.2 Evidence Gathering and Handling ................................ ................................ 36 \n3.3.3 Identifying the Attacking Hosts ................................ ....................."
+  },
+  {
+    "id": "CAND-017",
+    "question": "Saya baru saja mengalami insiden keamanan dan ingin memastikan tidak ada kerusakan pada bukti sistem. Apa yang harus saya lakukan?",
+    "ground_truth": "Dapatkan snapshot sistem melalui gambar disk forensik penuh, bukan cadangan sistem file. Gambar disk harus dibuat ke media yang dilindungi tulis atau tulis-sekali yang sudah disanitasi.",
+    "context_source": "NIST SP 800-61",
+    "incident_types": [
+      "phishing",
+      "malware",
+      "ransomware",
+      "akses_tidak_sah",
+      "kebocoran_data",
+      "general"
+    ],
+    "source_chunk_preview": "without damaging the system’s evidence. \n Obtain system snapshots through full forensic disk images, not file system backups. Disk images \nshould be made to sanitized write-protectable or write-once "
+  },
+  {
+    "id": "CAND-018",
+    "question": "Saya baru saja menemukan perangkat lunak yang tidak dikenal di komputer saya. Apa yang harus saya lakukan?",
+    "ground_truth": "Segera laporkan perangkat lunak tersebut kepada tim TI atau keamanan siber di organisasi Anda. Mereka akan membantu mengevaluasi risiko dan menentukan langkah-langkah selanjutnya untuk mengatasi potensi kerentanan yang ditimbulkan.",
+    "context_source": "NIST SP 800-61",
+    "incident_types": [
+      "phishing",
+      "malware",
+      "ransomware",
+      "akses_tidak_sah",
+      "kebocoran_data",
+      "ddos",
+      "web_defacement",
+      "general"
+    ],
+    "source_chunk_preview": "for use in finding and addressing \nvulnerabilities, monitoring operations and \nusage to detect adverse cybersecurity \nevents, and identifying “shadow IT” usage. \nID.AM-05 Assets are prioritized based "
+  },
+  {
+    "id": "CAND-019",
+    "question": "Saya melihat ada perangkat asing yang terhubung ke jaringan kantor. Apa yang harus saya lakukan?",
+    "ground_truth": "Segera laporkan perangkat tersebut kepada tim IT atau keamanan siber. Mereka perlu memeriksa keberadaan perangkat tersebut untuk memastikan tidak ada jaringan yang tidak sah yang terhubung.",
+    "context_source": "NIST SP 800-61",
+    "incident_types": [
+      "phishing",
+      "malware",
+      "ransomware",
+      "akses_tidak_sah",
+      "kebocoran_data",
+      "ddos",
+      "web_defacement",
+      "general"
+    ],
+    "source_chunk_preview": "NIST SP 800-61r3  Incident Response Recommendations and \nApril 2025  Considerations for Cyber Risk Management \n \n24 \nCSF Element CSF Element Description Priority Recommendations, Considerations, Notes"
+  },
+  {
+    "id": "CAND-020",
+    "question": "Saya baru saja mendengar bahwa ada insiden keamanan di perusahaan. Apa yang harus saya lakukan untuk membantu tim respons insiden?",
+    "ground_truth": "Anda harus memahami definisi insiden yang telah ditetapkan oleh organisasi dan mengikuti prosedur serta kebijakan yang ada. Pastikan untuk melaporkan semua informasi yang relevan kepada tim respons insiden.",
+    "context_source": "NIST SP 800-61",
+    "incident_types": [
+      "phishing",
+      "malware",
+      "ransomware",
+      "akses_tidak_sah",
+      "kebocoran_data",
+      "general"
+    ],
+    "source_chunk_preview": "COMPUTER SECURITY INCIDENT HANDLING GUIDE \n6 \n2. Organizing a Computer Security Incident Response Capability \nOrganizing an effective computer security incident response capability (CSIRC) involves se"
+  },
+  {
+    "id": "CAND-021",
+    "question": "Saya menerima email yang mencurigakan dan tidak ada yang saya kenal mengirimnya. Apa yang harus saya lakukan?",
+    "ground_truth": "Segera laporkan email tersebut kepada tim keamanan siber di perusahaan Anda. Jangan mengklik tautan atau mengunduh lampiran apapun dari email tersebut.",
+    "context_source": "NIST SP 800-61",
+    "incident_types": [
+      "phishing",
+      "malware",
+      "ransomware",
+      "akses_tidak_sah",
+      "kebocoran_data",
+      "ddos",
+      "web_defacement",
+      "general"
+    ],
+    "source_chunk_preview": "NIST SP 800-61r3  Incident Response Recommendations and \nApril 2025  Considerations for Cyber Risk Management \n \n38 \nAppendix A. List of Symbols, Abbreviations, and Acronyms \nCISA \nCybersecurity and I"
+  },
+  {
+    "id": "CAND-022",
+    "question": "Saya baru saja mengalami insiden keamanan siber di tempat kerja. Apa yang harus saya lakukan untuk merespons insiden tersebut?",
+    "ground_truth": "Lakukan langkah-langkah dalam proses respons insiden yang telah ditetapkan, termasuk pemulihan dan evaluasi. Pastikan untuk mengidentifikasi perbaikan yang diperlukan pada program respons insiden atau aspek lain dari manajemen risiko keamanan siber di organisasi.",
+    "context_source": "NIST SP 800-61",
+    "incident_types": [
+      "phishing",
+      "malware",
+      "ransomware",
+      "akses_tidak_sah",
+      "kebocoran_data",
+      "ddos",
+      "web_defacement",
+      "general"
+    ],
+    "source_chunk_preview": "providers and product suppliers) for future \nincident response activities.  \nN2: See [SP800-84] for more information on \nsimulations, tabletop discussions, and other \nforms of exercises. \nID.IM-03 Imp"
+  },
+  {
+    "id": "CAND-023",
+    "question": "Saya baru saja menyadari bahwa ada insiden keamanan yang terjadi di sistem kami. Apa yang harus saya lakukan?",
+    "ground_truth": "Segera laporkan insiden tersebut sesuai dengan kebijakan pelaporan insiden yang telah ditetapkan. Pastikan untuk mengikuti prosedur tanggap insiden yang telah dikembangkan, yang mencakup langkah-langkah rinci untuk merespons insiden.",
+    "context_source": "NIST SP 800-61",
+    "incident_types": [
+      "phishing",
+      "malware",
+      "ransomware",
+      "akses_tidak_sah",
+      "kebocoran_data",
+      "general"
+    ],
+    "source_chunk_preview": "reporting incidents, among other items. \n Develop an incident response plan based on the incident response policy. The incident response \nplan provides a roadmap for implementing an incident response"
+  },
+  {
+    "id": "CAND-024",
+    "question": "Saya menerima email yang mencurigakan dan tidak saya kenal. Apa yang harus saya lakukan?",
+    "ground_truth": "Segera laporkan email tersebut kepada tim keamanan siber di perusahaan Anda. Jangan membuka lampiran atau mengklik tautan yang ada dalam email tersebut.",
+    "context_source": "NIST SP 800-61",
+    "incident_types": [
+      "phishing",
+      "malware",
+      "ransomware",
+      "akses_tidak_sah",
+      "kebocoran_data",
+      "general"
+    ],
+    "source_chunk_preview": "CVSS  Common Vulnerability Scoring System  http://www.first.org/cvss/cvss-guide  \nCWE  Common Weakness Enumeration  http://cwe.mitre.org/  \nCybOX Cyber Observable eXpression http://cybox.mitre.org/  \n"
+  },
+  {
+    "id": "CAND-025",
+    "question": "Saya baru saja menerima permintaan dari tim koordinasi untuk melaporkan dampak bisnis akibat insiden keamanan. Apa yang harus saya laporkan?",
+    "ground_truth": "Anda harus melaporkan informasi dampak bisnis menggunakan kategori yang ditentukan. Misalnya, laporkan dampak fungsional, dampak informasi, dan waktu pemulihan yang diperlukan.",
+    "context_source": "NIST SP 800-61",
+    "incident_types": [
+      "phishing",
+      "malware",
+      "ransomware",
+      "akses_tidak_sah",
+      "kebocoran_data",
+      "general"
+    ],
+    "source_chunk_preview": "COMPUTER SECURITY INCIDENT HANDLING GUIDE \n50 \ndegree of assistance to provide to the reporting organization. A coordinating team may also use this \ninformation to make decisions relative to how a spe"
+  },
+  {
+    "id": "CAND-026",
+    "question": "Saya baru saja mengalami insiden keamanan di perusahaan saya dan tidak tahu apa yang harus dilakukan. Apa langkah pertama yang harus saya ambil?",
+    "ground_truth": "Langkah pertama yang harus diambil adalah membuat kronologi formal dari peristiwa tersebut, termasuk informasi bertanggal seperti data log dari sistem, untuk keperluan hukum.",
+    "context_source": "NIST SP 800-61",
+    "incident_types": [
+      "phishing",
+      "malware",
+      "ransomware",
+      "akses_tidak_sah",
+      "kebocoran_data",
+      "general"
+    ],
+    "source_chunk_preview": "quite valuable for future use. The report provides a reference that can be used to assist in handling similar \nincidents. Creating a formal chronology of events (including timestamped information such"
+  },
+  {
+    "id": "CAND-027",
+    "question": "Saya melihat aktivitas mencurigakan di sistem saya dan tidak tahu harus berbuat apa. Apa langkah yang harus saya ambil?",
+    "ground_truth": "Prioritaskan seberapa cepat respons insiden harus dilakukan berdasarkan ruang lingkup, dampak yang mungkin, sifat yang kritis terhadap waktu, dan ketersediaan sumber daya. Pilih strategi respons insiden yang tepat untuk situasi tersebut.",
+    "context_source": "NIST SP 800-61",
+    "incident_types": [
+      "phishing",
+      "malware",
+      "ransomware",
+      "akses_tidak_sah",
+      "kebocoran_data",
+      "ddos",
+      "web_defacement",
+      "general"
+    ],
+    "source_chunk_preview": "NIST SP 800-61r3  Incident Response Recommendations and \nApril 2025  Considerations for Cyber Risk Management \n \n28 \nCSF Element CSF Element Description Priority Recommendations, Considerations, Notes"
+  },
+  {
+    "id": "CAND-028",
+    "question": "Saya baru saja menerima pemberitahuan bahwa ada insiden keamanan di perusahaan. Apa yang harus saya lakukan selanjutnya?",
+    "ground_truth": "Segera laporkan insiden tersebut kepada tim keamanan siber dan ikuti prosedur yang telah ditetapkan untuk notifikasi insiden. Pastikan untuk memberikan semua informasi yang diperlukan untuk analisis lebih lanjut.",
+    "context_source": "NIST SP 800-61",
+    "incident_types": [
+      "phishing",
+      "malware",
+      "ransomware",
+      "akses_tidak_sah",
+      "kebocoran_data",
+      "general"
+    ],
+    "source_chunk_preview": "3.2.4 Incident Analysis ................................ ................................ ..........................28 \n3.2.5 Incident Documentation ................................ .................."
+  },
+  {
+    "id": "CAND-029",
+    "question": "Saya baru saja menerima laporan bahwa terjadi insiden keamanan di kantor. Apa yang harus saya lakukan?",
+    "ground_truth": "Anda harus mengikuti prosedur yang telah ditetapkan dalam kebijakan dan rencana respons insiden. Pastikan untuk melaporkan insiden tersebut sesuai prosedur penanganan dan pelaporan yang telah dikembangkan.",
+    "context_source": "NIST SP 800-61",
+    "incident_types": [
+      "phishing",
+      "malware",
+      "ransomware",
+      "akses_tidak_sah",
+      "kebocoran_data",
+      "general"
+    ],
+    "source_chunk_preview": "policy. Each agency is responsible for determining how to fulfill these requirements.  \nEstablishing an incident response capability should include the following actions: \n Creating an incident respo"
+  },
+  {
+    "id": "CAND-030",
+    "question": "Saya melihat bahwa beberapa file di komputer saya tidak dapat diakses dan muncul pesan bahwa ada masalah dengan konfigurasi. Apa yang harus saya lakukan?",
+    "ground_truth": "Pastikan bahwa host Anda telah diperkuat dengan konfigurasi standar dan telah diperbarui dengan patch terbaru. Jika masalah berlanjut, hubungi tim keamanan TI untuk memeriksa konfigurasi dan memastikan bahwa prinsip least privilege diterapkan.",
+    "context_source": "NIST SP 800-61",
+    "incident_types": [
+      "phishing",
+      "malware",
+      "ransomware",
+      "akses_tidak_sah",
+      "kebocoran_data",
+      "general"
+    ],
+    "source_chunk_preview": "allowing staff to emphasize monitoring and response activities for those resources.26 \n Host Security. All hosts should be hardened appropriately using standard configurations. In addition \nto keepin"
+  }
+]

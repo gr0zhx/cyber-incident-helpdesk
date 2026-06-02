@@ -11,13 +11,12 @@ logger = logging.getLogger(__name__)
 HIGH_PRIORITY_SEVERITIES = {"Kritis", "Tinggi"}
 
 _CSIRT_CHAT_ID_ENV = "CSIRT_CHAT_ID"
-_CSIRT_CHAT_ID_FALLBACK = "-1003971618295"
 
 
 def _get_csirt_recipients(severity: str) -> list[str]:
     """Tentukan daftar penerima CSIRT berdasarkan severity."""
     recipients = []
-    csirt_id = os.getenv(_CSIRT_CHAT_ID_ENV, _CSIRT_CHAT_ID_FALLBACK)
+    csirt_id = os.getenv(_CSIRT_CHAT_ID_ENV, "")
     if csirt_id:
         recipients.append(csirt_id)
 

@@ -55,6 +55,7 @@ async def main(
     output_path: str | None = None,
     limit: int | None = None,
     pause_seconds: float = 7.0,
+    ids: list[str] | None = None,
 ) -> None:
     _prioritize_venv_site_packages()
     _bootstrap_github_models_env()
@@ -83,14 +84,44 @@ async def main(
         with open(qa_file, encoding="utf-8") as f:
             qa_pairs = json.load(f)
 
-        from datasets import Dataset
-        from langchain_openai import ChatOpenAI
+        import warnings as _warnings
+        _warnings.filterwarnings("ignore", category=DeprecationWarning, module="ragas")
+
+        from langchain_openai import ChatOpenAI, OpenAIEmbeddings as LCOAIEmbeddings
+        from ragas import evaluate as _ragas_evaluate
+        from ragas.dataset_schema import EvaluationDataset, SingleTurnSample
+        from ragas.embeddings import LangchainEmbeddingsWrapper
+        from ragas.llms import LangchainLLMWrapper
+        from ragas.metrics import AnswerRelevancy, Faithfulness
+        from ragas.metrics._nv_metrics import ContextRelevance as _ContextRelevance
 
         from app.agents.mitigation import MitigationAdvisorAgent
         from app.rag.reranker import rerank
         from app.rag.retriever import HybridRetriever
         from app.utils.llm_client import create_embedder, create_llm_client
         from qdrant_client import QdrantClient
+
+        _base_url = os.getenv("OPENAI_BASE_URL")
+        _api_key = os.getenv("OPENAI_API_KEY")
+        _model = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+
+        # max_tokens=4096: Faithfulness generates long NLI-statement JSON;
+        # GitHub Models defaults to 1024 output tokens which causes truncation.
+        _lc_llm = ChatOpenAI(
+            model=_model,
+            temperature=0.0,
+            openai_api_key=_api_key,
+            max_tokens=4096,
+            **({"base_url": _base_url} if _base_url else {}),
+        )
+        _ragas_llm = LangchainLLMWrapper(_lc_llm)
+        # AnswerRelevancy calls embed_query() — requires LangChain embeddings interface
+        _lc_embed = LCOAIEmbeddings(
+            model="text-embedding-3-small",
+            openai_api_key=_api_key,
+            **({"openai_api_base": _base_url} if _base_url else {}),
+        )
+        _ragas_embed = LangchainEmbeddingsWrapper(_lc_embed)
 
         llm = create_llm_client()
         embedder = create_embedder()
@@ -102,13 +133,21 @@ async def main(
         advisor = MitigationAdvisorAgent(llm_client=llm, retriever=retriever, reranker_fn=rerank)
 
         selected_pairs = qa_pairs[:limit] if limit else qa_pairs
+        if ids:
+            selected_pairs = [q for q in selected_pairs if q.get("id") in ids]
         results = []
 
         for index, qa in enumerate(selected_pairs, 1):
+            print(f"[{index}/{len(selected_pairs)}] Generating answer for: {qa.get('id', '?')}")
             try:
+                # Handle both incident_type (string) dan incident_types (list)
+                inc_type = qa.get("incident_type") or ""
+                if not inc_type:
+                    inc_list = qa.get("incident_types", [])
+                    inc_type = inc_list[0] if inc_list else ""
                 res = await advisor.generate_mitigation(
                     sanitized_input=qa["question"],
-                    incident_type=qa.get("incident_type", ""),
+                    incident_type=inc_type,
                     severity=qa.get("severity", "Sedang"),
                 )
             except Exception as exc:
@@ -143,46 +182,71 @@ async def main(
             if pause_seconds > 0 and index < len(selected_pairs):
                 await asyncio.sleep(pause_seconds)
 
-        out_path = Path(output_path or Path(__file__).resolve().parent / "ragas_results.json")
+        out_path = Path(output_path or Path(__file__).resolve().parent / "rag_ragas_results.json")
         out_path.parent.mkdir(parents=True, exist_ok=True)
         out_path.write_text(json.dumps(results, indent=2, ensure_ascii=False), encoding="utf-8")
-        print(f"Candidate answers saved to: {out_path}")
+        print(f"Candidate answers disimpan sementara: {out_path}")
 
-        ragas_rows = []
+        # Bangun EvaluationDataset RAGAS 0.4 (field: user_input, response, retrieved_contexts, reference)
+        samples = []
         for row in results:
-            ragas_rows.append(
-                {
-                    "question": row.get("question", ""),
-                    "ground_truth": row.get("ground_truth", ""),
-                    "answer": row.get("candidate_answer", ""),
-                    "contexts": [
-                        chunk.get("content", "")
-                        for chunk in row.get("retrieved_chunks", [])[:5]
-                        if chunk.get("content")
-                    ],
-                }
+            contexts = [
+                chunk.get("content", "")
+                for chunk in row.get("retrieved_chunks", [])[:5]
+                if chunk.get("content")
+            ]
+            samples.append(
+                SingleTurnSample(
+                    user_input=row.get("question", ""),
+                    response=row.get("candidate_answer", ""),
+                    retrieved_contexts=contexts,
+                    reference=row.get("ground_truth", ""),
+                )
             )
+        ragas_dataset = EvaluationDataset(samples=samples)
 
-        ragas_dataset = Dataset.from_list(ragas_rows)
-        ragas_llm = ChatOpenAI(
-            model=os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
-            temperature=0.0,
+        # 3 metrik sesuai paper asli Es et al. (2023) — semuanya reference-free
+        _metrics = [
+            Faithfulness(llm=_ragas_llm),
+            AnswerRelevancy(llm=_ragas_llm, embeddings=_ragas_embed),
+            _ContextRelevance(llm=_ragas_llm),
+        ]
+        from ragas.run_config import RunConfig as _RunConfig
+        # max_workers=1: GitHub Models rate limit tidak tahan 16 parallel request default RAGAS
+        _run_cfg = _RunConfig(max_workers=1, max_retries=3, timeout=120)
+        print(f"\nMenjalankan ragas.evaluate() dengan {len(_metrics)} metrik pada {len(samples)} sampel ...")
+        ragas_result = _ragas_evaluate(
+            dataset=ragas_dataset,
+            metrics=_metrics,
+            run_config=_run_cfg,
+            raise_exceptions=False,
+            show_progress=True,
         )
 
-        try:
-            if hasattr(ragas, "evaluate"):
-                print("Calling ragas.evaluate(...) — adapt arguments if needed.")
-                ragas_result = ragas.evaluate(
-                    dataset=ragas_dataset,
-                    llm=ragas_llm,
-                    embeddings=embedder,
-                )
-                print(ragas_result)
+        _df = ragas_result.to_pandas()
+        _summary = {}
+        for m in _metrics:
+            col = m.name
+            if col in _df.columns:
+                _summary[col] = float(_df[col].dropna().mean()) if not _df[col].dropna().empty else None
             else:
-                print("`ragas` installed but no `evaluate` helper detected.")
-                print("Please run ragas CLI or adapt this script to your ragas API.")
-        except Exception as exc:
-            print(f"ragas evaluation call failed (non-fatal): {exc}")
+                _summary[col] = None
+
+        _detail = ragas_result.to_pandas().to_dict(orient="records")
+        out_path.write_text(
+            json.dumps(
+                {"summary": _summary, "per_question": _detail, "qa_pairs": results},
+                indent=2,
+                ensure_ascii=False,
+                default=str,
+            ),
+            encoding="utf-8",
+        )
+        print(f"\nHasil RAGAS disimpan: {out_path}")
+        print("\n=== Ringkasan RAGAS ===")
+        for _k, _v in _summary.items():
+            _disp = f"{_v:.4f}" if _v is not None else "N/A"
+            print(f"  {_k}: {_disp}")
 
     except Exception as exc:
         print(f"Error running RAGAS path: {exc}")
@@ -203,6 +267,7 @@ if __name__ == "__main__":
     parser.add_argument("--output", default=str(Path(__file__).resolve().parent / "rag_ragas_results.json"))
     parser.add_argument("--limit", type=int, default=None, help="Batasi jumlah pertanyaan agar lebih aman terhadap rate limit.")
     parser.add_argument("--pause-seconds", type=float, default=7.0, help="Jeda antar item untuk menahan laju request GitHub Models.")
+    parser.add_argument("--ids", nargs="+", default=None, help="Jalankan hanya soal dengan ID tertentu, contoh: --ids QA-004 QA-013 QA-005")
     args = parser.parse_args()
 
-    asyncio.run(main(args.qa_file, args.output, args.limit, args.pause_seconds))
+    asyncio.run(main(args.qa_file, args.output, args.limit, args.pause_seconds, args.ids))

@@ -1,0 +1,1116 @@
+<html lang="id">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { 
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    background: transparent;
+    padding: 1rem 0;
+  }
+  
+  .frame-container {
+    margin-bottom: 2.5rem;
+  }
+  
+  .frame-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .phone {
+    width: 100%;
+    max-width: 360px;
+    margin: 0 auto;
+    background: #F8F9FA;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+  }
+  
+  .app-header {
+    background: linear-gradient(135deg, #075E54 0%, #128C7E 100%);
+    padding: 16px;
+    color: white;
+  }
+  
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 18px;
+    font-weight: 600;
+  }
+  
+  .logo-icon {
+    width: 32px;
+    height: 32px;
+    background: white;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: #075E54;
+    font-size: 16px;
+  }
+  
+  .header-icons {
+    display: flex;
+    gap: 12px;
+  }
+  
+  .icon-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  .icon-btn:hover {
+    background: rgba(255,255,255,0.3);
+  }
+  
+  .welcome-section {
+    margin-top: 16px;
+  }
+  
+  .welcome-text {
+    font-size: 14px;
+    opacity: 0.9;
+    margin-bottom: 4px;
+  }
+  
+  .user-name {
+    font-size: 20px;
+    font-weight: 600;
+  }
+  
+  .content {
+    padding: 20px 16px;
+    min-height: 500px;
+    background: #F8F9FA;
+  }
+  
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  
+  .stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  
+  .stat-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+  
+  .stat-value {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  
+  .stat-label {
+    font-size: 12px;
+    color: #6C757D;
+  }
+  
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  
+  .section-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #212529;
+  }
+  
+  .link-text {
+    font-size: 13px;
+    color: #075E54;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  
+  .activity-card {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  
+  .activity-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+  }
+  
+  .activity-info h4 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  
+  .activity-time {
+    font-size: 12px;
+    color: #6C757D;
+  }
+  
+  .risk-badge {
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  
+  .badge-safe {
+    background: #D4EDDA;
+    color: #155724;
+  }
+  
+  .badge-warning {
+    background: #FFF3CD;
+    color: #856404;
+  }
+  
+  .badge-danger {
+    background: #F8D7DA;
+    color: #721C24;
+  }
+  
+  .activity-details {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 12px;
+    border-top: 1px solid #E9ECEF;
+    font-size: 13px;
+  }
+  
+  .detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .detail-label {
+    color: #6C757D;
+    font-size: 11px;
+  }
+  
+  .detail-value {
+    font-weight: 500;
+  }
+  
+  .filter-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+  
+  .filter-tab {
+    padding: 8px 16px;
+    border-radius: 20px;
+    background: white;
+    border: 1px solid #DEE2E6;
+    font-size: 13px;
+    color: #495057;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .filter-tab.active {
+    background: #075E54;
+    color: white;
+    border-color: #075E54;
+  }
+  
+  .chart-container {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  
+  .chart-header {
+    margin-bottom: 16px;
+  }
+  
+  .chart-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  
+  .chart-subtitle {
+    font-size: 12px;
+    color: #6C757D;
+  }
+  
+  .bar-chart {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    height: 160px;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  
+  .bar {
+    flex: 1;
+    background: linear-gradient(180deg, #128C7E 0%, #075E54 100%);
+    border-radius: 6px 6px 0 0;
+    position: relative;
+    min-height: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding-bottom: 4px;
+  }
+  
+  .bar-value {
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  
+  .bar-label {
+    position: absolute;
+    bottom: -24px;
+    font-size: 10px;
+    color: #6C757D;
+    text-align: center;
+  }
+  
+  .metric-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  
+  .metric-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .metric-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+  
+  .metric-text {
+    font-size: 12px;
+  }
+  
+  .metric-value {
+    font-weight: 600;
+  }
+  
+  .evidence-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .evidence-item {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  
+  .evidence-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  
+  .pdf-icon {
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg, #DC3545 0%, #C82333 100%);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+    font-weight: 600;
+  }
+  
+  .evidence-info h4 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  
+  .evidence-meta {
+    font-size: 12px;
+    color: #6C757D;
+  }
+  
+  .hash-display {
+    background: #F8F9FA;
+    border: 1px solid #DEE2E6;
+    border-radius: 8px;
+    padding: 10px;
+    margin: 8px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    color: #495057;
+    word-break: break-all;
+    line-height: 1.4;
+  }
+  
+  .hash-label {
+    font-size: 10px;
+    color: #6C757D;
+    font-weight: 600;
+    margin-bottom: 4px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  
+  .action-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  
+  .btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .btn-primary {
+    background: #075E54;
+    color: white;
+  }
+  
+  .btn-secondary {
+    background: #E9ECEF;
+    color: #495057;
+  }
+  
+  .settings-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+  
+  .settings-section {
+    background: white;
+    padding: 12px 0;
+  }
+  
+  .section-label {
+    font-size: 12px;
+    color: #6C757D;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding: 8px 16px;
+    background: #F8F9FA;
+  }
+  
+  .settings-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    background: white;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  .settings-item:hover {
+    background: #F8F9FA;
+  }
+  
+  .settings-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .settings-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  
+  .settings-text h4 {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 2px;
+  }
+  
+  .settings-desc {
+    font-size: 12px;
+    color: #6C757D;
+  }
+  
+  .toggle {
+    width: 48px;
+    height: 28px;
+    background: #CED4DA;
+    border-radius: 14px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  .toggle.on {
+    background: #28A745;
+  }
+  
+  .toggle-knob {
+    width: 24px;
+    height: 24px;
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    transition: left 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+  
+  .toggle.on .toggle-knob {
+    left: 22px;
+  }
+  
+  .upgrade-banner {
+    background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+    border-radius: 12px;
+    padding: 20px;
+    color: white;
+    margin-bottom: 20px;
+  }
+  
+  .banner-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.25);
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  
+  .banner-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  
+  .banner-desc {
+    font-size: 13px;
+    opacity: 0.9;
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+  
+  .banner-btn {
+    background: white;
+    color: #667EEA;
+    padding: 12px 24px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  
+  .banner-btn:hover {
+    transform: scale(1.05);
+  }
+</style>
+
+<div class="frame-container">
+  <div class="frame-title">Frame 1: Home Dashboard</div>
+  <div class="phone">
+    <div class="app-header">
+      <div class="header-top">
+        <div class="logo">
+          <div class="logo-icon">CA</div>
+          <span>Cekin AI</span>
+        </div>
+        <div class="header-icons">
+          <div class="icon-btn">🔔</div>
+          <div class="icon-btn">⚙️</div>
+        </div>
+      </div>
+      <div class="welcome-section">
+        <div class="welcome-text">Selamat datang kembali,</div>
+        <div class="user-name">Bu Tini 👋</div>
+      </div>
+    </div>
+    
+    <div class="content">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon" style="background: #D4EDDA; color: #155724;">✓</div>
+          <div class="stat-value" style="color: #155724;">24</div>
+          <div class="stat-label">Verifikasi Aman</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background: #F8D7DA; color: #721C24;">✗</div>
+          <div class="stat-value" style="color: #721C24;">3</div>
+          <div class="stat-label">Terdeteksi Fraud</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background: #FFF3CD; color: #856404;">⚠</div>
+          <div class="stat-value" style="color: #856404;">5</div>
+          <div class="stat-label">Mencurigakan</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background: #E1F5FE; color: #01579B;">💰</div>
+          <div class="stat-value" style="color: #01579B;">850K</div>
+          <div class="stat-label">Kerugian Dicegah</div>
+        </div>
+      </div>
+      
+      <div class="section-header">
+        <div class="section-title">Aktivitas Terbaru</div>
+        <div class="link-text">Lihat Semua →</div>
+      </div>
+      
+      <div class="activity-card">
+        <div class="activity-header">
+          <div class="activity-info">
+            <h4>Transfer BCA - Rp 450.000</h4>
+            <div class="activity-time">18 Mei 2026, 14:23</div>
+          </div>
+          <div class="risk-badge badge-safe">ASLI</div>
+        </div>
+        <div class="activity-details">
+          <div class="detail-item">
+            <div class="detail-label">Skor Verifikasi</div>
+            <div class="detail-value" style="color: #155724;">94% Aman</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Bank</div>
+            <div class="detail-value">BCA</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Status</div>
+            <div class="detail-value">✓ Verified</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="activity-card">
+        <div class="activity-header">
+          <div class="activity-info">
+            <h4>Transfer Mandiri - Rp 1.200.000</h4>
+            <div class="activity-time">17 Mei 2026, 20:34</div>
+          </div>
+          <div class="risk-badge badge-danger">PALSU</div>
+        </div>
+        <div class="activity-details">
+          <div class="detail-item">
+            <div class="detail-label">Skor Verifikasi</div>
+            <div class="detail-value" style="color: #721C24;">91% Fraud</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Bank</div>
+            <div class="detail-value">Mandiri</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Status</div>
+            <div class="detail-value">🚨 Blocked</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="upgrade-banner">
+        <div class="banner-badge">⭐ UPGRADE PRO</div>
+        <div class="banner-title">Tingkatkan Perlindungan Anda</div>
+        <div class="banner-desc">
+          Dapatkan unlimited verifikasi, evidence pack forensik, dan fitur analytics premium hanya Rp 49.000/bulan
+        </div>
+        <button class="banner-btn">Upgrade Sekarang →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="frame-container">
+  <div class="frame-title">Frame 2: Riwayat Verifikasi</div>
+  <div class="phone">
+    <div class="app-header">
+      <div class="header-top">
+        <div class="logo">
+          <div class="logo-icon">CA</div>
+          <span>Riwayat</span>
+        </div>
+        <div class="header-icons">
+          <div class="icon-btn">🔍</div>
+          <div class="icon-btn">⋮</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="content">
+      <div class="filter-tabs">
+        <div class="filter-tab active">Semua</div>
+        <div class="filter-tab">Aman</div>
+        <div class="filter-tab">Mencurigakan</div>
+        <div class="filter-tab">Palsu</div>
+        <div class="filter-tab">Minggu Ini</div>
+      </div>
+      
+      <div class="activity-card">
+        <div class="activity-header">
+          <div class="activity-info">
+            <h4>Transfer BCA - Rp 450.000</h4>
+            <div class="activity-time">18 Mei 2026, 14:23</div>
+          </div>
+          <div class="risk-badge badge-safe">ASLI</div>
+        </div>
+        <div class="activity-details">
+          <div class="detail-item">
+            <div class="detail-label">Customer</div>
+            <div class="detail-value">Siti Aminah</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Nomor Rekening</div>
+            <div class="detail-value">5730***123</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="activity-card">
+        <div class="activity-header">
+          <div class="activity-info">
+            <h4>Transfer Mandiri - Rp 1.200.000</h4>
+            <div class="activity-time">17 Mei 2026, 20:34</div>
+          </div>
+          <div class="risk-badge badge-danger">PALSU</div>
+        </div>
+        <div class="activity-details">
+          <div class="detail-item">
+            <div class="detail-label">Fraud Signals</div>
+            <div class="detail-value" style="color: #721C24;">AI-Generated, EXIF</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Evidence Pack</div>
+            <div class="detail-value">📄 Generated</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="activity-card">
+        <div class="activity-header">
+          <div class="activity-info">
+            <h4>Transfer BRI - Rp 350.000</h4>
+            <div class="activity-time">17 Mei 2026, 15:12</div>
+          </div>
+          <div class="risk-badge badge-warning">HATI-HATI</div>
+        </div>
+        <div class="activity-details">
+          <div class="detail-item">
+            <div class="detail-label">Skor</div>
+            <div class="detail-value" style="color: #856404;">68% Suspicious</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Action Taken</div>
+            <div class="detail-value">⚠️ Manual Check</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="activity-card">
+        <div class="activity-header">
+          <div class="activity-info">
+            <h4>Transfer BCA - Rp 275.000</h4>
+            <div class="activity-time">16 Mei 2026, 10:45</div>
+          </div>
+          <div class="risk-badge badge-safe">ASLI</div>
+        </div>
+        <div class="activity-details">
+          <div class="detail-item">
+            <div class="detail-label">Waktu Proses</div>
+            <div class="detail-value">3.2 detik</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Confidence</div>
+            <div class="detail-value">96%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="frame-container">
+  <div class="frame-title">Frame 3: Statistik & Analytics</div>
+  <div class="phone">
+    <div class="app-header">
+      <div class="header-top">
+        <div class="logo">
+          <div class="logo-icon">CA</div>
+          <span>Statistik</span>
+        </div>
+        <div class="header-icons">
+          <div class="icon-btn">📊</div>
+          <div class="icon-btn">📅</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="content">
+      <div class="chart-container">
+        <div class="chart-header">
+          <div class="chart-title">Tren Verifikasi (7 Hari Terakhir)</div>
+          <div class="chart-subtitle">Total: 32 verifikasi</div>
+        </div>
+        <div class="bar-chart">
+          <div class="bar" style="height: 45%;">
+            <div class="bar-value">3</div>
+            <div class="bar-label">Sen</div>
+          </div>
+          <div class="bar" style="height: 70%;">
+            <div class="bar-value">5</div>
+            <div class="bar-label">Sel</div>
+          </div>
+          <div class="bar" style="height: 55%;">
+            <div class="bar-value">4</div>
+            <div class="bar-label">Rab</div>
+          </div>
+          <div class="bar" style="height: 90%;">
+            <div class="bar-value">7</div>
+            <div class="bar-label">Kam</div>
+          </div>
+          <div class="bar" style="height: 100%;">
+            <div class="bar-value">8</div>
+            <div class="bar-label">Jum</div>
+          </div>
+          <div class="bar" style="height: 65%;">
+            <div class="bar-value">5</div>
+            <div class="bar-label">Sab</div>
+          </div>
+          <div class="bar" style="height: 35%;">
+            <div class="bar-value">2</div>
+            <div class="bar-label">Min</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="chart-container">
+        <div class="chart-header">
+          <div class="chart-title">Distribusi Hasil Verifikasi</div>
+          <div class="chart-subtitle">Mei 2026</div>
+        </div>
+        <div class="metric-grid">
+          <div class="metric-item">
+            <div class="metric-dot" style="background: #28A745;"></div>
+            <div class="metric-text">
+              <span class="metric-value">75%</span> Aman
+            </div>
+          </div>
+          <div class="metric-item">
+            <div class="metric-dot" style="background: #DC3545;"></div>
+            <div class="metric-text">
+              <span class="metric-value">9%</span> Palsu
+            </div>
+          </div>
+          <div class="metric-item">
+            <div class="metric-dot" style="background: #FFC107;"></div>
+            <div class="metric-text">
+              <span class="metric-value">16%</span> Mencurigakan
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon" style="background: #E1F5FE; color: #01579B;">💸</div>
+          <div class="stat-value" style="color: #01579B;">1.85M</div>
+          <div class="stat-label">Total Dicegah (30 hari)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background: #F3E5F5; color: #4A148C;">⚡</div>
+          <div class="stat-value" style="color: #4A148C;">3.4s</div>
+          <div class="stat-label">Avg Response Time</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background: #FFF3E0; color: #E65100;">🎯</div>
+          <div class="stat-value" style="color: #E65100;">97%</div>
+          <div class="stat-label">Akurasi Deteksi</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background: #E8F5E9; color: #1B5E20;">📈</div>
+          <div class="stat-value" style="color: #1B5E20;">+24%</div>
+          <div class="stat-label">vs Bulan Lalu</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="frame-container">
+  <div class="frame-title">Frame 4: Evidence Pack</div>
+  <div class="phone">
+    <div class="app-header">
+      <div class="header-top">
+        <div class="logo">
+          <div class="logo-icon">CA</div>
+          <span>Evidence Pack</span>
+        </div>
+        <div class="header-icons">
+          <div class="icon-btn">🔍</div>
+          <div class="icon-btn">⋮</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="content">
+      <div class="section-header">
+        <div class="section-title">Laporan Forensik Tersimpan</div>
+      </div>
+      
+      <div class="evidence-list">
+        <div class="evidence-item">
+          <div class="evidence-header">
+            <div class="pdf-icon">PDF</div>
+            <div class="evidence-info">
+              <h4>Forensic_Report_20260518.pdf</h4>
+              <div class="evidence-meta">Transfer Mandiri Rp 1.2M • 17 Mei 2026</div>
+            </div>
+          </div>
+          <div class="hash-label">🔒 HMAC Signature (Tamper-Proof):</div>
+          <div class="hash-display">
+            A3F2C8D94B1E7F3A2C5D8E9B4F1A6C2D7E3B8A5F9C1D4E7B2A8F3C6D9E1B4A7
+          </div>
+          <div class="hash-label">🌲 Merkle Tree Hash:</div>
+          <div class="hash-display">
+            8D41B7E3A2F5C9D6B1E4A8F2C7D3B9E5A1F6C4D8B2E7A3F9C5D1B6E8A4F2C7
+          </div>
+          <div class="action-row">
+            <button class="btn btn-primary">📥 Download</button>
+            <button class="btn btn-secondary">📧 Kirim Email</button>
+          </div>
+        </div>
+        
+        <div class="evidence-item">
+          <div class="evidence-header">
+            <div class="pdf-icon">PDF</div>
+            <div class="evidence-info">
+              <h4>Forensic_Report_20260515.pdf</h4>
+              <div class="evidence-meta">Transfer BRI Rp 350K • 15 Mei 2026</div>
+            </div>
+          </div>
+          <div class="hash-label">🔒 HMAC Signature:</div>
+          <div class="hash-display">
+            B2E9F1C3D7A8B4E5F2C9D1A6B3E8F4C7D2A9B5E1F8C3D6A2B7E4F9C1D5A8B3
+          </div>
+          <div class="hash-label">🌲 Merkle Tree Hash:</div>
+          <div class="hash-display">
+            7C38A1D5B9E2F6C4A8D1B7E3F9C5A2D6B4E8F1C7A3D9B2E5F8C4A6D1B3E7F9
+          </div>
+          <div class="action-row">
+            <button class="btn btn-primary">📥 Download</button>
+            <button class="btn btn-secondary">📧 Kirim Email</button>
+          </div>
+        </div>
+      </div>
+      
+      <div style="margin-top: 20px; padding: 16px; background: #FFF3CD; border-radius: 12px; border: 1px solid #FFC107;">
+        <div style="font-size: 13px; color: #856404; line-height: 1.6;">
+          <strong>ℹ️ Tentang Evidence Pack:</strong><br>
+          Setiap laporan dilindungi dengan cryptographic signature (HMAC + Merkle Tree) yang memastikan tidak ada pihak yang bisa mengubah isi laporan tanpa terdeteksi. Cocok untuk pelaporan resmi ke IASC OJK atau aparat penegak hukum.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="frame-container">
+  <div class="frame-title">Frame 5: Pengaturan Akun</div>
+  <div class="phone">
+    <div class="app-header">
+      <div class="header-top">
+        <div class="logo">
+          <div class="logo-icon">CA</div>
+          <span>Pengaturan</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="content" style="padding: 0;">
+      <div class="section-label">AKUN & PROFIL</div>
+      <div class="settings-list">
+        <div class="settings-item">
+          <div class="settings-left">
+            <div class="settings-icon" style="background: #E1F5FE; color: #01579B;">👤</div>
+            <div class="settings-text">
+              <h4>Profil Pengguna</h4>
+              <div class="settings-desc">Bu Tini • 0812-3456-7890</div>
+            </div>
+          </div>
+          <div>›</div>
+        </div>
+        
+        <div class="settings-item">
+          <div class="settings-left">
+            <div class="settings-icon" style="background: #F3E5F5; color: #4A148C;">⭐</div>
+            <div class="settings-text">
+              <h4>Paket Langganan</h4>
+              <div class="settings-desc">Free Plan • 5 verifikasi/hari</div>
+            </div>
+          </div>
+          <div>›</div>
+        </div>
+      </div>
+      
+      <div class="section-label">NOTIFIKASI</div>
+      <div class="settings-list">
+        <div class="settings-item">
+          <div class="settings-left">
+            <div class="settings-icon" style="background: #E8F5E9; color: #1B5E20;">🔔</div>
+            <div class="settings-text">
+              <h4>Notifikasi WhatsApp</h4>
+              <div class="settings-desc">Hasil verifikasi langsung via WA</div>
+            </div>
+          </div>
+          <div class="toggle on">
+            <div class="toggle-knob"></div>
+          </div>
+        </div>
+        
+        <div class="settings-item">
+          <div class="settings-left">
+            <div class="settings-icon" style="background: #FFF3E0; color: #E65100;">📧</div>
+            <div class="settings-text">
+              <h4>Email Report</h4>
+              <div class="settings-desc">Laporan mingguan via email</div>
+            </div>
+          </div>
+          <div class="toggle">
+            <div class="toggle-knob"></div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="section-label">KEAMANAN</div>
+      <div class="settings-list">
+        <div class="settings-item">
+          <div class="settings-left">
+            <div class="settings-icon" style="background: #FFEBEE; color: #B71C1C;">🔐</div>
+            <div class="settings-text">
+              <h4>Auto-Generate Evidence Pack</h4>
+              <div class="settings-desc">Untuk transaksi fraud</div>
+            </div>
+          </div>
+          <div class="toggle on">
+            <div class="toggle-knob"></div>
+          </div>
+        </div>
+        
+        <div class="settings-item">
+          <div class="settings-left">
+            <div class="settings-icon" style="background: #E0F2F1; color: #00695C;">🛡️</div>
+            <div class="settings-text">
+              <h4>Threat Intel Database</h4>
+              <div class="settings-desc">Cross-check rekening fraud</div>
+            </div>
+          </div>
+          <div class="toggle on">
+            <div class="toggle-knob"></div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="section-label">LAINNYA</div>
+      <div class="settings-list">
+        <div class="settings-item">
+          <div class="settings-left">
+            <div class="settings-icon" style="background: #F1F3F4; color: #5F6368;">📚</div>
+            <div class="settings-text">
+              <h4>Bantuan & Tutorial</h4>
+            </div>
+          </div>
+          <div>›</div>
+        </div>
+        
+        <div class="settings-item">
+          <div class="settings-left">
+            <div class="settings-icon" style="background: #F1F3F4; color: #5F6368;">📄</div>
+            <div class="settings-text">
+              <h4>Syarat & Ketentuan</h4>
+            </div>
+          </div>
+          <div>›</div>
+        </div>
+        
+        <div class="settings-item">
+          <div class="settings-left">
+            <div class="settings-icon" style="background: #FFEBEE; color: #C62828;">🚪</div>
+            <div class="settings-text">
+              <h4>Keluar</h4>
+            </div>
+          </div>
+          <div>›</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</html>

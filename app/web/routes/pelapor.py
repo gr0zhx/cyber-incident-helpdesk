@@ -158,7 +158,7 @@ async def upload_file(
             data=data,
         )
     except UploadError as exc:
-        return HTMLResponse(f'<p style="color: #dc2626; font-size: 13px;">{exc}</p>')
+        return HTMLResponse(f'<p style="color: #dc2626; font-size: 13px;">{_html.escape(str(exc))}</p>')
 
     size_kb = meta["size_bytes"] // 1024
     return templates.TemplateResponse(
@@ -191,11 +191,14 @@ def reset_session(
 def ticket_status(
     request: Request,
     ticket_id: str,
+    reporter: dict = Depends(get_reporter_session),
     db: Session = Depends(get_db_session),
 ):
     ticket = db.query(IncidentTicket).filter_by(ticket_id=ticket_id).first()
     if ticket is None:
         raise HTTPException(status_code=404, detail="Tiket tidak ditemukan.")
+    if ticket.reporter_id != reporter["reporter_id"]:
+        raise HTTPException(status_code=403, detail="Akses ditolak.")
     return templates.TemplateResponse(
         "pelapor/tiket_detail.html",
         {"request": request, "ticket": ticket},

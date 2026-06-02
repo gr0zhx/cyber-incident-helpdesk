@@ -1,122 +1,162 @@
 [
   {
     "id": "QA-001",
-    "question": "Apa langkah pertama yang harus dilakukan saat menerima email phishing?",
-    "ground_truth": "Jangan klik link atau lampiran apapun. Segera laporkan ke tim IT/CSIRT dan tandai email sebagai phishing.",
-    "context_source": "NIST SP 800-61"
+    "question": "Dokumen minimum apa yang wajib ada sebelum insiden siber terjadi?",
+    "ground_truth": "Kembangkan rencana respons insiden berdasarkan kebijakan respons insiden organisasi. Rencana ini memberikan peta jalan untuk mengimplementasikan program sesuai kebijakan, mencakup tujuan jangka pendek dan panjang, termasuk metrik pengukuran program. Dokumen minimum mencakup kebijakan, SOP eskalasi, dan rencana respons insiden yang telah diuji.",
+    "context_source": "NIST SP 800-61",
+    "incident_type": "Malware",
+    "severity": "Sedang"
   },
   {
     "id": "QA-002",
-    "question": "Bagaimana cara mengisolasi sistem yang terinfeksi ransomware?",
-    "ground_truth": "Segera putuskan koneksi jaringan (cabut kabel LAN atau matikan WiFi), jangan matikan komputer, dan hubungi tim CSIRT segera.",
-    "context_source": "NIST SP 800-61"
+    "question": "Laporan via WhatsApp/japri sering minim detail. Data minimum apa yang harus kita minta dari pelapor insiden?",
+    "ground_truth": "Tim respons insiden harus mempertahankan catatan status insiden beserta informasi terkait. Sistem pelacakan insiden harus memuat: status saat ini, ringkasan insiden, indikator terkait, tindakan yang telah dilakukan, bukti yang terkumpul, komentar dari incident handler, dan langkah berikutnya. Data minimum ini memastikan insiden ditangani secara konsisten dan tepat waktu.",
+    "context_source": "NIST SP 800-61",
+    "incident_type": "Malware",
+    "severity": "Sedang"
   },
   {
     "id": "QA-003",
-    "question": "Apa yang harus dilakukan jika menemukan data sensitif bocor ke publik?",
-    "ground_truth": "Laporkan segera ke tim CSIRT, dokumentasikan bukti, identifikasi sumber kebocoran, dan patuhi prosedur notifikasi insiden sesuai regulasi.",
-    "context_source": "NIST SP 800-61"
+    "question": "Saat dua insiden datang bersamaan, satu mengganggu layanan, dan satunya dugaan kebocoran data. Yang mana dulu harus diprioritaskan?",
+    "ground_truth": "Handler insiden harus mempertimbangkan upaya pemulihan dan menimbangnya terhadap nilai yang dihasilkan. Menggabungkan dampak fungsional terhadap sistem dan dampak terhadap informasi organisasi menentukan dampak bisnis insiden. Insiden dengan dampak bisnis lebih tinggi, terutama yang melibatkan data sensitif, diprioritaskan lebih tinggi.",
+    "context_source": "NIST SP 800-61",
+    "incident_type": "Kebocoran Data",
+    "severity": "Tinggi"
   },
   {
     "id": "QA-004",
-    "question": "Bagaimana cara mendeteksi serangan DDoS pada server?",
-    "ground_truth": "Pantau lonjakan trafik yang tidak normal, periksa log server untuk pola permintaan berulang dari banyak IP, dan gunakan tools monitoring jaringan.",
-    "context_source": "NIST SP 800-61"
+    "question": "Saat serangan masih berjalan, tindakan paling aman apakah langsung mematikan sistem atau isolasi dulu?",
+    "ground_truth": "Pertimbangkan faktor berikut dalam memilih strategi containment: waktu dan sumber daya yang dibutuhkan, efektivitas strategi (containment parsial vs penuh), dan durasi solusi. Lakukan containment terlebih dahulu agar dampak berhenti tanpa merusak bukti. Keputusan shutdown diambil hanya jika manfaatnya lebih besar dari risiko kehilangan bukti.",
+    "context_source": "NIST SP 800-61",
+    "incident_type": "Malware",
+    "severity": "Tinggi"
   },
   {
     "id": "QA-005",
-    "question": "Apa langkah mitigasi awal untuk serangan malware pada workstation?",
-    "ground_truth": "Isolasi perangkat dari jaringan, jalankan full scan antivirus, dokumentasikan proses mencurigakan yang berjalan, dan laporkan ke CSIRT.",
-    "context_source": "NIST SP 800-61"
+    "question": "Akun saya tiba-tiba login sendiri dari perangkat/lokasi yang bukan saya. Ini harus dianggap serius?",
+    "ground_truth": "Ya, ini indikator akses tidak sah. Monitor penggunaan kredensial yang tidak sah dan pantau konfigurasi perangkat keras maupun lunak untuk penyimpangan dari baseline keamanan. Monitor endpoint untuk masalah kesehatan siber seperti patch yang hilang, infeksi malware, atau perangkat lunak yang tidak sah. Segera verifikasi dan tangani untuk mencegah penyalahgunaan lanjutan.",
+    "context_source": "NIST SP 800-61",
+    "incident_type": "Akses Tidak Sah",
+    "severity": "Tinggi"
   },
   {
     "id": "QA-006",
-    "question": "Bagaimana prosedur response saat akun admin dikompromis?",
-    "ground_truth": "Segera nonaktifkan akun yang dikompromis, reset semua kredensial terkait, audit log akses, dan investigasi sumber kompromi.",
-    "context_source": "NIST SP 800-61"
+    "question": "Saya klik email mencurigakan, tapi belum tahu ada dampak atau tidak. Langkah awalnya bagaimana ya?",
+    "ground_truth": "Segera laporkan insiden untuk memverifikasi apakah insiden siber benar-benar terjadi, kemudian perkirakan tingkat keparahan dan urgensi respons. Mekanisme pelaporan harus tersedia agar siapa pun dapat melaporkan kemungkinan insiden. Laporan harus dipantau secara cermat dan ditanggapi dengan serius.",
+    "context_source": "NIST SP 800-61",
+    "incident_type": "Phishing",
+    "severity": "Sedang"
   },
   {
     "id": "QA-007",
-    "question": "Apa indikator kompromi (IoC) yang umum pada serangan phishing?",
-    "ground_truth": "Email dari domain mirip tapi berbeda, link menuju URL yang tidak sesuai, permintaan kredensial mendesak, dan lampiran berekstensi tidak biasa.",
-    "context_source": "NIST SP 800-61"
+    "question": "Komputer jadi lambat, muncul pop-up aneh, dan file sulit dibuka. Itu cukup buat dianggap insiden?",
+    "ground_truth": "Tanda-tanda insiden terbagi dalam dua kategori: prekursor dan indikator. Indikator yang umum antara lain: percobaan login gagal berulang dari sistem yang tidak dikenal, lonjakan lalu lintas jaringan yang tidak biasa, dan peringatan antivirus. Gejala tersebut perlu dianalisis lebih lanjut sebelum ditetapkan sebagai insiden.",
+    "context_source": "NIST SP 800-61",
+    "incident_type": "Malware",
+    "severity": "Sedang"
   },
   {
     "id": "QA-008",
-    "question": "Bagaimana cara memulihkan sistem setelah serangan ransomware?",
-    "ground_truth": "Jangan bayar tebusan. Restore dari backup bersih yang terverifikasi, scan sistem sebelum reconnect ke jaringan, dan laporkan ke penegak hukum.",
-    "context_source": "NIST SP 800-61"
+    "question": "Kenapa saya diminta jangan hapus email/chat/berkas yang mencurigakan?",
+    "ground_truth": "Bukti harus diperhitungkan setiap saat. Setiap kali bukti berpindah tangan, formulir chain of custody harus merinci perpindahan tersebut sesuai prosedur hukum dan regulasi yang berlaku agar bukti dapat diterima di pengadilan. Menghapus bukti digital dapat merusak investigasi dan menghalangi penuntutan hukum.",
+    "context_source": "NIST SP 800-61",
+    "incident_type": "Kebocoran Data",
+    "severity": "Sedang"
   },
   {
     "id": "QA-009",
-    "question": "Apa perbedaan antara incident response dan disaster recovery?",
-    "ground_truth": "Incident response fokus pada mengatasi ancaman keamanan aktif, sedangkan disaster recovery fokus pada pemulihan sistem dan data setelah insiden selesai.",
-    "context_source": "NIST SP 800-61"
+    "question": "Kalau data kerja saya hilang karena insiden, apakah masih bisa dikembalikan?",
+    "ground_truth": "Selama pemulihan insiden, personel memulihkan sistem ke operasi normal, memastikan sistem berfungsi dengan baik, dan jika memungkinkan, memperbaiki kerentanan untuk mencegah insiden serupa. Operasi pemulihan mencakup restorasi dari backup yang bersih. Pemulihan data bergantung pada ketersediaan backup yang valid.",
+    "context_source": "NIST SP 800-61",
+    "incident_type": "Ransomware",
+    "severity": "Sedang"
   },
   {
     "id": "QA-010",
-    "question": "Bagaimana cara mengamankan akun dari serangan brute force?",
-    "ground_truth": "Aktifkan multi-factor authentication, terapkan kebijakan lockout akun setelah beberapa kali gagal login, dan gunakan password yang kuat dan unik.",
-    "context_source": "NIST SP 800-53"
+    "question": "Saya dihubungi oleh pihak yang mengaku dari tim IT dan diminta memberikan kode OTP. Apakah ini aman dan apa yang harus saya lakukan?",
+    "ground_truth": "Edukasi dan kesadaran adalah penguat sumber daya keamanan. Pengguna dan staf teknis harus mengetahui cara mendeteksi, melaporkan, dan merespons insiden termasuk upaya social engineering. Jangan berikan OTP atau kredensial kepada pihak yang tidak dapat diverifikasi. Segera laporkan melalui kanal resmi organisasi.",
+    "context_source": "NIST SP 800-61",
+    "incident_type": "Phishing",
+    "severity": "Tinggi"
   },
   {
     "id": "QA-011",
     "question": "Saya menerima email yang mengatasnamakan atasan dengan nada mendesak dan meminta saya melakukan login ulang melalui tautan tertentu. Apakah ini perlu dianggap sebagai ancaman keamanan?",
-    "ground_truth": "Ya, ini indikasi kuat phishing. Pola mendesak + ajakan klik/login ulang adalah ciri umum upaya pencurian kredensial. Saran mitigasi awal: isolasi email dan blok domain/URL mencurigakan di gateway, edukasi cepat ke user terdampak agar tidak klik tautan serupa, dan perkuat filter email serta proteksi endpoint.",
-    "context_source": "MITRE ATT&CK"
+    "ground_truth": "Ya, ini indikasi kuat phishing. Pola mendesak dan ajakan klik atau login ulang adalah ciri umum upaya pencurian kredensial. Saran mitigasi awal: isolasi email dan blok domain atau URL mencurigakan di gateway, edukasi cepat ke user terdampak agar tidak klik tautan serupa, dan perkuat filter email serta proteksi endpoint.",
+    "context_source": "MITRE ATT&CK",
+    "incident_type": "Phishing",
+    "severity": "Tinggi"
   },
   {
     "id": "QA-012",
     "question": "Saya menerima email dengan lampiran invoice dari pengirim yang tidak saya kenal, dan setelah dibuka perangkat saya menjadi tidak normal. Kemungkinan kejadian ini apa?",
-    "ground_truth": "Ini merupakan spearphishing attachment: file berbahaya disamarkan sebagai dokumen kerja. Saran mitigasi awal: karantina endpoint yang membuka lampiran dan hentikan penyebaran file serupa, batasi tipe file berisiko tinggi dari email/web, dan sosialisasi ulang prosedur buka lampiran yang aman.",
-    "context_source": "MITRE ATT&CK"
+    "ground_truth": "Ini merupakan spearphishing attachment yaitu file berbahaya yang disamarkan sebagai dokumen kerja. Saran mitigasi awal: karantina endpoint yang membuka lampiran dan hentikan penyebaran file serupa, batasi tipe file berisiko tinggi dari email atau web, dan sosialisasi ulang prosedur membuka lampiran yang aman.",
+    "context_source": "MITRE ATT&CK",
+    "incident_type": "Malware",
+    "severity": "Tinggi"
   },
   {
     "id": "QA-013",
     "question": "File pada shared drive tiba-tiba terenkripsi dan muncul pesan permintaan tebusan. Apa langkah awal yang sebaiknya dilakukan?",
-    "ground_truth": "Ini indikasi ransomware tipe enkripsi data untuk mengganggu ketersediaan layanan. Saran mitigasi awal: isolasi host terdampak dan hentikan proses enkripsi lanjutan, siapkan pemulihan dari backup bersih yang terverifikasi, dan bekukan akun/sesi yang dicurigai jadi jalur awal serangan (operasional lokal).",
-    "context_source": "MITRE ATT&CK"
+    "ground_truth": "Ini indikasi ransomware tipe enkripsi data untuk mengganggu ketersediaan layanan. Saran mitigasi awal: isolasi host terdampak dan hentikan proses enkripsi lanjutan, siapkan pemulihan dari backup bersih yang terverifikasi, dan bekukan akun atau sesi yang dicurigai menjadi jalur awal serangan.",
+    "context_source": "MITRE ATT&CK",
+    "incident_type": "Ransomware",
+    "severity": "Kritis"
   },
   {
     "id": "QA-014",
     "question": "Halaman utama website berubah tanpa izin dan menampilkan pesan yang tidak dikenal. Apakah ini termasuk insiden prioritas tinggi?",
-    "ground_truth": "Ya, ini indikasi defacement dan berdampak langsung pada integritas serta reputasi layanan publik. Saran mitigasi awal: takedown sementara halaman terdampak dan aktifkan halaman cadangan darurat, pulihkan konten dari sumber tepercaya/backup bersih, serta simpan artefak perubahan untuk investigasi lanjutan.",
-    "context_source": "MITRE ATT&CK"
+    "ground_truth": "Ya, ini indikasi defacement dan berdampak langsung pada integritas serta reputasi layanan publik. Saran mitigasi awal: takedown sementara halaman terdampak dan aktifkan halaman cadangan darurat, pulihkan konten dari sumber tepercaya atau backup bersih, serta simpan artefak perubahan untuk investigasi lanjutan.",
+    "context_source": "MITRE ATT&CK",
+    "incident_type": "Web Defacement",
+    "severity": "Tinggi"
   },
   {
     "id": "QA-015",
     "question": "Aplikasi yang terhubung ke internet tiba-tiba dapat diakses oleh pihak tidak sah, padahal tidak ada penggunaan akun admin. Biasanya ini disebabkan oleh apa?",
-    "ground_truth": "Salah satu kemungkinan utama: eksploitasi celah aplikasi publik untuk akses awal. Saran mitigasi awal: lakukan scan kerentanan dan patch prioritas kritikal, segmentasi layanan publik dari jaringan internal, serta terapkan filtering trafik dan isolasi aplikasi bila perlu.",
-    "context_source": "MITRE ATT&CK"
+    "ground_truth": "Salah satu kemungkinan utama adalah eksploitasi celah aplikasi publik untuk akses awal. Saran mitigasi awal: lakukan scan kerentanan dan patch prioritas kritikal, segmentasi layanan publik dari jaringan internal, serta terapkan filtering trafik dan isolasi aplikasi bila perlu.",
+    "context_source": "MITRE ATT&CK",
+    "incident_type": "Akses Tidak Sah",
+    "severity": "Tinggi"
   },
   {
     "id": "QA-016",
     "question": "Terdapat login berhasil menggunakan akun pegawai, namun pemilik akun menyatakan tidak pernah melakukan login tersebut. Indikasi apakah ini?",
     "ground_truth": "Ini indikasi penyalahgunaan akun valid. Saran mitigasi awal: nonaktifkan sementara atau suspend sesi aktif akun terdampak, perketat kebijakan password dan kredensial, serta tinjau hak akses istimewa akun terkait.",
-    "context_source": "MITRE ATT&CK"
+    "context_source": "MITRE ATT&CK",
+    "incident_type": "Akses Tidak Sah",
+    "severity": "Tinggi"
   },
   {
     "id": "QA-017",
     "question": "Trafik mendadak meledak sehingga layanan publik drop, apa yang terjadi?",
-    "ground_truth": "Ini merupakan indikasi Network Denial of Service yaitu serangan yang menghabiskan kapasitas jaringan sehingga layanan jadi lambat atau tidak tersedia.",
-    "context_source": "MITRE ATT&CK"
+    "ground_truth": "Ini merupakan indikasi Network Denial of Service yaitu serangan yang menghabiskan kapasitas jaringan sehingga layanan menjadi lambat atau tidak tersedia.",
+    "context_source": "MITRE ATT&CK",
+    "incident_type": "DDoS",
+    "severity": "Tinggi"
   },
   {
     "id": "QA-018",
     "question": "Saya melihat adanya unggahan dokumen internal ke layanan berbagi file publik tanpa persetujuan. Apakah ini dapat mengindikasikan kebocoran data?",
     "ground_truth": "Ya, ini selaras dengan exfiltration melalui layanan web. Saran mitigasi awal: terapkan pembatasan akses ke web service berisiko tinggi, aktifkan kontrol DLP pada trafik keluar, dan audit akun atau endpoint yang melakukan upload.",
-    "context_source": "MITRE ATT&CK"
+    "context_source": "MITRE ATT&CK",
+    "incident_type": "Kebocoran Data",
+    "severity": "Tinggi"
   },
   {
     "id": "QA-019",
     "question": "Saya menemukan file atau skrip yang tidak dikenal muncul di perangkat, terlihat seperti tool atau aplikasi pihak ketiga. Dari mana file ini bisa datang dan apakah perlu dilaporkan?",
-    "ground_truth": "File atau tool yang tidak dikenal kemungkinan ditransfer oleh penyerang untuk melakukan aktivitas lanjutan. Ini perlu dilaporkan segera sebagai dugaan transfer tool berbahaya. Saran mitigasi awal: karantina endpoint dan isolasi perangkat dari jaringan, blok transfer file dari sumber yang tidak terpercaya, serta monitor dan batasi transfer file atau tool ke endpoint.",
-    "context_source": "MITRE ATT&CK"
+    "ground_truth": "File atau tool yang tidak dikenal kemungkinan ditransfer oleh penyerang untuk melakukan aktivitas lanjutan. Ini perlu segera dilaporkan sebagai dugaan transfer tool berbahaya. Saran mitigasi awal: karantina endpoint dan isolasi perangkat dari jaringan, blok transfer file dari sumber tidak terpercaya, serta monitor dan batasi transfer file ke endpoint.",
+    "context_source": "MITRE ATT&CK",
+    "incident_type": "Malware",
+    "severity": "Tinggi"
   },
   {
     "id": "QA-020",
     "question": "Saya sempat mengunduh dan menjalankan file yang dikirim lewat chat karena dikira dokumen kerja. Setelah itu laptop terasa lambat dan muncul pop-up aneh. Ini biasanya mengarah ke apa?",
     "ground_truth": "Ini merupakan indikasi malware. Ketika korban menjalankan file yang sebenarnya berbahaya, itu selaras dengan pola penyerang yang mengandalkan aksi pengguna untuk mengeksekusi kode berbahaya.",
-    "context_source": "MITRE ATT&CK"
+    "context_source": "MITRE ATT&CK",
+    "incident_type": "Malware",
+    "severity": "Tinggi"
   }
 ]

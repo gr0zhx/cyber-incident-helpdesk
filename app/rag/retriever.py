@@ -67,6 +67,7 @@ class HybridRetriever:
         query: str,
         incident_type: str | None = None,
         top_k: int = 20,
+        prefer_mitigations: bool = False,
     ) -> list[dict]:
         """
         Hybrid retrieval: semantic search + keyword search, merged via RRF.
@@ -74,6 +75,18 @@ class HybridRetriever:
         Returns list of dicts with keys: id, content, metadata, score, rrf_score.
         """
         metadata_filter = _build_incident_filter(incident_type)
+
+        # Jika prefer_mitigations=True, tambahkan filter konten ke mitigation chunks saja.
+        # Digunakan pada iterasi 2 agar retriever hanya mengambil chunk "Mitigasi MITRE ATT&CK"
+        # (bukan deskripsi teknik serangan yang semantiknya mirip tapi bukan panduan tindakan).
+        if prefer_mitigations:
+            mitigation_condition = FieldCondition(
+                key="content", match=MatchText(text="Mitigasi MITRE ATT&CK")
+            )
+            if metadata_filter and metadata_filter.must:
+                metadata_filter = Filter(must=list(metadata_filter.must) + [mitigation_condition])
+            else:
+                metadata_filter = Filter(must=[mitigation_condition])
 
         # --- Semantic search ---
         query_vector = self.embedder.embed_query(query)
@@ -85,7 +98,7 @@ class HybridRetriever:
             try:
                 resp = self.client.search(
                     collection_name=COLLECTION_NAME,
-                    query=query_vector,
+                    query_vector=query_vector,
                     query_filter=metadata_filter,
                     limit=top_k,
                     with_payload=True,

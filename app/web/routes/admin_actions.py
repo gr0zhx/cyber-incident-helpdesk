@@ -153,8 +153,4 @@ def download_attachment(
         "FILE_DOWNLOADED ticket=%s admin=%s file=%s",
         ticket_id, admin.username, filename,
     )
-    return FileResponse(
-        abs_path,
-        filename=filename,
-        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
-    )
+    return FileResponse(abs_path, filename=filename)

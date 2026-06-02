@@ -50,9 +50,12 @@ class AuthService:
 
         admin = self._db.query(Admin).filter_by(username=username).first()
 
-        if admin is None:
+        if admin is None or not admin.is_active:
             # Verify against a real bcrypt(rounds=12) hash agar timing konsisten
             # dengan path valid-user (mitigasi username enumeration).
+            # Akun disabled sengaja dikembalikan sebagai invalid_credentials agar
+            # attacker tidak bisa membedakan "user tidak ada", "password salah",
+            # atau "akun dinonaktifkan".
             bcrypt.verify(password, _DUMMY_HASH)
             self._increment_failure(lockout_key)
             return AuthResult(success=False, error="invalid_credentials")
@@ -60,9 +63,6 @@ class AuthService:
         if not bcrypt.verify(password, admin.password_hash):
             self._increment_failure(lockout_key)
             return AuthResult(success=False, error="invalid_credentials")
-
-        if not admin.is_active:
-            return AuthResult(success=False, error="account_disabled")
 
         self._redis.delete(lockout_key)
         admin.last_login_at = datetime.now(timezone.utc)

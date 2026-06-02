@@ -41,6 +41,10 @@ requests==2.32.*
 pytest==8.*
 pytest-asyncio==0.26.*
 
+# Evaluation
+ragas>=0.2.0
+datasets>=2.0.0
+
 # Web interface (Plan A)
 passlib[bcrypt]==1.7.4
 bcrypt==4.0.1  # passlib 1.7.4 tidak kompatibel dengan bcrypt>=4.1

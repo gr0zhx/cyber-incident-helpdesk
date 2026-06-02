@@ -60,7 +60,7 @@ def ensure_collection(client: QdrantClient) -> None:
 
 def _build_payload(chunk: Document) -> dict[str, Any]:
     meta = chunk.metadata
-    return {
+    payload: dict[str, Any] = {
         "content": chunk.page_content,
         "doc_id": meta.get("doc_id", ""),
         "doc_title": meta.get("doc_title", ""),
@@ -70,7 +70,12 @@ def _build_payload(chunk: Document) -> dict[str, Any]:
         "page_number": meta.get("page", meta.get("page_number", 0)),
         "section_header": meta.get("section_header", ""),
         "chunk_index": meta.get("chunk_index", 0),
+        # MITRE ATT&CK specific — kosong string untuk non-MITRE chunks
+        "object_type": meta.get("object_type", ""),
+        "external_id": meta.get("external_id", ""),
+        "source": meta.get("source", ""),
     }
+    return payload
 
 
 def upload_chunks(

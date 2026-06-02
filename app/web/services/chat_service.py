@@ -101,10 +101,12 @@ class ChatService:
                 "error": False,
             }
 
-        # Hitung berapa kali bot sudah minta klarifikasi sebelumnya
+        # Hitung berapa kali bot sudah minta klarifikasi sebelumnya.
+        # Hanya hitung pesan yang secara eksplisit diberi tag type="clarification"
+        # agar pesan timeout/error tidak ikut terhitung.
         clarification_rounds = sum(
             1 for m in history
-            if m["role"] == "assistant" and not m["content"].startswith("Tiket insiden")
+            if m.get("type") == "clarification"
         )
 
         # Jika sudah ada percakapan sebelumnya, kirim konteks lengkap (Q&A)
@@ -189,7 +191,11 @@ class ChatService:
             mitigation = result.get("mitigation_recommendation", "")
             bot_text = mitigation if mitigation else "Respons tidak tersedia."
 
-        history.append({"role": "assistant", "content": bot_text, "ts": ts})
+        # Tag pesan klarifikasi agar counter clarification_rounds akurat
+        msg_entry: dict = {"role": "assistant", "content": bot_text, "ts": ts}
+        if requires_clarification and not ticket_id:
+            msg_entry["type"] = "clarification"
+        history.append(msg_entry)
         self._save_history(session_id, history)
 
         return {
@@ -209,10 +215,9 @@ class ChatService:
     ) -> None:
         from app.database.models import TicketAttachment
         key = f"web:pending_uploads:{session_id}"
-        pipe = self._redis.pipeline()
-        pipe.get(key)
-        pipe.delete(key)
-        pending_raw, _ = pipe.execute()
+        # GET dulu tanpa DELETE — DELETE hanya dilakukan setelah commit sukses
+        # agar data tidak hilang jika commit gagal (bug_054).
+        pending_raw = self._redis.get(key)
         if not pending_raw:
             return
         try:
@@ -231,3 +236,4 @@ class ChatService:
             )
             db.add(att)
         db.commit()
+        self._redis.delete(key)

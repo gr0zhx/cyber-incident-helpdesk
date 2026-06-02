@@ -23,7 +23,7 @@ import requests
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 _JAILBREAKHUB_URL = (
-    "https://raw.githubusercontent.com/verazuo/jailbreak_llms/master/data/jailbreak_prompts.csv"
+    "https://raw.githubusercontent.com/verazuo/jailbreak_llms/main/data/prompts/jailbreak_prompts_2023_12_25.csv"
 )
 _DEFAULT_CACHE  = Path(__file__).resolve().parent / "jailbreakhub_cache.csv"
 _DEFAULT_QA     = Path(__file__).resolve().parent / "rag_qa_dataset.json"
@@ -123,7 +123,7 @@ def download_jailbreakhub(cache_path: Path, refresh: bool = False) -> list[dict]
     fieldnames: list[str] = list(reader.fieldnames or [])
 
     prompt_col    = _find_col(fieldnames, ["prompt", "text", "query", "jailbreak_query"])
-    category_col  = _find_col(fieldnames, ["type", "category", "attack_type"])
+    category_col  = _find_col(fieldnames, ["type", "category", "attack_type", "platform", "source", "community_name"])
     jailbreak_col = _find_col(fieldnames, ["jailbreak", "is_jailbreak", "label"])
 
     rows: list[dict] = []

@@ -230,7 +230,7 @@ def main() -> None:
 
     # 1. Download / load dataset adversarial
     jailbreak_prompts = download_jailbreakhub(cache_path, refresh=args.refresh_dataset)
-    if args.limit:
+    if args.limit is not None:
         jailbreak_prompts = jailbreak_prompts[: args.limit]
 
     # 2. Load laporan normal

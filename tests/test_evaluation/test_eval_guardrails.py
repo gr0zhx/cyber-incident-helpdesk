@@ -4,6 +4,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 import json
+import os
 import tempfile
 from pathlib import Path
 
@@ -93,7 +94,12 @@ class TestLoadNormalReports:
         )
         json.dump(data, tmp)
         tmp.close()
-        return Path(tmp.name)
+        self._tmp_path = Path(tmp.name)
+        return self._tmp_path
+
+    def teardown_method(self, method):
+        if hasattr(self, "_tmp_path") and self._tmp_path.exists():
+            self._tmp_path.unlink()
 
     def test_loads_questions(self):
         qa = self._write_qa([

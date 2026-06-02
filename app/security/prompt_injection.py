@@ -37,6 +37,8 @@ _RAW_PATTERNS: list[tuple[str, str]] = [
     (r"an?\s+(?:ai|bot|model|assistant)\s+named", "persona_switch"),
     (r"from\s+now\s+(?:on\s+)?you\s+are", "persona_switch"),
     (r"always\s+stays?\s+in\s+character", "persona_switch"),
+    # "You are [NamaKarakter]" atau "YOU ARE X" — persona assignment langsung
+    (r"you\s+are\s+(?!(?:able|correct|welcome|sure|right|aware|going|trying|looking|asking|saying|thinking|using|working|doing|making|getting|helping|ready|here|a\s+helpdesk))[A-Z]\w+", "persona_switch"),
 
     # Konten amoral / tanpa filter
     (r"\bamoral\b", "jailbreak"),

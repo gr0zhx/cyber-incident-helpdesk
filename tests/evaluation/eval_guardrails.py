@@ -146,7 +146,8 @@ def run_adversarial_eval(prompts: list[dict]) -> list[dict]:
     """Jalankan guardrails pada setiap adversarial prompt dan catat hasilnya."""
     from app.security.guardrails import run_input_guardrails
     results = []
-    for item in prompts:
+    total = len(prompts)
+    for i, item in enumerate(prompts, 1):
         r = run_input_guardrails(item["prompt"])
         results.append({
             "prompt": item["prompt"],
@@ -154,6 +155,8 @@ def run_adversarial_eval(prompts: list[dict]) -> list[dict]:
             "blocked": r.blocked,
             "block_reason": r.block_reason,
         })
+        if i % 50 == 0 or i == total:
+            print(f"  [{i}/{total}] diproses...")
     return results
 
 
@@ -222,7 +225,21 @@ def main() -> None:
                         help="Path file cache CSV JailbreakHub.")
     parser.add_argument("--qa-file", default=str(_DEFAULT_QA),
                         help="Path rag_qa_dataset.json untuk false positive test.")
+    parser.add_argument("--with-llm-judge", action="store_true",
+                        help="Aktifkan LLM judge (butuh GITHUB_TOKEN, ~23 menit untuk 1405 prompt).")
     args = parser.parse_args()
+
+    # Kontrol LLM judge
+    from app.security import guardrails as _gmod
+    if not args.with_llm_judge:
+        _gmod._judge.disable()
+    else:
+        if not _gmod._judge.is_available():
+            print("Peringatan: --with-llm-judge aktif tapi GITHUB_TOKEN/OPENAI_API_KEY tidak ditemukan.")
+            print("Judge akan di-skip otomatis (fail-open).")
+        else:
+            print("LLM judge aktif (model: gpt-4o-mini via GitHub Models).")
+            print("Estimasi waktu tambahan: ~1 detik per prompt yang lolos regex.")
 
     cache_path  = Path(args.cache)
     output_path = Path(args.output)
@@ -258,6 +275,7 @@ def main() -> None:
             "dataset_url": _JAILBREAKHUB_URL,
             "total_adversarial": metrics["total_adversarial"],
             "total_normal": metrics["total_normal"],
+            "llm_judge_enabled": args.with_llm_judge and _gmod._judge.is_available(),
             "run_at": datetime.now().isoformat(),
         },
         "summary": {

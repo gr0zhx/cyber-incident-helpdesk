@@ -62,13 +62,13 @@ def _check_adequacy(chunks: list[dict]) -> bool:
 def _expand_query(query: str, incident_type: str, iteration: int) -> str:
     """Expand query for subsequent retrieval iterations."""
     expansions = {
-        "Phishing": "mitigasi phishing email social engineering langkah respons insiden",
-        "Malware": "mitigasi malware trojan virus isolasi karantina endpoint langkah",
-        "Ransomware": "mitigasi ransomware enkripsi backup pemulihan isolasi jaringan langkah",
-        "Web Defacement": "mitigasi web defacement pemulihan website restore backup langkah",
+        "Phishing": "mitigasi phishing social engineering jangan berikan kredensial edukasi pengguna user training langkah respons insiden pelaporan",
+        "Malware": "langkah penanganan insiden malware checklist isolasi eradikasi pemulihan backup restore identifikasi kerentanan mitigasi",
+        "Ransomware": "mitigasi ransomware enkripsi backup pemulihan isolasi jaringan langkah eradikasi restore",
+        "Web Defacement": "mitigasi web defacement data backup restore konten recovery M1053 integritas website",
         "DDoS": "mitigasi DDoS denial of service rate limiting firewall langkah respons",
         "Akses Tidak Sah": "mitigasi akses tidak sah unauthorized account use policies MFA audit log",
-        "Kebocoran Data": "mitigasi kebocoran data breach notifikasi data loss prevention langkah",
+        "Kebocoran Data": "chain of custody bukti digital evidence preservation eradikasi mitigasi kebocoran data breach notifikasi langkah",
         "Lainnya": "mitigasi insiden keamanan siber respons prosedur SOP langkah",
     }
     keywords = expansions.get(incident_type, "mitigasi insiden keamanan siber langkah respons")
@@ -188,6 +188,7 @@ class MitigationAdvisorAgent:
         sanitized_input: str,
         incident_type: str,
         severity: str,
+        source_preference: str | None = None,
     ) -> dict:
         """Generate mitigation recommendation using Agentic RAG.
 
@@ -200,13 +201,18 @@ class MitigationAdvisorAgent:
         for iteration in range(1, MAX_ITERATIONS + 1):
             try:
                 current_query = query if iteration == 1 else _expand_query(query, incident_type, iteration)
-                # Iterasi 2: cari khusus chunk mitigasi (bukan deskripsi serangan)
-                use_mitigation_filter = iteration == 2
+                # Strategi retrieval per iterasi:
+                # - source_preference="NIST": SEMUA iterasi filter ke NIST agar chunk MITRE
+                #   tidak mendominasi hasil akhir setelah merge+rerank.
+                # - default iterasi 2: cari chunk mitigasi MITRE (soal insiden teknis)
+                use_mitigation_filter = iteration == 2 and not source_preference
+                prefer_src = "NIST" if source_preference == "NIST" else None
                 new_chunks = self.retriever.retrieve(
                     current_query,
                     incident_type=incident_type,
                     top_k=TOP_K_RETRIEVAL,
                     prefer_mitigations=use_mitigation_filter,
+                    prefer_source=prefer_src,
                 )
             except Exception as exc:
                 logger.warning(
@@ -223,10 +229,16 @@ class MitigationAdvisorAgent:
                 logger.error("Reranking gagal: %s", exc)
                 reranked = all_chunks[:TOP_K_RERANK]
 
-            # Lanjut ke iterasi 2 (mitigasi) hanya jika chunk iterasi 1 didominasi
-            # deskripsi serangan ("Teknik Serangan MITRE ATT&CK") — bukan panduan
-            # prosedur. Untuk soal prosedural/NIST, iterasi 1 sudah cukup.
             if _check_adequacy(reranked):
+                # Soal NIST: paksa iterasi 2 agar pass NIST-only selalu berjalan.
+                # Chunk MITRE sering menang di iterasi 1 meski kurang relevan untuk
+                # pertanyaan prosedural IR (dokumentasi, prioritasi, bukti digital).
+                if source_preference == "NIST" and iteration < 2:
+                    logger.info("Iterasi %d: NIST preference aktif, lanjut ke pass NIST-only...", iteration)
+                    continue
+
+                # Soal non-NIST: lanjut ke iterasi 2 hanya jika chunk didominasi
+                # deskripsi serangan ("Teknik Serangan MITRE ATT&CK").
                 attack_chunks = sum(
                     1 for c in reranked
                     if c.get("content", "").startswith("Teknik Serangan MITRE ATT&CK")
@@ -235,7 +247,7 @@ class MitigationAdvisorAgent:
                 if iteration >= 2 or not is_dominated_by_attacks:
                     break
 
-            logger.info("Iterasi %d: chunk didominasi deskripsi serangan, lanjut ke pass mitigasi...", iteration)
+            logger.info("Iterasi %d: lanjut ke iterasi berikutnya...", iteration)
 
         # --- Fallback jika tidak ada dokumen relevan ---
         if not _check_adequacy(reranked if all_chunks else []):

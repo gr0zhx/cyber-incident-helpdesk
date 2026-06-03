@@ -1,0 +1,82 @@
+[
+  {
+    "id": "QA-011",
+    "question": "Saya menerima email yang mengatasnamakan atasan dengan nada mendesak dan meminta saya melakukan login ulang melalui tautan tertentu. Apakah ini perlu dianggap sebagai ancaman keamanan?",
+    "ground_truth": "Ya, ini indikasi kuat phishing. Pola mendesak dan ajakan klik atau login ulang adalah ciri umum upaya pencurian kredensial. Saran mitigasi awal: isolasi email dan blok domain atau URL mencurigakan di gateway, edukasi cepat ke user terdampak agar tidak klik tautan serupa, dan perkuat filter email serta proteksi endpoint.",
+    "context_source": "MITRE ATT&CK",
+    "incident_type": "Phishing",
+    "severity": "Tinggi"
+  },
+  {
+    "id": "QA-012",
+    "question": "Saya menerima email dengan lampiran invoice dari pengirim yang tidak saya kenal, dan setelah dibuka perangkat saya menjadi tidak normal. Kemungkinan kejadian ini apa?",
+    "ground_truth": "Ini merupakan spearphishing attachment yaitu file berbahaya yang disamarkan sebagai dokumen kerja. Saran mitigasi awal: karantina endpoint yang membuka lampiran dan hentikan penyebaran file serupa, batasi tipe file berisiko tinggi dari email atau web, dan sosialisasi ulang prosedur membuka lampiran yang aman.",
+    "context_source": "MITRE ATT&CK",
+    "incident_type": "Malware",
+    "severity": "Tinggi"
+  },
+  {
+    "id": "QA-013",
+    "question": "File pada shared drive tiba-tiba terenkripsi dan muncul pesan permintaan tebusan. Apa langkah awal yang sebaiknya dilakukan?",
+    "ground_truth": "Ini indikasi ransomware tipe enkripsi data untuk mengganggu ketersediaan layanan. Saran mitigasi awal: isolasi host terdampak dan hentikan proses enkripsi lanjutan, siapkan pemulihan dari backup bersih yang terverifikasi, dan bekukan akun atau sesi yang dicurigai menjadi jalur awal serangan.",
+    "context_source": "MITRE ATT&CK",
+    "incident_type": "Ransomware",
+    "severity": "Kritis"
+  },
+  {
+    "id": "QA-014",
+    "question": "Halaman utama website berubah tanpa izin dan menampilkan pesan yang tidak dikenal. Apakah ini termasuk insiden prioritas tinggi?",
+    "ground_truth": "Ya, ini indikasi defacement dan berdampak langsung pada integritas serta reputasi layanan publik. Saran mitigasi awal: takedown sementara halaman terdampak dan aktifkan halaman cadangan darurat, pulihkan konten dari sumber tepercaya atau backup bersih, serta simpan artefak perubahan untuk investigasi lanjutan.",
+    "context_source": "MITRE ATT&CK",
+    "incident_type": "Web Defacement",
+    "severity": "Tinggi"
+  },
+  {
+    "id": "QA-015",
+    "question": "Aplikasi yang terhubung ke internet tiba-tiba dapat diakses oleh pihak tidak sah, padahal tidak ada penggunaan akun admin. Biasanya ini disebabkan oleh apa?",
+    "ground_truth": "Salah satu kemungkinan utama adalah eksploitasi celah aplikasi publik untuk akses awal. Saran mitigasi awal: lakukan scan kerentanan dan patch prioritas kritikal, segmentasi layanan publik dari jaringan internal, serta terapkan filtering trafik dan isolasi aplikasi bila perlu.",
+    "context_source": "MITRE ATT&CK",
+    "incident_type": "Akses Tidak Sah",
+    "severity": "Tinggi"
+  },
+  {
+    "id": "QA-016",
+    "question": "Terdapat login berhasil menggunakan akun pegawai, namun pemilik akun menyatakan tidak pernah melakukan login tersebut. Indikasi apakah ini?",
+    "ground_truth": "Ini indikasi penyalahgunaan akun valid. Saran mitigasi awal: nonaktifkan sementara atau suspend sesi aktif akun terdampak, perketat kebijakan password dan kredensial, serta tinjau hak akses istimewa akun terkait.",
+    "context_source": "MITRE ATT&CK",
+    "incident_type": "Akses Tidak Sah",
+    "severity": "Tinggi"
+  },
+  {
+    "id": "QA-017",
+    "question": "Trafik mendadak meledak sehingga layanan publik drop, apa yang terjadi?",
+    "ground_truth": "Ini merupakan indikasi Network Denial of Service yaitu serangan yang menghabiskan kapasitas jaringan sehingga layanan menjadi lambat atau tidak tersedia.",
+    "context_source": "MITRE ATT&CK",
+    "incident_type": "DDoS",
+    "severity": "Tinggi"
+  },
+  {
+    "id": "QA-018",
+    "question": "Saya melihat adanya unggahan dokumen internal ke layanan berbagi file publik tanpa persetujuan. Apakah ini dapat mengindikasikan kebocoran data?",
+    "ground_truth": "Ya, ini selaras dengan exfiltration melalui layanan web. Saran mitigasi awal: terapkan pembatasan akses ke web service berisiko tinggi, aktifkan kontrol DLP pada trafik keluar, dan audit akun atau endpoint yang melakukan upload.",
+    "context_source": "MITRE ATT&CK",
+    "incident_type": "Kebocoran Data",
+    "severity": "Tinggi"
+  },
+  {
+    "id": "QA-019",
+    "question": "Saya menemukan file atau skrip yang tidak dikenal muncul di perangkat, terlihat seperti tool atau aplikasi pihak ketiga. Dari mana file ini bisa datang dan apakah perlu dilaporkan?",
+    "ground_truth": "File atau tool yang tidak dikenal kemungkinan ditransfer oleh penyerang untuk melakukan aktivitas lanjutan. Ini perlu segera dilaporkan sebagai dugaan transfer tool berbahaya. Saran mitigasi awal: karantina endpoint dan isolasi perangkat dari jaringan, blok transfer file dari sumber tidak terpercaya, serta monitor dan batasi transfer file ke endpoint.",
+    "context_source": "MITRE ATT&CK",
+    "incident_type": "Malware",
+    "severity": "Tinggi"
+  },
+  {
+    "id": "QA-020",
+    "question": "Saya sempat mengunduh dan menjalankan file yang dikirim lewat chat karena dikira dokumen kerja. Setelah itu laptop terasa lambat dan muncul pop-up aneh. Ini biasanya mengarah ke apa?",
+    "ground_truth": "Ini merupakan indikasi malware. Ketika korban menjalankan file yang sebenarnya berbahaya, itu selaras dengan pola penyerang yang mengandalkan aksi pengguna untuk mengeksekusi kode berbahaya.",
+    "context_source": "MITRE ATT&CK",
+    "incident_type": "Malware",
+    "severity": "Tinggi"
+  }
+]

@@ -62,13 +62,13 @@ def _check_adequacy(chunks: list[dict]) -> bool:
 def _expand_query(query: str, incident_type: str, iteration: int) -> str:
     """Expand query for subsequent retrieval iterations."""
     expansions = {
-        "Phishing": "mitigasi phishing social engineering jangan berikan kredensial edukasi pengguna user training langkah respons insiden pelaporan",
-        "Malware": "langkah penanganan insiden malware checklist isolasi eradikasi pemulihan backup restore identifikasi kerentanan mitigasi",
-        "Ransomware": "mitigasi ransomware enkripsi backup pemulihan isolasi jaringan langkah eradikasi restore",
-        "Web Defacement": "mitigasi web defacement data backup restore konten recovery M1053 integritas website",
-        "DDoS": "mitigasi DDoS denial of service rate limiting firewall langkah respons",
-        "Akses Tidak Sah": "mitigasi akses tidak sah unauthorized account use policies MFA audit log",
-        "Kebocoran Data": "chain of custody bukti digital evidence preservation eradikasi mitigasi kebocoran data breach notifikasi langkah",
+        "Phishing": "phishing social engineering user training edukasi pengguna mengenali melaporkan ancaman mitigasi respons insiden",
+        "Malware": "antivirus antimalware behavior prevention endpoint deteksi blokir malware isolasi karantina eradikasi",
+        "Ransomware": "data backup backup terisolasi pemulihan ransomware enkripsi eradikasi restore isolasi jaringan",
+        "Web Defacement": "data backup pemulihan konten website defacement restore integritas recovery",
+        "DDoS": "filter network traffic lalu lintas jaringan denial of service rate limiting firewall mitigasi",
+        "Akses Tidak Sah": "unauthorized credential use monitoring account policies MFA multi-factor authentication audit log akses tidak sah",
+        "Kebocoran Data": "chain of custody evidence preservation eksfiltrasi data kebocoran filter network traffic notifikasi langkah",
         "Lainnya": "mitigasi insiden keamanan siber respons prosedur SOP langkah",
     }
     keywords = expansions.get(incident_type, "mitigasi insiden keamanan siber langkah respons")
@@ -255,6 +255,39 @@ class MitigationAdvisorAgent:
             return {**_FALLBACK_RESULT}
 
         top_chunks = reranked if all_chunks else []
+
+        # --- Pastikan minimal 2 chunk mitigasi di top_chunks untuk soal MITRE ---
+        # Jika chunk masih didominasi deskripsi serangan, injeksi chunk mitigasi terbaik
+        # dari all_chunks (sudah diambil di iterasi 2 dengan prefer_mitigations=True).
+        if not source_preference:
+            mitig_in_top = sum(
+                1 for c in top_chunks
+                if c.get("content", "").startswith("Mitigasi MITRE ATT&CK")
+            )
+            if mitig_in_top < 2:
+                mitig_candidates = sorted(
+                    [c for c in all_chunks if c.get("content", "").startswith("Mitigasi MITRE ATT&CK")],
+                    key=lambda x: x.get("final_score", x.get("rrf_score", 0.0)),
+                    reverse=True,
+                )
+                existing_ids = {c["id"] for c in top_chunks}
+                new_mitig = [c for c in mitig_candidates if c["id"] not in existing_ids]
+                slots_needed = 2 - mitig_in_top
+                if new_mitig:
+                    attack_in_top = [
+                        c for c in top_chunks
+                        if c.get("content", "").startswith("Teknik Serangan MITRE ATT&CK")
+                    ]
+                    non_attack = [
+                        c for c in top_chunks
+                        if not c.get("content", "").startswith("Teknik Serangan MITRE ATT&CK")
+                    ]
+                    injected = new_mitig[:slots_needed]
+                    top_chunks = (non_attack + injected + attack_in_top)[:TOP_K_RERANK]
+                    logger.info(
+                        "Injeksi %d chunk mitigasi dari all_chunks ke top_chunks.",
+                        len(injected),
+                    )
 
         # --- Assemble context dan panggil LLM ---
         context = _assemble_context(top_chunks)

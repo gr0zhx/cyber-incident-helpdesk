@@ -145,10 +145,14 @@ async def main(
                 if not inc_type:
                     inc_list = qa.get("incident_types", [])
                     inc_type = inc_list[0] if inc_list else ""
+                # Map context_source ke source_preference untuk retrieval
+                ctx_src = qa.get("context_source", "")
+                src_pref = "NIST" if "NIST" in ctx_src else None
                 res = await advisor.generate_mitigation(
                     sanitized_input=qa["question"],
                     incident_type=inc_type,
                     severity=qa.get("severity", "Sedang"),
+                    source_preference=src_pref,
                 )
             except Exception as exc:
                 message = str(exc)

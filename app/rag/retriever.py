@@ -68,6 +68,7 @@ class HybridRetriever:
         incident_type: str | None = None,
         top_k: int = 20,
         prefer_mitigations: bool = False,
+        prefer_source: str | None = None,
     ) -> list[dict]:
         """
         Hybrid retrieval: semantic search + keyword search, merged via RRF.
@@ -87,6 +88,18 @@ class HybridRetriever:
                 metadata_filter = Filter(must=list(metadata_filter.must) + [mitigation_condition])
             else:
                 metadata_filter = Filter(must=[mitigation_condition])
+
+        # prefer_source: paksa retrieval hanya ke source_framework tertentu (misal "NIST")
+        # Digunakan saat pertanyaan berasal dari dokumen NIST agar tidak kalah bersaing
+        # dengan chunk MITRE yang semantiknya lebih tinggi tapi kurang relevan.
+        if prefer_source:
+            source_condition = FieldCondition(
+                key="source_framework", match=MatchValue(value=prefer_source)
+            )
+            if metadata_filter and metadata_filter.must:
+                metadata_filter = Filter(must=list(metadata_filter.must) + [source_condition])
+            else:
+                metadata_filter = Filter(must=[source_condition])
 
         # --- Semantic search ---
         query_vector = self.embedder.embed_query(query)

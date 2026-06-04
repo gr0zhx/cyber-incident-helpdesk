@@ -1,0 +1,82 @@
+[
+  {
+    "id": "QA-001",
+    "question": "Dokumen dan kebijakan (policy) minimum apa yang wajib ada sebagai persiapan sebelum insiden siber terjadi?",
+    "ground_truth": "Kembangkan rencana respons insiden (incident response plan) berdasarkan kebijakan respons insiden organisasi. Rencana ini memberikan peta jalan untuk mengimplementasikan program respons insiden sesuai kebijakan, mencakup tujuan jangka pendek dan panjang, termasuk metrik pengukuran. Rencana juga harus mencakup prosedur komunikasi, peran dan tanggung jawab tim, serta prosedur prioritas penanganan insiden.",
+    "context_source": "NIST SP 800-61",
+    "incident_type": "Malware",
+    "severity": "Sedang"
+  },
+  {
+    "id": "QA-002",
+    "question": "Laporan via WhatsApp/japri sering minim detail. Elemen data minimum apa yang harus dikumpulkan saat menerima laporan insiden dari pelapor?",
+    "ground_truth": "Organisasi harus mengidentifikasi elemen data standar yang dikumpulkan untuk setiap insiden. Sistem pelacakan insiden harus memuat: status saat ini, ringkasan insiden, indikator terkait, tindakan yang telah dilakukan, bukti yang terkumpul, komentar dari incident handler, dan langkah berikutnya. Informasi yang lebih presisi akan meningkatkan efektivitas penanganan insiden.",
+    "context_source": "NIST SP 800-61",
+    "incident_type": "Malware",
+    "severity": "Sedang"
+  },
+  {
+    "id": "QA-003",
+    "question": "Saat dua insiden datang bersamaan, bagaimana cara menentukan prioritas berdasarkan dampak fungsional dan dampak terhadap informasi organisasi?",
+    "ground_truth": "Menggabungkan dampak fungsional terhadap sistem organisasi dan dampak terhadap informasi organisasi menentukan dampak bisnis insiden. Incident handler harus mempertimbangkan upaya pemulihan yang diperlukan dan menimbangnya terhadap nilai yang akan dihasilkan. Insiden dengan dampak bisnis lebih tinggi, terutama yang melibatkan data sensitif, diprioritaskan lebih tinggi.",
+    "context_source": "NIST SP 800-61",
+    "incident_type": "Kebocoran Data",
+    "severity": "Tinggi"
+  },
+  {
+    "id": "QA-004",
+    "question": "Saat serangan masih berjalan, tindakan paling aman apa yang sebaiknya dilakukan: langsung mematikan sistem atau melakukan containment/isolasi terlebih dahulu?",
+    "ground_truth": "Pertimbangkan faktor berikut dalam memilih strategi containment: waktu dan sumber daya yang dibutuhkan, efektivitas strategi (containment parsial vs penuh), dan durasi solusi. Lakukan containment terlebih dahulu agar dampak berhenti tanpa merusak bukti. Keputusan shutdown diambil hanya jika manfaatnya lebih besar dari risiko kehilangan bukti atau layanan.",
+    "context_source": "NIST SP 800-61",
+    "incident_type": "Malware",
+    "severity": "Tinggi"
+  },
+  {
+    "id": "QA-005",
+    "question": "Akun saya tiba-tiba login sendiri dari perangkat/lokasi yang bukan saya — apakah ini indikator akses tidak sah (unauthorized access) yang harus segera ditangani?",
+    "ground_truth": "Ya, ini merupakan indikator akses tidak sah. Monitor penggunaan kredensial yang tidak sah dan pantau konfigurasi perangkat keras maupun lunak untuk penyimpangan dari security baseline. Monitor endpoint untuk masalah kesehatan siber seperti patch yang hilang, infeksi malware, atau perangkat lunak yang tidak sah. Segera verifikasi dan tangani untuk mencegah penyalahgunaan lanjutan.",
+    "context_source": "NIST SP 800-61",
+    "incident_type": "Akses Tidak Sah",
+    "severity": "Tinggi"
+  },
+  {
+    "id": "QA-006",
+    "question": "Saya klik email mencurigakan, tapi belum tahu ada dampak atau tidak. Bagaimana prosedur pelaporan insiden awalnya?",
+    "ground_truth": "Laporkan insiden untuk memverifikasi apakah insiden siber benar-benar terjadi, kemudian perkirakan tingkat keparahan dan urgensi respons yang diperlukan. Mekanisme pelaporan harus tersedia agar siapa pun dapat melaporkan kemungkinan insiden. Laporan harus dipantau secara cermat dan ditanggapi dengan serius sesuai prosedur yang telah ditetapkan.",
+    "context_source": "NIST SP 800-61",
+    "incident_type": "Phishing",
+    "severity": "Sedang"
+  },
+  {
+    "id": "QA-007",
+    "question": "Komputer jadi lambat, muncul pop-up aneh, dan file sulit dibuka. Apakah gejala ini termasuk indikator atau prekursor insiden keamanan?",
+    "ground_truth": "Tanda-tanda insiden terbagi dalam dua kategori: prekursor dan indikator. Indikator yang umum antara lain: percobaan login gagal berulang dari sistem yang tidak dikenal, lonjakan lalu lintas jaringan yang tidak biasa, dan peringatan antivirus. Gejala seperti komputer lambat dan pop-up aneh perlu dianalisis lebih lanjut dengan mengkorelasikan log dan alert sebelum ditetapkan sebagai insiden.",
+    "context_source": "NIST SP 800-61",
+    "incident_type": "Malware",
+    "severity": "Sedang"
+  },
+  {
+    "id": "QA-008",
+    "question": "Kenapa saya diminta jangan hapus email/chat/berkas yang mencurigakan? Apa hubungannya dengan preservasi bukti digital?",
+    "ground_truth": "Bukti digital harus diperhitungkan setiap saat untuk menjaga chain of custody. Setiap kali bukti berpindah tangan, formulir chain of custody harus merinci perpindahan tersebut sesuai prosedur hukum dan regulasi yang berlaku agar bukti dapat diterima di pengadilan. Menghapus bukti digital dapat merusak investigasi dan menghalangi penuntutan hukum.",
+    "context_source": "NIST SP 800-61",
+    "incident_type": "Kebocoran Data",
+    "severity": "Sedang"
+  },
+  {
+    "id": "QA-009",
+    "question": "Kalau data kerja saya hilang karena insiden, apakah masih bisa dikembalikan melalui proses eradikasi dan pemulihan (recovery)?",
+    "ground_truth": "Selama pemulihan insiden, personel memulihkan sistem ke operasi normal, memastikan sistem berfungsi dengan baik, dan jika memungkinkan, memperbaiki kerentanan untuk mencegah insiden serupa. Operasi pemulihan mencakup restorasi dari backup yang bersih dan terverifikasi. Pemulihan data bergantung pada ketersediaan backup yang valid dan prosedur eradikasi yang telah diterapkan.",
+    "context_source": "NIST SP 800-61",
+    "incident_type": "Ransomware",
+    "severity": "Sedang"
+  },
+  {
+    "id": "QA-010",
+    "question": "Saya dihubungi oleh pihak yang mengaku dari tim IT dan diminta memberikan kode OTP. Apakah ini aman dan apa yang harus saya lakukan?",
+    "ground_truth": "Edukasi dan kesadaran pengguna adalah penguat sumber daya keamanan — semakin banyak pengguna yang mengetahui cara mendeteksi, melaporkan, dan merespons insiden, semakin rendah dampaknya. Jangan berikan OTP atau kredensial kepada pihak yang tidak dapat diverifikasi. Segera laporkan melalui kanal resmi organisasi agar tim menentukan apakah ini insiden.",
+    "context_source": "NIST SP 800-61",
+    "incident_type": "Phishing",
+    "severity": "Tinggi"
+  }
+]

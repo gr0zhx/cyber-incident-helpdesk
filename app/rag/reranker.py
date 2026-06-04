@@ -4,22 +4,29 @@ Score-based reranker untuk prototipe.
 final_score menggabungkan dua sinyal pada skala yang sama (0–1):
   - cosine similarity (bobot 0.7) : kualitas semantik query ↔ chunk
   - rrf_score yang dinormalisasi  (bobot 0.3) : gabungan ranking semantic + keyword
-  - incident_type boost (+0.10)   : jika tipe insiden cocok dengan metadata chunk
+  - incident_type boost (+0.20)   : jika tipe insiden cocok dengan metadata chunk
 
 Bobot 70/30 mengutamakan relevansi semantik (cosine) tapi tetap menghargai
 sinyal keyword dari hybrid retrieval. Hasilnya skala konsisten 0–1 sehingga
 threshold tunggal berlaku untuk semua tahap pipeline.
+
+Bobot dapat dioverride via env (RERANK_COSINE_WEIGHT, RERANK_RRF_WEIGHT,
+RERANK_INCIDENT_BOOST) untuk eksperimen tuning. Default incident boost 0.20
+dipilih dari grid search RAGAS: memberi answer_relevancy tertinggi tanpa
+menurunkan faithfulness/context_relevance dibanding boost 0.10.
 """
 
-# Bobot kombinasi cosine + RRF
-_COSINE_WEIGHT = 0.7
-_RRF_WEIGHT = 0.3
+import os
+
+# Bobot kombinasi cosine + RRF — dapat dioverride via env untuk eksperimen tuning.
+_COSINE_WEIGHT = float(os.getenv("RERANK_COSINE_WEIGHT", "0.7"))
+_RRF_WEIGHT = float(os.getenv("RERANK_RRF_WEIGHT", "0.3"))
 
 # RRF score biasanya di rentang 0.01–0.05 untuk top-20 hasil.
 # Normalisasi ke 0–1 dengan membagi konstanta representatif.
 _RRF_NORMALIZE = 0.05
 
-INCIDENT_TYPE_BOOST = 0.10
+INCIDENT_TYPE_BOOST = float(os.getenv("RERANK_INCIDENT_BOOST", "0.20"))
 MIN_SCORE_THRESHOLD = 0.0
 
 

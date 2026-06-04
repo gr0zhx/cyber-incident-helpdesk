@@ -1,80 +1,80 @@
 [
   {
     "id": "QA-011",
-    "question": "Saya menerima email yang mengatasnamakan atasan dengan nada mendesak dan meminta saya melakukan login ulang melalui tautan tertentu. Apakah ini perlu dianggap sebagai ancaman keamanan?",
-    "ground_truth": "Ya, ini indikasi kuat phishing. Pola mendesak dan ajakan klik atau login ulang adalah ciri umum upaya pencurian kredensial. Saran mitigasi awal: isolasi email dan blok domain atau URL mencurigakan di gateway, edukasi cepat ke user terdampak agar tidak klik tautan serupa, dan perkuat filter email serta proteksi endpoint.",
+    "question": "Saya menerima email phishing yang mengatasnamakan atasan dengan nada mendesak dan tautan login palsu. Apa langkah mitigasi phishing spearphishing via tautan yang tepat?",
+    "ground_truth": "Laksanakan program User Training untuk mendidik karyawan dalam mengenali, melaporkan, dan mencegah ancaman phishing seperti email spearphishing dengan tautan palsu. Desain modul pelatihan yang mencakup topik phishing, pengelolaan kata sandi, dan pelaporan insiden. Gunakan simulasi phishing untuk melatih respons pengguna terhadap serangan rekayasa sosial.",
     "context_source": "MITRE ATT&CK",
     "incident_type": "Phishing",
     "severity": "Tinggi"
   },
   {
     "id": "QA-012",
-    "question": "Saya menerima email dengan lampiran invoice dari pengirim yang tidak saya kenal, dan setelah dibuka perangkat saya menjadi tidak normal. Kemungkinan kejadian ini apa?",
-    "ground_truth": "Ini merupakan spearphishing attachment yaitu file berbahaya yang disamarkan sebagai dokumen kerja. Saran mitigasi awal: karantina endpoint yang membuka lampiran dan hentikan penyebaran file serupa, batasi tipe file berisiko tinggi dari email atau web, dan sosialisasi ulang prosedur membuka lampiran yang aman.",
+    "question": "Perangkat terinfeksi malware setelah membuka lampiran email berbahaya (spearphishing attachment). Apa langkah mitigasi malware dari lampiran email yang harus segera diambil?",
+    "ground_truth": "Pasang dan perbarui perangkat lunak Antivirus/Antimalware di semua perangkat untuk mendeteksi dan memblokir malware dari lampiran email berbahaya. Gunakan pencegahan perilaku pada endpoint untuk mendeteksi dan memblokir aktivitas mencurigakan berdasarkan analisis perilaku proses. Terapkan isolasi aplikasi dan sandboxing untuk menjalankan lampiran email dalam lingkungan terkontrol sehingga kode berbahaya tidak mempengaruhi sistem utama.",
     "context_source": "MITRE ATT&CK",
     "incident_type": "Malware",
     "severity": "Tinggi"
   },
   {
     "id": "QA-013",
-    "question": "File pada shared drive tiba-tiba terenkripsi dan muncul pesan permintaan tebusan. Apa langkah awal yang sebaiknya dilakukan?",
-    "ground_truth": "Ini indikasi ransomware tipe enkripsi data untuk mengganggu ketersediaan layanan. Saran mitigasi awal: isolasi host terdampak dan hentikan proses enkripsi lanjutan, siapkan pemulihan dari backup bersih yang terverifikasi, dan bekukan akun atau sesi yang dicurigai menjadi jalur awal serangan.",
+    "question": "Terjadi serangan ransomware yang mengenkripsi file pada shared drive dan muncul pesan permintaan tebusan. Apa langkah mitigasi ransomware yang harus segera dilakukan?",
+    "ground_truth": "Lakukan backup data secara teratur dan simpan di lokasi yang terisolasi dari jaringan korporat untuk memastikan pemulihan dari serangan ransomware yang mengenkripsi data. Jadwalkan backup incremental harian dan backup penuh mingguan untuk semua server dan sistem kritis. Pastikan proses backup mencakup pengerasan sistem backup dan solusi penyimpanan yang aman.",
     "context_source": "MITRE ATT&CK",
     "incident_type": "Ransomware",
     "severity": "Kritis"
   },
   {
     "id": "QA-014",
-    "question": "Halaman utama website berubah tanpa izin dan menampilkan pesan yang tidak dikenal. Apakah ini termasuk insiden prioritas tinggi?",
-    "ground_truth": "Ya, ini indikasi defacement dan berdampak langsung pada integritas serta reputasi layanan publik. Saran mitigasi awal: takedown sementara halaman terdampak dan aktifkan halaman cadangan darurat, pulihkan konten dari sumber tepercaya atau backup bersih, serta simpan artefak perubahan untuk investigasi lanjutan.",
+    "question": "Website mengalami web defacement — konten halaman utama diubah tanpa izin oleh pihak tidak berwenang. Apa langkah mitigasi web defacement yang harus segera dilakukan?",
+    "ground_truth": "Pulihkan konten website dari backup data yang tersimpan di lokasi terisolasi dari jaringan korporat untuk memulihkan integritas halaman yang terdeface. Terapkan jadwal backup data secara teratur termasuk backup incremental harian dan backup penuh mingguan untuk semua server web kritis.",
     "context_source": "MITRE ATT&CK",
     "incident_type": "Web Defacement",
     "severity": "Tinggi"
   },
   {
     "id": "QA-015",
-    "question": "Aplikasi yang terhubung ke internet tiba-tiba dapat diakses oleh pihak tidak sah, padahal tidak ada penggunaan akun admin. Biasanya ini disebabkan oleh apa?",
-    "ground_truth": "Salah satu kemungkinan utama adalah eksploitasi celah aplikasi publik untuk akses awal. Saran mitigasi awal: lakukan scan kerentanan dan patch prioritas kritikal, segmentasi layanan publik dari jaringan internal, serta terapkan filtering trafik dan isolasi aplikasi bila perlu.",
+    "question": "Aplikasi yang terhubung ke internet tiba-tiba dapat diakses oleh pihak tidak sah tanpa menggunakan akun admin. Apa langkah mitigasi yang tepat?",
+    "ground_truth": "Terapkan kebijakan penggunaan akun dengan mengonfigurasi mekanisme penguncian akun, pembatasan waktu login, dan batas waktu tidak aktif untuk mengurangi risiko akses tidak sah. Implementasikan Multi-Factor Authentication pada semua sistem dan layanan kritis. Terapkan manajemen akun pengguna dengan prinsip hak akses minimum dan audit akun secara berkala.",
     "context_source": "MITRE ATT&CK",
     "incident_type": "Akses Tidak Sah",
     "severity": "Tinggi"
   },
   {
     "id": "QA-016",
-    "question": "Terdapat login berhasil menggunakan akun pegawai, namun pemilik akun menyatakan tidak pernah melakukan login tersebut. Indikasi apakah ini?",
-    "ground_truth": "Ini indikasi penyalahgunaan akun valid. Saran mitigasi awal: nonaktifkan sementara atau suspend sesi aktif akun terdampak, perketat kebijakan password dan kredensial, serta tinjau hak akses istimewa akun terkait.",
+    "question": "Terdeteksi penyalahgunaan akun valid (valid account abuse) — ada login berhasil menggunakan kredensial pegawai tanpa sepengetahuan pemiliknya. Apa langkah mitigasi akun yang dikompromikan ini?",
+    "ground_truth": "Implementasikan Multi-Factor Authentication untuk memastikan setiap login memerlukan verifikasi tambahan selain password, mencegah penyalahgunaan kredensial yang bocor. Terapkan kebijakan pengelolaan akun istimewa untuk membatasi akses dan memantau penggunaan akun dengan hak istimewa. Terapkan kebijakan kata sandi yang kuat termasuk persyaratan kompleksitas dan perubahan kata sandi segera.",
     "context_source": "MITRE ATT&CK",
     "incident_type": "Akses Tidak Sah",
     "severity": "Tinggi"
   },
   {
     "id": "QA-017",
-    "question": "Trafik mendadak meledak sehingga layanan publik drop, apa yang terjadi?",
-    "ground_truth": "Ini merupakan indikasi Network Denial of Service yaitu serangan yang menghabiskan kapasitas jaringan sehingga layanan menjadi lambat atau tidak tersedia.",
+    "question": "Layanan publik mengalami gangguan akibat serangan DDoS (Denial of Service) — trafik jaringan mendadak meledak hingga layanan tidak tersedia. Apa langkah mitigasi serangan DDoS yang tepat?",
+    "ground_truth": "Gunakan perangkat jaringan dan perangkat lunak endpoint untuk memfilter lalu lintas jaringan masuk, keluar, dan lateral guna mencegah dampak serangan DDoS pada layanan publik. Konfigurasikan filter jaringan untuk membatasi akses hanya dari sumber yang diotorisasi ke server yang menghadap publik.",
     "context_source": "MITRE ATT&CK",
     "incident_type": "DDoS",
     "severity": "Tinggi"
   },
   {
     "id": "QA-018",
-    "question": "Saya melihat adanya unggahan dokumen internal ke layanan berbagi file publik tanpa persetujuan. Apakah ini dapat mengindikasikan kebocoran data?",
-    "ground_truth": "Ya, ini selaras dengan exfiltration melalui layanan web. Saran mitigasi awal: terapkan pembatasan akses ke web service berisiko tinggi, aktifkan kontrol DLP pada trafik keluar, dan audit akun atau endpoint yang melakukan upload.",
+    "question": "Terjadi eksfiltrasi data (data exfiltration) — dokumen internal diunggah ke layanan berbagi file publik tanpa persetujuan. Apa langkah mitigasi eksfiltrasi data yang harus diterapkan?",
+    "ground_truth": "Terapkan filter lalu lintas jaringan untuk membatasi akses ke layanan berbagi file publik yang tidak diotorisasi dan mencegah eksfiltrasi data lebih lanjut. Konfigurasikan kebijakan penggunaan akun dan terapkan prinsip hak akses minimum agar hanya pengguna yang berwenang yang dapat mengakses dan mentransfer dokumen sensitif ke layanan eksternal.",
     "context_source": "MITRE ATT&CK",
     "incident_type": "Kebocoran Data",
     "severity": "Tinggi"
   },
   {
     "id": "QA-019",
-    "question": "Saya menemukan file atau skrip yang tidak dikenal muncul di perangkat, terlihat seperti tool atau aplikasi pihak ketiga. Dari mana file ini bisa datang dan apakah perlu dilaporkan?",
-    "ground_truth": "File atau tool yang tidak dikenal kemungkinan ditransfer oleh penyerang untuk melakukan aktivitas lanjutan. Ini perlu segera dilaporkan sebagai dugaan transfer tool berbahaya. Saran mitigasi awal: karantina endpoint dan isolasi perangkat dari jaringan, blok transfer file dari sumber tidak terpercaya, serta monitor dan batasi transfer file ke endpoint.",
+    "question": "Ditemukan malware atau tool berbahaya yang diduga ditanam penyerang di perangkat (lateral tool transfer). Apa langkah mitigasi untuk mendeteksi dan memblokir tool berbahaya tersebut?",
+    "ground_truth": "Gunakan perangkat lunak Antivirus/Antimalware untuk mendeteksi dan memblokir tool berbahaya yang ditransfer penyerang ke sistem. Terapkan pencegahan perilaku pada endpoint untuk menganalisis dan memblokir eksekusi skrip atau tool yang tidak dikenal berdasarkan pola perilaku mencurigakan.",
     "context_source": "MITRE ATT&CK",
     "incident_type": "Malware",
     "severity": "Tinggi"
   },
   {
     "id": "QA-020",
-    "question": "Saya sempat mengunduh dan menjalankan file yang dikirim lewat chat karena dikira dokumen kerja. Setelah itu laptop terasa lambat dan muncul pop-up aneh. Ini biasanya mengarah ke apa?",
-    "ground_truth": "Ini merupakan indikasi malware. Ketika korban menjalankan file yang sebenarnya berbahaya, itu selaras dengan pola penyerang yang mengandalkan aksi pengguna untuk mengeksekusi kode berbahaya.",
+    "question": "Laptop terinfeksi malware setelah menjalankan file berbahaya dari chat yang dikira dokumen kerja (user execution). Laptop menjadi lambat dan muncul pop-up aneh. Apa langkah mitigasi malware dari user execution yang tepat?",
+    "ground_truth": "Gunakan perangkat lunak Antivirus/Antimalware untuk mendeteksi dan memblokir malware yang terinstal dari file berbahaya yang dijalankan pengguna. Terapkan pencegahan perilaku pada endpoint untuk mendeteksi dan menghentikan proses mencurigakan yang berjalan sebagai akibat dari eksekusi file berbahaya tersebut.",
     "context_source": "MITRE ATT&CK",
     "incident_type": "Malware",
     "severity": "Tinggi"

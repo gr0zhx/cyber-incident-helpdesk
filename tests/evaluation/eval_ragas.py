@@ -210,9 +210,18 @@ async def main(
         ragas_dataset = EvaluationDataset(samples=samples)
 
         # 3 metrik sesuai paper asli Es et al. (2023) — semuanya reference-free
+        # AnswerRelevancy: prompt internal RAGAS default men-generate pertanyaan dalam
+        # Bahasa Inggris, sementara korpus (pertanyaan & jawaban) Bahasa Indonesia.
+        # Membandingkan Q-asli (ID) vs Q-generated (EN) memberi penalti cross-lingual
+        # ~0.2 pada cosine similarity yang tidak merefleksikan relevansi sebenarnya.
+        # Kami paksa generate dalam Bahasa Indonesia agar perbandingan konsisten satu bahasa.
+        _answer_relevancy = AnswerRelevancy(llm=_ragas_llm, embeddings=_ragas_embed)
+        _answer_relevancy.question_generation.instruction += (
+            " PENTING: Tulis 'question' yang dihasilkan dalam Bahasa Indonesia."
+        )
         _metrics = [
             Faithfulness(llm=_ragas_llm),
-            AnswerRelevancy(llm=_ragas_llm, embeddings=_ragas_embed),
+            _answer_relevancy,
             _ContextRelevance(llm=_ragas_llm),
         ]
         from ragas.run_config import RunConfig as _RunConfig

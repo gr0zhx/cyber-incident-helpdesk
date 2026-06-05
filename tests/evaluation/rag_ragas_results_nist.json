@@ -1,7 +1,7 @@
 {
   "summary": {
-    "faithfulness": 0.9571428571428571,
-    "answer_relevancy": 0.46544623474518554,
+    "faithfulness": 0.9690476190476189,
+    "answer_relevancy": 0.5692625472980193,
     "nv_context_relevance": 0.925
   },
   "per_question": [
@@ -14,10 +14,10 @@
         "COMPUTER SECURITY INCIDENT HANDLING GUIDE \n43 \n Acquire tools and resources that may be of value during incident handling. The team will be \nmore efficient at handling incidents if various tools and resources are already available to them. \nExamples include contact lists, encryption software, network diagrams, backup devices, digital \nforensic software, and port lists. \n Prevent incidents from occurring by ensuring that networks, systems, and applications are \nsufficiently secure. Preventing incidents is beneficial to the organization and also reduces the \nworkload of the incident response team. Performing periodic risk assessments and reducing the \nidentified risks to an acceptable level are effective in reducing the number of incidents. Awareness of",
         "backups) of affected systems. Make copies of log files that contain evidence related to the incident. \n8. Wipe out all effects of the incident. This effort includes malware infections, inappropriate materials \n(e.g., pirated software), Trojan horse files, and any other changes made to systems by incidents. If a \nsystem has been fully compromised, rebuild it from scratch or restore it from a known good backup. \n9. Identify and mitigate all vulnerabilities that were exploited. The incident may have occurred by \ntaking advantage of vulnerabilities in operating systems or applications. It is critical to identify such \nvulnerabilities and eliminate or otherwise mitigate them so that the incident does not recur."
       ],
-      "response": "1. Organisasi harus memiliki kebijakan yang mengatur respons insiden keamanan siber, termasuk komitmen manajemen, tujuan, dan cakupan kebijakan.\n2. Perangkat lunak untuk mendeteksi dan menghentikan malware harus diterapkan di seluruh organisasi pada tingkat host, server aplikasi, dan klien aplikasi.\n3. Pastikan perimeter jaringan dikonfigurasi untuk menolak semua aktivitas yang tidak secara eksplisit diizinkan, termasuk mengamankan semua titik koneksi seperti VPN.\n4. Lakukan penilaian risiko secara berkala dan kurangi risiko yang teridentifikasi ke tingkat yang dapat diterima untuk mencegah insiden.\n\nSumber:\n[1] [2] Incident Response Recommendations and Considerations for Cybersecurity Risk Management, 2.3. Incident Response Policies, Processes, and Procedures\n[2] [1] Computer Security Incident Handling Guide\n[3] [4] Computer Security Incident Handling Guide",
+      "response": "1. Organisasi harus memiliki kebijakan yang mengatur respons insiden keamanan siber, termasuk komitmen manajemen dan tujuan kebijakan.\n2. Perimeter jaringan harus dikonfigurasi untuk menolak semua aktivitas yang tidak secara eksplisit diizinkan.\n3. Perangkat lunak untuk mendeteksi dan menghentikan malware harus diterapkan di seluruh organisasi pada level host, server aplikasi, dan klien aplikasi.\n4. Pengguna harus diberi kesadaran dan pelatihan mengenai kebijakan dan prosedur terkait keamanan.\n\nSumber:\n[1] [2] Incident Response Recommendations and Considerations for Cybersecurity Risk Management, 2.3. Incident Response Policies, Processes, and Procedures\n[2] [1] Computer Security Incident Handling Guide",
       "reference": "Kembangkan rencana respons insiden berdasarkan kebijakan respons insiden organisasi. Kebijakan harus mencakup pernyataan komitmen manajemen, tujuan dan ruang lingkup kebijakan, serta definisi insiden. Rencana memberikan peta jalan implementasi program respons insiden termasuk tujuan jangka pendek dan panjang serta metrik pengukuran.",
-      "faithfulness": 1.0,
-      "answer_relevancy": 0.456899471067201,
+      "faithfulness": 0.8571428571428571,
+      "answer_relevancy": 0.7264688828520791,
       "nv_context_relevance": 1.0
     },
     {
@@ -29,10 +29,10 @@
         "checklists to assist in securing hosts consistently and effectively.29 \n Network Security. The network perimeter should be configured to deny all activity that is not \nexpressly permitted. This includes securing all connection points, such as virtual private networks \n(VPNs) and dedicated connections to other organizations. \n Malware Prevention. Software to detect and stop malware should be deployed throughout the \norganization. Malware protection should be deployed at the host level (e.g., server and workstation \noperating systems), the application server level (e.g., email server, web proxies), and the application \nclient level (e.g., email clients, instant messaging clients).30  \n User Awareness and Training. Users should be made aware of policies and procedures regarding",
         "Most organizations have multiple methods for reporting an incident. Different reporting methods \nmay be preferable as a result of variations in the skills of the person reporting the activity, the \nurgency of the incident, and the sensitivity of the incident. A phone number should be established \nto report emergencies. An email address may be provided for informal incident reporting, \nwhereas a web-based form may be useful in formal incident reporting. Sensitive information can \nbe provided to the team by using a public key published by the team to encrypt the material. \n8. What information should be provided when reporting an incident? \nThe more precise the information is, the better. For example, if a workstation appears to have"
       ],
-      "response": "1. Kumpulkan nama pengguna, ID pengguna, dan informasi kontak seperti nomor telepon dan alamat email.\n2. Catat lokasi workstation, nomor model, nomor seri, nama host, dan alamat IP.\n3. Rekam tanggal dan waktu kejadian insiden.\n4. Dapatkan penjelasan langkah demi langkah tentang apa yang terjadi, termasuk tindakan yang dilakukan setelah infeksi ditemukan.\n\nSumber:\n[1] [1] Computer Security Incident Handling Guide",
+      "response": "1. Kumpulkan nama pengguna, ID pengguna, dan informasi kontak seperti nomor telepon dan alamat email.\n2. Catat lokasi workstation, nomor model, nomor seri, nama host, dan alamat IP.\n3. Rekam tanggal dan waktu kejadian insiden.\n4. Buat penjelasan langkah demi langkah tentang apa yang terjadi, termasuk tindakan yang dilakukan setelah infeksi ditemukan.\n\nSumber:\n[1] [1] Computer Security Incident Handling Guide",
       "reference": "Kumpulkan nama pengguna, ID pengguna, dan informasi kontak pelapor. Dapatkan lokasi, model, nomor seri, hostname, dan alamat IP workstation terdampak. Catat tanggal dan waktu insiden beserta penjelasan langkah demi langkah kejadian termasuk tindakan yang sudah dilakukan sejak insiden ditemukan.",
       "faithfulness": 1.0,
-      "answer_relevancy": 0.3942070706968051,
+      "answer_relevancy": 0.4439733004328808,
       "nv_context_relevance": 1.0
     },
     {
@@ -47,7 +47,7 @@
       "response": "1. Prioritaskan penanganan insiden berdasarkan dampak fungsional dan dampak informasi, bukan berdasarkan urutan kedatangan insiden.\n2. Pertimbangkan dampak fungsional insiden terhadap sistem IT dan bagaimana hal ini mempengaruhi fungsi bisnis yang ada.\n3. Evaluasi dampak informasi insiden terhadap kerahasiaan, integritas, dan ketersediaan informasi organisasi.\n4. Tentukan prioritas berdasarkan kemampuan pemulihan dari insiden, termasuk waktu dan sumber daya yang diperlukan.\n\nSumber:\n[1] [2] Computer Security Incident Handling Guide\n[2] [3] Computer Security Incident Handling Guide, 3.2.6 Incident Prioritization\n[3] [1] Computer Security Incident Handling Guide\n[4] [5] Computer Security Incident Handling Guide",
       "reference": "Prioritaskan penanganan insiden berdasarkan dampak fungsional terhadap sistem IT yang mempengaruhi fungsi bisnis dan dampak terhadap kerahasiaan, integritas, dan ketersediaan informasi organisasi. Gunakan panduan tertulis yang menetapkan seberapa cepat tim harus merespons dan tindakan apa yang harus diambil berdasarkan faktor dampak fungsional, dampak informasi, dan upaya pemulihan.",
       "faithfulness": 1.0,
-      "answer_relevancy": 0.5080848086166254,
+      "answer_relevancy": 0.4949294276549623,
       "nv_context_relevance": 1.0
     },
     {
@@ -59,10 +59,10 @@
         "the investigation and gathering evidence \n2. Prioritize handling the incident based on the relevant factors (functional impact, information \nimpact, recoverability effort, etc.) \n3. Report the incident to the appropriate internal personnel and external organizations \nContainment, Eradication, and Recovery \n4. Acquire, preserve, secure, and document evidence \n5. Contain the incident \n6. Eradicate the incident \n6.1  Identify and mitigate all vulnerabilities that were exploited \n6.2  Remove malware, inappropriate materials, and other components \n6.3  If more affected hosts are discovered (e.g., new malware infections), repeat \n the Detection and Analysis steps (1.1, 1.2) to identify all other affected hosts, then \n contain (5) and eradicate (6) the incident for them",
         "backups) of affected systems. Make copies of log files that contain evidence related to the incident. \n8. Wipe out all effects of the incident. This effort includes malware infections, inappropriate materials \n(e.g., pirated software), Trojan horse files, and any other changes made to systems by incidents. If a \nsystem has been fully compromised, rebuild it from scratch or restore it from a known good backup. \n9. Identify and mitigate all vulnerabilities that were exploited. The incident may have occurred by \ntaking advantage of vulnerabilities in operating systems or applications. It is critical to identify such \nvulnerabilities and eliminate or otherwise mitigate them so that the incident does not recur."
       ],
-      "response": "1. Lakukan containment untuk mencegah perluasan insiden dan menghindari kerusakan tambahan.\n2. Pertimbangkan untuk mengkonfigurasi teknologi keamanan siber agar secara otomatis melakukan tindakan containment, seperti mengkarantina malware atau memindahkan endpoint yang terkompromi ke jaringan remediasi yang terisolasi.\n3. Keputusan containment seperti mematikan sistem atau memutuskan dari jaringan lebih mudah dilakukan jika ada strategi dan prosedur yang telah ditentukan sebelumnya.\n\nSumber:\n[1] [2] Incident Response Recommendations and Considerations for Cybersecurity Risk Management\n[2] [3] Computer Security Incident Handling Guide, 3.3 Containment, Eradication, and Recovery",
+      "response": "1. Lakukan containment untuk mencegah perluasan insiden dan menghindari kerusakan tambahan.\n2. Pertimbangkan untuk mengkonfigurasi teknologi keamanan siber agar secara otomatis melakukan tindakan containment, seperti mengkarantina malware atau memindahkan endpoint yang terkompromi ke jaringan remediasi yang terisolasi.\n3. Keputusan containment seperti mematikan sistem atau memutuskan dari jaringan harus lebih mudah jika ada strategi dan prosedur yang telah ditentukan sebelumnya.\n\nSumber:\n[1] [2] Incident Response Recommendations and Considerations for Cybersecurity Risk Management\n[2] [3] Computer Security Incident Handling Guide, 3.3 Containment, Eradication, and Recovery",
       "reference": "Lakukan containment terlebih dahulu untuk mencegah perluasan insiden sebelum kehabisan sumber daya atau kerusakan meningkat. Containment memberikan waktu untuk mengembangkan strategi remediasi yang tepat. Konfigurasikan teknologi keamanan siber seperti antivirus dan fitur keamanan sistem operasi untuk secara otomatis melakukan tindakan containment seperti mengkarantina malware atau memindahkan endpoint ke jaringan remediasi terisolasi.",
       "faithfulness": 1.0,
-      "answer_relevancy": 0.5429680728954888,
+      "answer_relevancy": 0.6353029836815617,
       "nv_context_relevance": 1.0
     },
     {
@@ -77,7 +77,7 @@
       "response": "1. Pantau aktivitas pengguna dan penggunaan teknologi untuk menemukan aktivitas pengguna yang anomali atau pola aktivitas yang tidak biasa.\n2. Pantau konfigurasi perangkat lunak dan perangkat keras untuk penyimpangan dari baseline keamanan.\n3. Pantau perangkat keras dan perangkat lunak, termasuk mekanisme perlindungan siber, untuk tanda-tanda perusakan, kegagalan, atau kompromi.\n4. Pantau endpoint untuk masalah kesehatan siber seperti infeksi malware atau perangkat lunak yang tidak sah, dan alihkan endpoint dengan masalah ke lingkungan remediasi sebelum akses diizinkan.\n\nSumber:\n[1] [1] Incident Response Recommendations and Considerations for Cybersecurity Risk Management\n[2] [3] Incident Response Recommendations and Considerations for Cybersecurity Risk Management",
       "reference": "Pantau penggunaan kredensial yang tidak sah dan pantau konfigurasi perangkat keras maupun lunak untuk penyimpangan dari security baseline. Monitor endpoint untuk masalah kesehatan siber seperti patch yang hilang, infeksi malware, atau perangkat lunak tidak sah, dan arahkan endpoint bermasalah ke lingkungan remediasi sebelum akses diizinkan kembali.",
       "faithfulness": 1.0,
-      "answer_relevancy": 0.3184076318241086,
+      "answer_relevancy": 0.47628848876315183,
       "nv_context_relevance": 0.75
     },
     {
@@ -89,10 +89,10 @@
         "• Detect, Respond, and Recover help organizations discover, manage, prioritize, contain, \neradicate, and recover from cybersecurity incidents, as well as perform incident \nreporting, notification, and other incident-related communications.  \nMany individuals, teams, and third parties hold a wide variety of roles and responsibilities \nacross all of the Functions that support an organization’s incident response. Organizations have \nno direct control over the tactics and techniques used by their adversaries, nor are they certain \nabout the timing of a future incident other than knowing that another incident is inevitable. \nHowever, organizations can use an incident response life cycle framework or model that best",
         "COMPUTER SECURITY INCIDENT HANDLING GUIDE \n34 \ninclude provisions concerning incident reporting—at a minimum, what must be reported to whom and at \nwhat times (e.g., initial notification, regular status updates). The exact reporting requirements vary among \norganizations, but parties that are typically notified include: \n CIO \n Head of information security \n Local information security officer \n Other incident response teams within the organization \n External incident response teams (if appropriate) \n System owner \n Human resources (for cases involving employees, such as harassment through email) \n Public affairs (for incidents that may generate publicity) \n Legal department (for incidents with potential legal ramifications)"
       ],
-      "response": "1. Pastikan laporan insiden phishing segera disampaikan kepada CIO, kepala keamanan informasi, dan tim respons insiden lainnya dalam organisasi.\n2. Pantau laporan dari pihak ketiga yang mungkin melaporkan insiden terkait, dan pastikan laporan tersebut ditindaklanjuti dengan serius.\n3. Tingkatkan kesadaran pengguna tentang kebijakan dan prosedur penggunaan jaringan, sistem, dan aplikasi yang tepat untuk mengurangi frekuensi insiden di masa depan.\n\nSumber:\n[1] [5] Computer Security Incident Handling Guide\n[2] [3] Incident Response Recommendations and Considerations for Cybersecurity Risk Management\n[3] [2] Computer Security Incident Handling Guide",
+      "response": "1. Pastikan laporan insiden phishing segera dikirim ke tim respons insiden untuk verifikasi dan penilaian tingkat keparahan insiden.\n2. Gunakan mekanisme yang ada untuk pihak ketiga melaporkan insiden yang mungkin melibatkan organisasi, dan pantau laporan tersebut dengan serius.\n3. Pastikan laporan insiden mencakup pemberitahuan awal dan pembaruan status reguler kepada pihak-pihak terkait seperti CIO, kepala keamanan informasi, dan tim respons insiden lainnya.\n\nSumber:\n[1] [3] Incident Response Recommendations and Considerations for Cybersecurity Risk Management\n[2] [5] Computer Security Incident Handling Guide",
       "reference": "Laporkan insiden untuk memverifikasi apakah insiden siber benar-benar terjadi dan perkirakan tingkat keparahan serta urgensi respons. Pastikan mekanisme pelaporan tersedia agar siapapun dapat melaporkan kemungkinan insiden. Gunakan berbagai metode pelaporan yang tersedia seperti nomor telepon darurat, email, atau formulir web sesuai urgensi dan sensitivitas insiden.",
-      "faithfulness": 0.5714285714285714,
-      "answer_relevancy": 0.6312992245715211,
+      "faithfulness": 0.8333333333333334,
+      "answer_relevancy": 0.7903440992324194,
       "nv_context_relevance": 1.0
     },
     {
@@ -104,10 +104,10 @@
         "impact of the incident by containing it and ultimately recovering from it. During this phase, activity often \ncycles back to detection and analysis—for example, to see if additional hosts are infected by malware \nwhile eradicating a malware incident. After the incident is adequately handled, the organization issues a \nreport that details the cause and cost of the incident and the steps the organization should take to prevent \nfuture incidents. This section describes the major phases of the incident response process—preparation, \ndetection and analysis, containment, eradication and recovery, and post-incident activity—in detail. \nFigure 3-1 illustrates the incident response life cycle.  \nFigure 3-1. Incident Response Life Cycle \n3.1 Preparation",
         "some of the risk evaluation factors in \nRS.MA. Another factor to consider is the \nduration of the containment measure (e.g., \nan emergency workaround that must be \nremoved within hours, a temporary \nworkaround to be removed within two \nweeks, or a permanent solution). The \neradication measure’s duration could be \nsimilarly evaluated. \nR1: In some instances, organizations \nredirect an attacker to a sandbox so that \nthey can monitor the attacker’s activity, \nusually to gather additional evidence. This \ndelays containment and eradication \nactivities. The incident response team \nshould first discuss the feasibility of this \nstrategy with the legal department before \nexecuting it. The intentional delay can be \ndangerous because an attacker could \nescalate unauthorized access or"
       ],
-      "response": "1. Pantau alert dari antivirus yang mendeteksi malware pada host.\n2. Pertimbangkan untuk mengizinkan pihak ketiga seperti penyedia layanan internet untuk bertindak otomatis dalam menahan jenis insiden tertentu.\n3. Selama fase ini, aktivitas sering kali kembali ke deteksi dan analisis untuk melihat apakah ada host tambahan yang terinfeksi malware.\n\nSumber:\n[1] [3] Computer Security Incident Handling Guide\n[2] [2] Incident Response Recommendations and Considerations for Cybersecurity Risk Management\n[3] [4] Computer Security Incident Handling Guide, 3.1 Preparation",
+      "response": "1. Pantau alert dari antivirus yang mendeteksi malware pada host.\n2. Pertimbangkan untuk mengizinkan pihak ketiga seperti penyedia layanan internet untuk bertindak otomatis dalam menahan jenis insiden tertentu.\n3. Selama fase ini, aktivitas sering kali kembali ke deteksi dan analisis untuk melihat apakah ada host tambahan yang terinfeksi malware.\n4. Pertimbangkan untuk mengarahkan penyerang ke sandbox untuk memantau aktivitas mereka dan mengumpulkan bukti tambahan, setelah berdiskusi dengan departemen hukum.\n\nSumber:\n[1] [3] Computer Security Incident Handling Guide\n[2] [2] Incident Response Recommendations and Considerations for Cybersecurity Risk Management\n[3] [4] Computer Security Incident Handling Guide, 3.1 Preparation\n[4] [5] Incident Response Recommendations and Considerations for Cybersecurity Risk Management",
       "reference": "Identifikasi dan mitigasi semua kerentanan yang dieksploitasi oleh malware. Hapus malware, materi yang tidak sesuai, dan komponen berbahaya lainnya dari sistem yang terdampak. Jika ditemukan host lain yang terinfeksi, ulangi langkah deteksi dan analisis untuk mengidentifikasi semua host terpengaruh, kemudian lakukan containment dan eradikasi untuk setiap host tersebut.",
       "faithfulness": 1.0,
-      "answer_relevancy": 0.5536661692950591,
+      "answer_relevancy": 0.47261587743399186,
       "nv_context_relevance": 1.0
     },
     {
@@ -119,10 +119,10 @@
         "COMPUTER SECURITY INCIDENT HANDLING GUIDE \n31 \naudio recorders, and digital cameras can also serve this purpose.38 Documenting system events, \nconversations, and observed changes in files can lead to a more efficient, more systematic, and less error-\nprone handling of the problem. Every step taken from the time the incident was detected to its final \nresolution should be documented and timestamped. Every document regarding the incident should be \ndated and signed by the incident handler. Information of this nature can also be used as evidence in a \ncourt of law if legal prosecution is pursued. Whenever possible, handlers should work in teams of at least \ntwo: one person can record and log events while the other person performs the technical tasks. Section",
         "during the investigation. Users and system administrators should be made aware of the steps that they \nshould take to preserve evidence. See NIST SP 800-86, Guide to Integrating Forensic Techniques into \nIncident Response, for additional information on preserving evidence.  \n                                                      \n42  NIST SP 800-86, Guide to Integrating Forensic Techniques into Incident Response, provides detailed information on \nestablishing a forensic capability. It focuses on forensic techniques for PCs, but much of the material is applicable to other \nsystems. The document can be found at http://csrc.nist.gov/publications/PubsSPs.html#800-86.  \n43  Evidence gathering and handling is not typically performed for every incident that occurs—for example, most malware"
       ],
-      "response": "1. Mulai merekam semua informasi segera setelah tim mencurigai bahwa insiden telah terjadi. Setiap langkah yang diambil, dari saat insiden terdeteksi hingga penyelesaiannya, harus didokumentasikan dan diberi cap waktu.\n2. Lindungi data insiden karena sering mengandung informasi sensitif mengenai kerentanan dan pelanggaran keamanan. Pastikan akses ke data insiden dibatasi dengan benar, baik secara logis maupun fisik.\n3. Ikuti prosedur yang telah ditetapkan untuk pengumpulan dan penanganan bukti. Tim harus mendokumentasikan dengan jelas bagaimana semua bukti telah dipertahankan.\n4. Tangkap data volatil dari sistem sebagai bukti, termasuk daftar koneksi jaringan, proses, sesi login, file terbuka, konfigurasi antarmuka jaringan, dan isi memori.\n\nSumber:\n[1] [1] Computer Security Incident Handling Guide\n[2] [3] Computer Security Incident Handling Guide",
+      "response": "1. Mulai merekam semua informasi segera setelah tim mencurigai bahwa insiden telah terjadi. Setiap langkah yang diambil, dari saat insiden terdeteksi hingga penyelesaiannya, harus didokumentasikan dan diberi cap waktu.\n2. Lindungi data insiden yang sering kali mengandung informasi sensitif mengenai kerentanan, pelanggaran keamanan, dan pengguna yang mungkin melakukan tindakan tidak pantas.\n3. Ikuti prosedur yang telah ditetapkan untuk pengumpulan dan penanganan bukti. Tim harus mendokumentasikan dengan jelas bagaimana semua bukti telah dipertahankan.\n4. Tangkap data volatil dari sistem sebagai bukti, termasuk daftar koneksi jaringan, proses, sesi login, file terbuka, konfigurasi antarmuka jaringan, dan isi memori.\n\nSumber:\n[1] [1] Computer Security Incident Handling Guide\n[2] [3] Computer Security Incident Handling Guide",
       "reference": "Dapatkan, jaga, amankan, dan dokumentasikan bukti yang terkait insiden. Buat salinan file log yang berisi bukti terkait insiden dari sistem yang terdampak. Setiap kali bukti berpindah tangan, dokumentasikan perpindahan tersebut dalam formulir chain of custody sesuai prosedur hukum yang berlaku agar bukti dapat diterima di pengadilan.",
       "faithfulness": 1.0,
-      "answer_relevancy": 0.4543985574099056,
+      "answer_relevancy": 0.6057565308745864,
       "nv_context_relevance": 1.0
     },
     {
@@ -134,10 +134,10 @@
         "isolated remediation network, or halting \nthe execution of an infected container.  \nC2: Consider authorizing third parties (e.g., \nthe organization’s internet service \nproviders and cloud service providers) to \nautomatically act to contain certain types",
         "manner.  \nEradication and recovery should be done in a phased approach so that remediation steps are prioritized. \nFor large-scale incidents, recovery may take months; the intent of the early phases should be to increase \nthe overall security with relatively quick (days to weeks) high value changes to prevent future incidents. \nThe later phases should focus on longer-term changes (e.g., infrastructure changes) and ongoing work to \nkeep the enterprise as secure as possible."
       ],
-      "response": "1. Pulihkan sistem dari backup yang bersih untuk mengembalikan data yang hilang akibat insiden.\n2. Pastikan sistem berfungsi normal dan lakukan remediasi terhadap kerentanan untuk mencegah insiden serupa.\n3. Ganti file yang terkompromi dengan versi yang bersih dan pasang patch keamanan terbaru.\n4. Tingkatkan logging sistem atau pemantauan jaringan sebagai bagian dari proses pemulihan.\n\nSumber:\n[1] [2] Computer Security Incident Handling Guide\n[2] [1] Incident Response Recommendations and Considerations for Cybersecurity Risk Management\n[3] [3] Computer Security Incident Handling Guide",
+      "response": "1. Pulihkan sistem dari backup yang bersih untuk mengembalikan data yang hilang.\n2. Pastikan sistem berfungsi normal dan remediasi kerentanan untuk mencegah insiden serupa.\n3. Ganti file yang terkompromi dengan versi yang bersih dan pasang patch keamanan.\n4. Tingkatkan logging sistem atau pemantauan jaringan sebagai bagian dari proses pemulihan.\n\nSumber:\n[1] [2] Computer Security Incident Handling Guide\n[2] [1] Incident Response Recommendations and Considerations for Cybersecurity Risk Management\n[3] [3] Computer Security Incident Handling Guide",
       "reference": "Selama pemulihan, personel memulihkan sistem ke operasi normal dengan merestorasi dari backup yang bersih, merekonstruksi sistem, mengganti file yang terkompromi dengan versi bersih, memasang patch, dan memperketat kontrol keamanan. Eradikasi dan pemulihan dilakukan secara bertahap dengan perubahan bernilai tinggi di fase awal untuk mencegah insiden berulang.",
       "faithfulness": 1.0,
-      "answer_relevancy": 0.4608082926333356,
+      "answer_relevancy": 0.5588944858866887,
       "nv_context_relevance": 1.0
     },
     {
@@ -152,7 +152,7 @@
       "response": "1. Tingkatkan kesadaran pengguna mengenai kebijakan dan prosedur penggunaan jaringan, sistem, dan aplikasi yang tepat untuk mengurangi frekuensi insiden.\n2. Bagikan pelajaran yang didapat dari insiden sebelumnya kepada pengguna agar mereka memahami dampak tindakan mereka terhadap organisasi.\n3. Pastikan tim respons insiden berpartisipasi dalam kelompok berbagi informasi untuk mengelola upaya berbagi informasi insiden organisasi.\n4. Gunakan kerangka kerja siklus hidup respons insiden untuk mendeteksi, merespons, dan memulihkan dari insiden keamanan siber.\n\nSumber:\n[1] [1] Computer Security Incident Handling Guide\n[2] [4] Computer Security Incident Handling Guide, 2.6 Recommendations\n[3] [2] Incident Response Recommendations and Considerations for Cybersecurity Risk Management",
       "reference": "Laporkan insiden ini melalui saluran resmi organisasi agar tim menentukan apakah ini merupakan insiden siber. Tingkatkan edukasi dan kesadaran pengguna — semakin banyak yang memahami cara mendeteksi, melaporkan, dan merespons insiden social engineering, semakin rendah dampaknya. Pastikan hanya satu grup resmi dalam organisasi yang mendistribusikan advisori keamanan untuk menghindari informasi yang bertentangan.",
       "faithfulness": 1.0,
-      "answer_relevancy": 0.33372304844180495,
+      "answer_relevancy": 0.48805139616787185,
       "nv_context_relevance": 0.5
     }
   ],
@@ -161,7 +161,7 @@
       "id": "QA-001",
       "question": "Dokumen dan kebijakan (policy) minimum apa yang wajib ada sebagai persiapan sebelum insiden siber terjadi?",
       "ground_truth": "Kembangkan rencana respons insiden berdasarkan kebijakan respons insiden organisasi. Kebijakan harus mencakup pernyataan komitmen manajemen, tujuan dan ruang lingkup kebijakan, serta definisi insiden. Rencana memberikan peta jalan implementasi program respons insiden termasuk tujuan jangka pendek dan panjang serta metrik pengukuran.",
-      "candidate_answer": "1. Organisasi harus memiliki kebijakan yang mengatur respons insiden keamanan siber, termasuk komitmen manajemen, tujuan, dan cakupan kebijakan.\n2. Perangkat lunak untuk mendeteksi dan menghentikan malware harus diterapkan di seluruh organisasi pada tingkat host, server aplikasi, dan klien aplikasi.\n3. Pastikan perimeter jaringan dikonfigurasi untuk menolak semua aktivitas yang tidak secara eksplisit diizinkan, termasuk mengamankan semua titik koneksi seperti VPN.\n4. Lakukan penilaian risiko secara berkala dan kurangi risiko yang teridentifikasi ke tingkat yang dapat diterima untuk mencegah insiden.\n\nSumber:\n[1] [2] Incident Response Recommendations and Considerations for Cybersecurity Risk Management, 2.3. Incident Response Policies, Processes, and Procedures\n[2] [1] Computer Security Incident Handling Guide\n[3] [4] Computer Security Incident Handling Guide",
+      "candidate_answer": "1. Organisasi harus memiliki kebijakan yang mengatur respons insiden keamanan siber, termasuk komitmen manajemen dan tujuan kebijakan.\n2. Perimeter jaringan harus dikonfigurasi untuk menolak semua aktivitas yang tidak secara eksplisit diizinkan.\n3. Perangkat lunak untuk mendeteksi dan menghentikan malware harus diterapkan di seluruh organisasi pada level host, server aplikasi, dan klien aplikasi.\n4. Pengguna harus diberi kesadaran dan pelatihan mengenai kebijakan dan prosedur terkait keamanan.\n\nSumber:\n[1] [2] Incident Response Recommendations and Considerations for Cybersecurity Risk Management, 2.3. Incident Response Policies, Processes, and Procedures\n[2] [1] Computer Security Incident Handling Guide",
       "retrieved_chunks": [
         {
           "id": "dd2fb3e7-b883-4ae7-8d8f-a9e3d157584d",
@@ -291,7 +291,7 @@
       "id": "QA-002",
       "question": "Laporan via WhatsApp/japri sering minim detail. Elemen data minimum apa yang harus dikumpulkan saat menerima laporan insiden dari pelapor?",
       "ground_truth": "Kumpulkan nama pengguna, ID pengguna, dan informasi kontak pelapor. Dapatkan lokasi, model, nomor seri, hostname, dan alamat IP workstation terdampak. Catat tanggal dan waktu insiden beserta penjelasan langkah demi langkah kejadian termasuk tindakan yang sudah dilakukan sejak insiden ditemukan.",
-      "candidate_answer": "1. Kumpulkan nama pengguna, ID pengguna, dan informasi kontak seperti nomor telepon dan alamat email.\n2. Catat lokasi workstation, nomor model, nomor seri, nama host, dan alamat IP.\n3. Rekam tanggal dan waktu kejadian insiden.\n4. Dapatkan penjelasan langkah demi langkah tentang apa yang terjadi, termasuk tindakan yang dilakukan setelah infeksi ditemukan.\n\nSumber:\n[1] [1] Computer Security Incident Handling Guide",
+      "candidate_answer": "1. Kumpulkan nama pengguna, ID pengguna, dan informasi kontak seperti nomor telepon dan alamat email.\n2. Catat lokasi workstation, nomor model, nomor seri, nama host, dan alamat IP.\n3. Rekam tanggal dan waktu kejadian insiden.\n4. Buat penjelasan langkah demi langkah tentang apa yang terjadi, termasuk tindakan yang dilakukan setelah infeksi ditemukan.\n\nSumber:\n[1] [1] Computer Security Incident Handling Guide",
       "retrieved_chunks": [
         {
           "id": "33375221-46b7-4ebc-a9ec-c2d6c0ea4a84",
@@ -549,7 +549,7 @@
       "id": "QA-004",
       "question": "Saat serangan masih berjalan, tindakan paling aman apa yang sebaiknya dilakukan: langsung mematikan sistem atau melakukan containment/isolasi terlebih dahulu?",
       "ground_truth": "Lakukan containment terlebih dahulu untuk mencegah perluasan insiden sebelum kehabisan sumber daya atau kerusakan meningkat. Containment memberikan waktu untuk mengembangkan strategi remediasi yang tepat. Konfigurasikan teknologi keamanan siber seperti antivirus dan fitur keamanan sistem operasi untuk secara otomatis melakukan tindakan containment seperti mengkarantina malware atau memindahkan endpoint ke jaringan remediasi terisolasi.",
-      "candidate_answer": "1. Lakukan containment untuk mencegah perluasan insiden dan menghindari kerusakan tambahan.\n2. Pertimbangkan untuk mengkonfigurasi teknologi keamanan siber agar secara otomatis melakukan tindakan containment, seperti mengkarantina malware atau memindahkan endpoint yang terkompromi ke jaringan remediasi yang terisolasi.\n3. Keputusan containment seperti mematikan sistem atau memutuskan dari jaringan lebih mudah dilakukan jika ada strategi dan prosedur yang telah ditentukan sebelumnya.\n\nSumber:\n[1] [2] Incident Response Recommendations and Considerations for Cybersecurity Risk Management\n[2] [3] Computer Security Incident Handling Guide, 3.3 Containment, Eradication, and Recovery",
+      "candidate_answer": "1. Lakukan containment untuk mencegah perluasan insiden dan menghindari kerusakan tambahan.\n2. Pertimbangkan untuk mengkonfigurasi teknologi keamanan siber agar secara otomatis melakukan tindakan containment, seperti mengkarantina malware atau memindahkan endpoint yang terkompromi ke jaringan remediasi yang terisolasi.\n3. Keputusan containment seperti mematikan sistem atau memutuskan dari jaringan harus lebih mudah jika ada strategi dan prosedur yang telah ditentukan sebelumnya.\n\nSumber:\n[1] [2] Incident Response Recommendations and Considerations for Cybersecurity Risk Management\n[2] [3] Computer Security Incident Handling Guide, 3.3 Containment, Eradication, and Recovery",
       "retrieved_chunks": [
         {
           "id": "41d09b76-1b20-4192-a479-e8be610e51e0",
@@ -571,9 +571,9 @@
             "section_header": "",
             "chunk_index": 202
           },
-          "score": 0.56631726,
+          "score": 0.56626797,
           "rrf_score": 0.01639344262295082,
-          "final_score": 0.6947827377377049
+          "final_score": 0.6947482347377049
         },
         {
           "id": "e7f9790e-da13-4e64-b858-12a75bfa95b0",
@@ -597,9 +597,9 @@
             "section_header": "",
             "chunk_index": 503
           },
-          "score": 0.5571248,
+          "score": 0.55708134,
           "rrf_score": 0.016129032258064516,
-          "final_score": 0.6867615535483871
+          "final_score": 0.686731131548387
         },
         {
           "id": "a0daaf42-483f-4730-8a3e-d09986d169cd",
@@ -621,9 +621,9 @@
             "section_header": "3.3 Containment, Eradication, and Recovery",
             "chunk_index": 199
           },
-          "score": 0.5438011,
+          "score": 0.543743,
           "rrf_score": 0.015873015873015872,
-          "final_score": 0.6758988652380953
+          "final_score": 0.6758581952380952
         },
         {
           "id": "a29687e4-3c1e-44d1-acd9-5eeff992f602",
@@ -645,9 +645,9 @@
             "section_header": "4. Acquire, preserve, secure, and document evidence",
             "chunk_index": 236
           },
-          "score": 0.4987884,
+          "score": 0.49874377,
           "rrf_score": 0.015625,
-          "final_score": 0.6429018799999999
+          "final_score": 0.642870639
         },
         {
           "id": "41c0a2d1-9e8b-4176-acd2-3b0b6912bcc6",
@@ -669,9 +669,9 @@
             "section_header": "",
             "chunk_index": 349
           },
-          "score": 0.48150223,
+          "score": 0.48146704,
           "rrf_score": 0.015384615384615385,
-          "final_score": 0.6293592533076923
+          "final_score": 0.6293346203076924
         }
       ]
     },
@@ -811,7 +811,7 @@
       "id": "QA-006",
       "question": "Setelah mengklik email phishing yang mencurigakan, bagaimana prosedur pelaporan insiden phishing agar tim respons insiden dapat segera menanganinya?",
       "ground_truth": "Laporkan insiden untuk memverifikasi apakah insiden siber benar-benar terjadi dan perkirakan tingkat keparahan serta urgensi respons. Pastikan mekanisme pelaporan tersedia agar siapapun dapat melaporkan kemungkinan insiden. Gunakan berbagai metode pelaporan yang tersedia seperti nomor telepon darurat, email, atau formulir web sesuai urgensi dan sensitivitas insiden.",
-      "candidate_answer": "1. Pastikan laporan insiden phishing segera disampaikan kepada CIO, kepala keamanan informasi, dan tim respons insiden lainnya dalam organisasi.\n2. Pantau laporan dari pihak ketiga yang mungkin melaporkan insiden terkait, dan pastikan laporan tersebut ditindaklanjuti dengan serius.\n3. Tingkatkan kesadaran pengguna tentang kebijakan dan prosedur penggunaan jaringan, sistem, dan aplikasi yang tepat untuk mengurangi frekuensi insiden di masa depan.\n\nSumber:\n[1] [5] Computer Security Incident Handling Guide\n[2] [3] Incident Response Recommendations and Considerations for Cybersecurity Risk Management\n[3] [2] Computer Security Incident Handling Guide",
+      "candidate_answer": "1. Pastikan laporan insiden phishing segera dikirim ke tim respons insiden untuk verifikasi dan penilaian tingkat keparahan insiden.\n2. Gunakan mekanisme yang ada untuk pihak ketiga melaporkan insiden yang mungkin melibatkan organisasi, dan pantau laporan tersebut dengan serius.\n3. Pastikan laporan insiden mencakup pemberitahuan awal dan pembaruan status reguler kepada pihak-pihak terkait seperti CIO, kepala keamanan informasi, dan tim respons insiden lainnya.\n\nSumber:\n[1] [3] Incident Response Recommendations and Considerations for Cybersecurity Risk Management\n[2] [5] Computer Security Incident Handling Guide",
       "retrieved_chunks": [
         {
           "id": "5b1dba57-b4a6-483f-bb98-099783626931",
@@ -943,7 +943,7 @@
       "id": "QA-007",
       "question": "Komputer jadi lambat, muncul pop-up aneh, dan file sulit dibuka. Apa yang harus dilakukan tim untuk merespons kemungkinan insiden malware ini?",
       "ground_truth": "Identifikasi dan mitigasi semua kerentanan yang dieksploitasi oleh malware. Hapus malware, materi yang tidak sesuai, dan komponen berbahaya lainnya dari sistem yang terdampak. Jika ditemukan host lain yang terinfeksi, ulangi langkah deteksi dan analisis untuk mengidentifikasi semua host terpengaruh, kemudian lakukan containment dan eradikasi untuk setiap host tersebut.",
-      "candidate_answer": "1. Pantau alert dari antivirus yang mendeteksi malware pada host.\n2. Pertimbangkan untuk mengizinkan pihak ketiga seperti penyedia layanan internet untuk bertindak otomatis dalam menahan jenis insiden tertentu.\n3. Selama fase ini, aktivitas sering kali kembali ke deteksi dan analisis untuk melihat apakah ada host tambahan yang terinfeksi malware.\n\nSumber:\n[1] [3] Computer Security Incident Handling Guide\n[2] [2] Incident Response Recommendations and Considerations for Cybersecurity Risk Management\n[3] [4] Computer Security Incident Handling Guide, 3.1 Preparation",
+      "candidate_answer": "1. Pantau alert dari antivirus yang mendeteksi malware pada host.\n2. Pertimbangkan untuk mengizinkan pihak ketiga seperti penyedia layanan internet untuk bertindak otomatis dalam menahan jenis insiden tertentu.\n3. Selama fase ini, aktivitas sering kali kembali ke deteksi dan analisis untuk melihat apakah ada host tambahan yang terinfeksi malware.\n4. Pertimbangkan untuk mengarahkan penyerang ke sandbox untuk memantau aktivitas mereka dan mengumpulkan bukti tambahan, setelah berdiskusi dengan departemen hukum.\n\nSumber:\n[1] [3] Computer Security Incident Handling Guide\n[2] [2] Incident Response Recommendations and Considerations for Cybersecurity Risk Management\n[3] [4] Computer Security Incident Handling Guide, 3.1 Preparation\n[4] [5] Incident Response Recommendations and Considerations for Cybersecurity Risk Management",
       "retrieved_chunks": [
         {
           "id": "dc046f44-8daa-486b-b810-e26e037d83ee",
@@ -1075,7 +1075,7 @@
       "id": "QA-008",
       "question": "Bagaimana prosedur yang benar untuk menangani dan mendokumentasikan bukti digital selama penanganan insiden keamanan siber?",
       "ground_truth": "Dapatkan, jaga, amankan, dan dokumentasikan bukti yang terkait insiden. Buat salinan file log yang berisi bukti terkait insiden dari sistem yang terdampak. Setiap kali bukti berpindah tangan, dokumentasikan perpindahan tersebut dalam formulir chain of custody sesuai prosedur hukum yang berlaku agar bukti dapat diterima di pengadilan.",
-      "candidate_answer": "1. Mulai merekam semua informasi segera setelah tim mencurigai bahwa insiden telah terjadi. Setiap langkah yang diambil, dari saat insiden terdeteksi hingga penyelesaiannya, harus didokumentasikan dan diberi cap waktu.\n2. Lindungi data insiden karena sering mengandung informasi sensitif mengenai kerentanan dan pelanggaran keamanan. Pastikan akses ke data insiden dibatasi dengan benar, baik secara logis maupun fisik.\n3. Ikuti prosedur yang telah ditetapkan untuk pengumpulan dan penanganan bukti. Tim harus mendokumentasikan dengan jelas bagaimana semua bukti telah dipertahankan.\n4. Tangkap data volatil dari sistem sebagai bukti, termasuk daftar koneksi jaringan, proses, sesi login, file terbuka, konfigurasi antarmuka jaringan, dan isi memori.\n\nSumber:\n[1] [1] Computer Security Incident Handling Guide\n[2] [3] Computer Security Incident Handling Guide",
+      "candidate_answer": "1. Mulai merekam semua informasi segera setelah tim mencurigai bahwa insiden telah terjadi. Setiap langkah yang diambil, dari saat insiden terdeteksi hingga penyelesaiannya, harus didokumentasikan dan diberi cap waktu.\n2. Lindungi data insiden yang sering kali mengandung informasi sensitif mengenai kerentanan, pelanggaran keamanan, dan pengguna yang mungkin melakukan tindakan tidak pantas.\n3. Ikuti prosedur yang telah ditetapkan untuk pengumpulan dan penanganan bukti. Tim harus mendokumentasikan dengan jelas bagaimana semua bukti telah dipertahankan.\n4. Tangkap data volatil dari sistem sebagai bukti, termasuk daftar koneksi jaringan, proses, sesi login, file terbuka, konfigurasi antarmuka jaringan, dan isi memori.\n\nSumber:\n[1] [1] Computer Security Incident Handling Guide\n[2] [3] Computer Security Incident Handling Guide",
       "retrieved_chunks": [
         {
           "id": "ef6951bc-6b65-4e47-99d8-1ce004c9de82",
@@ -1205,7 +1205,7 @@
       "id": "QA-009",
       "question": "Kalau data kerja saya hilang karena insiden, apakah masih bisa dikembalikan melalui proses eradikasi dan pemulihan (recovery)?",
       "ground_truth": "Selama pemulihan, personel memulihkan sistem ke operasi normal dengan merestorasi dari backup yang bersih, merekonstruksi sistem, mengganti file yang terkompromi dengan versi bersih, memasang patch, dan memperketat kontrol keamanan. Eradikasi dan pemulihan dilakukan secara bertahap dengan perubahan bernilai tinggi di fase awal untuk mencegah insiden berulang.",
-      "candidate_answer": "1. Pulihkan sistem dari backup yang bersih untuk mengembalikan data yang hilang akibat insiden.\n2. Pastikan sistem berfungsi normal dan lakukan remediasi terhadap kerentanan untuk mencegah insiden serupa.\n3. Ganti file yang terkompromi dengan versi yang bersih dan pasang patch keamanan terbaru.\n4. Tingkatkan logging sistem atau pemantauan jaringan sebagai bagian dari proses pemulihan.\n\nSumber:\n[1] [2] Computer Security Incident Handling Guide\n[2] [1] Incident Response Recommendations and Considerations for Cybersecurity Risk Management\n[3] [3] Computer Security Incident Handling Guide",
+      "candidate_answer": "1. Pulihkan sistem dari backup yang bersih untuk mengembalikan data yang hilang.\n2. Pastikan sistem berfungsi normal dan remediasi kerentanan untuk mencegah insiden serupa.\n3. Ganti file yang terkompromi dengan versi yang bersih dan pasang patch keamanan.\n4. Tingkatkan logging sistem atau pemantauan jaringan sebagai bagian dari proses pemulihan.\n\nSumber:\n[1] [2] Computer Security Incident Handling Guide\n[2] [1] Incident Response Recommendations and Considerations for Cybersecurity Risk Management\n[3] [3] Computer Security Incident Handling Guide",
       "retrieved_chunks": [
         {
           "id": "5c862db7-581d-40a9-8ee8-8f56e6c4eff5",

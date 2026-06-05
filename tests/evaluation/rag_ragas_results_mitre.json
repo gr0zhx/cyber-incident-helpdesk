@@ -1,7 +1,7 @@
 {
   "summary": {
-    "faithfulness": 0.9800000000000001,
-    "answer_relevancy": 0.38751398330504666,
+    "faithfulness": 0.9466666666666667,
+    "answer_relevancy": 0.5441111772006788,
     "nv_context_relevance": 0.975
   },
   "per_question": [
@@ -14,10 +14,10 @@
         "Teknik Serangan MITRE ATT&CK: Spearphishing Link (T1192)\nTaktik: initial-access\n\nSpearphishing with a link is a specific variant of spearphishing. It is different from other forms of spearphishing in that it employs the use of links to download malware contained in email, instead of attaching malicious files to the email itself, to avoid defenses that may inspect email attachments.",
         "Teknik Serangan MITRE ATT&CK: Phishing (T1566)\nTaktik: initial-access\n\nAdversaries may send phishing messages to gain access to victim systems. All forms of phishing are electronically delivered social engineering. Phishing can be targeted, known as spearphishing. In spearphishing, a specific individual, company, or industry will be targeted by the adversary. More generally, adversaries can conduct non-targeted phishing, such as in mass malware spam campaigns."
       ],
-      "response": "1. Gunakan teknologi pencegahan perilaku pada endpoint untuk mendeteksi dan memblokir aktivitas mencurigakan dengan menganalisis perilaku proses dan file.\n2. Terapkan manajemen akun pengguna dengan prinsip hak akses paling rendah untuk mengurangi risiko eskalasi hak akses.\n\nSumber:\n[1] [2] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Behavior Prevention on Endpoint (M1040)\n[2] [3] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: User Account Management (M1018)",
+      "response": "1. Gunakan teknologi pencegahan perilaku pada endpoint untuk mendeteksi dan memblokir aktivitas mencurigakan dengan menganalisis perilaku proses dan file.\n2. Terapkan manajemen akun pengguna dengan prinsip hak akses paling rendah untuk mengurangi risiko eskalasi hak akses.\n\nSumber:\n[1] [2] MITRE ATT&CK Enterprise\n[2] [3] MITRE ATT&CK Enterprise",
       "reference": "Laksanakan program User Training untuk mendidik karyawan dalam mengenali, melaporkan, dan mencegah ancaman phishing seperti email spearphishing dengan tautan palsu. Desain modul pelatihan yang mencakup topik phishing, pengelolaan kata sandi, dan pelaporan insiden. Gunakan simulasi phishing untuk melatih respons pengguna terhadap serangan rekayasa sosial.",
       "faithfulness": 1.0,
-      "answer_relevancy": 0.38515710066621917,
+      "answer_relevancy": 0.5170247018465126,
       "nv_context_relevance": 1.0
     },
     {
@@ -29,10 +29,10 @@
         "Mitigasi MITRE ATT&CK: Execution Prevention (M1038)\n\nPrevent the execution of unauthorized or malicious code on systems by implementing application control, script blocking, and other execution prevention mechanisms. This ensures that only trusted and authorized code is executed, reducing the risk of malware and unauthorized actions. This mitigation can be implemented through the following measures:\n\nApplication Control:",
         "Teknik Serangan MITRE ATT&CK: Selective Exclusion (T1679)\nTaktik: defense-evasion\n\nAdversaries may intentionally exclude certain files, folders, directories, file types, or system components from encryption or tampering during a ransomware or malicious payload execution. Some file extensions that adversaries may avoid encrypting include `.dll`, `.exe`, and `.lnk`.(Citation: Palo Alto Unit 42 Medusa Group Medusa Ransomware January 2024)  \n\nAdversaries may perform this behavior to avoid alerting users, to evade detection by security tools and analysts, or, in the case of ransomware, to ensure that the system remains operational enough to deliver the ransom notice."
       ],
-      "response": "1. Gunakan teknologi pencegahan perilaku pada endpoint untuk mendeteksi dan memblokir aktivitas yang berpotensi berbahaya dengan menganalisis perilaku proses dan file.\n2. Cegah eksekusi kode yang tidak sah atau berbahaya pada sistem dengan menerapkan kontrol aplikasi dan mekanisme pencegahan eksekusi lainnya.\n\nSumber:\n[1] [1] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Behavior Prevention on Endpoint (M1040)\n[2] [4] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Execution Prevention (M1038)",
+      "response": "1. Gunakan teknologi pencegahan perilaku pada endpoint untuk mendeteksi dan memblokir aktivitas mencurigakan dengan menganalisis perilaku proses dan file.\n2. Cegah eksekusi kode yang tidak sah atau berbahaya dengan menerapkan kontrol aplikasi dan mekanisme pencegahan eksekusi lainnya.\n\nSumber:\n[1] [1] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Behavior Prevention on Endpoint (M1040)\n[2] [4] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Execution Prevention (M1038)",
       "reference": "Pasang dan perbarui perangkat lunak Antivirus/Antimalware di semua perangkat untuk mendeteksi dan memblokir malware dari lampiran email berbahaya. Gunakan pencegahan perilaku pada endpoint untuk mendeteksi dan memblokir aktivitas mencurigakan berdasarkan analisis perilaku proses. Terapkan isolasi aplikasi dan sandboxing untuk menjalankan lampiran email dalam lingkungan terkontrol sehingga kode berbahaya tidak mempengaruhi sistem utama.",
-      "faithfulness": 1.0,
-      "answer_relevancy": 0.3807858852872703,
+      "faithfulness": 0.6666666666666666,
+      "answer_relevancy": 0.520667562350836,
       "nv_context_relevance": 0.75
     },
     {
@@ -44,10 +44,10 @@
         "Teknik Serangan MITRE ATT&CK: Data Encrypted for Impact (T1486)\nTaktik: impact\n\nAdversaries may encrypt data on target systems or on large numbers of systems in a network to interrupt availability to system and network resources. They can attempt to render stored data inaccessible by encrypting files or data on local and remote drives and withholding access to a decryption key. This may be done in order to extract monetary compensation from a victim in exchange for decryption or a decryption key (ransomware) or to render data permanently inaccessible in cases where the key is not saved or transmitted.(Citation: US-CERT Ransomware 2016)(Citation: FireEye WannaCry 2017)(Citation: US-CERT NotPetya 2017)(Citation: US-CERT SamSam 2018)",
         "Teknik Serangan MITRE ATT&CK: Account Access Removal (T1531)\nTaktik: impact\n\nAdversaries may interrupt availability of system and network resources by inhibiting access to accounts utilized by legitimate users. Accounts may be deleted, locked, or manipulated (ex: changed credentials, revoked permissions for SaaS platforms such as Sharepoint) to remove access to accounts.(Citation: Obsidian Security SaaS Ransomware June 2023) Adversaries may also subsequently log off and/or perform a [System Shutdown/Reboot](https://attack.mitre.org/techniques/T1529) to set malicious changes into place.(Citation: CarbonBlack LockerGoga 2019)(Citation: Unit42 LockerGoga 2019)"
       ],
-      "response": "1. Deploy solusi Antivirus/Antimalware di semua perangkat untuk mendeteksi dan memblokir ransomware.\n2. Gunakan enkripsi data yang kuat untuk melindungi informasi sensitif agar tidak diakses atau dimanipulasi tanpa izin.\n\nSumber:\n[1] [2] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Antivirus/Antimalware (M1049)\n[2] [3] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Encrypt Sensitive Information (M1041)",
+      "response": "1. Deploy solusi Antivirus/Antimalware di semua perangkat untuk mendeteksi, memblokir, dan memperbaiki perangkat lunak berbahaya seperti ransomware.\n2. Gunakan enkripsi data yang kuat untuk melindungi informasi sensitif agar tidak diakses atau diubah tanpa izin.\n\nSumber:\n[1] [2] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Antivirus/Antimalware (M1049)\n[2] [3] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Encrypt Sensitive Information (M1041)",
       "reference": "Lakukan backup data secara teratur dan simpan di lokasi yang terisolasi dari jaringan korporat untuk memastikan pemulihan dari serangan ransomware yang mengenkripsi data. Jadwalkan backup incremental harian dan backup penuh mingguan untuk semua server dan sistem kritis. Pastikan proses backup mencakup pengerasan sistem backup dan solusi penyimpanan yang aman.",
       "faithfulness": 1.0,
-      "answer_relevancy": 0.5391136671350706,
+      "answer_relevancy": 0.5162795750515616,
       "nv_context_relevance": 1.0
     },
     {
@@ -59,10 +59,10 @@
         "Teknik Serangan MITRE ATT&CK: Data Destruction (T1485)\nTaktik: impact",
         "Teknik Serangan MITRE ATT&CK: Account Access Removal (T1531)\nTaktik: impact\n\nAdversaries may interrupt availability of system and network resources by inhibiting access to accounts utilized by legitimate users. Accounts may be deleted, locked, or manipulated (ex: changed credentials, revoked permissions for SaaS platforms such as Sharepoint) to remove access to accounts.(Citation: Obsidian Security SaaS Ransomware June 2023) Adversaries may also subsequently log off and/or perform a [System Shutdown/Reboot](https://attack.mitre.org/techniques/T1529) to set malicious changes into place.(Citation: CarbonBlack LockerGoga 2019)(Citation: Unit42 LockerGoga 2019)"
       ],
-      "response": "1. Pastikan backup data dilakukan secara teratur dengan menjadwalkan backup inkremental harian dan backup penuh mingguan untuk semua server dan sistem kritis.\n2. Kelola akun pengguna dengan menerapkan prinsip hak akses minimum, memastikan pengguna hanya memiliki izin yang diperlukan untuk menjalankan fungsi pekerjaan mereka.\n\nSumber:\n[1] [1] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Data Backup (M1053)\n[2] [2] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: User Account Management (M1018)",
+      "response": "1. Lakukan backup data secara teratur dengan menjadwalkan backup incremental harian dan backup penuh mingguan untuk semua server dan sistem kritis.\n2. Terapkan prinsip hak akses minimum dengan memberikan izin hanya yang diperlukan kepada pengguna untuk menjalankan fungsi pekerjaan mereka.\n\nSumber:\n[1] [1] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Data Backup (M1053)\n[2] [2] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: User Account Management (M1018)",
       "reference": "Pulihkan konten website dari backup data yang tersimpan di lokasi terisolasi dari jaringan korporat untuk memulihkan integritas halaman yang terdeface. Terapkan jadwal backup data secara teratur termasuk backup incremental harian dan backup penuh mingguan untuk semua server web kritis.",
       "faithfulness": 1.0,
-      "answer_relevancy": 0.20843907919094273,
+      "answer_relevancy": 0.4983238774122832,
       "nv_context_relevance": 1.0
     },
     {
@@ -74,10 +74,10 @@
         "Mitigasi MITRE ATT&CK: Privileged Account Management (M1026)\n\nPrivileged Account Management focuses on implementing policies, controls, and tools to securely manage privileged accounts (e.g., SYSTEM, root, or administrative accounts). This includes restricting access, limiting the scope of permissions, monitoring privileged account usage, and ensuring accountability through logging and auditing.This mitigation can be implemented through the following measures:\n\nAccount Permissions and Roles:\n\n- Implement RBAC and least privilege principles to allocate permissions securely.\n- Use tools like Active Directory Group Policies to enforce access restrictions.\n\nCredential Security:",
         "Mitigasi MITRE ATT&CK: User Account Management (M1018)\n\nUser Account Management involves implementing and enforcing policies for the lifecycle of user accounts, including creation, modification, and deactivation. Proper account management reduces the attack surface by limiting unauthorized access, managing account privileges, and ensuring accounts are used according to organizational policies. This mitigation can be implemented through the following measures:\n\nEnforcing the Principle of Least Privilege\n\n- Implementation: Assign users only the minimum permissions required to perform their job functions. Regularly audit accounts to ensure no excess permissions are granted.\n- Use Case: Reduces the risk of privilege escalation by ensuring accounts cannot perform unauthorized actions."
       ],
-      "response": "1. Terapkan kebijakan penggunaan akun dengan mengonfigurasi dan menegakkan aturan yang mengatur bagaimana dan kapan akun dapat digunakan, termasuk mekanisme penguncian akun dan batas waktu tidak aktif.\n2. Implementasikan Multi-Factor Authentication (MFA) di semua sistem dan layanan kritis untuk memastikan perlindungan yang kuat terhadap pengambilalihan akun dan akses tidak sah.\n3. Batasi akses ke mekanisme penyimpanan kredensial dan gunakan alat pemantauan untuk mendeteksi aktivitas mencurigakan terkait kredensial.\n4. Kelola akun pengguna dengan menerapkan dan menegakkan kebijakan untuk siklus hidup akun pengguna, termasuk pembatasan hak istimewa dan audit rutin untuk memastikan tidak ada izin berlebih yang diberikan.\n\nSumber:\n[1] [1] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Account Use Policies (M1036)\n[2] [2] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Multi-factor Authentication (M1032)\n[3] [3] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Credential Access Protection (M1043)\n[4] [5] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: User Account Management (M1018)",
+      "response": "1. Terapkan kebijakan penggunaan akun dengan mengonfigurasi dan menegakkan aturan yang mengatur bagaimana dan kapan akun dapat digunakan, termasuk mekanisme penguncian akun dan batas waktu tidak aktif.\n2. Implementasikan Multi-Factor Authentication (MFA) di semua sistem dan layanan kritis untuk memastikan perlindungan yang kuat terhadap pengambilalihan akun dan akses tidak sah.\n3. Batasi akses ke mekanisme penyimpanan kredensial dan gunakan alat pemantauan untuk mendeteksi aktivitas mencurigakan terkait kredensial.\n4. Kelola akun pengguna dengan menerapkan dan menegakkan kebijakan untuk siklus hidup akun pengguna, termasuk pembuatan, modifikasi, dan penonaktifan.\n\nSumber:\n[1] [1] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Account Use Policies (M1036)\n[2] [2] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Multi-factor Authentication (M1032)\n[3] [3] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Credential Access Protection (M1043)\n[4] [5] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: User Account Management (M1018)",
       "reference": "Terapkan kebijakan penggunaan akun dengan mengonfigurasi mekanisme penguncian akun, pembatasan waktu login, dan batas waktu tidak aktif untuk mengurangi risiko akses tidak sah. Implementasikan Multi-Factor Authentication pada semua sistem dan layanan kritis. Terapkan manajemen akun pengguna dengan prinsip hak akses minimum dan audit akun secara berkala.",
       "faithfulness": 1.0,
-      "answer_relevancy": 0.3575746753053184,
+      "answer_relevancy": 0.5977594700668271,
       "nv_context_relevance": 1.0
     },
     {
@@ -89,10 +89,10 @@
         "Mitigasi MITRE ATT&CK: Privileged Account Management (M1026)\n\nPrivileged Account Management focuses on implementing policies, controls, and tools to securely manage privileged accounts (e.g., SYSTEM, root, or administrative accounts). This includes restricting access, limiting the scope of permissions, monitoring privileged account usage, and ensuring accountability through logging and auditing.This mitigation can be implemented through the following measures:\n\nAccount Permissions and Roles:\n\n- Implement RBAC and least privilege principles to allocate permissions securely.\n- Use tools like Active Directory Group Policies to enforce access restrictions.\n\nCredential Security:",
         "Teknik yang dimitigasi (10):\n  - T1078.004: Cloud Accounts\n  - T1078: Valid Accounts\n  - T1110.001: Password Guessing\n  - T1110.003: Password Spraying\n  - T1110.004: Credential Stuffing\n  - T1110: Brute Force\n  - T1550.001: Application Access Token\n  - T1550: Use Alternate Authentication Material\n  - T1621: Multi-Factor Authentication Request Generation\n  - T1648: Serverless Execution"
       ],
-      "response": "1. Implementasikan Multi-Factor Authentication (MFA) untuk semua sistem dan layanan kritis guna mencegah pengambilalihan akun dan akses tidak sah.\n2. Batasi akses ke mekanisme penyimpanan kredensial dan gunakan alat pemantauan untuk mendeteksi aktivitas mencurigakan terkait kredensial.\n3. Terapkan prinsip hak istimewa paling sedikit dan gunakan kebijakan grup untuk membatasi akses akun istimewa.\n\nSumber:\n[1] [1] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Multi-factor Authentication (M1032)\n[2] [3] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Credential Access Protection (M1043)\n[3] [4] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Privileged Account Management (M1026)",
+      "response": "1. Implementasikan Multi-Factor Authentication (MFA) untuk meningkatkan keamanan dengan memerlukan setidaknya dua bentuk verifikasi sebelum memberikan akses.\n2. Batasi akses ke mekanisme penyimpanan kredensial dan gunakan alat pemantauan untuk mendeteksi aktivitas mencurigakan terkait kredensial.\n3. Implementasikan kebijakan dan alat untuk mengelola akun istimewa dengan aman, termasuk membatasi akses dan memantau penggunaan akun istimewa.\n\nSumber:\n[1] [1] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Multi-factor Authentication (M1032)\n[2] [3] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Credential Access Protection (M1043)\n[3] [4] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Privileged Account Management (M1026)",
       "reference": "Implementasikan Multi-Factor Authentication untuk memastikan setiap login memerlukan verifikasi tambahan selain password, mencegah penyalahgunaan kredensial yang bocor. Terapkan kebijakan pengelolaan akun istimewa untuk membatasi akses dan memantau penggunaan akun dengan hak istimewa. Terapkan kebijakan kata sandi yang kuat termasuk persyaratan kompleksitas dan perubahan kata sandi segera.",
       "faithfulness": 1.0,
-      "answer_relevancy": 0.4198705951793315,
+      "answer_relevancy": 0.5080804640878527,
       "nv_context_relevance": 1.0
     },
     {
@@ -107,7 +107,7 @@
       "response": "1. Gunakan perangkat jaringan dan perangkat lunak endpoint untuk memfilter lalu lintas jaringan masuk, keluar, dan lateral untuk membatasi pergerakan lawan dan eksfiltrasi data.\n2. Segmentasikan jaringan dengan membagi jaringan menjadi segmen-segmen yang lebih kecil dan terisolasi untuk mengontrol dan membatasi aliran lalu lintas antara perangkat, sistem, dan aplikasi.\n\nSumber:\n[1] [1] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Filter Network Traffic (M1037)\n[2] [3] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Network Segmentation (M1030)",
       "reference": "Gunakan perangkat jaringan dan perangkat lunak endpoint untuk memfilter lalu lintas jaringan masuk, keluar, dan lateral guna mencegah dampak serangan DDoS pada layanan publik. Konfigurasikan filter jaringan untuk membatasi akses hanya dari sumber yang diotorisasi ke server yang menghadap publik.",
       "faithfulness": 0.8,
-      "answer_relevancy": 0.44194019898540443,
+      "answer_relevancy": 0.5377309645751892,
       "nv_context_relevance": 1.0
     },
     {
@@ -122,7 +122,7 @@
       "response": "1. Gunakan perangkat jaringan dan perangkat lunak endpoint untuk memfilter lalu lintas jaringan masuk, keluar, dan lateral untuk membatasi pergerakan musuh dan eksfiltrasi data.\n2. Gunakan tanda tangan deteksi intrusi untuk memblokir lalu lintas di batas jaringan.\n\nSumber:\n[1] [2] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Filter Network Traffic (M1037)\n[2] [3] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Network Intrusion Prevention (M1031)",
       "reference": "Terapkan filter lalu lintas jaringan untuk membatasi akses ke layanan berbagi file publik yang tidak diotorisasi dan mencegah eksfiltrasi data lebih lanjut. Konfigurasikan kebijakan penggunaan akun dan terapkan prinsip hak akses minimum agar hanya pengguna yang berwenang yang dapat mengakses dan mentransfer dokumen sensitif ke layanan eksternal.",
       "faithfulness": 1.0,
-      "answer_relevancy": 0.3526620255660378,
+      "answer_relevancy": 0.5063843083901493,
       "nv_context_relevance": 1.0
     },
     {
@@ -134,10 +134,10 @@
         "Teknik Serangan MITRE ATT&CK: Indicator Removal from Tools (T1066)\nTaktik: defense-evasion\n\nIf a malicious tool is detected and quarantined or otherwise curtailed, an adversary may be able to determine why the malicious tool was detected (the indicator), modify the tool by removing the indicator, and use the updated version that is no longer detected by the target's defensive systems or subsequent targets that may use similar systems.",
         "Teknik Serangan MITRE ATT&CK: Disabling Security Tools (T1089)\nTaktik: defense-evasion\n\nAdversaries may disable security tools to avoid possible detection of their tools and activities. This can take the form of killing security software or event logging processes, deleting Registry keys so that tools do not start at run time, or other methods to interfere with security scanning or event reporting."
       ],
-      "response": "1. Gunakan Sysmon untuk memantau event pemuatan DLL (Event ID 7) guna mendeteksi aktivitas mencurigakan.\n2. Implementasikan Windows Defender Application Control (WDAC) untuk membatasi eksekusi library yang tidak sah.\n3. Gunakan Wazuh atau OSSEC untuk memantau integritas file dan mendeteksi perubahan pada library.\n4. Terapkan kontrol aplikasi untuk mencegah eksekusi kode yang tidak sah atau berbahaya.\n\nSumber:\n[1] [1] MITRE ATT&CK Enterprise\n[2] [3] MITRE ATT&CK Enterprise",
+      "response": "1. Gunakan Sysmon untuk memonitor event pemuatan DLL (Event ID 7) untuk mendeteksi aktivitas mencurigakan.\n2. Implementasikan Windows Defender Application Control (WDAC) untuk membatasi eksekusi library yang tidak sah.\n3. Gunakan Wazuh atau OSSEC untuk memonitor integritas file dan mendeteksi perubahan pada library.\n4. Terapkan kontrol aplikasi untuk mencegah eksekusi kode yang tidak sah atau berbahaya.\n\nSumber:\n[1] [1] MITRE ATT&CK Enterprise\n[2] [3] MITRE ATT&CK Enterprise",
       "reference": "Gunakan perangkat lunak Antivirus/Antimalware untuk mendeteksi dan memblokir tool berbahaya yang ditransfer penyerang ke sistem. Terapkan pencegahan perilaku pada endpoint untuk menganalisis dan memblokir eksekusi skrip atau tool yang tidak dikenal berdasarkan pola perilaku mencurigakan.",
       "faithfulness": 1.0,
-      "answer_relevancy": 0.4469939130586002,
+      "answer_relevancy": 0.6251856923197089,
       "nv_context_relevance": 1.0
     },
     {
@@ -149,10 +149,10 @@
         "Teknik Serangan MITRE ATT&CK: Winlogon Helper DLL (T1004)\nTaktik: persistence\n\nWinlogon.exe is a Windows component responsible for actions at logon/logoff as well as the secure attention sequence (SAS) triggered by Ctrl-Alt-Delete. Registry entries in HKLM\\Software\\[Wow6432Node\\]Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\ and HKCU\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\ are used to manage additional helper programs and functionalities that support Winlogon. (Citation: Cylance Reg Persistence Sept 2013) \n\nMalicious modifications to these Registry keys may cause Winlogon to load and execute malicious DLLs and/or executables. Specifically, the following subkeys have been known to be possibly vulnerable to abuse: (Citation: Cylance Reg Persistence Sept 2013)",
         "Teknik Serangan MITRE ATT&CK: User Execution (T1204)\nTaktik: execution\n\nAn adversary may rely upon specific actions by a user in order to gain execution. Users may be subjected to social engineering to get them to execute malicious code by, for example, opening a malicious document file or link. These user actions will typically be observed as follow-on behavior from forms of [Phishing](https://attack.mitre.org/techniques/T1566)."
       ],
-      "response": "1. Deploy antivirus/antimalware software di semua perangkat dengan pembaruan otomatis untuk melindungi dari ancaman terbaru.\n2. Gunakan teknologi pencegahan perilaku pada endpoint untuk mendeteksi dan memblokir aktivitas yang berpotensi berbahaya dengan menganalisis perilaku proses dan file.\n\nSumber:\n[1] [1] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Antivirus/Antimalware (M1049)\n[2] [2] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Behavior Prevention on Endpoint (M1040)",
+      "response": "1. Deploy perangkat lunak Antivirus/Antimalware di semua perangkat untuk mendeteksi, memblokir, dan memperbaiki perangkat lunak berbahaya.\n2. Gunakan pencegahan perilaku pada endpoint untuk mendeteksi dan memblokir aktivitas yang berpotensi berbahaya dengan menganalisis perilaku proses dan file.\n\nSumber:\n[1] [1] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Antivirus/Antimalware (M1049)\n[2] [2] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Behavior Prevention on Endpoint (M1040)",
       "reference": "Gunakan perangkat lunak Antivirus/Antimalware untuk mendeteksi dan memblokir malware yang terinstal dari file berbahaya yang dijalankan pengguna. Terapkan pencegahan perilaku pada endpoint untuk mendeteksi dan menghentikan proses mencurigakan yang berjalan sebagai akibat dari eksekusi file berbahaya tersebut.",
       "faithfulness": 1.0,
-      "answer_relevancy": 0.3426026926762719,
+      "answer_relevancy": 0.6136751559058674,
       "nv_context_relevance": 1.0
     }
   ],
@@ -161,7 +161,7 @@
       "id": "QA-011",
       "question": "Saya menerima email phishing yang mengatasnamakan atasan dengan nada mendesak dan tautan login palsu. Apa langkah mitigasi phishing spearphishing via tautan yang tepat?",
       "ground_truth": "Laksanakan program User Training untuk mendidik karyawan dalam mengenali, melaporkan, dan mencegah ancaman phishing seperti email spearphishing dengan tautan palsu. Desain modul pelatihan yang mencakup topik phishing, pengelolaan kata sandi, dan pelaporan insiden. Gunakan simulasi phishing untuk melatih respons pengguna terhadap serangan rekayasa sosial.",
-      "candidate_answer": "1. Gunakan teknologi pencegahan perilaku pada endpoint untuk mendeteksi dan memblokir aktivitas mencurigakan dengan menganalisis perilaku proses dan file.\n2. Terapkan manajemen akun pengguna dengan prinsip hak akses paling rendah untuk mengurangi risiko eskalasi hak akses.\n\nSumber:\n[1] [2] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Behavior Prevention on Endpoint (M1040)\n[2] [3] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: User Account Management (M1018)",
+      "candidate_answer": "1. Gunakan teknologi pencegahan perilaku pada endpoint untuk mendeteksi dan memblokir aktivitas mencurigakan dengan menganalisis perilaku proses dan file.\n2. Terapkan manajemen akun pengguna dengan prinsip hak akses paling rendah untuk mengurangi risiko eskalasi hak akses.\n\nSumber:\n[1] [2] MITRE ATT&CK Enterprise\n[2] [3] MITRE ATT&CK Enterprise",
       "retrieved_chunks": [
         {
           "id": "fd510a40-d2cc-4ce7-8836-91b32d386aaa",
@@ -276,7 +276,7 @@
       "id": "QA-012",
       "question": "Perangkat terinfeksi malware setelah membuka lampiran email berbahaya (spearphishing attachment). Apa langkah mitigasi malware dari lampiran email yang harus segera diambil?",
       "ground_truth": "Pasang dan perbarui perangkat lunak Antivirus/Antimalware di semua perangkat untuk mendeteksi dan memblokir malware dari lampiran email berbahaya. Gunakan pencegahan perilaku pada endpoint untuk mendeteksi dan memblokir aktivitas mencurigakan berdasarkan analisis perilaku proses. Terapkan isolasi aplikasi dan sandboxing untuk menjalankan lampiran email dalam lingkungan terkontrol sehingga kode berbahaya tidak mempengaruhi sistem utama.",
-      "candidate_answer": "1. Gunakan teknologi pencegahan perilaku pada endpoint untuk mendeteksi dan memblokir aktivitas yang berpotensi berbahaya dengan menganalisis perilaku proses dan file.\n2. Cegah eksekusi kode yang tidak sah atau berbahaya pada sistem dengan menerapkan kontrol aplikasi dan mekanisme pencegahan eksekusi lainnya.\n\nSumber:\n[1] [1] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Behavior Prevention on Endpoint (M1040)\n[2] [4] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Execution Prevention (M1038)",
+      "candidate_answer": "1. Gunakan teknologi pencegahan perilaku pada endpoint untuk mendeteksi dan memblokir aktivitas mencurigakan dengan menganalisis perilaku proses dan file.\n2. Cegah eksekusi kode yang tidak sah atau berbahaya dengan menerapkan kontrol aplikasi dan mekanisme pencegahan eksekusi lainnya.\n\nSumber:\n[1] [1] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Behavior Prevention on Endpoint (M1040)\n[2] [4] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Execution Prevention (M1038)",
       "retrieved_chunks": [
         {
           "id": "e2b538fd-6878-4be4-ba9e-f19af6c495c4",
@@ -389,7 +389,7 @@
       "id": "QA-013",
       "question": "Terjadi serangan ransomware yang mengenkripsi file pada shared drive dan muncul pesan permintaan tebusan. Apa langkah mitigasi ransomware yang harus segera dilakukan?",
       "ground_truth": "Lakukan backup data secara teratur dan simpan di lokasi yang terisolasi dari jaringan korporat untuk memastikan pemulihan dari serangan ransomware yang mengenkripsi data. Jadwalkan backup incremental harian dan backup penuh mingguan untuk semua server dan sistem kritis. Pastikan proses backup mencakup pengerasan sistem backup dan solusi penyimpanan yang aman.",
-      "candidate_answer": "1. Deploy solusi Antivirus/Antimalware di semua perangkat untuk mendeteksi dan memblokir ransomware.\n2. Gunakan enkripsi data yang kuat untuk melindungi informasi sensitif agar tidak diakses atau dimanipulasi tanpa izin.\n\nSumber:\n[1] [2] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Antivirus/Antimalware (M1049)\n[2] [3] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Encrypt Sensitive Information (M1041)",
+      "candidate_answer": "1. Deploy solusi Antivirus/Antimalware di semua perangkat untuk mendeteksi, memblokir, dan memperbaiki perangkat lunak berbahaya seperti ransomware.\n2. Gunakan enkripsi data yang kuat untuk melindungi informasi sensitif agar tidak diakses atau diubah tanpa izin.\n\nSumber:\n[1] [2] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Antivirus/Antimalware (M1049)\n[2] [3] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Encrypt Sensitive Information (M1041)",
       "retrieved_chunks": [
         {
           "id": "1dc10fbf-48ea-4a60-912e-4a9fc9ca46da",
@@ -505,7 +505,7 @@
       "id": "QA-014",
       "question": "Website mengalami web defacement — konten halaman utama diubah tanpa izin oleh pihak tidak berwenang. Apa langkah mitigasi web defacement yang harus segera dilakukan?",
       "ground_truth": "Pulihkan konten website dari backup data yang tersimpan di lokasi terisolasi dari jaringan korporat untuk memulihkan integritas halaman yang terdeface. Terapkan jadwal backup data secara teratur termasuk backup incremental harian dan backup penuh mingguan untuk semua server web kritis.",
-      "candidate_answer": "1. Pastikan backup data dilakukan secara teratur dengan menjadwalkan backup inkremental harian dan backup penuh mingguan untuk semua server dan sistem kritis.\n2. Kelola akun pengguna dengan menerapkan prinsip hak akses minimum, memastikan pengguna hanya memiliki izin yang diperlukan untuk menjalankan fungsi pekerjaan mereka.\n\nSumber:\n[1] [1] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Data Backup (M1053)\n[2] [2] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: User Account Management (M1018)",
+      "candidate_answer": "1. Lakukan backup data secara teratur dengan menjadwalkan backup incremental harian dan backup penuh mingguan untuk semua server dan sistem kritis.\n2. Terapkan prinsip hak akses minimum dengan memberikan izin hanya yang diperlukan kepada pengguna untuk menjalankan fungsi pekerjaan mereka.\n\nSumber:\n[1] [1] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Data Backup (M1053)\n[2] [2] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: User Account Management (M1018)",
       "retrieved_chunks": [
         {
           "id": "59852cd7-0c1b-48fb-ae27-9e11d1437fb4",
@@ -621,7 +621,7 @@
       "id": "QA-015",
       "question": "Aplikasi yang terhubung ke internet tiba-tiba dapat diakses oleh pihak tidak sah tanpa menggunakan akun admin. Apa langkah mitigasi yang tepat?",
       "ground_truth": "Terapkan kebijakan penggunaan akun dengan mengonfigurasi mekanisme penguncian akun, pembatasan waktu login, dan batas waktu tidak aktif untuk mengurangi risiko akses tidak sah. Implementasikan Multi-Factor Authentication pada semua sistem dan layanan kritis. Terapkan manajemen akun pengguna dengan prinsip hak akses minimum dan audit akun secara berkala.",
-      "candidate_answer": "1. Terapkan kebijakan penggunaan akun dengan mengonfigurasi dan menegakkan aturan yang mengatur bagaimana dan kapan akun dapat digunakan, termasuk mekanisme penguncian akun dan batas waktu tidak aktif.\n2. Implementasikan Multi-Factor Authentication (MFA) di semua sistem dan layanan kritis untuk memastikan perlindungan yang kuat terhadap pengambilalihan akun dan akses tidak sah.\n3. Batasi akses ke mekanisme penyimpanan kredensial dan gunakan alat pemantauan untuk mendeteksi aktivitas mencurigakan terkait kredensial.\n4. Kelola akun pengguna dengan menerapkan dan menegakkan kebijakan untuk siklus hidup akun pengguna, termasuk pembatasan hak istimewa dan audit rutin untuk memastikan tidak ada izin berlebih yang diberikan.\n\nSumber:\n[1] [1] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Account Use Policies (M1036)\n[2] [2] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Multi-factor Authentication (M1032)\n[3] [3] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Credential Access Protection (M1043)\n[4] [5] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: User Account Management (M1018)",
+      "candidate_answer": "1. Terapkan kebijakan penggunaan akun dengan mengonfigurasi dan menegakkan aturan yang mengatur bagaimana dan kapan akun dapat digunakan, termasuk mekanisme penguncian akun dan batas waktu tidak aktif.\n2. Implementasikan Multi-Factor Authentication (MFA) di semua sistem dan layanan kritis untuk memastikan perlindungan yang kuat terhadap pengambilalihan akun dan akses tidak sah.\n3. Batasi akses ke mekanisme penyimpanan kredensial dan gunakan alat pemantauan untuk mendeteksi aktivitas mencurigakan terkait kredensial.\n4. Kelola akun pengguna dengan menerapkan dan menegakkan kebijakan untuk siklus hidup akun pengguna, termasuk pembuatan, modifikasi, dan penonaktifan.\n\nSumber:\n[1] [1] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Account Use Policies (M1036)\n[2] [2] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Multi-factor Authentication (M1032)\n[3] [3] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Credential Access Protection (M1043)\n[4] [5] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: User Account Management (M1018)",
       "retrieved_chunks": [
         {
           "id": "0f2c6040-af49-4747-b5f0-cea1dc0907a8",
@@ -747,7 +747,7 @@
       "id": "QA-016",
       "question": "Terdeteksi penyalahgunaan akun valid (valid account abuse) — ada login berhasil menggunakan kredensial pegawai tanpa sepengetahuan pemiliknya. Apa langkah mitigasi akun yang dikompromikan ini?",
       "ground_truth": "Implementasikan Multi-Factor Authentication untuk memastikan setiap login memerlukan verifikasi tambahan selain password, mencegah penyalahgunaan kredensial yang bocor. Terapkan kebijakan pengelolaan akun istimewa untuk membatasi akses dan memantau penggunaan akun dengan hak istimewa. Terapkan kebijakan kata sandi yang kuat termasuk persyaratan kompleksitas dan perubahan kata sandi segera.",
-      "candidate_answer": "1. Implementasikan Multi-Factor Authentication (MFA) untuk semua sistem dan layanan kritis guna mencegah pengambilalihan akun dan akses tidak sah.\n2. Batasi akses ke mekanisme penyimpanan kredensial dan gunakan alat pemantauan untuk mendeteksi aktivitas mencurigakan terkait kredensial.\n3. Terapkan prinsip hak istimewa paling sedikit dan gunakan kebijakan grup untuk membatasi akses akun istimewa.\n\nSumber:\n[1] [1] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Multi-factor Authentication (M1032)\n[2] [3] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Credential Access Protection (M1043)\n[3] [4] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Privileged Account Management (M1026)",
+      "candidate_answer": "1. Implementasikan Multi-Factor Authentication (MFA) untuk meningkatkan keamanan dengan memerlukan setidaknya dua bentuk verifikasi sebelum memberikan akses.\n2. Batasi akses ke mekanisme penyimpanan kredensial dan gunakan alat pemantauan untuk mendeteksi aktivitas mencurigakan terkait kredensial.\n3. Implementasikan kebijakan dan alat untuk mengelola akun istimewa dengan aman, termasuk membatasi akses dan memantau penggunaan akun istimewa.\n\nSumber:\n[1] [1] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Multi-factor Authentication (M1032)\n[2] [3] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Credential Access Protection (M1043)\n[3] [4] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Privileged Account Management (M1026)",
       "retrieved_chunks": [
         {
           "id": "36b90da0-8941-40f2-8d47-e59fa4aed87d",
@@ -1100,7 +1100,7 @@
       "id": "QA-019",
       "question": "Ditemukan malware atau tool berbahaya yang diduga ditanam penyerang di perangkat (lateral tool transfer). Apa langkah mitigasi untuk mendeteksi dan memblokir tool berbahaya tersebut?",
       "ground_truth": "Gunakan perangkat lunak Antivirus/Antimalware untuk mendeteksi dan memblokir tool berbahaya yang ditransfer penyerang ke sistem. Terapkan pencegahan perilaku pada endpoint untuk menganalisis dan memblokir eksekusi skrip atau tool yang tidak dikenal berdasarkan pola perilaku mencurigakan.",
-      "candidate_answer": "1. Gunakan Sysmon untuk memantau event pemuatan DLL (Event ID 7) guna mendeteksi aktivitas mencurigakan.\n2. Implementasikan Windows Defender Application Control (WDAC) untuk membatasi eksekusi library yang tidak sah.\n3. Gunakan Wazuh atau OSSEC untuk memantau integritas file dan mendeteksi perubahan pada library.\n4. Terapkan kontrol aplikasi untuk mencegah eksekusi kode yang tidak sah atau berbahaya.\n\nSumber:\n[1] [1] MITRE ATT&CK Enterprise\n[2] [3] MITRE ATT&CK Enterprise",
+      "candidate_answer": "1. Gunakan Sysmon untuk memonitor event pemuatan DLL (Event ID 7) untuk mendeteksi aktivitas mencurigakan.\n2. Implementasikan Windows Defender Application Control (WDAC) untuk membatasi eksekusi library yang tidak sah.\n3. Gunakan Wazuh atau OSSEC untuk memonitor integritas file dan mendeteksi perubahan pada library.\n4. Terapkan kontrol aplikasi untuk mencegah eksekusi kode yang tidak sah atau berbahaya.\n\nSumber:\n[1] [1] MITRE ATT&CK Enterprise\n[2] [3] MITRE ATT&CK Enterprise",
       "retrieved_chunks": [
         {
           "id": "e209c5bd-43f8-4174-afdb-cf461553680d",
@@ -1211,7 +1211,7 @@
       "id": "QA-020",
       "question": "Laptop terinfeksi malware setelah menjalankan file berbahaya dari chat yang dikira dokumen kerja (user execution). Laptop menjadi lambat dan muncul pop-up aneh. Apa langkah mitigasi malware dari user execution yang tepat?",
       "ground_truth": "Gunakan perangkat lunak Antivirus/Antimalware untuk mendeteksi dan memblokir malware yang terinstal dari file berbahaya yang dijalankan pengguna. Terapkan pencegahan perilaku pada endpoint untuk mendeteksi dan menghentikan proses mencurigakan yang berjalan sebagai akibat dari eksekusi file berbahaya tersebut.",
-      "candidate_answer": "1. Deploy antivirus/antimalware software di semua perangkat dengan pembaruan otomatis untuk melindungi dari ancaman terbaru.\n2. Gunakan teknologi pencegahan perilaku pada endpoint untuk mendeteksi dan memblokir aktivitas yang berpotensi berbahaya dengan menganalisis perilaku proses dan file.\n\nSumber:\n[1] [1] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Antivirus/Antimalware (M1049)\n[2] [2] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Behavior Prevention on Endpoint (M1040)",
+      "candidate_answer": "1. Deploy perangkat lunak Antivirus/Antimalware di semua perangkat untuk mendeteksi, memblokir, dan memperbaiki perangkat lunak berbahaya.\n2. Gunakan pencegahan perilaku pada endpoint untuk mendeteksi dan memblokir aktivitas yang berpotensi berbahaya dengan menganalisis perilaku proses dan file.\n\nSumber:\n[1] [1] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Antivirus/Antimalware (M1049)\n[2] [2] MITRE ATT&CK Enterprise, Mitigasi MITRE ATT&CK: Behavior Prevention on Endpoint (M1040)",
       "retrieved_chunks": [
         {
           "id": "8de950f0-654b-4496-99b1-96c3378980f2",

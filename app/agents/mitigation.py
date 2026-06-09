@@ -10,7 +10,7 @@ from app.utils.prompt_loader import load_prompt
 
 logger = logging.getLogger(__name__)
 
-RETRIEVAL_SCORE_THRESHOLD = 0.22
+RETRIEVAL_SCORE_THRESHOLD = 0.3  # Threshold final_score untuk menentukan relevansi dokumen
 MAX_ITERATIONS = 3
 TOP_K_RETRIEVAL = 30
 TOP_K_RERANK = 5

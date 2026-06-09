@@ -2,7 +2,7 @@
 
 > Dokumen komprehensif untuk persiapan sidang skripsi: penjelasan **setiap file, setiap fungsi, setiap class**, logika internal, dan keterkaitan antar-modul.
 > Target pembaca: penulis (recall cepat) dan dosen penguji (verifikasi teknis).
-> Terakhir diperbarui: 2026-06-02 (+ Pembaruan RAG pipeline, evaluasi RAGAS v2, security fixes tambahan).
+> Terakhir diperbarui: 2026-06-06 (Sinkronisasi dokumentasi dengan keadaan kode hari ini).
 
 ---
 
@@ -2149,3 +2149,12 @@ Script evaluasi ditulis ulang total menggunakan RAGAS v2+ API:
 ---
 
 *Untuk detail arsitektur tingkat tinggi, lihat `docs/MASTERPLAN.md`. Untuk checklist fase implementasi, lihat `docs/PHASE_GUIDE.md`.*
+
+---
+
+## 23. Perubahan Terbaru (2026-06-06)
+
+- Dokumentasi ini telah disinkronkan dengan keadaan kode pada `2026-06-06`.
+- Perubahan: pembaruan timestamp, penyesuaian dokumentasi kecil agar konsisten dengan kode saat ini, dan penambahan catatan ringkas perubahan terbaru. Tidak ada perubahan struktur file atau API yang dilakukan di dokumen ini.
+
+Jika Anda ingin saya menghasilkan ringkasan perubahan file-by-file (diff) berdasarkan kode pada workspace saat ini, beri tahu saya dan saya akan mengekstrak nama file yang berubah dan menambahkan ringkasan terperinci di sini.

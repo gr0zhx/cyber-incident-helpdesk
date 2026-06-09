@@ -1,0 +1,1222 @@
+{
+  "meta": {
+    "dataset": "E:\\Kuliah\\TA\\Kode\\pusdatin-help\\tests\\evaluation\\pii_test_dataset.json",
+    "total_cases": 60,
+    "positive_cases": 45,
+    "negative_cases": 15,
+    "correct_cases": 57,
+    "accuracy": 0.95,
+    "methodology": "Text Anonymization Benchmark (Pilán et al., 2022)",
+    "pii_categories": "UU PDP No. 27 Tahun 2022 Pasal 4",
+    "run_at": "2026-06-05T15:16:12.302006"
+  },
+  "summary": {
+    "per_type": {
+      "IP": {
+        "tp": 30,
+        "fn": 0,
+        "fp": 2,
+        "precision": 0.9375,
+        "detection_rate": 1.0,
+        "f1": 0.9677
+      },
+      "EMAIL": {
+        "tp": 24,
+        "fn": 0,
+        "fp": 0,
+        "precision": 1.0,
+        "detection_rate": 1.0,
+        "f1": 1.0
+      },
+      "NIK": {
+        "tp": 18,
+        "fn": 0,
+        "fp": 1,
+        "precision": 0.9474,
+        "detection_rate": 1.0,
+        "f1": 0.973
+      },
+      "PHONE": {
+        "tp": 20,
+        "fn": 0,
+        "fp": 0,
+        "precision": 1.0,
+        "detection_rate": 1.0,
+        "f1": 1.0
+      }
+    },
+    "global_tp": 92,
+    "global_fn": 0,
+    "global_fp": 3,
+    "global_precision": 0.9684,
+    "global_recall": 1.0,
+    "global_f1": 0.9839,
+    "total_negative_cases": 15,
+    "fp_negative_cases": 3,
+    "false_positive_rate": 0.2
+  },
+  "per_case": [
+    {
+      "id": "PII-001",
+      "category": "IP — format standar",
+      "pii_present": true,
+      "pii_types": [
+        "IP"
+      ],
+      "redacted_text": "Serangan berasal dari [IP_DISUNTING] pada pukul 14:00 WIB.",
+      "detected_values": [
+        "192.168.1.50"
+      ],
+      "tp": [
+        "192.168.1.50"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Alamat IP sebagai pengenal perangkat dalam konteks siber — data pribadi berdasarkan UU PDP Pasal 4 ayat 1"
+    },
+    {
+      "id": "PII-002",
+      "category": "IP — dua IP berbeda",
+      "pii_present": true,
+      "pii_types": [
+        "IP"
+      ],
+      "redacted_text": "Trafik mencurigakan terdeteksi dari [IP_DISUNTING] menuju server [IP_DISUNTING_2].",
+      "detected_values": [
+        "172.16.0.5",
+        "10.0.0.1"
+      ],
+      "tp": [
+        "172.16.0.5",
+        "10.0.0.1"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Dua alamat IP berbeda dalam satu laporan insiden — keduanya merupakan data pengenal jaringan"
+    },
+    {
+      "id": "PII-003",
+      "category": "IP — IP sama muncul dua kali",
+      "pii_present": true,
+      "pii_types": [
+        "IP"
+      ],
+      "redacted_text": "IP [IP_DISUNTING] terdeteksi dua kali: pertama jam 09:00, kedua dari [IP_DISUNTING] jam 13:00.",
+      "detected_values": [
+        "10.10.1.1"
+      ],
+      "tp": [
+        "10.10.1.1"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Pengujian deduplikasi — IP yang sama tidak boleh menghasilkan dua placeholder berbeda"
+    },
+    {
+      "id": "PII-004",
+      "category": "IP — di awal kalimat",
+      "pii_present": true,
+      "pii_types": [
+        "IP"
+      ],
+      "redacted_text": "[IP_DISUNTING] teridentifikasi sebagai sumber serangan brute force.",
+      "detected_values": [
+        "192.168.100.200"
+      ],
+      "tp": [
+        "192.168.100.200"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "IP di awal kalimat tanpa konteks pembuka — uji batas pola regex"
+    },
+    {
+      "id": "PII-005",
+      "category": "IP — di akhir kalimat",
+      "pii_present": true,
+      "pii_types": [
+        "IP"
+      ],
+      "redacted_text": "Sistem log mencatat koneksi tidak sah ke server dengan alamat [IP_DISUNTING].",
+      "detected_values": [
+        "203.0.113.50"
+      ],
+      "tp": [
+        "203.0.113.50"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "IP di akhir kalimat diakhiri titik — uji batas word boundary"
+    },
+    {
+      "id": "PII-006",
+      "category": "IP — IP privat kelas A",
+      "pii_present": true,
+      "pii_types": [
+        "IP"
+      ],
+      "redacted_text": "Perangkat dengan IP [IP_DISUNTING] mencoba mengakses database produksi.",
+      "detected_values": [
+        "10.254.0.1"
+      ],
+      "tp": [
+        "10.254.0.1"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "IP privat kelas A (RFC 1918) — sering muncul dalam laporan insiden jaringan internal"
+    },
+    {
+      "id": "PII-007",
+      "category": "IP — IP privat kelas B",
+      "pii_present": true,
+      "pii_types": [
+        "IP"
+      ],
+      "redacted_text": "Subnet [IP_DISUNTING] digunakan sebagai titik pivot oleh penyerang.",
+      "detected_values": [
+        "172.31.255.254"
+      ],
+      "tp": [
+        "172.31.255.254"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "IP privat kelas B (RFC 1918) — validasi oktet nilai tinggi (255)"
+    },
+    {
+      "id": "PII-008",
+      "category": "IP — tiga IP dalam rantai serangan",
+      "pii_present": true,
+      "pii_types": [
+        "IP"
+      ],
+      "redacted_text": "Rantai serangan: [IP_DISUNTING] → [IP_DISUNTING_2] → [IP_DISUNTING_3].",
+      "detected_values": [
+        "45.33.32.156",
+        "192.168.1.100",
+        "10.0.0.50"
+      ],
+      "tp": [
+        "45.33.32.156",
+        "192.168.1.100",
+        "10.0.0.50"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Tiga IP dalam satu kalimat — uji kemampuan deteksi multiple PII sejenis"
+    },
+    {
+      "id": "PII-009",
+      "category": "IP — dalam laporan panjang",
+      "pii_present": true,
+      "pii_types": [
+        "IP"
+      ],
+      "redacted_text": "Tim CSIRT melaporkan bahwa pada tanggal 1 Juni 2025, sistem monitoring mendeteksi aktivitas tidak normal dari alamat IP [IP_DISUNTING] yang mencoba mengakses port SSH secara berulang. Aktivitas tersebut berlangsung selama kurang lebih 2 jam.",
+      "detected_values": [
+        "198.51.100.77"
+      ],
+      "tp": [
+        "198.51.100.77"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "IP dalam konteks laporan insiden panjang — simulasi kondisi nyata pelaporan"
+    },
+    {
+      "id": "PII-010",
+      "category": "IP — diapit tanda kutip",
+      "pii_present": true,
+      "pii_types": [
+        "IP"
+      ],
+      "redacted_text": "Log sistem mencatat: 'koneksi dari \"[IP_DISUNTING]\" diblokir oleh firewall'.",
+      "detected_values": [
+        "203.0.113.10"
+      ],
+      "tp": [
+        "203.0.113.10"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "IP diapit tanda kutip — uji deteksi dalam konteks string yang dikutip"
+    },
+    {
+      "id": "PII-011",
+      "category": "EMAIL — domain .go.id",
+      "pii_present": true,
+      "pii_types": [
+        "EMAIL"
+      ],
+      "redacted_text": "Pegawai dengan email [EMAIL_DISUNTING] melaporkan menerima pesan phishing.",
+      "detected_values": [
+        "budi.santoso@kementan.go.id"
+      ],
+      "tp": [
+        "budi.santoso@kementan.go.id"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Alamat email instansi pemerintah (.go.id) — data kontak pribadi berdasarkan UU PDP Pasal 4 ayat 1"
+    },
+    {
+      "id": "PII-012",
+      "category": "EMAIL — alamat penyerang",
+      "pii_present": true,
+      "pii_types": [
+        "EMAIL"
+      ],
+      "redacted_text": "Email phishing dikirim dari akun [EMAIL_DISUNTING] kepada seluruh pegawai divisi keuangan.",
+      "detected_values": [
+        "hacker123@protonmail.com"
+      ],
+      "tp": [
+        "hacker123@protonmail.com"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Email penyerang sebagai bukti forensik — tetap merupakan data pribadi yang perlu diproteksi"
+    },
+    {
+      "id": "PII-013",
+      "category": "EMAIL — local part dengan karakter khusus",
+      "pii_present": true,
+      "pii_types": [
+        "EMAIL"
+      ],
+      "redacted_text": "Laporan dikirim oleh user [EMAIL_DISUNTING] ke tim CSIRT.",
+      "detected_values": [
+        "budi.santoso+csirt@kementan.go.id"
+      ],
+      "tp": [
+        "budi.santoso+csirt@kementan.go.id"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Email dengan karakter '+' pada local part — validasi regex untuk format email non-standar"
+    },
+    {
+      "id": "PII-014",
+      "category": "EMAIL — dua email berbeda",
+      "pii_present": true,
+      "pii_types": [
+        "EMAIL"
+      ],
+      "redacted_text": "Korespondensi terjadi antara pengirim [EMAIL_DISUNTING] dan korban [EMAIL_DISUNTING_2].",
+      "detected_values": [
+        "attack@malware.ru",
+        "data@pusdatin.kementan.go.id"
+      ],
+      "tp": [
+        "attack@malware.ru",
+        "data@pusdatin.kementan.go.id"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Dua email berbeda (penyerang dan korban) — uji deteksi multiple email"
+    },
+    {
+      "id": "PII-015",
+      "category": "EMAIL — subdomain panjang",
+      "pii_present": true,
+      "pii_types": [
+        "EMAIL"
+      ],
+      "redacted_text": "Akses tidak sah ke portal menggunakan kredensial [EMAIL_DISUNTING].",
+      "detected_values": [
+        "pegawai.aktif@mail.internal.kementan.go.id"
+      ],
+      "tp": [
+        "pegawai.aktif@mail.internal.kementan.go.id"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Email dengan subdomain berlapis — validasi pola domain kompleks"
+    },
+    {
+      "id": "PII-016",
+      "category": "EMAIL — email dengan angka",
+      "pii_present": true,
+      "pii_types": [
+        "EMAIL"
+      ],
+      "redacted_text": "Akun [EMAIL_DISUNTING] digunakan untuk login tanpa otorisasi.",
+      "detected_values": [
+        "admin123@gmail.com"
+      ],
+      "tp": [
+        "admin123@gmail.com"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Email dengan angka pada local part — validasi format umum"
+    },
+    {
+      "id": "PII-017",
+      "category": "EMAIL — di awal kalimat",
+      "pii_present": true,
+      "pii_types": [
+        "EMAIL"
+      ],
+      "redacted_text": "[EMAIL_DISUNTING] mengirimkan lampiran berbahaya ke 50 pegawai.",
+      "detected_values": [
+        "no-reply@phishing-site.net"
+      ],
+      "tp": [
+        "no-reply@phishing-site.net"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Email di awal kalimat — uji word boundary pada posisi awal"
+    },
+    {
+      "id": "PII-018",
+      "category": "EMAIL — uppercase",
+      "pii_present": true,
+      "pii_types": [
+        "EMAIL"
+      ],
+      "redacted_text": "Laporan diterima dari [EMAIL_DISUNTING] terkait kebocoran data.",
+      "detected_values": [
+        "BUDI@KEMENTAN.GO.ID"
+      ],
+      "tp": [
+        "BUDI@KEMENTAN.GO.ID"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Email huruf kapital — validasi case-insensitive pada pola regex"
+    },
+    {
+      "id": "PII-019",
+      "category": "NIK — dengan label NIK",
+      "pii_present": true,
+      "pii_types": [
+        "NIK"
+      ],
+      "redacted_text": "Pegawai dengan NIK [NIK_DISUNTING] melaporkan akses tidak sah ke akun kepegawaian.",
+      "detected_values": [
+        "3201012501020003"
+      ],
+      "tp": [
+        "3201012501020003"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "NIK (Nomor Induk Kependudukan) — data pribadi spesifik berdasarkan UU PDP Pasal 4 ayat 1, Perpres No. 52/2016"
+    },
+    {
+      "id": "PII-020",
+      "category": "NIK — tanpa label",
+      "pii_present": true,
+      "pii_types": [
+        "NIK"
+      ],
+      "redacted_text": "Data identitas pelaku: [NIK_DISUNTING], dicatat dalam laporan forensik.",
+      "detected_values": [
+        "3275011987654321"
+      ],
+      "tp": [
+        "3275011987654321"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "NIK tanpa label teks — uji deteksi berdasarkan pola 16 digit murni"
+    },
+    {
+      "id": "PII-021",
+      "category": "NIK — di akhir kalimat",
+      "pii_present": true,
+      "pii_types": [
+        "NIK"
+      ],
+      "redacted_text": "Verifikasi identitas diperlukan untuk nomor [NIK_DISUNTING].",
+      "detected_values": [
+        "3578090203040001"
+      ],
+      "tp": [
+        "3578090203040001"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "NIK di akhir kalimat diakhiri titik — uji word boundary posisi akhir"
+    },
+    {
+      "id": "PII-022",
+      "category": "NIK — dua NIK berbeda",
+      "pii_present": true,
+      "pii_types": [
+        "NIK"
+      ],
+      "redacted_text": "Sistem mencatat dua pengguna terdampak: [NIK_DISUNTING] dan [NIK_DISUNTING_2].",
+      "detected_values": [
+        "3201012501020003",
+        "3578051205060002"
+      ],
+      "tp": [
+        "3201012501020003",
+        "3578051205060002"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Dua NIK dalam satu laporan — uji multiple detection sejenis"
+    },
+    {
+      "id": "PII-023",
+      "category": "NIK — dalam kalimat panjang",
+      "pii_present": true,
+      "pii_types": [
+        "NIK"
+      ],
+      "redacted_text": "Berdasarkan hasil investigasi, pegawai atas nama Budi Santoso dengan nomor identitas [NIK_DISUNTING] diduga menjadi korban pencurian kredensial melalui serangan phishing yang diterima pada email kantornya.",
+      "detected_values": [
+        "3201010101020001"
+      ],
+      "tp": [
+        "3201010101020001"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "NIK dalam narasi panjang — simulasi laporan insiden nyata"
+    },
+    {
+      "id": "PII-024",
+      "category": "NIK — disebut sebagai nomor identitas",
+      "pii_present": true,
+      "pii_types": [
+        "NIK"
+      ],
+      "redacted_text": "Nomor identitas nasional [NIK_DISUNTING] ditemukan dalam dokumen yang bocor.",
+      "detected_values": [
+        "3201234501020001"
+      ],
+      "tp": [
+        "3201234501020001"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "NIK disebut sebagai 'nomor identitas nasional' — variasi label yang umum digunakan"
+    },
+    {
+      "id": "PII-025",
+      "category": "NIK — diawali kode wilayah Jakarta",
+      "pii_present": true,
+      "pii_types": [
+        "NIK"
+      ],
+      "redacted_text": "KTP digital dengan kode [NIK_DISUNTING] terdeteksi dalam database yang bocor.",
+      "detected_values": [
+        "3171050506070001"
+      ],
+      "tp": [
+        "3171050506070001"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "NIK diawali kode wilayah DKI Jakarta (3171) — format NIK nyata"
+    },
+    {
+      "id": "PII-026",
+      "category": "TELEPON — format 08xx",
+      "pii_present": true,
+      "pii_types": [
+        "PHONE"
+      ],
+      "redacted_text": "Korban dapat dihubungi di nomor [TELP_DISUNTING] untuk konfirmasi lebih lanjut.",
+      "detected_values": [
+        "081234567890"
+      ],
+      "tp": [
+        "081234567890"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Nomor telepon format 08xx — data kontak pribadi berdasarkan UU PDP Pasal 4 ayat 1"
+    },
+    {
+      "id": "PII-027",
+      "category": "TELEPON — format +62",
+      "pii_present": true,
+      "pii_types": [
+        "PHONE"
+      ],
+      "redacted_text": "SMS phishing dikirim dari nomor [TELP_DISUNTING] ke seluruh kontak.",
+      "detected_values": [
+        "+6281298765432"
+      ],
+      "tp": [
+        "+6281298765432"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Nomor telepon format internasional (+62) — sering muncul dalam laporan penipuan digital"
+    },
+    {
+      "id": "PII-028",
+      "category": "TELEPON — format 628xx tanpa +",
+      "pii_present": true,
+      "pii_types": [
+        "PHONE"
+      ],
+      "redacted_text": "Penerima pesan tidak sah tercatat pada [TELP_DISUNTING] dalam log sistem.",
+      "detected_values": [
+        "628123456789"
+      ],
+      "tp": [
+        "628123456789"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Nomor telepon format 62 tanpa tanda + — variasi format internasional"
+    },
+    {
+      "id": "PII-029",
+      "category": "TELEPON — dengan tanda hubung",
+      "pii_present": true,
+      "pii_types": [
+        "PHONE"
+      ],
+      "redacted_text": "Laporan diterima dari pegawai melalui WhatsApp di nomor [TELP_DISUNTING].",
+      "detected_values": [
+        "0812-3456-7890"
+      ],
+      "tp": [
+        "0812-3456-7890"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Nomor telepon dengan pemisah tanda hubung — format penulisan umum di Indonesia"
+    },
+    {
+      "id": "PII-030",
+      "category": "TELEPON — dengan spasi",
+      "pii_present": true,
+      "pii_types": [
+        "PHONE"
+      ],
+      "redacted_text": "Panggilan masuk dari [TELP_DISUNTING] tidak dijawab oleh petugas.",
+      "detected_values": [
+        "0856 4321 9870"
+      ],
+      "tp": [
+        "0856 4321 9870"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Nomor telepon dengan pemisah spasi — variasi penulisan umum"
+    },
+    {
+      "id": "PII-031",
+      "category": "TELEPON — dua nomor berbeda",
+      "pii_present": true,
+      "pii_types": [
+        "PHONE"
+      ],
+      "redacted_text": "Komunikasi mencurigakan antara [TELP_DISUNTING] dan [TELP_DISUNTING_2] terdeteksi.",
+      "detected_values": [
+        "+6285678901234",
+        "081234567890"
+      ],
+      "tp": [
+        "+6285678901234",
+        "081234567890"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Dua nomor telepon dalam satu laporan — uji multiple detection"
+    },
+    {
+      "id": "PII-032",
+      "category": "TELEPON — dalam konteks penipuan",
+      "pii_present": true,
+      "pii_types": [
+        "PHONE"
+      ],
+      "redacted_text": "Pelaku menggunakan nomor [TELP_DISUNTING] untuk menghubungi korban dengan modus mengaku sebagai petugas bank.",
+      "detected_values": [
+        "087712345678"
+      ],
+      "tp": [
+        "087712345678"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Nomor telepon dalam konteks social engineering — simulasi laporan penipuan nyata"
+    },
+    {
+      "id": "PII-033",
+      "category": "TELEPON — prefix 0821",
+      "pii_present": true,
+      "pii_types": [
+        "PHONE"
+      ],
+      "redacted_text": "Korban menerima OTP palsu melalui SMS ke nomor [TELP_DISUNTING].",
+      "detected_values": [
+        "082156789012"
+      ],
+      "tp": [
+        "082156789012"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Nomor telepon prefix 0821 (Telkomsel) — validasi berbagai prefix operator"
+    },
+    {
+      "id": "PII-034",
+      "category": "CAMPURAN — IP dan Email",
+      "pii_present": true,
+      "pii_types": [
+        "IP",
+        "EMAIL"
+      ],
+      "redacted_text": "Penyerang dari [IP_DISUNTING] mengirim malware ke [EMAIL_DISUNTING].",
+      "detected_values": [
+        "45.33.32.156",
+        "budi@kementan.go.id"
+      ],
+      "tp": [
+        "45.33.32.156",
+        "budi@kementan.go.id"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Kombinasi IP dan email — simulasi laporan phishing dengan bukti teknis"
+    },
+    {
+      "id": "PII-035",
+      "category": "CAMPURAN — Email, Telepon, NIK",
+      "pii_present": true,
+      "pii_types": [
+        "EMAIL",
+        "PHONE",
+        "NIK"
+      ],
+      "redacted_text": "Korban: email [EMAIL_DISUNTING], HP [TELP_DISUNTING], NIK [NIK_DISUNTING].",
+      "detected_values": [
+        "3201012501020003",
+        "siti@pusdatin.go.id",
+        "08211234567"
+      ],
+      "tp": [
+        "3201012501020003",
+        "siti@pusdatin.go.id",
+        "08211234567"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Tiga jenis PII dalam satu kalimat — simulasi formulir identitas korban"
+    },
+    {
+      "id": "PII-036",
+      "category": "CAMPURAN — semua empat jenis PII",
+      "pii_present": true,
+      "pii_types": [
+        "IP",
+        "EMAIL",
+        "NIK",
+        "PHONE"
+      ],
+      "redacted_text": "Data terdampak: IP [IP_DISUNTING], email [EMAIL_DISUNTING], NIK [NIK_DISUNTING], HP [TELP_DISUNTING].",
+      "detected_values": [
+        "3201012501020003",
+        "+6281234567890",
+        "192.168.1.50",
+        "budi@kementan.go.id"
+      ],
+      "tp": [
+        "3201012501020003",
+        "+6281234567890",
+        "192.168.1.50",
+        "budi@kementan.go.id"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Keempat kategori PII berdasarkan UU PDP dalam satu laporan — uji integrasi lengkap"
+    },
+    {
+      "id": "PII-037",
+      "category": "CAMPURAN — IP dan Telepon",
+      "pii_present": true,
+      "pii_types": [
+        "IP",
+        "PHONE"
+      ],
+      "redacted_text": "Koneksi dari [IP_DISUNTING] dikaitkan dengan pemilik nomor [TELP_DISUNTING].",
+      "detected_values": [
+        "082198765432",
+        "10.0.0.50"
+      ],
+      "tp": [
+        "082198765432",
+        "10.0.0.50"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Kombinasi IP dan telepon — penghubungan identitas jaringan dan kontak personal"
+    },
+    {
+      "id": "PII-038",
+      "category": "CAMPURAN — dua email dan satu IP",
+      "pii_present": true,
+      "pii_types": [
+        "EMAIL",
+        "IP"
+      ],
+      "redacted_text": "Log menunjukkan pengiriman dari [EMAIL_DISUNTING] ke [EMAIL_DISUNTING_2] via [IP_DISUNTING].",
+      "detected_values": [
+        "attacker@evil.com",
+        "victim@kementan.go.id",
+        "203.0.113.1"
+      ],
+      "tp": [
+        "attacker@evil.com",
+        "victim@kementan.go.id",
+        "203.0.113.1"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Dua email berbeda dan satu IP — skenario analisis email header forensik"
+    },
+    {
+      "id": "PII-039",
+      "category": "NEGATIF — laporan tanpa PII",
+      "pii_present": false,
+      "pii_types": [],
+      "redacted_text": "Terjadi insiden phishing melalui tautan palsu yang dikirim lewat email internal. Tim keamanan sudah memblokir domain tersebut.",
+      "detected_values": [],
+      "tp": [],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Laporan insiden tanpa data pribadi — baseline True Negative"
+    },
+    {
+      "id": "PII-040",
+      "category": "NEGATIF — laporan malware tanpa PII",
+      "pii_present": false,
+      "pii_types": [],
+      "redacted_text": "Ransomware terdeteksi pada workstation di lantai 3. File dengan ekstensi .locked ditemukan di folder Documents. Sistem diisolasi dan sedang dilakukan pemindaian antivirus.",
+      "detected_values": [],
+      "tp": [],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Laporan malware tanpa menyebut identitas — True Negative"
+    },
+    {
+      "id": "PII-041",
+      "category": "NEGATIF — laporan DDoS tanpa PII",
+      "pii_present": false,
+      "pii_types": [],
+      "redacted_text": "Website layanan publik tidak dapat diakses sejak pukul 09.00. Traffic sangat tinggi berasal dari berbagai lokasi. Tim sedang melakukan mitigasi dengan membatasi akses dari region tertentu.",
+      "detected_values": [],
+      "tp": [],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Laporan DDoS tanpa data personal — True Negative"
+    },
+    {
+      "id": "PII-042",
+      "category": "NEGATIF — nomor 14 digit bukan NIK",
+      "pii_present": false,
+      "pii_types": [],
+      "redacted_text": "Nomor tiket insiden 12345678901234 telah dibuat dan diteruskan ke tim CSIRT.",
+      "detected_values": [],
+      "tp": [],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "14 digit bukan NIK (NIK = tepat 16 digit) — uji True Negative untuk angka panjang"
+    },
+    {
+      "id": "PII-043",
+      "category": "NEGATIF — nomor 17 digit bukan NIK",
+      "pii_present": false,
+      "pii_types": [],
+      "redacted_text": "Kode transaksi sistem 12345678901234567 tercatat dalam log.",
+      "detected_values": [],
+      "tp": [],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "17 digit bukan NIK — uji batas word boundary pada angka lebih panjang dari NIK"
+    },
+    {
+      "id": "PII-044",
+      "category": "NEGATIF — port number bukan IP",
+      "pii_present": false,
+      "pii_types": [],
+      "redacted_text": "Koneksi tidak sah terdeteksi pada port 8080 server aplikasi.",
+      "detected_values": [],
+      "tp": [],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Nomor port tunggal tidak cocok pola IPv4 — True Negative"
+    },
+    {
+      "id": "PII-045",
+      "category": "NEGATIF — URL bukan email",
+      "pii_present": false,
+      "pii_types": [],
+      "redacted_text": "Tautan phishing mengarah ke http://fake-bank.com/login yang sudah diblokir.",
+      "detected_values": [],
+      "tp": [],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "URL tidak memiliki karakter @ sehingga tidak cocok pola email — True Negative"
+    },
+    {
+      "id": "PII-046",
+      "category": "NEGATIF — kode produk dengan @",
+      "pii_present": false,
+      "pii_types": [],
+      "redacted_text": "Kode komponen yang bermasalah: SRV@RACK-2024-UNIT3 perlu diganti segera.",
+      "detected_values": [],
+      "tp": [],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Kode produk mengandung @ tapi tidak memiliki TLD — tidak cocok pola email"
+    },
+    {
+      "id": "PII-047",
+      "category": "FALSE POSITIVE — versi software terdeteksi sebagai IP",
+      "pii_present": false,
+      "pii_types": [],
+      "redacted_text": "Sistem rentan karena menggunakan versi firmware [IP_DISUNTING] yang sudah kadaluarsa.",
+      "detected_values": [
+        "1.0.2.3"
+      ],
+      "tp": [],
+      "fn": [],
+      "fp": [
+        "1.0.2.3"
+      ],
+      "correct": false,
+      "justification": "KASUS FALSE POSITIVE: versi firmware '1.0.2.3' memiliki format yang sama dengan IPv4 valid. Ini merupakan keterbatasan deteksi berbasis regex yang diakui dalam penelitian ini."
+    },
+    {
+      "id": "PII-048",
+      "category": "FALSE POSITIVE — harga Rp 16 digit terdeteksi sebagai NIK",
+      "pii_present": false,
+      "pii_types": [],
+      "redacted_text": "Kerugian finansial akibat insiden ini diperkirakan mencapai Rp [NIK_DISUNTING].",
+      "detected_values": [
+        "1234567890123456"
+      ],
+      "tp": [],
+      "fn": [],
+      "fp": [
+        "1234567890123456"
+      ],
+      "correct": false,
+      "justification": "KASUS FALSE POSITIVE: angka nominal Rp 16 digit memiliki format identik dengan NIK. Ini merupakan keterbatasan yang diakui dari pendekatan regex berbasis panjang digit."
+    },
+    {
+      "id": "PII-049",
+      "category": "FALSE POSITIVE — versi IP-like lainnya",
+      "pii_present": false,
+      "pii_types": [],
+      "redacted_text": "Patch terbaru adalah [IP_DISUNTING] dan wajib diinstal sebelum Senin.",
+      "detected_values": [
+        "10.0.2.15"
+      ],
+      "tp": [],
+      "fn": [],
+      "fp": [
+        "10.0.2.15"
+      ],
+      "correct": false,
+      "justification": "KASUS FALSE POSITIVE: versi software '10.0.2.15' cocok dengan pola IPv4 valid. Keterbatasan yang sama dengan PII-047."
+    },
+    {
+      "id": "PII-050",
+      "category": "NEGATIF — teks normal dengan angka biasa",
+      "pii_present": false,
+      "pii_types": [],
+      "redacted_text": "Insiden terjadi selama 48 jam dengan 1200 upaya login gagal terdeteksi dari berbagai lokasi.",
+      "detected_values": [],
+      "tp": [],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Angka biasa (48, 1200) tidak cocok pola PII manapun — True Negative"
+    },
+    {
+      "id": "PII-051",
+      "category": "IP — oktet 0 dan 255",
+      "pii_present": true,
+      "pii_types": [
+        "IP"
+      ],
+      "redacted_text": "Broadcast ke [IP_DISUNTING] dan gateway default [IP_DISUNTING_2] terdeteksi.",
+      "detected_values": [
+        "255.255.255.0",
+        "0.0.0.1"
+      ],
+      "tp": [
+        "255.255.255.0",
+        "0.0.0.1"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Oktet ekstrem (0 dan 255) — validasi batas atas dan bawah pola regex IPv4"
+    },
+    {
+      "id": "PII-052",
+      "category": "EMAIL — TLD dua karakter",
+      "pii_present": true,
+      "pii_types": [
+        "EMAIL"
+      ],
+      "redacted_text": "Pesan mencurigakan diterima dari [EMAIL_DISUNTING] yang mencoba mengeksploitasi celah sistem.",
+      "detected_values": [
+        "admin@malware.ru"
+      ],
+      "tp": [
+        "admin@malware.ru"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Email dengan TLD dua karakter (.ru) — validasi batas minimum panjang TLD"
+    },
+    {
+      "id": "PII-053",
+      "category": "TELEPON — prefix 0877",
+      "pii_present": true,
+      "pii_types": [
+        "PHONE"
+      ],
+      "redacted_text": "Korban dihubungi berulang kali dari nomor [TELP_DISUNTING] yang tidak dikenal.",
+      "detected_values": [
+        "087712345678"
+      ],
+      "tp": [
+        "087712345678"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Prefix 0877 (Telkomsel) — validasi cakupan operator Indonesia"
+    },
+    {
+      "id": "PII-054",
+      "category": "TELEPON — prefix 0895",
+      "pii_present": true,
+      "pii_types": [
+        "PHONE"
+      ],
+      "redacted_text": "Whatsapp dari [TELP_DISUNTING] meminta transfer dana dengan modus social engineering.",
+      "detected_values": [
+        "089512345678"
+      ],
+      "tp": [
+        "089512345678"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Prefix 0895 (Three/3) — validasi cakupan operator Indonesia lainnya"
+    },
+    {
+      "id": "PII-055",
+      "category": "NIK — dalam konteks kebocoran data",
+      "pii_present": true,
+      "pii_types": [
+        "NIK"
+      ],
+      "redacted_text": "Database yang bocor mengandung NIK [NIK_DISUNTING] milik ratusan pegawai.",
+      "detected_values": [
+        "3674010203040005"
+      ],
+      "tp": [
+        "3674010203040005"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "NIK dalam konteks kebocoran data — skenario insiden data breach yang umum"
+    },
+    {
+      "id": "PII-056",
+      "category": "CAMPURAN — IP, Email dalam forensik",
+      "pii_present": true,
+      "pii_types": [
+        "IP",
+        "EMAIL"
+      ],
+      "redacted_text": "Header email menunjukkan origin [IP_DISUNTING] dengan pengirim [EMAIL_DISUNTING].",
+      "detected_values": [
+        "198.51.100.1",
+        "spoofed@legitimate.com"
+      ],
+      "tp": [
+        "198.51.100.1",
+        "spoofed@legitimate.com"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Analisis header email — kasus nyata investigasi email phishing"
+    },
+    {
+      "id": "PII-057",
+      "category": "NEGATIF — laporan kebijakan tanpa PII",
+      "pii_present": false,
+      "pii_types": [],
+      "redacted_text": "Kebijakan keamanan siber organisasi mewajibkan penggantian kata sandi setiap 90 hari dan penggunaan autentikasi dua faktor untuk semua sistem kritikal.",
+      "detected_values": [],
+      "tp": [],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Teks kebijakan keamanan tanpa data personal — True Negative"
+    },
+    {
+      "id": "PII-058",
+      "category": "NEGATIF — laporan teknis tanpa PII",
+      "pii_present": false,
+      "pii_types": [],
+      "redacted_text": "Pemindaian kerentanan menemukan CVE-2023-44487 pada web server. Patch tersedia dan sedang dalam proses penerapan.",
+      "detected_values": [],
+      "tp": [],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Laporan teknis dengan kode CVE tanpa data personal — True Negative"
+    },
+    {
+      "id": "PII-059",
+      "category": "CAMPURAN — IP dan NIK dalam investigasi",
+      "pii_present": true,
+      "pii_types": [
+        "IP",
+        "NIK"
+      ],
+      "redacted_text": "Akses dari [IP_DISUNTING] dikaitkan dengan pegawai ber-NIK [NIK_DISUNTING] berdasarkan log VPN.",
+      "detected_values": [
+        "172.16.5.20",
+        "3171051205060001"
+      ],
+      "tp": [
+        "172.16.5.20",
+        "3171051205060001"
+      ],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Penghubungan IP dengan NIK — skenario investigasi insider threat"
+    },
+    {
+      "id": "PII-060",
+      "category": "NEGATIF — statistik tanpa PII",
+      "pii_present": false,
+      "pii_types": [],
+      "redacted_text": "Dalam kuartal terakhir, terdapat 347 insiden keamanan siber yang dilaporkan, meningkat 23% dibanding periode sebelumnya.",
+      "detected_values": [],
+      "tp": [],
+      "fn": [],
+      "fp": [],
+      "correct": true,
+      "justification": "Data statistik agregat tanpa data personal — True Negative"
+    }
+  ],
+  "false_positive_cases": [
+    {
+      "id": "PII-047",
+      "category": "FALSE POSITIVE — versi software terdeteksi sebagai IP",
+      "pii_present": false,
+      "pii_types": [],
+      "redacted_text": "Sistem rentan karena menggunakan versi firmware [IP_DISUNTING] yang sudah kadaluarsa.",
+      "detected_values": [
+        "1.0.2.3"
+      ],
+      "tp": [],
+      "fn": [],
+      "fp": [
+        "1.0.2.3"
+      ],
+      "correct": false,
+      "justification": "KASUS FALSE POSITIVE: versi firmware '1.0.2.3' memiliki format yang sama dengan IPv4 valid. Ini merupakan keterbatasan deteksi berbasis regex yang diakui dalam penelitian ini."
+    },
+    {
+      "id": "PII-048",
+      "category": "FALSE POSITIVE — harga Rp 16 digit terdeteksi sebagai NIK",
+      "pii_present": false,
+      "pii_types": [],
+      "redacted_text": "Kerugian finansial akibat insiden ini diperkirakan mencapai Rp [NIK_DISUNTING].",
+      "detected_values": [
+        "1234567890123456"
+      ],
+      "tp": [],
+      "fn": [],
+      "fp": [
+        "1234567890123456"
+      ],
+      "correct": false,
+      "justification": "KASUS FALSE POSITIVE: angka nominal Rp 16 digit memiliki format identik dengan NIK. Ini merupakan keterbatasan yang diakui dari pendekatan regex berbasis panjang digit."
+    },
+    {
+      "id": "PII-049",
+      "category": "FALSE POSITIVE — versi IP-like lainnya",
+      "pii_present": false,
+      "pii_types": [],
+      "redacted_text": "Patch terbaru adalah [IP_DISUNTING] dan wajib diinstal sebelum Senin.",
+      "detected_values": [
+        "10.0.2.15"
+      ],
+      "tp": [],
+      "fn": [],
+      "fp": [
+        "10.0.2.15"
+      ],
+      "correct": false,
+      "justification": "KASUS FALSE POSITIVE: versi software '10.0.2.15' cocok dengan pola IPv4 valid. Keterbatasan yang sama dengan PII-047."
+    }
+  ],
+  "missed_cases": []
+}

@@ -2,7 +2,7 @@
 
 > Dokumen komprehensif untuk persiapan sidang skripsi: penjelasan **setiap file, setiap fungsi, setiap class**, logika internal, dan keterkaitan antar-modul.
 > Target pembaca: penulis (recall cepat) dan dosen penguji (verifikasi teknis).
-> Terakhir diperbarui: 2026-06-16 (Tambah LLM Judge guardrails, eval_guardrails.py, update RETRIEVAL_SCORE_THRESHOLD).
+> Terakhir diperbarui: 2026-06-21 (Intent ke-5 query_knowledge, knowledge RAG node, BSSN eval, scripts analisis).
 
 ---
 
@@ -32,6 +32,7 @@
 22. [Perubahan Terbaru (2026-06-02)](#22-perubahan-terbaru-2026-06-02)
 23. [Perubahan Terbaru (2026-06-06)](#23-perubahan-terbaru-2026-06-06)
 24. [Perubahan Terbaru (2026-06-16)](#24-perubahan-terbaru-2026-06-16)
+25. [Perubahan Terbaru (2026-06-21)](#25-perubahan-terbaru-2026-06-21)
 
 ---
 
@@ -441,10 +442,12 @@ Fungsi `run_pipeline(raw_input, reporter_*)` adalah **satu-satunya entry point p
 
 **Fungsi `_validate_intent(parsed)`:** Normalisasi intent ke salah satu 4 nilai valid, clamp confidence 0–1, pastikan konsistensi (jika `needs_clarification` tapi intent bukan `needs_clarification`, koreksi).
 
-**4 Intent valid:**
-- `report_incident` — lanjut pipeline penuh
+**5 Intent valid:**
+
+- `report_incident` — lanjut pipeline penuh (identifikasi → RAG mitigasi → tiket → notifikasi)
+- `query_knowledge` — jawab pertanyaan regulasi/prosedur/kebijakan via RAG, output prosa (bukan steps)
 - `query_status` — hanya lookup tiket
-- `general_help` — dijawab langsung
+- `general_help` — dijawab langsung tanpa RAG (pertanyaan umum edukatif)
 - `needs_clarification` — minta informasi tambahan ke pelapor
 
 ---
@@ -2204,4 +2207,168 @@ Script evaluasi ditulis ulang total menggunakan RAGAS v2+ API:
 - Dokumentasi ini telah disinkronkan dengan keadaan kode pada `2026-06-06`.
 - Perubahan: pembaruan timestamp, penyesuaian dokumentasi kecil agar konsisten dengan kode saat ini, dan penambahan catatan ringkas perubahan terbaru. Tidak ada perubahan struktur file atau API yang dilakukan di dokumen ini.
 
-Jika Anda ingin saya menghasilkan ringkasan perubahan file-by-file (diff) berdasarkan kode pada workspace saat ini, beri tahu saya dan saya akan mengekstrak nama file yang berubah dan menambahkan ringkasan terperinci di sini.
+---
+
+## 24. Perubahan Terbaru (2026-06-16)
+
+- Tambah `LLMJudge` sebagai layer ke-3 guardrails (lihat seksi 8).
+- Tambah `eval_guardrails.py` — evaluasi guardrails vs JailbreakHub dataset.
+- `RETRIEVAL_SCORE_THRESHOLD` dinaikkan kembali ke `0.3` untuk presisi lebih tinggi.
+
+---
+
+## 25. Perubahan Terbaru (2026-06-21)
+
+### 25.1 Intent Baru: `query_knowledge` (5th Intent)
+
+Sebelumnya sistem hanya mengenal 4 intent. Kini ditambahkan intent ke-5 untuk menangani pertanyaan regulasi/prosedur/kebijakan keamanan siber yang bisa dijawab dari knowledge base (BSSN, NIST, MITRE), tanpa membuka tiket insiden.
+
+**Perbedaan `query_knowledge` vs `general_help`:**
+
+| Aspek | `query_knowledge` | `general_help` |
+| ----- | ----------------- | -------------- |
+| Sumber jawaban | RAG dari knowledge base | LLM langsung (tanpa retrieval) |
+| Tipe pertanyaan | "Berapa lama masa berlaku register TTIS?" | "Apa itu phishing?" |
+| Output | Prosa naratif + citation dokumen | Jawaban umum edukatif |
+| Contoh | Pertanyaan tentang BSSN/NIST/MITRE ATT&CK | Pertanyaan definisi umum |
+
+---
+
+### 25.2 `app/agents/orchestrator.py` — VALID_INTENTS Update
+
+`query_knowledge` ditambahkan ke set `VALID_INTENTS`:
+
+```python
+VALID_INTENTS = {"report_incident", "query_knowledge", "query_status", "general_help", "needs_clarification"}
+```
+
+---
+
+### 25.3 `app/agents/graph.py` — Node dan Routing Baru
+
+**Node factory baru `make_knowledge_node(mitigation_advisor)`:**
+
+- Panggil `mitigation_advisor.generate_knowledge_response(sanitized_input)`.
+- Tulis hasil ke `state["mitigation_recommendation"]`, `state["citations"]`, `state["retrieved_chunks"]`, `state["rag_confidence"]`.
+- Fallback: pesan generik "Sistem tidak dapat menemukan jawaban..." jika error.
+
+**Routing baru di `route_by_intent()`:**
+
+```python
+if intent == "query_knowledge":
+    return "query_knowledge"
+```
+
+**Graf diperbarui:**
+
+```
+START → guardrails → classify_intent → (route_by_intent)
+                                    ├─ report_incident  → identify_incident → ... → END
+                                    ├─ query_knowledge  → query_knowledge → END   ← BARU
+                                    ├─ needs_clarification → END
+                                    ├─ query_status     → general_help → END
+                                    └─ general_help     → general_help → END
+```
+
+---
+
+### 25.4 `app/agents/mitigation.py` — `generate_knowledge_response()`
+
+**Method baru pada `MitigationAdvisorAgent`:**
+
+| Method | Parameter | Return | Detail |
+| ------ | --------- | ------ | ------ |
+| `generate_knowledge_response(...)` | `sanitized_input: str`, `source_preference: str\|None`, `incident_type: str` | `dict` | RAG loop max 2 iterasi, filter chunk "Teknik Serangan MITRE", output prosa naratif. Selalu return dict, tidak pernah raise. |
+
+**Konstanta baru `_KNOWLEDGE_FALLBACK`:** Dict default yang dikembalikan jika retrieval gagal total atau parse JSON gagal.
+
+**Perbedaan vs `generate_mitigation()`:**
+
+| Aspek | `generate_mitigation()` | `generate_knowledge_response()` |
+| ----- | ----------------------- | ------------------------------- |
+| Prompt | `mitigation.txt` | `knowledge.txt` |
+| Output format | Numbered steps + citation | Prosa naratif + source_refs |
+| Max iterasi RAG | 3 | 2 |
+| Filter chunk | Smart (prefer mitigations iterasi 2) | Filter keluar chunk deskripsi serangan MITRE |
+| Token max | 800 | 600 |
+
+---
+
+### 25.5 `config/prompts/knowledge.txt` — Prompt Baru
+
+Prompt untuk menjawab pertanyaan regulasi/kebijakan. Instruksi kunci:
+
+- **Hanya dari dokumen referensi** — DILARANG menambah pengetahuan umum.
+- **Terjemahkan, jangan infer** — frasa harus dekat dengan dokumen (diterjemahkan jika Inggris).
+- **Format prosa/poin** — bukan numbered steps.
+- **Maksimum 200 kata** (tidak termasuk bagian Sumber).
+- **Output JSON:** `{"knowledge_answer": "...", "source_refs": ["[1] Dokumen, Bagian X"]}`.
+
+---
+
+### 25.6 `config/prompts/orchestrator.txt` — Aturan `query_knowledge` + 4 Contoh Baru
+
+Definisi intent `query_knowledge` ditambahkan. Aturan 4b menjelaskan kapan menggunakan `query_knowledge` vs `general_help`. Empat contoh few-shot baru ditambahkan untuk intent ini (masa berlaku TTIS, TLP:RED, containment BSSN, rencana tanggap insiden).
+
+---
+
+### 25.7 `app/utils/llm_client.py` — Perbaikan Prioritas API Key
+
+**Sebelumnya:** Selalu prioritaskan `OPENAI_API_KEY`, fallback ke `GITHUB_TOKEN`.
+
+**Sekarang:** Jika `OPENAI_BASE_URL` di-set (indikator GitHub Models mode), prioritaskan `GITHUB_TOKEN` agar tidak salah kirim OpenAI key ke endpoint Azure.
+
+```python
+if os.getenv("OPENAI_BASE_URL"):
+    key = os.getenv("GITHUB_TOKEN") or os.getenv("OPENAI_API_KEY")
+else:
+    key = os.getenv("OPENAI_API_KEY") or os.getenv("GITHUB_TOKEN")
+```
+
+---
+
+### 25.8 `knowledge_base/metadata/peraturan-bssn-1-2024.json` — Metadata BSSN Baru
+
+File metadata untuk dokumen **Peraturan BSSN Nomor 1 Tahun 2024** (kebijakan pengelolaan insiden keamanan siber nasional). Memungkinkan `ingest_knowledge.py` mengindeks dokumen ini ke Qdrant sehingga `query_knowledge` bisa menjawab pertanyaan regulasi BSSN.
+
+---
+
+### 25.9 `scripts/` — Script Analisis dan Laporan Baru
+
+| File | Fungsi |
+| ---- | ------ |
+| `analyze_ar.py` | Analisis Answer Relevancy per-query dari hasil RAGAS |
+| `generate_bssn_report.py` | Generate laporan RAGAS untuk dataset BSSN |
+| `generate_mitre_report.py` | Generate laporan RAGAS untuk dataset MITRE |
+| `generate_nist_report.py` | Generate laporan RAGAS untuk dataset NIST |
+| `generate_combined_report.py` | Generate laporan RAGAS gabungan (BSSN + MITRE + NIST) |
+| `inspect_bssn.py` | Inspeksi chunk BSSN di Qdrant (debug) |
+| `show_bssn_scores.py` | Tampilkan distribusi skor retrieval untuk query BSSN |
+| `_check_api.py` | Cek konektivitas API key yang aktif |
+| `_debug_retrieval.py` | Debug query retrieval manual terhadap Qdrant |
+| `_debug_scores.py` | Debug skor reranker per chunk |
+
+---
+
+### 25.10 `tests/evaluation/` — Evaluasi BSSN + Laporan Lengkap
+
+| File | Keterangan |
+|------|-----------|
+| `rag_qa_dataset_bssn.json` | Dataset QA untuk Peraturan BSSN 1/2024 |
+| `rag_ragas_results_bssn.json` | Hasil evaluasi RAGAS untuk dataset BSSN |
+| `RAGAS_REPORT_BSSN.md` | Laporan naratif hasil RAGAS BSSN |
+| `RAGAS_REPORT_MITRE.md` | Laporan naratif hasil RAGAS MITRE ATT&CK |
+| `RAGAS_REPORT_NIST.md` | Laporan naratif hasil RAGAS NIST SP 800-61 |
+| `RAGAS_REPORT_COMBINED.md` | Laporan gabungan ketiga knowledge base |
+| `TCR_REPORT.md` | Laporan naratif hasil evaluasi TCR (Task Completion Rate) |
+| `rag_qa_dataset_*_test.json` | Subset dataset untuk pengujian cepat |
+| `rag_ragas_results_*_test.json` | Hasil evaluasi untuk subset pengujian |
+| `eval_checkpoint.json` | Checkpoint progress evaluasi RAGAS (resume jika interupsi) |
+
+**Cara run evaluasi BSSN:**
+
+```bash
+python tests/evaluation/eval_ragas.py --dataset tests/evaluation/rag_qa_dataset_bssn.json \
+    --output tests/evaluation/rag_ragas_results_bssn.json
+python scripts/generate_bssn_report.py
+```

@@ -1,0 +1,319 @@
+{
+  "summary": {
+    "faithfulness": 0.6785714285714286,
+    "answer_relevancy": 0.8471457926589487,
+    "nv_context_relevance": 0.75
+  },
+  "per_question": [
+    {
+      "user_input": "Kebijakan akun apa yang harus diterapkan untuk mencegah akses tidak sah pada sistem — seperti penguncian akun, pembatasan waktu login, dan Multi-Factor Authentication?",
+      "retrieved_contexts": [
+        "Training and Awareness:\n\n- Educate employees on identifying phishing attempts, securing their social media, and avoiding information leaks.\n\nTeknik yang dimitigasi (84):\n  - T1583.001: Domains\n  - T1583.002: DNS Server\n  - T1583.003: Virtual Private Server\n  - T1583.004: Server\n  - T1583.005: Botnet\n  - T1583.006: Web Services\n  - T1583.007: Serverless\n  - T1583.008: Malvertising\n  - T1583: Acquire Infrastructure\n  - T1584.001: Domains\n  - T1584.002: DNS Server\n  - T1584.003: Virtual Private Server\n  - T1584.004: Server\n  - T1584.005: Botnet\n  - T1584.006: Web Services\n  - T1584.007: Serverless\n  - T1584.008: Network Devices\n  - T1584: Compromise Infrastructure\n  - T1585.001: Social Media Accounts\n  - T1585.002: Email Accounts",
+        "- 19 -  \njika ada strategi dan prosedur yang telah ditentukan. \nOrganisasi harus menetapkan risiko yang dapat diterima dalam \nmenangani Insiden Siber dan mengembangkan strategi yang \nsesuai. Organisasi harus membuat strategi/prosedur \npenahanan terpisah untuk setiap jenis insiden utama, dengan \nkriteria yang didokumentasikan dengan jelas untuk \nmemfasilitasi pengambilan keputusan. Prosedur containment \ndapat dilakukan dengan cara sebagai berikut: \n1) isolasi sistem yang terkena insiden; \n2) backup data yang berkaitan dengan insiden (misalnya hasil \npengumpulan bukti berbentuk log, screenshot, dan lainnya); \n3) identifikasi semua layanan (service) dan koneksi yang \nterhubung; \n4) identifikasi metode penyerang ketika masuk ke sistem \npertama kali, dengan melihat log pada sistem;",
+        "Teknik yang dimitigasi (59):\n  - T1003.001: LSASS Memory\n  - T1003.002: Security Account Manager\n  - T1003.003: NTDS\n  - T1003.004: LSA Secrets\n  - T1003.005: Cached Domain Credentials\n  - T1003: OS Credential Dumping\n  - T1027: Obfuscated Files or Information\n  - T1036.007: Double File Extension\n  - T1036: Masquerading\n  - T1056.002: GUI Input Capture\n  - T1072: Software Deployment Tools\n  - T1078.002: Domain Accounts\n  - T1078.004: Cloud Accounts\n  - T1078: Valid Accounts\n  - T1111: Multi-Factor Authentication Interception\n  - T1176.001: Browser Extensions\n  - T1176.002: IDE Extensions\n  - T1176: Software Extensions\n  - T1185: Browser Session Hijacking\n  - T1189: Drive-by Compromise",
+        "- 18 -  \nii. Antimalware memberi peringatan saat mendeteksi host \n/ media yang terinfeksi malware; \niii. Administrator melihat adanya file baru yang \nmempunyai nama yang tidak biasa digunakan \n(unusual character); \niv. Log pada aplikasi mencatat adanya tindakan \npercobaan login yang banyak dari IP address yang \ntidak diketahui; dan \nv. Administrator melihat  surat elektronik yang tertolak \noleh sistem  (bounced email ) yang banyak dengan \nkonten yang anomali (suspicious content). \n \nAnalisis Insiden Siber dilakukan untuk mengetahui paling \nsedikit: \n1) Sistem Elektronik yang terkena Insiden Siber. \nSistem Elektronik yang terkena Insiden Siber sebagaimana \nperlu diketahui kategori Sistem Elektroniknya. \n2) Ruang lingkup dampak Insiden Siber.",
+        "kerentanan Sistem Elektro nik dilakukan untuk persiapan \npemulihan Sistem Elektronik. Penghapusan dilakukan dengan \nbeberapa cara seperti: \n1) menentukan tanda dan sebab dari suatu Insiden Siber; \n2) melakukan restore backup untuk mendapatkan new fresh \nsystem; \n3) menghapus penyebab Insiden Siber, seperti malware; \n4) menonaktifkan akun pengguna yang terkena Insiden Siber; \n5) melalui reset password jika diperlukan; \n6) melakukan mitigasi terhadap kerentanan yang tereksploitasi \nsaat Insiden Siber;"
+      ],
+      "response": "Untuk mencegah akses tidak sah pada sistem, kebijakan akun yang dapat diterapkan meliputi penggunaan Multi-Factor Authentication (MFA) untuk mencegah intersepsi autentikasi. Selain itu, penting untuk mengidentifikasi dan menonaktifkan akun pengguna yang terkena insiden siber serta melakukan reset password jika diperlukan. Kebijakan ini dapat membantu dalam mengurangi risiko akses tidak sah dan melindungi sistem dari potensi ancaman keamanan.",
+      "reference": "Terapkan kebijakan penggunaan akun dengan mengonfigurasi mekanisme penguncian akun, pembatasan waktu login, dan batas waktu tidak aktif untuk mengurangi risiko akses tidak sah. Implementasikan Multi-Factor Authentication pada semua sistem dan layanan kritis. Terapkan manajemen akun pengguna dengan prinsip hak akses minimum dan audit akun secara berkala.",
+      "faithfulness": 0.5,
+      "answer_relevancy": 0.8210853673128051,
+      "nv_context_relevance": 0.5
+    },
+    {
+      "user_input": "Bagaimana cara memfilter lalu lintas jaringan untuk mencegah eksfiltrasi data dari sistem organisasi ke layanan eksternal yang tidak diotorisasi?",
+      "retrieved_contexts": [
+        "- 19 -  \njika ada strategi dan prosedur yang telah ditentukan. \nOrganisasi harus menetapkan risiko yang dapat diterima dalam \nmenangani Insiden Siber dan mengembangkan strategi yang \nsesuai. Organisasi harus membuat strategi/prosedur \npenahanan terpisah untuk setiap jenis insiden utama, dengan \nkriteria yang didokumentasikan dengan jelas untuk \nmemfasilitasi pengambilan keputusan. Prosedur containment \ndapat dilakukan dengan cara sebagai berikut: \n1) isolasi sistem yang terkena insiden; \n2) backup data yang berkaitan dengan insiden (misalnya hasil \npengumpulan bukti berbentuk log, screenshot, dan lainnya); \n3) identifikasi semua layanan (service) dan koneksi yang \nterhubung; \n4) identifikasi metode penyerang ketika masuk ke sistem \npertama kali, dengan melihat log pada sistem;",
+        "Training and Awareness:\n\n- Educate employees on identifying phishing attempts, securing their social media, and avoiding information leaks.\n\nTeknik yang dimitigasi (84):\n  - T1583.001: Domains\n  - T1583.002: DNS Server\n  - T1583.003: Virtual Private Server\n  - T1583.004: Server\n  - T1583.005: Botnet\n  - T1583.006: Web Services\n  - T1583.007: Serverless\n  - T1583.008: Malvertising\n  - T1583: Acquire Infrastructure\n  - T1584.001: Domains\n  - T1584.002: DNS Server\n  - T1584.003: Virtual Private Server\n  - T1584.004: Server\n  - T1584.005: Botnet\n  - T1584.006: Web Services\n  - T1584.007: Serverless\n  - T1584.008: Network Devices\n  - T1584: Compromise Infrastructure\n  - T1585.001: Social Media Accounts\n  - T1585.002: Email Accounts",
+        "Insiden Siber dan sistem yang digunakan. \n2) melakukan deteksi sumber Insiden Siber: \na) identifikasi informasi, dapat dilakukan dengan melihat \nlokasi, nomor serial, nomor model, hostname, MAC \naddress, IP address dari komputer yang digunakan, log \npada sistem operasi dan aplikasi; \nb) identifikasi insiden, dapat dilihat melalui beberapa cara  \nseperti: \ni. Lihat IPS/IDS/Firewall pada jaringan yang \nmemberikan peringatan saat terjadi intrusi pada  \njaringan;",
+        "pertama kali, dengan melihat log pada sistem; \n5) periksa kode-kode berbahaya yang ada dalam sistem; dan \n6) lakukan pemantauan pada jaringan yang terkena Insiden \nSiber, jika terdapat paket yang dicurigai/anomali, segera \nblokir dan dokumentasikan (dapat dicatat sumber IP, bentuk \npaket, waktu, dan lainnya). \n \nb. mengumpulkan dan memelihara bukti Insiden Siber dari Sistem \nElektronik terdampak. \nPada kegiatan ini dilakukan hal-hal sebagai berikut: \n1) mengategorikan informasi mengenai Insiden Siber yang \nterdeteksi dan menyimpannya sesuai ukuran dampak terkait \nkeamanan, penyebab insiden, dan faktor lainnya yang \ndiperlukan. \n2) melakukan forensik digital terhadap aset informasi yang \nterdampak Insiden Siber untuk menemukenali penyebab \nInsiden Siber sesuai dengan ketentuan peraturan",
+        "Teknik yang dimitigasi (71):\n  - T1011.001: Exfiltration Over Bluetooth\n  - T1011: Exfiltration Over Other Network Medium\n  - T1021.001: Remote Desktop Protocol\n  - T1021.003: Distributed Component Object Model\n  - T1021.004: SSH\n  - T1021.005: VNC\n  - T1021.006: Windows Remote Management\n  - T1021.008: Direct Cloud VM Connections\n  - T1021: Remote Services\n  - T1046: Network Service Discovery\n  - T1052.001: Exfiltration over USB\n  - T1052: Exfiltration Over Physical Medium\n  - T1059.001: PowerShell\n  - T1059.005: Visual Basic\n  - T1059.007: JavaScript\n  - T1059: Command and Scripting Interpreter\n  - T1091: Replication Through Removable Media\n  - T1092: Communication Through Removable Media\n  - T1098.001: Additional Cloud Credentials\n  - T1098.002: Additional Email Delegate Permissions"
+      ],
+      "response": "Untuk memfilter lalu lintas jaringan dan mencegah eksfiltrasi data dari sistem organisasi ke layanan eksternal yang tidak diotorisasi, organisasi dapat melakukan pemantauan pada jaringan yang terkena Insiden Siber. Jika terdapat paket yang dicurigai atau anomali, langkah yang harus diambil adalah segera memblokir dan mendokumentasikan paket tersebut. Dokumentasi dapat mencakup sumber IP, bentuk paket, waktu, dan informasi relevan lainnya. Selain itu, organisasi harus mengidentifikasi semua layanan dan koneksi yang terhubung untuk memastikan tidak ada jalur yang tidak diotorisasi yang dapat digunakan untuk eksfiltrasi data. Langkah-langkah ini merupakan bagian dari prosedur penahanan insiden yang harus didokumentasikan dengan jelas untuk memfasilitasi pengambilan keputusan yang tepat.",
+      "reference": "Terapkan filter lalu lintas jaringan untuk membatasi akses ke layanan berbagi file publik yang tidak diotorisasi dan mencegah eksfiltrasi data lebih lanjut. Konfigurasikan kebijakan penggunaan akun dan terapkan prinsip hak akses minimum agar hanya pengguna yang berwenang yang dapat mengakses dan mentransfer dokumen sensitif ke layanan eksternal.",
+      "faithfulness": 0.8571428571428571,
+      "answer_relevancy": 0.8732062180050922,
+      "nv_context_relevance": 1.0
+    }
+  ],
+  "qa_pairs": [
+    {
+      "id": "QA-015",
+      "question": "Kebijakan akun apa yang harus diterapkan untuk mencegah akses tidak sah pada sistem — seperti penguncian akun, pembatasan waktu login, dan Multi-Factor Authentication?",
+      "ground_truth": "Terapkan kebijakan penggunaan akun dengan mengonfigurasi mekanisme penguncian akun, pembatasan waktu login, dan batas waktu tidak aktif untuk mengurangi risiko akses tidak sah. Implementasikan Multi-Factor Authentication pada semua sistem dan layanan kritis. Terapkan manajemen akun pengguna dengan prinsip hak akses minimum dan audit akun secara berkala.",
+      "candidate_answer": "Untuk mencegah akses tidak sah pada sistem, kebijakan akun yang dapat diterapkan meliputi penggunaan Multi-Factor Authentication (MFA) untuk mencegah intersepsi autentikasi. Selain itu, penting untuk mengidentifikasi dan menonaktifkan akun pengguna yang terkena insiden siber serta melakukan reset password jika diperlukan. Kebijakan ini dapat membantu dalam mengurangi risiko akses tidak sah dan melindungi sistem dari potensi ancaman keamanan.\n\nSumber:\n[3] MITRE ATT&CK Enterprise\n[5] Peraturan BSSN Nomor 1 Tahun 2024, Bagian 5",
+      "retrieved_chunks": [
+        {
+          "id": "9d414522-c882-469f-9734-21821872386e",
+          "content": "Training and Awareness:\n\n- Educate employees on identifying phishing attempts, securing their social media, and avoiding information leaks.\n\nTeknik yang dimitigasi (84):\n  - T1583.001: Domains\n  - T1583.002: DNS Server\n  - T1583.003: Virtual Private Server\n  - T1583.004: Server\n  - T1583.005: Botnet\n  - T1583.006: Web Services\n  - T1583.007: Serverless\n  - T1583.008: Malvertising\n  - T1583: Acquire Infrastructure\n  - T1584.001: Domains\n  - T1584.002: DNS Server\n  - T1584.003: Virtual Private Server\n  - T1584.004: Server\n  - T1584.005: Botnet\n  - T1584.006: Web Services\n  - T1584.007: Serverless\n  - T1584.008: Network Devices\n  - T1584: Compromise Infrastructure\n  - T1585.001: Social Media Accounts\n  - T1585.002: Email Accounts",
+          "metadata": {
+            "doc_id": "mitre-attack-enterprise",
+            "doc_title": "MITRE ATT&CK Enterprise",
+            "source_framework": "MITRE",
+            "language": "en",
+            "incident_types": [
+              "general"
+            ],
+            "page_number": 0,
+            "section_header": "",
+            "chunk_index": 617
+          },
+          "score": 0.5246883,
+          "rrf_score": 0.01639344262295082,
+          "final_score": 0.6656424657377049
+        },
+        {
+          "id": "007a4bd7-94e3-44f5-aee3-fea7884fefb7",
+          "content": "- 19 -  \njika ada strategi dan prosedur yang telah ditentukan. \nOrganisasi harus menetapkan risiko yang dapat diterima dalam \nmenangani Insiden Siber dan mengembangkan strategi yang \nsesuai. Organisasi harus membuat strategi/prosedur \npenahanan terpisah untuk setiap jenis insiden utama, dengan \nkriteria yang didokumentasikan dengan jelas untuk \nmemfasilitasi pengambilan keputusan. Prosedur containment \ndapat dilakukan dengan cara sebagai berikut: \n1) isolasi sistem yang terkena insiden; \n2) backup data yang berkaitan dengan insiden (misalnya hasil \npengumpulan bukti berbentuk log, screenshot, dan lainnya); \n3) identifikasi semua layanan (service) dan koneksi yang \nterhubung; \n4) identifikasi metode penyerang ketika masuk ke sistem \npertama kali, dengan melihat log pada sistem;",
+          "metadata": {
+            "doc_id": "peraturan-bssn-1-2024",
+            "doc_title": "Peraturan BSSN Nomor 1 Tahun 2024",
+            "source_framework": "BSSN",
+            "language": "id",
+            "incident_types": [
+              "phishing",
+              "malware",
+              "ransomware",
+              "akses_tidak_sah",
+              "kebocoran_data",
+              "ddos",
+              "web_defacement",
+              "general"
+            ],
+            "page_number": 18,
+            "section_header": "",
+            "chunk_index": 590,
+            "object_type": "",
+            "external_id": "",
+            "source": "knowledge_base\\documents\\Peraturan BSSN Nomor 1 Tahun 2024.pdf"
+          },
+          "score": 0.5098065,
+          "rrf_score": 0.016129032258064516,
+          "final_score": 0.653638743548387
+        },
+        {
+          "id": "b43e748d-4b95-4b53-a0ae-611c0bcc10d5",
+          "content": "Teknik yang dimitigasi (59):\n  - T1003.001: LSASS Memory\n  - T1003.002: Security Account Manager\n  - T1003.003: NTDS\n  - T1003.004: LSA Secrets\n  - T1003.005: Cached Domain Credentials\n  - T1003: OS Credential Dumping\n  - T1027: Obfuscated Files or Information\n  - T1036.007: Double File Extension\n  - T1036: Masquerading\n  - T1056.002: GUI Input Capture\n  - T1072: Software Deployment Tools\n  - T1078.002: Domain Accounts\n  - T1078.004: Cloud Accounts\n  - T1078: Valid Accounts\n  - T1111: Multi-Factor Authentication Interception\n  - T1176.001: Browser Extensions\n  - T1176.002: IDE Extensions\n  - T1176: Software Extensions\n  - T1185: Browser Session Hijacking\n  - T1189: Drive-by Compromise",
+          "metadata": {
+            "doc_id": "mitre-attack-enterprise",
+            "doc_title": "MITRE ATT&CK Enterprise",
+            "source_framework": "MITRE",
+            "language": "en",
+            "incident_types": [
+              "akses_tidak_sah",
+              "ddos",
+              "general",
+              "kebocoran_data",
+              "malware",
+              "phishing",
+              "ransomware",
+              "web_defacement"
+            ],
+            "page_number": 0,
+            "section_header": "",
+            "chunk_index": 572
+          },
+          "score": 0.50340104,
+          "rrf_score": 0.015873015873015872,
+          "final_score": 0.6476188232380953
+        },
+        {
+          "id": "cb33df73-dc6d-4e02-97cf-acc6da264390",
+          "content": "- 18 -  \nii. Antimalware memberi peringatan saat mendeteksi host \n/ media yang terinfeksi malware; \niii. Administrator melihat adanya file baru yang \nmempunyai nama yang tidak biasa digunakan \n(unusual character); \niv. Log pada aplikasi mencatat adanya tindakan \npercobaan login yang banyak dari IP address yang \ntidak diketahui; dan \nv. Administrator melihat  surat elektronik yang tertolak \noleh sistem  (bounced email ) yang banyak dengan \nkonten yang anomali (suspicious content). \n \nAnalisis Insiden Siber dilakukan untuk mengetahui paling \nsedikit: \n1) Sistem Elektronik yang terkena Insiden Siber. \nSistem Elektronik yang terkena Insiden Siber sebagaimana \nperlu diketahui kategori Sistem Elektroniknya. \n2) Ruang lingkup dampak Insiden Siber.",
+          "metadata": {
+            "doc_id": "peraturan-bssn-1-2024",
+            "doc_title": "Peraturan BSSN Nomor 1 Tahun 2024",
+            "source_framework": "BSSN",
+            "language": "id",
+            "incident_types": [
+              "phishing",
+              "malware",
+              "ransomware",
+              "akses_tidak_sah",
+              "kebocoran_data",
+              "ddos",
+              "web_defacement",
+              "general"
+            ],
+            "page_number": 17,
+            "section_header": "",
+            "chunk_index": 586,
+            "object_type": "",
+            "external_id": "",
+            "source": "knowledge_base\\documents\\Peraturan BSSN Nomor 1 Tahun 2024.pdf"
+          },
+          "score": 0.4846809,
+          "rrf_score": 0.015625,
+          "final_score": 0.63302663
+        },
+        {
+          "id": "5ac69564-b77a-43cb-95be-3caa37374271",
+          "content": "kerentanan Sistem Elektro nik dilakukan untuk persiapan \npemulihan Sistem Elektronik. Penghapusan dilakukan dengan \nbeberapa cara seperti: \n1) menentukan tanda dan sebab dari suatu Insiden Siber; \n2) melakukan restore backup untuk mendapatkan new fresh \nsystem; \n3) menghapus penyebab Insiden Siber, seperti malware; \n4) menonaktifkan akun pengguna yang terkena Insiden Siber; \n5) melalui reset password jika diperlukan; \n6) melakukan mitigasi terhadap kerentanan yang tereksploitasi \nsaat Insiden Siber;",
+          "metadata": {
+            "doc_id": "peraturan-bssn-1-2024",
+            "doc_title": "Peraturan BSSN Nomor 1 Tahun 2024",
+            "source_framework": "BSSN",
+            "language": "id",
+            "incident_types": [
+              "phishing",
+              "malware",
+              "ransomware",
+              "akses_tidak_sah",
+              "kebocoran_data",
+              "ddos",
+              "web_defacement",
+              "general"
+            ],
+            "page_number": 18,
+            "section_header": "",
+            "chunk_index": 593,
+            "object_type": "",
+            "external_id": "",
+            "source": "knowledge_base\\documents\\Peraturan BSSN Nomor 1 Tahun 2024.pdf"
+          },
+          "score": 0.47831133,
+          "rrf_score": 0.015384615384615385,
+          "final_score": 0.6271256233076923
+        }
+      ]
+    },
+    {
+      "id": "QA-018",
+      "question": "Bagaimana cara memfilter lalu lintas jaringan untuk mencegah eksfiltrasi data dari sistem organisasi ke layanan eksternal yang tidak diotorisasi?",
+      "ground_truth": "Terapkan filter lalu lintas jaringan untuk membatasi akses ke layanan berbagi file publik yang tidak diotorisasi dan mencegah eksfiltrasi data lebih lanjut. Konfigurasikan kebijakan penggunaan akun dan terapkan prinsip hak akses minimum agar hanya pengguna yang berwenang yang dapat mengakses dan mentransfer dokumen sensitif ke layanan eksternal.",
+      "candidate_answer": "Untuk memfilter lalu lintas jaringan dan mencegah eksfiltrasi data dari sistem organisasi ke layanan eksternal yang tidak diotorisasi, organisasi dapat melakukan pemantauan pada jaringan yang terkena Insiden Siber. Jika terdapat paket yang dicurigai atau anomali, langkah yang harus diambil adalah segera memblokir dan mendokumentasikan paket tersebut. Dokumentasi dapat mencakup sumber IP, bentuk paket, waktu, dan informasi relevan lainnya. Selain itu, organisasi harus mengidentifikasi semua layanan dan koneksi yang terhubung untuk memastikan tidak ada jalur yang tidak diotorisasi yang dapat digunakan untuk eksfiltrasi data. Langkah-langkah ini merupakan bagian dari prosedur penahanan insiden yang harus didokumentasikan dengan jelas untuk memfasilitasi pengambilan keputusan yang tepat.\n\nSumber:\n[4] Peraturan BSSN Nomor 1 Tahun 2024, Bagian 6",
+      "retrieved_chunks": [
+        {
+          "id": "007a4bd7-94e3-44f5-aee3-fea7884fefb7",
+          "content": "- 19 -  \njika ada strategi dan prosedur yang telah ditentukan. \nOrganisasi harus menetapkan risiko yang dapat diterima dalam \nmenangani Insiden Siber dan mengembangkan strategi yang \nsesuai. Organisasi harus membuat strategi/prosedur \npenahanan terpisah untuk setiap jenis insiden utama, dengan \nkriteria yang didokumentasikan dengan jelas untuk \nmemfasilitasi pengambilan keputusan. Prosedur containment \ndapat dilakukan dengan cara sebagai berikut: \n1) isolasi sistem yang terkena insiden; \n2) backup data yang berkaitan dengan insiden (misalnya hasil \npengumpulan bukti berbentuk log, screenshot, dan lainnya); \n3) identifikasi semua layanan (service) dan koneksi yang \nterhubung; \n4) identifikasi metode penyerang ketika masuk ke sistem \npertama kali, dengan melihat log pada sistem;",
+          "metadata": {
+            "doc_id": "peraturan-bssn-1-2024",
+            "doc_title": "Peraturan BSSN Nomor 1 Tahun 2024",
+            "source_framework": "BSSN",
+            "language": "id",
+            "incident_types": [
+              "phishing",
+              "malware",
+              "ransomware",
+              "akses_tidak_sah",
+              "kebocoran_data",
+              "ddos",
+              "web_defacement",
+              "general"
+            ],
+            "page_number": 18,
+            "section_header": "",
+            "chunk_index": 590,
+            "object_type": "",
+            "external_id": "",
+            "source": "knowledge_base\\documents\\Peraturan BSSN Nomor 1 Tahun 2024.pdf"
+          },
+          "score": 0.5619664,
+          "rrf_score": 0.01639344262295082,
+          "final_score": 0.6917371357377049
+        },
+        {
+          "id": "9d414522-c882-469f-9734-21821872386e",
+          "content": "Training and Awareness:\n\n- Educate employees on identifying phishing attempts, securing their social media, and avoiding information leaks.\n\nTeknik yang dimitigasi (84):\n  - T1583.001: Domains\n  - T1583.002: DNS Server\n  - T1583.003: Virtual Private Server\n  - T1583.004: Server\n  - T1583.005: Botnet\n  - T1583.006: Web Services\n  - T1583.007: Serverless\n  - T1583.008: Malvertising\n  - T1583: Acquire Infrastructure\n  - T1584.001: Domains\n  - T1584.002: DNS Server\n  - T1584.003: Virtual Private Server\n  - T1584.004: Server\n  - T1584.005: Botnet\n  - T1584.006: Web Services\n  - T1584.007: Serverless\n  - T1584.008: Network Devices\n  - T1584: Compromise Infrastructure\n  - T1585.001: Social Media Accounts\n  - T1585.002: Email Accounts",
+          "metadata": {
+            "doc_id": "mitre-attack-enterprise",
+            "doc_title": "MITRE ATT&CK Enterprise",
+            "source_framework": "MITRE",
+            "language": "en",
+            "incident_types": [
+              "general"
+            ],
+            "page_number": 0,
+            "section_header": "",
+            "chunk_index": 617
+          },
+          "score": 0.5412708,
+          "rrf_score": 0.016129032258064516,
+          "final_score": 0.6756637535483871
+        },
+        {
+          "id": "c8f70b4f-9db0-499e-983b-b108d20c9405",
+          "content": "Insiden Siber dan sistem yang digunakan. \n2) melakukan deteksi sumber Insiden Siber: \na) identifikasi informasi, dapat dilakukan dengan melihat \nlokasi, nomor serial, nomor model, hostname, MAC \naddress, IP address dari komputer yang digunakan, log \npada sistem operasi dan aplikasi; \nb) identifikasi insiden, dapat dilihat melalui beberapa cara  \nseperti: \ni. Lihat IPS/IDS/Firewall pada jaringan yang \nmemberikan peringatan saat terjadi intrusi pada  \njaringan;",
+          "metadata": {
+            "doc_id": "peraturan-bssn-1-2024",
+            "doc_title": "Peraturan BSSN Nomor 1 Tahun 2024",
+            "source_framework": "BSSN",
+            "language": "id",
+            "incident_types": [
+              "phishing",
+              "malware",
+              "ransomware",
+              "akses_tidak_sah",
+              "kebocoran_data",
+              "ddos",
+              "web_defacement",
+              "general"
+            ],
+            "page_number": 16,
+            "section_header": "",
+            "chunk_index": 585,
+            "object_type": "",
+            "external_id": "",
+            "source": "knowledge_base\\documents\\Peraturan BSSN Nomor 1 Tahun 2024.pdf"
+          },
+          "score": 0.5314922,
+          "rrf_score": 0.015873015873015872,
+          "final_score": 0.6672826352380952
+        },
+        {
+          "id": "48c1d54b-21f7-47cb-ac6d-a61eff6ac244",
+          "content": "pertama kali, dengan melihat log pada sistem; \n5) periksa kode-kode berbahaya yang ada dalam sistem; dan \n6) lakukan pemantauan pada jaringan yang terkena Insiden \nSiber, jika terdapat paket yang dicurigai/anomali, segera \nblokir dan dokumentasikan (dapat dicatat sumber IP, bentuk \npaket, waktu, dan lainnya). \n \nb. mengumpulkan dan memelihara bukti Insiden Siber dari Sistem \nElektronik terdampak. \nPada kegiatan ini dilakukan hal-hal sebagai berikut: \n1) mengategorikan informasi mengenai Insiden Siber yang \nterdeteksi dan menyimpannya sesuai ukuran dampak terkait \nkeamanan, penyebab insiden, dan faktor lainnya yang \ndiperlukan. \n2) melakukan forensik digital terhadap aset informasi yang \nterdampak Insiden Siber untuk menemukenali penyebab \nInsiden Siber sesuai dengan ketentuan peraturan",
+          "metadata": {
+            "doc_id": "peraturan-bssn-1-2024",
+            "doc_title": "Peraturan BSSN Nomor 1 Tahun 2024",
+            "source_framework": "BSSN",
+            "language": "id",
+            "incident_types": [
+              "phishing",
+              "malware",
+              "ransomware",
+              "akses_tidak_sah",
+              "kebocoran_data",
+              "ddos",
+              "web_defacement",
+              "general"
+            ],
+            "page_number": 18,
+            "section_header": "",
+            "chunk_index": 591,
+            "object_type": "",
+            "external_id": "",
+            "source": "knowledge_base\\documents\\Peraturan BSSN Nomor 1 Tahun 2024.pdf"
+          },
+          "score": 0.5212103,
+          "rrf_score": 0.015625,
+          "final_score": 0.6585972099999999
+        },
+        {
+          "id": "1fbfbf1c-a996-4f87-83c7-8d4148dca20e",
+          "content": "Teknik yang dimitigasi (71):\n  - T1011.001: Exfiltration Over Bluetooth\n  - T1011: Exfiltration Over Other Network Medium\n  - T1021.001: Remote Desktop Protocol\n  - T1021.003: Distributed Component Object Model\n  - T1021.004: SSH\n  - T1021.005: VNC\n  - T1021.006: Windows Remote Management\n  - T1021.008: Direct Cloud VM Connections\n  - T1021: Remote Services\n  - T1046: Network Service Discovery\n  - T1052.001: Exfiltration over USB\n  - T1052: Exfiltration Over Physical Medium\n  - T1059.001: PowerShell\n  - T1059.005: Visual Basic\n  - T1059.007: JavaScript\n  - T1059: Command and Scripting Interpreter\n  - T1091: Replication Through Removable Media\n  - T1092: Communication Through Removable Media\n  - T1098.001: Additional Cloud Credentials\n  - T1098.002: Additional Email Delegate Permissions",
+          "metadata": {
+            "doc_id": "mitre-attack-enterprise",
+            "doc_title": "MITRE ATT&CK Enterprise",
+            "source_framework": "MITRE",
+            "language": "en",
+            "incident_types": [
+              "akses_tidak_sah",
+              "general",
+              "kebocoran_data",
+              "malware",
+              "phishing",
+              "ransomware"
+            ],
+            "page_number": 0,
+            "section_header": "",
+            "chunk_index": 717
+          },
+          "score": 0.51455903,
+          "rrf_score": 0.015384615384615385,
+          "final_score": 0.6524990133076923
+        }
+      ]
+    }
+  ]
+}

@@ -1,173 +1,35 @@
 {
-  "timestamp": "2026-04-25T09:25:02.524534+00:00",
+  "timestamp": "2026-06-21T07:50:35.955113+00:00",
+  "tcr_formula": "binary (Ni et al., 2021): COMPLETE / total",
   "total": 35,
-  "complete": 14,
-  "partial": 0,
-  "fail": 21,
-  "tcr_percent": 40.0,
-  "target_met": false,
+  "complete": 28,
+  "fail": 7,
+  "tcr_percent": 80.0,
+  "target_met": true,
   "breakdown_by_category": {
     "clear_report": {
-      "total": 27,
-      "complete": 6,
-      "rate_percent": 22.2
-    },
-    "ambiguous": {
-      "total": 4,
-      "complete": 4,
-      "rate_percent": 100.0
-    },
-    "general_question": {
-      "total": 2,
-      "complete": 2,
-      "rate_percent": 100.0
-    },
-    "status_query": {
-      "total": 1,
-      "complete": 1,
-      "rate_percent": 100.0
-    },
-    "injection_attempt": {
-      "total": 1,
-      "complete": 1,
-      "rate_percent": 100.0
+      "total": 35,
+      "complete": 28,
+      "rate_percent": 80.0
     }
   },
   "details": [
     {
       "id": "SC-001",
       "category": "clear_report",
-      "status": "FAIL",
-      "checks": {
-        "intent": true,
-        "incident_type": false,
-        "mitigation": false,
-        "ticket": false
-      },
-      "intent": "report_incident",
-      "incident_type": "",
-      "severity": "",
-      "ticket_id": "",
-      "requires_clarification": true,
-      "processing_errors": []
-    },
-    {
-      "id": "SC-002",
-      "category": "clear_report",
       "status": "COMPLETE",
       "checks": {
         "intent": true,
-        "incident_type": true,
+        "incident_type_correct": true,
         "mitigation": true,
         "ticket": true
       },
+      "expected_type": "Phishing",
       "intent": "report_incident",
-      "incident_type": "Ransomware",
-      "severity": "Kritis",
-      "ticket_id": "TICKET-EVAL-28BF12",
+      "incident_type": "Phishing",
+      "severity": "Tinggi",
+      "ticket_id": "TICKET-EVAL-9BE5DD",
       "requires_clarification": false,
-      "processing_errors": []
-    },
-    {
-      "id": "SC-003",
-      "category": "clear_report",
-      "status": "COMPLETE",
-      "checks": {
-        "intent": true,
-        "incident_type": true,
-        "mitigation": true,
-        "ticket": true
-      },
-      "intent": "report_incident",
-      "incident_type": "DDoS",
-      "severity": "Kritis",
-      "ticket_id": "TICKET-EVAL-28BF12",
-      "requires_clarification": false,
-      "processing_errors": []
-    },
-    {
-      "id": "SC-004",
-      "category": "clear_report",
-      "status": "FAIL",
-      "checks": {
-        "intent": true,
-        "incident_type": false,
-        "mitigation": false,
-        "ticket": false
-      },
-      "intent": "report_incident",
-      "incident_type": "",
-      "severity": "",
-      "ticket_id": "",
-      "requires_clarification": true,
-      "processing_errors": []
-    },
-    {
-      "id": "SC-005",
-      "category": "clear_report",
-      "status": "FAIL",
-      "checks": {
-        "intent": true,
-        "incident_type": false,
-        "mitigation": false,
-        "ticket": false
-      },
-      "intent": "report_incident",
-      "incident_type": "",
-      "severity": "",
-      "ticket_id": "",
-      "requires_clarification": true,
-      "processing_errors": []
-    },
-    {
-      "id": "SC-006",
-      "category": "clear_report",
-      "status": "FAIL",
-      "checks": {
-        "intent": true,
-        "incident_type": false,
-        "mitigation": false,
-        "ticket": false
-      },
-      "intent": "report_incident",
-      "incident_type": "",
-      "severity": "",
-      "ticket_id": "",
-      "requires_clarification": true,
-      "processing_errors": []
-    },
-    {
-      "id": "SC-007",
-      "category": "clear_report",
-      "status": "FAIL",
-      "checks": {
-        "intent": true,
-        "incident_type": false,
-        "mitigation": false,
-        "ticket": false
-      },
-      "intent": "report_incident",
-      "incident_type": "",
-      "severity": "",
-      "ticket_id": "",
-      "requires_clarification": true,
-      "processing_errors": []
-    },
-    {
-      "id": "SC-008",
-      "category": "clear_report",
-      "status": "FAIL",
-      "checks": {
-        "intent": true,
-        "incident_type": false,
-        "mitigation": false,
-        "ticket": false
-      },
-      "intent": "report_incident",
-      "incident_type": "",
-      "severity": "",
-      "ticket_id": "",
-      "requires_clarification": true,
       "processing_errors": []
     },
     {
@@ -176,197 +38,47 @@
       "status": "COMPLETE",
       "checks": {
         "intent": true,
-        "incident_type": true,
+        "incident_type_correct": true,
         "mitigation": true,
         "ticket": true
       },
+      "expected_type": "Phishing",
       "intent": "report_incident",
       "incident_type": "Phishing",
       "severity": "Tinggi",
-      "ticket_id": "TICKET-EVAL-28BF12",
+      "ticket_id": "TICKET-EVAL-9BE5DD",
       "requires_clarification": false,
-      "processing_errors": []
-    },
-    {
-      "id": "SC-010",
-      "category": "clear_report",
-      "status": "COMPLETE",
-      "checks": {
-        "intent": true,
-        "incident_type": true,
-        "mitigation": true,
-        "ticket": true
-      },
-      "intent": "report_incident",
-      "incident_type": "Lainnya",
-      "severity": "Sedang",
-      "ticket_id": "TICKET-EVAL-28BF12",
-      "requires_clarification": false,
-      "processing_errors": []
-    },
-    {
-      "id": "SC-011",
-      "category": "clear_report",
-      "status": "COMPLETE",
-      "checks": {
-        "intent": true,
-        "incident_type": true,
-        "mitigation": true,
-        "ticket": true
-      },
-      "intent": "report_incident",
-      "incident_type": "Ransomware",
-      "severity": "Kritis",
-      "ticket_id": "TICKET-EVAL-28BF12",
-      "requires_clarification": false,
-      "processing_errors": []
-    },
-    {
-      "id": "SC-012",
-      "category": "clear_report",
-      "status": "FAIL",
-      "checks": {
-        "intent": true,
-        "incident_type": false,
-        "mitigation": false,
-        "ticket": false
-      },
-      "intent": "report_incident",
-      "incident_type": "",
-      "severity": "",
-      "ticket_id": "",
-      "requires_clarification": true,
-      "processing_errors": []
-    },
-    {
-      "id": "SC-013",
-      "category": "clear_report",
-      "status": "FAIL",
-      "checks": {
-        "intent": true,
-        "incident_type": false,
-        "mitigation": false,
-        "ticket": false
-      },
-      "intent": "report_incident",
-      "incident_type": "",
-      "severity": "",
-      "ticket_id": "",
-      "requires_clarification": true,
-      "processing_errors": []
-    },
-    {
-      "id": "SC-014",
-      "category": "clear_report",
-      "status": "FAIL",
-      "checks": {
-        "intent": true,
-        "incident_type": false,
-        "mitigation": false,
-        "ticket": false
-      },
-      "intent": "report_incident",
-      "incident_type": "",
-      "severity": "",
-      "ticket_id": "",
-      "requires_clarification": true,
-      "processing_errors": []
-    },
-    {
-      "id": "SC-015",
-      "category": "clear_report",
-      "status": "FAIL",
-      "checks": {
-        "intent": true,
-        "incident_type": false,
-        "mitigation": false,
-        "ticket": false
-      },
-      "intent": "report_incident",
-      "incident_type": "",
-      "severity": "",
-      "ticket_id": "",
-      "requires_clarification": true,
-      "processing_errors": []
-    },
-    {
-      "id": "SC-016",
-      "category": "clear_report",
-      "status": "FAIL",
-      "checks": {
-        "intent": true,
-        "incident_type": false,
-        "mitigation": false,
-        "ticket": false
-      },
-      "intent": "report_incident",
-      "incident_type": "",
-      "severity": "",
-      "ticket_id": "",
-      "requires_clarification": true,
-      "processing_errors": []
-    },
-    {
-      "id": "SC-017",
-      "category": "clear_report",
-      "status": "FAIL",
-      "checks": {
-        "intent": true,
-        "incident_type": false,
-        "mitigation": false,
-        "ticket": false
-      },
-      "intent": "report_incident",
-      "incident_type": "",
-      "severity": "",
-      "ticket_id": "",
-      "requires_clarification": true,
-      "processing_errors": []
-    },
-    {
-      "id": "SC-018",
-      "category": "clear_report",
-      "status": "FAIL",
-      "checks": {
-        "intent": true,
-        "incident_type": false,
-        "mitigation": false,
-        "ticket": false
-      },
-      "intent": "report_incident",
-      "incident_type": "",
-      "severity": "",
-      "ticket_id": "",
-      "requires_clarification": true,
       "processing_errors": []
     },
     {
       "id": "SC-019",
       "category": "clear_report",
-      "status": "FAIL",
+      "status": "COMPLETE",
       "checks": {
         "intent": true,
-        "incident_type": false,
-        "mitigation": false,
-        "ticket": false
+        "incident_type_correct": true,
+        "mitigation": true,
+        "ticket": true
       },
+      "expected_type": "Phishing",
       "intent": "report_incident",
-      "incident_type": "",
-      "severity": "",
-      "ticket_id": "",
-      "requires_clarification": true,
+      "incident_type": "Phishing",
+      "severity": "Tinggi",
+      "ticket_id": "TICKET-EVAL-9BE5DD",
+      "requires_clarification": false,
       "processing_errors": []
     },
     {
-      "id": "SC-020",
+      "id": "SC-035",
       "category": "clear_report",
       "status": "FAIL",
       "checks": {
         "intent": true,
-        "incident_type": false,
+        "incident_type_correct": false,
         "mitigation": false,
         "ticket": false
       },
+      "expected_type": "Phishing",
       "intent": "report_incident",
       "incident_type": "",
       "severity": "",
@@ -375,19 +87,56 @@
       "processing_errors": []
     },
     {
-      "id": "SC-021",
+      "id": "SC-048",
       "category": "clear_report",
       "status": "COMPLETE",
       "checks": {
         "intent": true,
-        "incident_type": true,
+        "incident_type_correct": true,
         "mitigation": true,
         "ticket": true
       },
+      "expected_type": "Phishing",
       "intent": "report_incident",
-      "incident_type": "Ransomware",
-      "severity": "Kritis",
-      "ticket_id": "TICKET-EVAL-28BF12",
+      "incident_type": "Phishing",
+      "severity": "Tinggi",
+      "ticket_id": "TICKET-EVAL-9BE5DD",
+      "requires_clarification": false,
+      "processing_errors": []
+    },
+    {
+      "id": "SC-007",
+      "category": "clear_report",
+      "status": "COMPLETE",
+      "checks": {
+        "intent": true,
+        "incident_type_correct": true,
+        "mitigation": true,
+        "ticket": true
+      },
+      "expected_type": "Malware",
+      "intent": "report_incident",
+      "incident_type": "Malware",
+      "severity": "Sedang",
+      "ticket_id": "TICKET-EVAL-9BE5DD",
+      "requires_clarification": false,
+      "processing_errors": []
+    },
+    {
+      "id": "SC-013",
+      "category": "clear_report",
+      "status": "COMPLETE",
+      "checks": {
+        "intent": true,
+        "incident_type_correct": true,
+        "mitigation": true,
+        "ticket": true
+      },
+      "expected_type": "Malware",
+      "intent": "report_incident",
+      "incident_type": "Malware",
+      "severity": "Sedang",
+      "ticket_id": "TICKET-EVAL-9BE5DD",
       "requires_clarification": false,
       "processing_errors": []
     },
@@ -397,192 +146,299 @@
       "status": "FAIL",
       "checks": {
         "intent": true,
-        "incident_type": false,
-        "mitigation": false,
-        "ticket": false
+        "incident_type_correct": false,
+        "mitigation": true,
+        "ticket": true
       },
+      "expected_type": "Malware",
       "intent": "report_incident",
-      "incident_type": "",
-      "severity": "",
-      "ticket_id": "",
-      "requires_clarification": true,
+      "incident_type": "DDoS",
+      "severity": "Tinggi",
+      "ticket_id": "TICKET-EVAL-9BE5DD",
+      "requires_clarification": false,
       "processing_errors": []
     },
     {
-      "id": "SC-023",
+      "id": "SC-049",
+      "category": "clear_report",
+      "status": "COMPLETE",
+      "checks": {
+        "intent": true,
+        "incident_type_correct": true,
+        "mitigation": true,
+        "ticket": true
+      },
+      "expected_type": "Malware",
+      "intent": "report_incident",
+      "incident_type": "Malware",
+      "severity": "Tinggi",
+      "ticket_id": "TICKET-EVAL-9BE5DD",
+      "requires_clarification": false,
+      "processing_errors": []
+    },
+    {
+      "id": "SC-050",
+      "category": "clear_report",
+      "status": "COMPLETE",
+      "checks": {
+        "intent": true,
+        "incident_type_correct": true,
+        "mitigation": true,
+        "ticket": true
+      },
+      "expected_type": "Malware",
+      "intent": "report_incident",
+      "incident_type": "Malware",
+      "severity": "Tinggi",
+      "ticket_id": "TICKET-EVAL-9BE5DD",
+      "requires_clarification": false,
+      "processing_errors": []
+    },
+    {
+      "id": "SC-002",
+      "category": "clear_report",
+      "status": "COMPLETE",
+      "checks": {
+        "intent": true,
+        "incident_type_correct": true,
+        "mitigation": true,
+        "ticket": true
+      },
+      "expected_type": "Ransomware",
+      "intent": "report_incident",
+      "incident_type": "Ransomware",
+      "severity": "Kritis",
+      "ticket_id": "TICKET-EVAL-9BE5DD",
+      "requires_clarification": false,
+      "processing_errors": []
+    },
+    {
+      "id": "SC-011",
+      "category": "clear_report",
+      "status": "COMPLETE",
+      "checks": {
+        "intent": true,
+        "incident_type_correct": true,
+        "mitigation": true,
+        "ticket": true
+      },
+      "expected_type": "Ransomware",
+      "intent": "report_incident",
+      "incident_type": "Ransomware",
+      "severity": "Kritis",
+      "ticket_id": "TICKET-EVAL-9BE5DD",
+      "requires_clarification": false,
+      "processing_errors": []
+    },
+    {
+      "id": "SC-021",
+      "category": "clear_report",
+      "status": "COMPLETE",
+      "checks": {
+        "intent": true,
+        "incident_type_correct": true,
+        "mitigation": true,
+        "ticket": true
+      },
+      "expected_type": "Ransomware",
+      "intent": "report_incident",
+      "incident_type": "Ransomware",
+      "severity": "Kritis",
+      "ticket_id": "TICKET-EVAL-9BE5DD",
+      "requires_clarification": false,
+      "processing_errors": []
+    },
+    {
+      "id": "SC-051",
+      "category": "clear_report",
+      "status": "COMPLETE",
+      "checks": {
+        "intent": true,
+        "incident_type_correct": true,
+        "mitigation": true,
+        "ticket": true
+      },
+      "expected_type": "Ransomware",
+      "intent": "report_incident",
+      "incident_type": "Ransomware",
+      "severity": "Kritis",
+      "ticket_id": "TICKET-EVAL-9BE5DD",
+      "requires_clarification": false,
+      "processing_errors": []
+    },
+    {
+      "id": "SC-052",
+      "category": "clear_report",
+      "status": "COMPLETE",
+      "checks": {
+        "intent": true,
+        "incident_type_correct": true,
+        "mitigation": true,
+        "ticket": true
+      },
+      "expected_type": "Ransomware",
+      "intent": "report_incident",
+      "incident_type": "Ransomware",
+      "severity": "Kritis",
+      "ticket_id": "TICKET-EVAL-9BE5DD",
+      "requires_clarification": false,
+      "processing_errors": []
+    },
+    {
+      "id": "SC-004",
+      "category": "clear_report",
+      "status": "COMPLETE",
+      "checks": {
+        "intent": true,
+        "incident_type_correct": true,
+        "mitigation": true,
+        "ticket": true
+      },
+      "expected_type": "Kebocoran Data",
+      "intent": "report_incident",
+      "incident_type": "Kebocoran Data",
+      "severity": "Kritis",
+      "ticket_id": "TICKET-EVAL-9BE5DD",
+      "requires_clarification": false,
+      "processing_errors": []
+    },
+    {
+      "id": "SC-012",
       "category": "clear_report",
       "status": "FAIL",
       "checks": {
         "intent": true,
-        "incident_type": false,
-        "mitigation": false,
-        "ticket": false
+        "incident_type_correct": false,
+        "mitigation": true,
+        "ticket": true
       },
+      "expected_type": "Kebocoran Data",
       "intent": "report_incident",
-      "incident_type": "",
-      "severity": "",
-      "ticket_id": "",
-      "requires_clarification": true,
-      "processing_errors": []
-    },
-    {
-      "id": "SC-024",
-      "category": "clear_report",
-      "status": "FAIL",
-      "checks": {
-        "intent": true,
-        "incident_type": false,
-        "mitigation": false,
-        "ticket": false
-      },
-      "intent": "report_incident",
-      "incident_type": "",
-      "severity": "",
-      "ticket_id": "",
-      "requires_clarification": true,
+      "incident_type": "Akses Tidak Sah",
+      "severity": "Kritis",
+      "ticket_id": "TICKET-EVAL-9BE5DD",
+      "requires_clarification": false,
       "processing_errors": []
     },
     {
       "id": "SC-025",
       "category": "clear_report",
-      "status": "FAIL",
+      "status": "COMPLETE",
       "checks": {
         "intent": true,
-        "incident_type": false,
-        "mitigation": false,
-        "ticket": false
+        "incident_type_correct": true,
+        "mitigation": true,
+        "ticket": true
       },
+      "expected_type": "Kebocoran Data",
       "intent": "report_incident",
-      "incident_type": "",
-      "severity": "",
-      "ticket_id": "",
-      "requires_clarification": true,
-      "processing_errors": []
-    },
-    {
-      "id": "SC-026",
-      "category": "ambiguous",
-      "status": "COMPLETE",
-      "checks": {
-        "clarification_requested": true
-      },
-      "intent": "report_incident",
-      "incident_type": "",
-      "severity": "",
-      "ticket_id": "",
-      "requires_clarification": true,
-      "processing_errors": []
-    },
-    {
-      "id": "SC-027",
-      "category": "ambiguous",
-      "status": "COMPLETE",
-      "checks": {
-        "clarification_requested": true
-      },
-      "intent": "report_incident",
-      "incident_type": "",
-      "severity": "",
-      "ticket_id": "",
-      "requires_clarification": true,
-      "processing_errors": []
-    },
-    {
-      "id": "SC-028",
-      "category": "ambiguous",
-      "status": "COMPLETE",
-      "checks": {
-        "clarification_requested": true
-      },
-      "intent": "report_incident",
-      "incident_type": "",
-      "severity": "",
-      "ticket_id": "",
-      "requires_clarification": true,
-      "processing_errors": []
-    },
-    {
-      "id": "SC-029",
-      "category": "ambiguous",
-      "status": "COMPLETE",
-      "checks": {
-        "clarification_requested": true
-      },
-      "intent": "report_incident",
-      "incident_type": "",
-      "severity": "",
-      "ticket_id": "",
-      "requires_clarification": true,
-      "processing_errors": []
-    },
-    {
-      "id": "SC-030",
-      "category": "general_question",
-      "status": "COMPLETE",
-      "checks": {
-        "intent": true
-      },
-      "intent": "general_help",
-      "incident_type": "",
-      "severity": "",
-      "ticket_id": "",
+      "incident_type": "Kebocoran Data",
+      "severity": "Tinggi",
+      "ticket_id": "TICKET-EVAL-9BE5DD",
       "requires_clarification": false,
       "processing_errors": []
     },
     {
-      "id": "SC-031",
-      "category": "general_question",
+      "id": "SC-053",
+      "category": "clear_report",
       "status": "COMPLETE",
       "checks": {
-        "intent": true
+        "intent": true,
+        "incident_type_correct": true,
+        "mitigation": true,
+        "ticket": true
       },
-      "intent": "general_help",
-      "incident_type": "",
-      "severity": "",
-      "ticket_id": "",
+      "expected_type": "Kebocoran Data",
+      "intent": "report_incident",
+      "incident_type": "Kebocoran Data",
+      "severity": "Tinggi",
+      "ticket_id": "TICKET-EVAL-9BE5DD",
       "requires_clarification": false,
       "processing_errors": []
     },
     {
-      "id": "SC-032",
-      "category": "status_query",
-      "status": "COMPLETE",
-      "checks": {
-        "intent": true
-      },
-      "intent": "query_status",
-      "incident_type": "",
-      "severity": "",
-      "ticket_id": "",
-      "requires_clarification": false,
-      "processing_errors": []
-    },
-    {
-      "id": "SC-033",
-      "category": "injection_attempt",
-      "status": "COMPLETE",
-      "checks": {
-        "blocked": true
-      },
-      "intent": "needs_clarification",
-      "incident_type": "",
-      "severity": "",
-      "ticket_id": "",
-      "requires_clarification": true,
-      "processing_errors": [
-        "Input diblokir: terdeteksi pola 'override_instruction'"
-      ]
-    },
-    {
-      "id": "SC-034",
+      "id": "SC-054",
       "category": "clear_report",
       "status": "FAIL",
       "checks": {
         "intent": true,
-        "incident_type": false,
+        "incident_type_correct": false,
+        "mitigation": true,
+        "ticket": true
+      },
+      "expected_type": "Kebocoran Data",
+      "intent": "report_incident",
+      "incident_type": "Akses Tidak Sah",
+      "severity": "Tinggi",
+      "ticket_id": "TICKET-EVAL-9BE5DD",
+      "requires_clarification": false,
+      "processing_errors": []
+    },
+    {
+      "id": "SC-005",
+      "category": "clear_report",
+      "status": "COMPLETE",
+      "checks": {
+        "intent": true,
+        "incident_type_correct": true,
+        "mitigation": true,
+        "ticket": true
+      },
+      "expected_type": "Akses Tidak Sah",
+      "intent": "report_incident",
+      "incident_type": "Akses Tidak Sah",
+      "severity": "Kritis",
+      "ticket_id": "TICKET-EVAL-9BE5DD",
+      "requires_clarification": false,
+      "processing_errors": []
+    },
+    {
+      "id": "SC-015",
+      "category": "clear_report",
+      "status": "FAIL",
+      "checks": {
+        "intent": true,
+        "incident_type_correct": false,
+        "mitigation": true,
+        "ticket": true
+      },
+      "expected_type": "Akses Tidak Sah",
+      "intent": "report_incident",
+      "incident_type": "DDoS",
+      "severity": "Tinggi",
+      "ticket_id": "TICKET-EVAL-9BE5DD",
+      "requires_clarification": false,
+      "processing_errors": []
+    },
+    {
+      "id": "SC-055",
+      "category": "clear_report",
+      "status": "COMPLETE",
+      "checks": {
+        "intent": true,
+        "incident_type_correct": true,
+        "mitigation": true,
+        "ticket": true
+      },
+      "expected_type": "Akses Tidak Sah",
+      "intent": "report_incident",
+      "incident_type": "Akses Tidak Sah",
+      "severity": "Sedang",
+      "ticket_id": "TICKET-EVAL-9BE5DD",
+      "requires_clarification": false,
+      "processing_errors": []
+    },
+    {
+      "id": "SC-056",
+      "category": "clear_report",
+      "status": "FAIL",
+      "checks": {
+        "intent": true,
+        "incident_type_correct": false,
         "mitigation": false,
         "ticket": false
       },
+      "expected_type": "Akses Tidak Sah",
       "intent": "report_incident",
       "incident_type": "",
       "severity": "",
@@ -591,44 +447,211 @@
       "processing_errors": []
     },
     {
-      "id": "SC-035",
+      "id": "SC-057",
+      "category": "clear_report",
+      "status": "COMPLETE",
+      "checks": {
+        "intent": true,
+        "incident_type_correct": true,
+        "mitigation": true,
+        "ticket": true
+      },
+      "expected_type": "Akses Tidak Sah",
+      "intent": "report_incident",
+      "incident_type": "Akses Tidak Sah",
+      "severity": "Tinggi",
+      "ticket_id": "TICKET-EVAL-9BE5DD",
+      "requires_clarification": false,
+      "processing_errors": []
+    },
+    {
+      "id": "SC-003",
+      "category": "clear_report",
+      "status": "COMPLETE",
+      "checks": {
+        "intent": true,
+        "incident_type_correct": true,
+        "mitigation": true,
+        "ticket": true
+      },
+      "expected_type": "DDoS",
+      "intent": "report_incident",
+      "incident_type": "DDoS",
+      "severity": "Kritis",
+      "ticket_id": "TICKET-EVAL-9BE5DD",
+      "requires_clarification": false,
+      "processing_errors": []
+    },
+    {
+      "id": "SC-010",
       "category": "clear_report",
       "status": "FAIL",
       "checks": {
         "intent": true,
-        "incident_type": false,
-        "mitigation": false,
-        "ticket": false
+        "incident_type_correct": false,
+        "mitigation": true,
+        "ticket": true
       },
+      "expected_type": "DDoS",
       "intent": "report_incident",
-      "incident_type": "",
-      "severity": "",
-      "ticket_id": "",
-      "requires_clarification": true,
+      "incident_type": "Lainnya",
+      "severity": "Tinggi",
+      "ticket_id": "TICKET-EVAL-9BE5DD",
+      "requires_clarification": false,
+      "processing_errors": []
+    },
+    {
+      "id": "SC-058",
+      "category": "clear_report",
+      "status": "COMPLETE",
+      "checks": {
+        "intent": true,
+        "incident_type_correct": true,
+        "mitigation": true,
+        "ticket": true
+      },
+      "expected_type": "DDoS",
+      "intent": "report_incident",
+      "incident_type": "DDoS",
+      "severity": "Tinggi",
+      "ticket_id": "TICKET-EVAL-9BE5DD",
+      "requires_clarification": false,
+      "processing_errors": []
+    },
+    {
+      "id": "SC-059",
+      "category": "clear_report",
+      "status": "COMPLETE",
+      "checks": {
+        "intent": true,
+        "incident_type_correct": true,
+        "mitigation": true,
+        "ticket": true
+      },
+      "expected_type": "DDoS",
+      "intent": "report_incident",
+      "incident_type": "DDoS",
+      "severity": "Kritis",
+      "ticket_id": "TICKET-EVAL-9BE5DD",
+      "requires_clarification": false,
+      "processing_errors": []
+    },
+    {
+      "id": "SC-060",
+      "category": "clear_report",
+      "status": "COMPLETE",
+      "checks": {
+        "intent": true,
+        "incident_type_correct": true,
+        "mitigation": true,
+        "ticket": true
+      },
+      "expected_type": "DDoS",
+      "intent": "report_incident",
+      "incident_type": "DDoS",
+      "severity": "Tinggi",
+      "ticket_id": "TICKET-EVAL-9BE5DD",
+      "requires_clarification": false,
+      "processing_errors": []
+    },
+    {
+      "id": "SC-006",
+      "category": "clear_report",
+      "status": "COMPLETE",
+      "checks": {
+        "intent": true,
+        "incident_type_correct": true,
+        "mitigation": true,
+        "ticket": true
+      },
+      "expected_type": "Web Defacement",
+      "intent": "report_incident",
+      "incident_type": "Web Defacement",
+      "severity": "Tinggi",
+      "ticket_id": "TICKET-EVAL-9BE5DD",
+      "requires_clarification": false,
+      "processing_errors": []
+    },
+    {
+      "id": "SC-024",
+      "category": "clear_report",
+      "status": "COMPLETE",
+      "checks": {
+        "intent": true,
+        "incident_type_correct": true,
+        "mitigation": true,
+        "ticket": true
+      },
+      "expected_type": "Web Defacement",
+      "intent": "report_incident",
+      "incident_type": "Web Defacement",
+      "severity": "Tinggi",
+      "ticket_id": "TICKET-EVAL-9BE5DD",
+      "requires_clarification": false,
+      "processing_errors": []
+    },
+    {
+      "id": "SC-061",
+      "category": "clear_report",
+      "status": "COMPLETE",
+      "checks": {
+        "intent": true,
+        "incident_type_correct": true,
+        "mitigation": true,
+        "ticket": true
+      },
+      "expected_type": "Web Defacement",
+      "intent": "report_incident",
+      "incident_type": "Web Defacement",
+      "severity": "Tinggi",
+      "ticket_id": "TICKET-EVAL-9BE5DD",
+      "requires_clarification": false,
+      "processing_errors": []
+    },
+    {
+      "id": "SC-062",
+      "category": "clear_report",
+      "status": "COMPLETE",
+      "checks": {
+        "intent": true,
+        "incident_type_correct": true,
+        "mitigation": true,
+        "ticket": true
+      },
+      "expected_type": "Web Defacement",
+      "intent": "report_incident",
+      "incident_type": "Web Defacement",
+      "severity": "Tinggi",
+      "ticket_id": "TICKET-EVAL-9BE5DD",
+      "requires_clarification": false,
+      "processing_errors": []
+    },
+    {
+      "id": "SC-063",
+      "category": "clear_report",
+      "status": "COMPLETE",
+      "checks": {
+        "intent": true,
+        "incident_type_correct": true,
+        "mitigation": true,
+        "ticket": true
+      },
+      "expected_type": "Web Defacement",
+      "intent": "report_incident",
+      "incident_type": "Web Defacement",
+      "severity": "Tinggi",
+      "ticket_id": "TICKET-EVAL-9BE5DD",
+      "requires_clarification": false,
       "processing_errors": []
     }
   ],
   "failed_scenarios": [
-    "SC-001",
-    "SC-004",
-    "SC-005",
-    "SC-006",
-    "SC-007",
-    "SC-008",
-    "SC-012",
-    "SC-013",
-    "SC-014",
-    "SC-015",
-    "SC-016",
-    "SC-017",
-    "SC-018",
-    "SC-019",
-    "SC-020",
+    "SC-035",
     "SC-022",
-    "SC-023",
-    "SC-024",
-    "SC-025",
-    "SC-034",
-    "SC-035"
+    "SC-012",
+    "SC-054",
+    "SC-015",
+    "SC-056",
+    "SC-010"
   ]
 }

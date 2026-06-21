@@ -2,7 +2,7 @@
 
 > Dokumen komprehensif untuk persiapan sidang skripsi: penjelasan **setiap file, setiap fungsi, setiap class**, logika internal, dan keterkaitan antar-modul.
 > Target pembaca: penulis (recall cepat) dan dosen penguji (verifikasi teknis).
-> Terakhir diperbarui: 2026-06-06 (Sinkronisasi dokumentasi dengan keadaan kode hari ini).
+> Terakhir diperbarui: 2026-06-16 (Tambah LLM Judge guardrails, eval_guardrails.py, update RETRIEVAL_SCORE_THRESHOLD).
 
 ---
 
@@ -30,6 +30,8 @@
 20. [Tabel Q&A Sidang](#20-tabel-qa-sidang)
 21. [Perubahan Terbaru (2026-05-30)](#21-perubahan-terbaru-2026-05-30)
 22. [Perubahan Terbaru (2026-06-02)](#22-perubahan-terbaru-2026-06-02)
+23. [Perubahan Terbaru (2026-06-06)](#23-perubahan-terbaru-2026-06-06)
+24. [Perubahan Terbaru (2026-06-16)](#24-perubahan-terbaru-2026-06-16)
 
 ---
 
@@ -166,10 +168,11 @@ pusdatin-help/
 │   │   └── reranker.py     ← Custom reranker (cosine + RRF + type boost)
 │   │
 │   ├── security/           ← Guardrails berlapis
-│   │   ├── guardrails.py   ← Orchestrator: sanitize → inject → PII
+│   │   ├── guardrails.py   ← Orchestrator: sanitize → inject → LLM judge → PII
 │   │   ├── sanitizer.py    ← Strip HTML, kontrol karakter
 │   │   ├── prompt_injection.py ← Regex + base64 heuristic
 │   │   ├── pii_redactor.py ← 4 regex: IP, email, NIK, telepon
+│   │   ├── llm_judge.py    ← LLMJudge: deteksi jailbreak semantik via gpt-4o-mini (baru)
 │   │   └── validator.py    ← OutputValidator: cek PII di output LLM
 │   │
 │   ├── telegram/           ← Telegram Bot (PTB)
@@ -229,8 +232,9 @@ pusdatin-help/
 │   ├── test_telegram/      ← 1 file (bot handlers)
 │   ├── test_web/           ← 30+ file (routes, services, middleware, integrasi)
 │   └── evaluation/         ← eval_rag.py, eval_tcr.py, eval_report.py
-│       │                      eval_ragas.py (baru), rag_qa_dataset.json
-│       │                      rag_results.json (baru), rag_ragas_results.json (baru)
+│       │                      eval_ragas.py, eval_guardrails.py (baru)
+│       │                      rag_qa_dataset.json, rag_results.json
+│       │                      rag_ragas_results.json, pii_eval_results.json (baru)
 │
 ├── docker-compose.yml      ← PostgreSQL, Redis, Qdrant
 ├── Dockerfile              ← Image FastAPI
@@ -469,7 +473,7 @@ Fungsi `run_pipeline(raw_input, reporter_*)` adalah **satu-satunya entry point p
 
 | Konstanta | Nilai | Makna |
 |-----------|-------|-------|
-| `RETRIEVAL_SCORE_THRESHOLD` | `0.22` | Batas minimum skor chunk dianggap relevan (diturunkan dari 0.3 agar recall lebih tinggi) |
+| `RETRIEVAL_SCORE_THRESHOLD` | `0.3` | Batas minimum skor chunk dianggap relevan (dinaikkan kembali dari 0.22 ke 0.3 untuk presisi lebih tinggi) |
 | `MAX_ITERATIONS` | `3` | Maksimum iterasi RAG sebelum berhenti |
 | `TOP_K_RETRIEVAL` | `30` | Jumlah chunk diambil per iterasi (dinaikkan dari 20) |
 | `TOP_K_RERANK` | `5` | Jumlah chunk setelah reranking |
@@ -727,16 +731,27 @@ Mendukung dua format: **PDF** (NIST SP 800-61) dan **STIX JSON** (MITRE ATT&CK).
 **Fungsi utama `run_input_guardrails(raw_input) -> GuardrailsResult`:**
 
 ```python
-cleaned = sanitizer.sanitize(raw_input)         # 1. strip HTML + kontrol
-result = injection_detector.detect(cleaned)      # 2. cek injection
-if result["is_injection"]:
-    return GuardrailsResult(blocked=True, reason="prompt_injection")
-redacted, mapping = pii_redactor.redact(cleaned) # 3. redact PII
+sanitized = sanitizer.sanitize(raw_input)            # 1. strip HTML + kontrol char
+detection = detector.detect(sanitized)               # 2. deteksi injection regex
+if detection["is_injection"]:
+    return GuardrailsResult(blocked=True, ...)
+if _judge.is_available() and _judge.is_jailbreak(sanitized):  # 3. LLM judge
+    return GuardrailsResult(blocked=True, block_reason="jailbreak oleh LLM judge")
+redacted, mapping = redactor.redact(sanitized)       # 4. redact PII
 return GuardrailsResult(sanitized_input=redacted, pii_mapping=mapping)
 
 ```
 
-**Fail-closed:** Exception apapun → `blocked=True`, pipeline berhenti.
+**Pipeline guardrails kini 4 lapisan** (sebelumnya 3):
+
+1. Sanitasi — strip HTML + kontrol karakter
+2. Regex injection detection — fail-closed
+3. **LLM Judge** — fail-open (hanya blokir jika token tersedia dan model mendeteksi jailbreak)
+4. PII Redaction
+
+Singleton modul-level: `_sanitizer`, `_detector`, `_redactor`, `_judge` — diinisialisasi sekali saat import.
+
+**Fail-closed (layer 1–2):** Exception apapun → `blocked=True`. **Fail-open (layer 3):** API error LLM judge → tidak memblokir.
 
 ---
 
@@ -788,6 +803,36 @@ return GuardrailsResult(sanitized_input=redacted, pii_mapping=mapping)
 | `restore(redacted_text, mapping)` | `str, dict` | `str` | Substitusi balik placeholder → nilai asli (untuk penyimpanan internal) |
 
 **Mengapa urutan IP→Email→NIK→Phone?** Untuk menghindari overlap regex — IP diproses lebih dulu sebelum angka dalam email/NIK bisa salah match.
+
+---
+
+### `app/security/llm_judge.py` — LLM Judge (Layer ke-3 Guardrails)
+
+**File baru** — klasifikasi semantik apakah input adalah jailbreak attempt.
+
+**Konstanta:**
+
+- `_MODEL = "gpt-4o-mini"` — model ringan untuk klasifikasi biner
+- `_SYSTEM_PROMPT` — instruksi penilai: daftar pola jailbreak yang dikenali vs laporan normal
+
+**Class `LLMJudge`:**
+
+| Method       | Return | Detail |
+|--------------|--------|--------|
+| `__init__`   | —      | Resolve token: prioritaskan `GITHUB_TOKEN` (pakai GitHub Models endpoint), fallback ke `OPENAI_API_KEY`. Jika tidak ada → `_client = None` |
+| `is_available()` | `bool` | True jika `_client` tidak None |
+| `disable()`  | —      | Set `_client = None` — untuk eval/testing tanpa API call |
+| `is_jailbreak(text)` | `bool` | Kirim ke gpt-4o-mini, parse "JAILBREAK" atau "SAFE". **Fail-open:** API error → return `False` (tidak memblokir) |
+
+**Pola jailbreak yang dikenali (dari system prompt):**
+
+- Pemberian persona baru kepada AI (nama/identitas lain)
+- Instruksi untuk mengabaikan panduan sistem
+- Framing cerita fiksi/hipotetikal untuk bypass batasan
+- Permintaan berperilaku tanpa filter atau uncensored
+- Konfigurasi karakter (`rules={}`, `settings:{}`) yang memaksa AI bertingkah berbeda
+
+**Mengapa fail-open (bukan fail-closed)?** LLM judge adalah layer tambahan — jika API tidak tersedia, sistem tetap terlindungi oleh layer 1 (sanitasi) dan layer 2 (regex). Memblokir semua request saat API error akan mematikan helpdesk.
 
 ---
 
@@ -1387,6 +1432,8 @@ Label organisasi di halaman-halaman pelapor dan admin telah diperbarui untuk ber
 | | `rag_qa_dataset.json` *(diperbarui)* | Dataset QA berbasis skenario nyata MITRE ATT&CK. QA-011 s/d QA-020 direvisi; QA-021–QA-030 dihapus. |
 | | `rag_results.json` *(baru)* | Hasil raw evaluasi RAG (per-query metrics) |
 | | `rag_ragas_results.json` *(baru)* | Hasil evaluasi RAGAS framework (context relevance, answer relevance, faithfulness) |
+| | `eval_guardrails.py` *(baru)* | Evaluasi guardrails vs JailbreakHub dataset; mode gate-only dan end-to-end |
+| | `pii_eval_results.json` *(baru)* | Hasil evaluasi PII redaction |
 
 ### Pola Testing
 

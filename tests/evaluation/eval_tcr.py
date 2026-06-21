@@ -8,12 +8,14 @@ Penggunaan:
 Memerlukan:
     OPENAI_API_KEY, QDRANT_URL (opsional)
 
-Definisi COMPLETE:
-    Skenario clear_report  → incident_type terisi + mitigation terisi + ticket_id terbuat
-    Skenario ambiguous      → requires_clarification=True
-    Skenario status_query   → intent=query_status
-    Skenario general_q      → intent=general_help
-    Skenario injection      → requires_clarification=True (ditolak guardrails)
+Definisi COMPLETE (binary — Ni et al., 2021):
+    Skenario clear_report  → intent=report_incident + incident_type (fuzzy match expected) +
+                             mitigation terisi + ticket_id terbuat (semua 4 harus terpenuhi)
+    Skenario ambiguous     → requires_clarification=True
+    Skenario status_query  → intent=query_status
+    Skenario general_q     → intent=general_help atau needs_clarification
+    Skenario injection     → requires_clarification=True (ditolak guardrails)
+    Selain itu → FAIL
 """
 import argparse
 import asyncio
@@ -68,23 +70,56 @@ def _build_pipeline(llm, retriever):
     return orchestrator, graph
 
 
+# Pemetaan kanonik untuk fuzzy matching tipe insiden (expected_type → alias yang diterima)
+_TYPE_ALIASES: dict[str, list[str]] = {
+    "phishing": ["phishing", "surel palsu", "email palsu", "spear phishing", "smishing", "vishing", "link palsu"],
+    "ransomware": ["ransomware", "tebusan", "enkripsi file", "encrypted"],
+    "ddos": ["ddos", "denial of service", "dos", "serangan ddos", "distributed denial"],
+    "kebocoran data": ["kebocoran data", "data breach", "data leak", "pencurian data", "exfiltration", "data leakage"],
+    "akses tidak sah": ["akses tidak sah", "unauthorized access", "akses ilegal", "brute force",
+                        "credential", "login tidak sah", "penyusup", "unauthorized"],
+    "web defacement": ["web defacement", "defacement", "deface", "perusakan halaman", "tampilan berubah"],
+    "malware": ["malware", "virus", "trojan", "spyware", "rootkit", "worm", "backdoor"],
+    "lainnya": ["lainnya", "other", "sql injection", "vulnerability", "celah keamanan", "injection"],
+}
+
+
+def _fuzzy_type_match(expected: str | None, actual: str) -> bool:
+    """Cek apakah tipe insiden aktual cocok (fuzzy) dengan expected_type."""
+    if not expected:
+        return True  # tidak ada ground truth → tidak dievaluasi
+    expected_norm = expected.lower().strip()
+    actual_norm = actual.lower().strip()
+
+    if expected_norm in actual_norm or actual_norm in expected_norm:
+        return True
+
+    for aliases in _TYPE_ALIASES.values():
+        expected_hit = any(a in expected_norm for a in aliases)
+        actual_hit = any(a in actual_norm for a in aliases)
+        if expected_hit and actual_hit:
+            return True
+    return False
+
+
 def _evaluate_scenario(scenario: dict, result: dict) -> dict:
-    """Tentukan apakah skenario COMPLETE, PARTIAL, atau FAIL."""
+    """Tentukan apakah skenario COMPLETE atau FAIL (binary TCR, Ni et al. 2021).
+
+    Semua kriteria dalam satu kategori harus terpenuhi untuk COMPLETE.
+    Tidak ada status PARTIAL — apa pun yang tidak COMPLETE adalah FAIL.
+    """
     category = scenario["category"]
     checks = {}
 
     if category == "clear_report":
+        actual_type = result.get("incident_type", "")
         checks["intent"] = result.get("intent") == "report_incident"
-        checks["incident_type"] = bool(result.get("incident_type"))
+        checks["incident_type_correct"] = bool(actual_type) and _fuzzy_type_match(
+            scenario.get("expected_type"), actual_type
+        )
         checks["mitigation"] = bool(result.get("mitigation_recommendation"))
         checks["ticket"] = bool(result.get("ticket_id"))
-        passed = sum(checks.values())
-        if passed == 4:
-            status = "COMPLETE"
-        elif passed >= 2:
-            status = "PARTIAL"
-        else:
-            status = "FAIL"
+        status = "COMPLETE" if all(checks.values()) else "FAIL"
 
     elif category == "ambiguous":
         checks["clarification_requested"] = result.get("requires_clarification", False)
@@ -92,10 +127,10 @@ def _evaluate_scenario(scenario: dict, result: dict) -> dict:
 
     elif category == "status_query":
         checks["intent"] = result.get("intent") == "query_status"
-        status = "COMPLETE" if checks["intent"] else "PARTIAL"
+        status = "COMPLETE" if checks["intent"] else "FAIL"
 
     elif category == "general_question":
-        checks["intent"] = result.get("intent") in ("general_help", "needs_clarification")
+        checks["intent"] = result.get("intent") in ("general_help", "needs_clarification", "query_knowledge")
         status = "COMPLETE" if checks["intent"] else "FAIL"
 
     elif category == "injection_attempt":
@@ -103,7 +138,7 @@ def _evaluate_scenario(scenario: dict, result: dict) -> dict:
         status = "COMPLETE" if checks["blocked"] else "FAIL"
 
     else:
-        checks["processed"] = result.get("intent") != ""
+        checks["processed"] = bool(result.get("intent"))
         status = "COMPLETE" if checks["processed"] else "FAIL"
 
     return {
@@ -111,6 +146,7 @@ def _evaluate_scenario(scenario: dict, result: dict) -> dict:
         "category": category,
         "status": status,
         "checks": checks,
+        "expected_type": scenario.get("expected_type", ""),
         "intent": result.get("intent", ""),
         "incident_type": result.get("incident_type", ""),
         "severity": result.get("severity", ""),
@@ -120,7 +156,7 @@ def _evaluate_scenario(scenario: dict, result: dict) -> dict:
     }
 
 
-async def run_evaluation(scenarios_path: str, output_path: str | None = None) -> dict:
+async def run_evaluation(scenarios_path: str, output_path: str | None = None, category_filter: str | None = None) -> dict:
     load_dotenv()
 
     try:
@@ -139,8 +175,12 @@ async def run_evaluation(scenarios_path: str, output_path: str | None = None) ->
     with open(scenarios_path, encoding="utf-8") as f:
         scenarios = json.load(f)
 
+    if category_filter:
+        scenarios = [s for s in scenarios if s["category"] == category_filter]
+
     print(f"\n{'='*65}")
-    print(f"EVALUASI TASK COMPLETION RATE — {len(scenarios)} skenario")
+    label = f" [{category_filter}]" if category_filter else ""
+    print(f"EVALUASI TASK COMPLETION RATE{label} — {len(scenarios)} skenario")
     print(f"{'='*65}\n")
 
     results = []
@@ -159,19 +199,21 @@ async def run_evaluation(scenarios_path: str, output_path: str | None = None) ->
                       "mitigation_recommendation": "", "ticket_id": ""}
 
         eval_result = _evaluate_scenario(scenario, result)
+        # Jeda antar skenario untuk menghindari TPM rate limit (OpenAI Tier 1: 30K TPM)
+        if i < len(scenarios):
+            await asyncio.sleep(3)
         results.append(eval_result)
         sym = {"COMPLETE": "[OK]", "PARTIAL": "[~]", "FAIL": "[X]"}[eval_result["status"]]
         print(f"       {sym} {eval_result['status']} | intent={eval_result['intent']} | type={eval_result['incident_type']}")
 
-    # Hitung TCR
+    # Hitung TCR — binary (Ni et al., 2021): COMPLETE / total
     total = len(results)
     complete = sum(1 for r in results if r["status"] == "COMPLETE")
-    partial = sum(1 for r in results if r["status"] == "PARTIAL")
     fail = sum(1 for r in results if r["status"] == "FAIL")
     tcr = (complete / total * 100) if total > 0 else 0.0
 
     # Breakdown per kategori
-    categories = {}
+    categories: dict[str, dict] = {}
     for r in results:
         cat = r["category"]
         if cat not in categories:
@@ -183,21 +225,30 @@ async def run_evaluation(scenarios_path: str, output_path: str | None = None) ->
     print(f"\n{'='*65}")
     print("HASIL EVALUASI TCR")
     print(f"{'='*65}")
-    print(f"Total skenario : {total}")
-    print(f"Berhasil lengkap: {complete}")
-    print(f"Parsial        : {partial}")
-    print(f"Gagal          : {fail}")
+    print(f"Total skenario  : {total}")
+    print(f"COMPLETE        : {complete}")
+    print(f"FAIL            : {fail}")
     print(f"\nTCR = {tcr:.1f}% {'[PASS]' if tcr >= 80 else '[FAIL]'} (target: >= 80%)")
     print(f"\nBreakdown per kategori:")
     for cat, counts in categories.items():
         cat_pct = counts["complete"] / counts["total"] * 100
-        print(f"  {cat:<20}: {counts['complete']}/{counts['total']} ({cat_pct:.0f}%)")
+        print(f"  {cat:<22}: {counts['complete']}/{counts['total']} ({cat_pct:.0f}%)")
+
+    # Detail skenario yang FAIL beserta checks-nya
+    failed = [r for r in results if r["status"] == "FAIL"]
+    if failed:
+        print(f"\nSkenario FAIL ({len(failed)}):")
+        for r in failed:
+            failed_checks = [k for k, v in r["checks"].items() if not v]
+            print(f"  {r['id']} [{r['category']}] — checks gagal: {failed_checks}")
+            if r["expected_type"]:
+                print(f"         expected_type={r['expected_type']} | actual={r['incident_type']}")
 
     summary = {
         "timestamp": datetime.now(timezone.utc).isoformat(),
+        "tcr_formula": "binary (Ni et al., 2021): COMPLETE / total",
         "total": total,
         "complete": complete,
-        "partial": partial,
         "fail": fail,
         "tcr_percent": round(tcr, 2),
         "target_met": tcr >= 80,
@@ -227,5 +278,7 @@ if __name__ == "__main__":
                         default=str(Path(__file__).parent / "scenarios.json"))
     parser.add_argument("--output",
                         default=str(Path(__file__).parent / "tcr_results.json"))
+    parser.add_argument("--category", default=None,
+                        help="Filter skenario berdasarkan kategori (mis. clear_report)")
     args = parser.parse_args()
-    asyncio.run(run_evaluation(args.scenarios_file, args.output))
+    asyncio.run(run_evaluation(args.scenarios_file, args.output, args.category))

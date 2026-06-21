@@ -1,0 +1,92 @@
+[
+  {
+    "id": "BSSN-001",
+    "question": "Kami ingin tahu cara mengenali kalau komputer atau sistem kantor sedang diserang atau mengalami insiden siber. Tanda-tanda apa yang perlu kami waspadai sehari-hari?",
+    "ground_truth": "Tanda-tanda yang mengindikasikan adanya insiden siber antara lain: (1) perangkat antimalware memberi peringatan saat mendeteksi host atau media yang terinfeksi, (2) administrator menemukan file baru dengan nama yang tidak biasa, (3) log aplikasi mencatat banyak percobaan login dari IP address yang tidak dikenal, (4) banyak surat elektronik yang tertolak oleh sistem dengan konten yang anomali, dan (5) IPS/IDS/Firewall pada jaringan memberi peringatan adanya intrusi. Indikasi-indikasi tersebut perlu segera dilaporkan kepada tim pengelola sistem untuk ditindaklanjuti.",
+    "query_type": "query_knowledge",
+    "context_source": "Peraturan BSSN Nomor 1 Tahun 2024",
+    "incident_type": "general",
+    "severity": "Sedang"
+  },
+  {
+    "id": "BSSN-002",
+    "question": "Saat serangan siber masih aktif dan sistem kami terdampak, langkah pengisolasian dan pembatasan apa saja yang harus dilakukan sesuai panduan pengelolaan insiden siber BSSN?",
+    "ground_truth": "Prosedur containment berdasarkan panduan BSSN Nomor 1 Tahun 2024 meliputi: (1) isolasi sistem yang terkena insiden, (2) backup data yang berkaitan dengan insiden seperti log dan screenshot, (3) identifikasi semua layanan dan koneksi yang terhubung, (4) identifikasi metode penyerang saat masuk ke sistem pertama kali melalui log sistem, (5) periksa kode-kode berbahaya yang ada dalam sistem, dan (6) lakukan pemantauan pada jaringan — jika terdapat paket yang dicurigai atau anomali, segera blokir dan dokumentasikan termasuk sumber IP, bentuk paket, dan waktu kejadian.",
+    "query_type": "query_knowledge",
+    "context_source": "Peraturan BSSN Nomor 1 Tahun 2024",
+    "incident_type": "Malware",
+    "severity": "Tinggi"
+  },
+  {
+    "id": "BSSN-003",
+    "question": "Apa saja cara penghapusan dan eradikasi penyebab Insiden Siber dari Sistem Elektronik yang terdampak menurut panduan pengelolaan insiden siber BSSN?",
+    "ground_truth": "Penghapusan atau eradikasi Insiden Siber dilakukan untuk menghilangkan komponen Insiden Siber termasuk penghapusan kerentanan Sistem Elektronik. Penghapusan dilakukan dengan beberapa cara: (1) menentukan tanda dan sebab dari suatu Insiden Siber, (2) melakukan restore backup untuk mendapatkan new fresh system, (3) menghapus penyebab Insiden Siber seperti malware, (4) menonaktifkan akun pengguna yang terkena Insiden Siber, (5) melakukan reset password jika diperlukan, (6) melakukan mitigasi terhadap kerentanan yang tereksploitasi saat Insiden Siber, (7) mengidentifikasi semua host yang terkena Insiden Siber, dan (8) melakukan improvisasi pertahanan dan vulnerability analysis untuk melihat potensi ancaman yang dapat terjadi.",
+    "query_type": "query_knowledge",
+    "context_source": "Peraturan BSSN Nomor 1 Tahun 2024",
+    "incident_type": "Malware",
+    "severity": "Tinggi"
+  },
+  {
+    "id": "BSSN-004",
+    "question": "Apa yang harus kami lakukan untuk mengumpulkan dan memelihara bukti saat terjadi insiden siber di organisasi kami?",
+    "ground_truth": "Pada kegiatan pengumpulan dan pemeliharaan bukti insiden siber, hal-hal yang perlu dilakukan antara lain: (1) mengategorikan informasi mengenai insiden siber yang terdeteksi dan menyimpannya sesuai ukuran dampak terkait keamanan, penyebab insiden, dan faktor lainnya; (2) melakukan forensik digital terhadap aset informasi yang terdampak untuk menemukenali penyebab insiden siber sesuai ketentuan peraturan perundang-undangan; serta (3) mengumpulkan bukti berupa log, screenshot, dan data lain yang berkaitan dengan insiden untuk keperluan analisis lebih lanjut.",
+    "query_type": "query_knowledge",
+    "context_source": "Peraturan BSSN Nomor 1 Tahun 2024",
+    "incident_type": "general",
+    "severity": "Sedang"
+  },
+  {
+    "id": "BSSN-005",
+    "question": "Kami menerima informasi keamanan dari tim siber yang diberi label TLP:AMBER dan TLP:GREEN. Apa arti kedua label itu dan sejauh mana kami boleh menyebarkannya?",
+    "ground_truth": "TLP:AMBER berarti pengungkapan terbatas: penerima hanya dapat menyebarkan informasi berdasarkan kebutuhan untuk mengetahui (need-to-know) di dalam organisasinya dan kliennya, tidak lebih luas dari itu. TLP:GREEN berarti penerima dapat berbagi informasi dengan rekan dan organisasi mitra dalam komunitasnya, tetapi tidak boleh melalui saluran yang dapat diakses publik dan tidak boleh dibagikan di luar komunitas. Sumber menggunakan TLP:GREEN ketika informasi berguna untuk meningkatkan kesadaran dalam komunitas yang lebih luas. Jika lingkup komunitas tidak ditentukan, diasumsikan sebagai komunitas keamanan atau pertahanan siber.",
+    "query_type": "query_knowledge",
+    "context_source": "Peraturan BSSN Nomor 1 Tahun 2024",
+    "incident_type": "general",
+    "severity": "Sedang"
+  },
+  {
+    "id": "BSSN-006",
+    "question": "Kami mendengar istilah Infrastruktur Informasi Vital atau IIV dalam sosialisasi keamanan siber. Apa definisi IIV menurut peraturan BSSN dan apa kewajiban pelaporan insiden siber yang berlaku jika sistem kami masuk kategori tersebut?",
+    "ground_truth": "Infrastruktur Informasi Vital (IIV) adalah infrastruktur informasi yang jika terganggu, rusak, atau hancur dapat berdampak serius terhadap kepentingan umum, kenegaraan, pertahanan dan keamanan nasional, perekonomian nasional, dan/atau penyelenggaraan layanan publik. Jika sistem masuk kategori IIV, Tim Tanggap Insiden Siber organisasi wajib melaporkan insiden yang terjadi kepada TTIS sektoral dengan tembusan TTIS nasional paling lambat 1x24 jam setelah insiden ditemukan. Jika TTIS sektoral belum terbentuk, laporan disampaikan langsung ke Kementerian atau Lembaga sesuai sektornya dengan tembusan TTIS nasional.",
+    "query_type": "query_knowledge",
+    "context_source": "Peraturan BSSN Nomor 1 Tahun 2024",
+    "incident_type": "general",
+    "severity": "Sedang"
+  },
+  {
+    "id": "BSSN-007",
+    "question": "Setelah insiden siber yang menimpa sistem kami selesai ditangani, apakah ada pemeriksaan ulang untuk memastikan sistemnya benar-benar sudah aman dan pulih?",
+    "ground_truth": "Ya. Setelah penanganan Insiden Siber, setiap aset informasi yang terdampak wajib diperiksa kembali keamanannya. Setelah upaya pemulihan Sistem Elektronik terdampak dilakukan, dilaksanakan kegiatan pengujian ulang terhadap fungsi vital dan fungsi pendukung untuk memastikan capaian pemulihan terpenuhi. Capaian pemulihan dinilai berdasarkan: (1) waktu pemulihan di bawah batas waktu maksimal yang ditetapkan berdasarkan rencana keberlangsungan kegiatan; dan (2) jumlah data yang terpulihkan sesuai dengan batas jumlah data minimal yang ditetapkan berdasarkan rencana keberlangsungan kegiatan.",
+    "query_type": "query_knowledge",
+    "context_source": "Peraturan BSSN Nomor 1 Tahun 2024",
+    "incident_type": "general",
+    "severity": "Sedang"
+  },
+  {
+    "id": "BSSN-008",
+    "question": "Saat insiden siber terjadi, informasi minimum apa yang wajib disampaikan Tim Tanggap Insiden Siber kepada pihak yang terdampak?",
+    "ground_truth": "Informasi Insiden Siber yang wajib disampaikan kepada pihak terdampak paling sedikit mencakup: (a) jenis indikasi Insiden Siber yang terjadi, (b) kode distribusi informasi, (c) sistem dan aset yang terkena dampak, serta (d) rekomendasi langkah mitigasi yang perlu dilakukan.",
+    "query_type": "query_knowledge",
+    "context_source": "Peraturan BSSN Nomor 1 Tahun 2024",
+    "incident_type": "general",
+    "severity": "Sedang"
+  },
+  {
+    "id": "BSSN-009",
+    "question": "Saat kami menemukan insiden siber, faktor apa saja yang dipertimbangkan untuk menentukan prioritas dan seberapa serius dampaknya bagi organisasi kami?",
+    "ground_truth": "Pemrioritasan insiden siber dilakukan dengan mempertimbangkan tiga hal: (1) kategori Sistem Elektronik yang terdampak, termasuk apakah sistem tersebut termasuk Infrastruktur Informasi Vital (IIV) atau bukan; (2) ruang lingkup dampak insiden siber, yaitu seberapa luas sistem dan pihak yang terdampak; dan (3) identifikasi penyerang yang menyebabkan insiden. Laporan insiden dikumpulkan, dikategorisasikan, dan diprioritaskan sesuai dampak risiko terhadap organisasi oleh Tim Tanggap Insiden Siber.",
+    "query_type": "query_knowledge",
+    "context_source": "Peraturan BSSN Nomor 1 Tahun 2024",
+    "incident_type": "general",
+    "severity": "Sedang"
+  },
+  {
+    "id": "BSSN-010",
+    "question": "Apa saja langkah pelaksanaan rekam cadang data yang harus dilakukan organisasi sesuai panduan pengelolaan Insiden Siber BSSN, termasuk enkripsi dan dokumentasi rekam cadang?",
+    "ground_truth": "Pelaksanaan rekam cadang data sesuai panduan BSSN mencakup: (1) melaksanakan simulasi secara periodik terhadap prosedur pemulihan sistem atau data dari media penyimpanan rekam cadang, (2) melakukan prosedur rekam cadang secara optimal dengan memanfaatkan perangkat penyimpanan yang memiliki fitur job-scheduling, (3) melakukan enkripsi terhadap data yang disimpan pada media penyimpanan rekam cadang, (4) menentukan waktu pelaksanaan rekam cadang terhadap data organisasi disesuaikan dengan tingkat kritikalitas data dan kebutuhan organisasi, serta (5) mendokumentasikan hasil pelaksanaan rekam cadang data.",
+    "query_type": "query_knowledge",
+    "context_source": "Peraturan BSSN Nomor 1 Tahun 2024",
+    "incident_type": "general",
+    "severity": "Sedang"
+  }
+]

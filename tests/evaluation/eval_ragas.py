@@ -147,13 +147,24 @@ async def main(
                     inc_type = inc_list[0] if inc_list else ""
                 # Map context_source ke source_preference untuk retrieval
                 ctx_src = qa.get("context_source", "")
-                src_pref = "NIST" if "NIST" in ctx_src else None
-                res = await advisor.generate_mitigation(
-                    sanitized_input=qa["question"],
-                    incident_type=inc_type,
-                    severity=qa.get("severity", "Sedang"),
-                    source_preference=src_pref,
-                )
+                if "NIST" in ctx_src:
+                    src_pref = "NIST"
+                elif "BSSN" in ctx_src:
+                    src_pref = "BSSN"
+                else:
+                    src_pref = None
+                if qa.get("query_type") == "query_knowledge":
+                    res = await advisor.generate_knowledge_response(
+                        sanitized_input=qa["question"],
+                        source_preference=src_pref,
+                    )
+                else:
+                    res = await advisor.generate_mitigation(
+                        sanitized_input=qa["question"],
+                        incident_type=inc_type,
+                        severity=qa.get("severity", "Sedang"),
+                        source_preference=src_pref,
+                    )
             except Exception as exc:
                 message = str(exc)
                 if "RateLimitReached" in message or "429" in message:
@@ -161,11 +172,17 @@ async def main(
                     if retry_after is not None and retry_after <= 60:
                         print(f"Rate limit singkat terdeteksi, tunggu {retry_after} detik lalu lanjut...")
                         await asyncio.sleep(retry_after)
-                        res = await advisor.generate_mitigation(
-                            sanitized_input=qa["question"],
-                            incident_type=qa.get("incident_type", ""),
-                            severity=qa.get("severity", "Sedang"),
-                        )
+                        if qa.get("query_type") == "query_knowledge":
+                            res = await advisor.generate_knowledge_response(
+                                sanitized_input=qa["question"],
+                                source_preference=src_pref,
+                            )
+                        else:
+                            res = await advisor.generate_mitigation(
+                                sanitized_input=qa["question"],
+                                incident_type=qa.get("incident_type", ""),
+                                severity=qa.get("severity", "Sedang"),
+                            )
                     else:
                         print(f"Rate limit provider terlalu besar untuk dilanjutkan sekarang: {message}")
                         print("Hasil parsial akan disimpan dan evaluasi dihentikan agar patuh batas provider.")
@@ -192,6 +209,17 @@ async def main(
         print(f"Candidate answers disimpan sementara: {out_path}")
 
         # Bangun EvaluationDataset RAGAS 0.4 (field: user_input, response, retrieved_contexts, reference)
+
+        def _strip_sumber(text: str) -> str:
+            """Hapus footer 'Sumber:' dari jawaban sebelum dikirim ke RAGAS.
+
+            Footer sitasi tidak relevan untuk AnswerRelevancy: LLM akan meng-generate
+            pertanyaan dari teks sitasi (misalnya "Apa isi Pasal 24?") yang tidak cocok
+            dengan pertanyaan asli, sehingga menurunkan cosine similarity secara artifisial.
+            """
+            idx = text.find("\n\nSumber:")
+            return text[:idx].strip() if idx != -1 else text.strip()
+
         samples = []
         for row in results:
             contexts = [
@@ -202,7 +230,7 @@ async def main(
             samples.append(
                 SingleTurnSample(
                     user_input=row.get("question", ""),
-                    response=row.get("candidate_answer", ""),
+                    response=_strip_sumber(row.get("candidate_answer", "")),
                     retrieved_contexts=contexts,
                     reference=row.get("ground_truth", ""),
                 )

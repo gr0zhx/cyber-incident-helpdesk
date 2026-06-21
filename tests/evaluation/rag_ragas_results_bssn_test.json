@@ -1,0 +1,179 @@
+{
+  "summary": {
+    "faithfulness": 1.0,
+    "answer_relevancy": 0.9466941725838427,
+    "nv_context_relevance": 1.0
+  },
+  "per_question": [
+    {
+      "user_input": "Apa yang harus kami lakukan untuk mengumpulkan dan memelihara bukti saat terjadi insiden siber di organisasi kami?",
+      "retrieved_contexts": [
+        "pertama kali, dengan melihat log pada sistem; \n5) periksa kode-kode berbahaya yang ada dalam sistem; dan \n6) lakukan pemantauan pada jaringan yang terkena Insiden \nSiber, jika terdapat paket yang dicurigai/anomali, segera \nblokir dan dokumentasikan (dapat dicatat sumber IP, bentuk \npaket, waktu, dan lainnya). \n \nb. mengumpulkan dan memelihara bukti Insiden Siber dari Sistem \nElektronik terdampak. \nPada kegiatan ini dilakukan hal-hal sebagai berikut: \n1) mengategorikan informasi mengenai Insiden Siber yang \nterdeteksi dan menyimpannya sesuai ukuran dampak terkait \nkeamanan, penyebab insiden, dan faktor lainnya yang \ndiperlukan. \n2) melakukan forensik digital terhadap aset informasi yang \nterdampak Insiden Siber untuk menemukenali penyebab \nInsiden Siber sesuai dengan ketentuan peraturan",
+        "a. memastikan Insiden Siber diisolasi dan dimitigasi \nsesuai rencana tanggap Insiden Siber; \nb. mengumpulkan dan memelihara bukti Insiden Siber \ndari IIV dan Sistem Elektronik selain IIV terdampak; \nc. menginvestigasi dan eradikasi penyebab Insiden \nSiber; \nd. mengoordinasikan dengan pihak terkait dalam \nrangka eskalasi penanggulangan Insiden Siber. \ne. memastikan setiap aset informasi diperiksa \nkeamanannya setelah penanganan Insiden Siber; \nf. melaksanakan prosedur pencadangan dan pemulihan \nsistem dan data sesuai rencana keberlangsungan \nkegiatan; \ng. menentukan dan menerapkan retensi terhadap hasil \npencadangan yang sudah tidak terpakai sesuai \nketentuan; \nh. pengujian ulang terhadap fungsi vital dan fungsi \npendukung untuk memastikan capaian pemulihan \nterpenuhi;",
+        "- 19 -  \njika ada strategi dan prosedur yang telah ditentukan. \nOrganisasi harus menetapkan risiko yang dapat diterima dalam \nmenangani Insiden Siber dan mengembangkan strategi yang \nsesuai. Organisasi harus membuat strategi/prosedur \npenahanan terpisah untuk setiap jenis insiden utama, dengan \nkriteria yang didokumentasikan dengan jelas untuk \nmemfasilitasi pengambilan keputusan. Prosedur containment \ndapat dilakukan dengan cara sebagai berikut: \n1) isolasi sistem yang terkena insiden; \n2) backup data yang berkaitan dengan insiden (misalnya hasil \npengumpulan bukti berbentuk log, screenshot, dan lainnya); \n3) identifikasi semua layanan (service) dan koneksi yang \nterhubung; \n4) identifikasi metode penyerang ketika masuk ke sistem \npertama kali, dengan melihat log pada sistem;",
+        "terkait. \nPada kegiatan ini dilakukan hal-hal sebagai berikut: \n1) melaporkan informasi mengenai Insiden Siber kepada pihak \nyang berwenang sesuai dengan kriteria yang diterapkan oleh \norganisasi dan peraturan perundangan yang berlaku; dan \n2) memastikan proses koordinasi dengan pemangku \nkepentingan dilakukan sesuai dengan rencana tanggap \nInsiden Siber. \n \n3. Melaksanakan penanggulangan dan pemulihan Insiden Siber. \nKegiatan yang dilakukan meliputi: \na. memastikan Insiden Siber diisolasi dan dimitigasi sesuai \nrencana tanggap Insiden Siber. \nTujuan dari isolasi adalah untuk membatasi jangkauan dan \nskala Insiden Siber agar Insiden Siber tidak semakin memburuk. \nInformasi yang dikumpulkan pada fase ini cukup untuk \nmenentukan akar masalah dari Insiden Siber.",
+        "pendukung untuk memastikan capaian pemulihan \nterpenuhi;  \ni. memastikan organisasi memiliki dan mengelola \nstrategi komunikasi publik ketika terjadi Insiden \nSiber dan setelah penanggulangan serta pemulihan \nInsiden Siber; dan \nj. penyampaian informasi penanggulangan dan \npemulihan Insiden Siber kepada pihak terkait. \n(7) Kegiatan meningkatkan keamanan setelah terjadinya \nInsiden Siber sebagaimana dimaksud pada ayat (2) huruf"
+      ],
+      "response": "Untuk mengumpulkan dan memelihara bukti saat terjadi insiden siber di organisasi Anda, langkah-langkah yang harus dilakukan meliputi: mengategorikan informasi mengenai insiden siber yang terdeteksi dan menyimpannya sesuai ukuran dampak terkait keamanan, penyebab insiden, dan faktor lainnya yang diperlukan. Selain itu, lakukan forensik digital terhadap aset informasi yang terdampak insiden siber untuk menemukenali penyebab insiden siber sesuai dengan ketentuan peraturan. Pastikan juga untuk mengumpulkan bukti insiden siber dari sistem elektronik terdampak, termasuk log, screenshot, dan data lainnya yang relevan.",
+      "reference": "Pada kegiatan pengumpulan dan pemeliharaan bukti insiden siber, hal-hal yang perlu dilakukan antara lain: (1) mengategorikan informasi mengenai insiden siber yang terdeteksi dan menyimpannya sesuai ukuran dampak terkait keamanan, penyebab insiden, dan faktor lainnya; (2) melakukan forensik digital terhadap aset informasi yang terdampak untuk menemukenali penyebab insiden siber sesuai ketentuan peraturan perundang-undangan; serta (3) mengumpulkan bukti berupa log, screenshot, dan data lain yang berkaitan dengan insiden untuk keperluan analisis lebih lanjut.",
+      "faithfulness": 1.0,
+      "answer_relevancy": 0.9466941725838427,
+      "nv_context_relevance": 1.0
+    }
+  ],
+  "qa_pairs": [
+    {
+      "id": "BSSN-004",
+      "question": "Apa yang harus kami lakukan untuk mengumpulkan dan memelihara bukti saat terjadi insiden siber di organisasi kami?",
+      "ground_truth": "Pada kegiatan pengumpulan dan pemeliharaan bukti insiden siber, hal-hal yang perlu dilakukan antara lain: (1) mengategorikan informasi mengenai insiden siber yang terdeteksi dan menyimpannya sesuai ukuran dampak terkait keamanan, penyebab insiden, dan faktor lainnya; (2) melakukan forensik digital terhadap aset informasi yang terdampak untuk menemukenali penyebab insiden siber sesuai ketentuan peraturan perundang-undangan; serta (3) mengumpulkan bukti berupa log, screenshot, dan data lain yang berkaitan dengan insiden untuk keperluan analisis lebih lanjut.",
+      "candidate_answer": "Untuk mengumpulkan dan memelihara bukti saat terjadi insiden siber di organisasi Anda, langkah-langkah yang harus dilakukan meliputi: mengategorikan informasi mengenai insiden siber yang terdeteksi dan menyimpannya sesuai ukuran dampak terkait keamanan, penyebab insiden, dan faktor lainnya yang diperlukan. Selain itu, lakukan forensik digital terhadap aset informasi yang terdampak insiden siber untuk menemukenali penyebab insiden siber sesuai dengan ketentuan peraturan. Pastikan juga untuk mengumpulkan bukti insiden siber dari sistem elektronik terdampak, termasuk log, screenshot, dan data lainnya yang relevan.\n\nSumber:\n[1] Peraturan BSSN Nomor 1 Tahun 2024, Bagian X",
+      "retrieved_chunks": [
+        {
+          "id": "48c1d54b-21f7-47cb-ac6d-a61eff6ac244",
+          "content": "pertama kali, dengan melihat log pada sistem; \n5) periksa kode-kode berbahaya yang ada dalam sistem; dan \n6) lakukan pemantauan pada jaringan yang terkena Insiden \nSiber, jika terdapat paket yang dicurigai/anomali, segera \nblokir dan dokumentasikan (dapat dicatat sumber IP, bentuk \npaket, waktu, dan lainnya). \n \nb. mengumpulkan dan memelihara bukti Insiden Siber dari Sistem \nElektronik terdampak. \nPada kegiatan ini dilakukan hal-hal sebagai berikut: \n1) mengategorikan informasi mengenai Insiden Siber yang \nterdeteksi dan menyimpannya sesuai ukuran dampak terkait \nkeamanan, penyebab insiden, dan faktor lainnya yang \ndiperlukan. \n2) melakukan forensik digital terhadap aset informasi yang \nterdampak Insiden Siber untuk menemukenali penyebab \nInsiden Siber sesuai dengan ketentuan peraturan",
+          "metadata": {
+            "doc_id": "peraturan-bssn-1-2024",
+            "doc_title": "Peraturan BSSN Nomor 1 Tahun 2024",
+            "source_framework": "BSSN",
+            "language": "id",
+            "incident_types": [
+              "phishing",
+              "malware",
+              "ransomware",
+              "akses_tidak_sah",
+              "kebocoran_data",
+              "ddos",
+              "web_defacement",
+              "general"
+            ],
+            "page_number": 18,
+            "section_header": "",
+            "chunk_index": 591,
+            "object_type": "",
+            "external_id": "",
+            "source": "knowledge_base\\documents\\Peraturan BSSN Nomor 1 Tahun 2024.pdf"
+          },
+          "score": 0.7273791,
+          "rrf_score": 0.01639344262295082,
+          "final_score": 0.8075260257377048
+        },
+        {
+          "id": "0266fa48-75d7-4dad-908e-8e75e48cda30",
+          "content": "a. memastikan Insiden Siber diisolasi dan dimitigasi \nsesuai rencana tanggap Insiden Siber; \nb. mengumpulkan dan memelihara bukti Insiden Siber \ndari IIV dan Sistem Elektronik selain IIV terdampak; \nc. menginvestigasi dan eradikasi penyebab Insiden \nSiber; \nd. mengoordinasikan dengan pihak terkait dalam \nrangka eskalasi penanggulangan Insiden Siber. \ne. memastikan setiap aset informasi diperiksa \nkeamanannya setelah penanganan Insiden Siber; \nf. melaksanakan prosedur pencadangan dan pemulihan \nsistem dan data sesuai rencana keberlangsungan \nkegiatan; \ng. menentukan dan menerapkan retensi terhadap hasil \npencadangan yang sudah tidak terpakai sesuai \nketentuan; \nh. pengujian ulang terhadap fungsi vital dan fungsi \npendukung untuk memastikan capaian pemulihan \nterpenuhi;",
+          "metadata": {
+            "doc_id": "peraturan-bssn-1-2024",
+            "doc_title": "Peraturan BSSN Nomor 1 Tahun 2024",
+            "source_framework": "BSSN",
+            "language": "id",
+            "incident_types": [
+              "phishing",
+              "malware",
+              "ransomware",
+              "akses_tidak_sah",
+              "kebocoran_data",
+              "ddos",
+              "web_defacement",
+              "general"
+            ],
+            "page_number": 9,
+            "section_header": "",
+            "chunk_index": 563,
+            "object_type": "",
+            "external_id": "",
+            "source": "knowledge_base\\documents\\Peraturan BSSN Nomor 1 Tahun 2024.pdf"
+          },
+          "score": 0.7264657,
+          "rrf_score": 0.016129032258064516,
+          "final_score": 0.8053001835483871
+        },
+        {
+          "id": "007a4bd7-94e3-44f5-aee3-fea7884fefb7",
+          "content": "- 19 -  \njika ada strategi dan prosedur yang telah ditentukan. \nOrganisasi harus menetapkan risiko yang dapat diterima dalam \nmenangani Insiden Siber dan mengembangkan strategi yang \nsesuai. Organisasi harus membuat strategi/prosedur \npenahanan terpisah untuk setiap jenis insiden utama, dengan \nkriteria yang didokumentasikan dengan jelas untuk \nmemfasilitasi pengambilan keputusan. Prosedur containment \ndapat dilakukan dengan cara sebagai berikut: \n1) isolasi sistem yang terkena insiden; \n2) backup data yang berkaitan dengan insiden (misalnya hasil \npengumpulan bukti berbentuk log, screenshot, dan lainnya); \n3) identifikasi semua layanan (service) dan koneksi yang \nterhubung; \n4) identifikasi metode penyerang ketika masuk ke sistem \npertama kali, dengan melihat log pada sistem;",
+          "metadata": {
+            "doc_id": "peraturan-bssn-1-2024",
+            "doc_title": "Peraturan BSSN Nomor 1 Tahun 2024",
+            "source_framework": "BSSN",
+            "language": "id",
+            "incident_types": [
+              "phishing",
+              "malware",
+              "ransomware",
+              "akses_tidak_sah",
+              "kebocoran_data",
+              "ddos",
+              "web_defacement",
+              "general"
+            ],
+            "page_number": 18,
+            "section_header": "",
+            "chunk_index": 590,
+            "object_type": "",
+            "external_id": "",
+            "source": "knowledge_base\\documents\\Peraturan BSSN Nomor 1 Tahun 2024.pdf"
+          },
+          "score": 0.714212,
+          "rrf_score": 0.015873015873015872,
+          "final_score": 0.7951864952380951
+        },
+        {
+          "id": "42f93f0d-0cb5-45a1-959c-4e452224656b",
+          "content": "terkait. \nPada kegiatan ini dilakukan hal-hal sebagai berikut: \n1) melaporkan informasi mengenai Insiden Siber kepada pihak \nyang berwenang sesuai dengan kriteria yang diterapkan oleh \norganisasi dan peraturan perundangan yang berlaku; dan \n2) memastikan proses koordinasi dengan pemangku \nkepentingan dilakukan sesuai dengan rencana tanggap \nInsiden Siber. \n \n3. Melaksanakan penanggulangan dan pemulihan Insiden Siber. \nKegiatan yang dilakukan meliputi: \na. memastikan Insiden Siber diisolasi dan dimitigasi sesuai \nrencana tanggap Insiden Siber. \nTujuan dari isolasi adalah untuk membatasi jangkauan dan \nskala Insiden Siber agar Insiden Siber tidak semakin memburuk. \nInformasi yang dikumpulkan pada fase ini cukup untuk \nmenentukan akar masalah dari Insiden Siber.",
+          "metadata": {
+            "doc_id": "peraturan-bssn-1-2024",
+            "doc_title": "Peraturan BSSN Nomor 1 Tahun 2024",
+            "source_framework": "BSSN",
+            "language": "id",
+            "incident_types": [
+              "phishing",
+              "malware",
+              "ransomware",
+              "akses_tidak_sah",
+              "kebocoran_data",
+              "ddos",
+              "web_defacement",
+              "general"
+            ],
+            "page_number": 17,
+            "section_header": "3. Melaksanakan penanggulangan dan pemulihan Insiden Siber.",
+            "chunk_index": 588,
+            "object_type": "",
+            "external_id": "",
+            "source": "knowledge_base\\documents\\Peraturan BSSN Nomor 1 Tahun 2024.pdf"
+          },
+          "score": 0.69256777,
+          "rrf_score": 0.015625,
+          "final_score": 0.778547439
+        },
+        {
+          "id": "df2c88eb-801e-4b24-89a7-ac7ec2e68009",
+          "content": "pendukung untuk memastikan capaian pemulihan \nterpenuhi;  \ni. memastikan organisasi memiliki dan mengelola \nstrategi komunikasi publik ketika terjadi Insiden \nSiber dan setelah penanggulangan serta pemulihan \nInsiden Siber; dan \nj. penyampaian informasi penanggulangan dan \npemulihan Insiden Siber kepada pihak terkait. \n(7) Kegiatan meningkatkan keamanan setelah terjadinya \nInsiden Siber sebagaimana dimaksud pada ayat (2) huruf",
+          "metadata": {
+            "doc_id": "peraturan-bssn-1-2024",
+            "doc_title": "Peraturan BSSN Nomor 1 Tahun 2024",
+            "source_framework": "BSSN",
+            "language": "id",
+            "incident_types": [
+              "phishing",
+              "malware",
+              "ransomware",
+              "akses_tidak_sah",
+              "kebocoran_data",
+              "ddos",
+              "web_defacement",
+              "general"
+            ],
+            "page_number": 9,
+            "section_header": "",
+            "chunk_index": 564,
+            "object_type": "",
+            "external_id": "",
+            "source": "knowledge_base\\documents\\Peraturan BSSN Nomor 1 Tahun 2024.pdf"
+          },
+          "score": 0.68195605,
+          "rrf_score": 0.015384615384615385,
+          "final_score": 0.7696769273076922
+        }
+      ]
+    }
+  ]
+}

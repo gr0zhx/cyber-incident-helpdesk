@@ -37,8 +37,8 @@
   },
   {
     "id": "QA-015",
-    "question": "Beberapa pegawai kantor kami pernah menerima telepon dari seseorang yang mengaku teknisi IT dan meminta password atau akses ke komputer mereka. Bagaimana cara melindungi pegawai dari jenis penipuan semacam ini?",
-    "ground_truth": "Laksanakan program pelatihan keamanan dan kesadaran (User Training) untuk mendidik pegawai agar tidak pernah memberikan informasi sensitif seperti password atau akses sistem kepada siapapun melalui telepon, termasuk yang mengaku sebagai staf IT. Pelatihan harus mencakup cara mengenali teknik rekayasa sosial, prosedur verifikasi identitas yang benar sebelum memberikan akses, dan cara melaporkan percobaan penipuan kepada tim keamanan.",
+    "question": "Kebijakan kata sandi, penguncian akun, dan MFA apa yang sebaiknya kami konfigurasi untuk mengamankan login pengguna di sistem?",
+    "ground_truth": "Terapkan kebijakan penggunaan akun dengan mengonfigurasi mekanisme penguncian akun, pembatasan waktu login, dan batas waktu tidak aktif untuk mengurangi risiko akses tidak sah. Implementasikan Multi-Factor Authentication pada semua sistem dan layanan kritis. Terapkan manajemen akun pengguna dengan prinsip hak akses minimum dan audit akun secara berkala.",
     "query_type": "query_knowledge",
     "context_source": "MITRE ATT&CK",
     "incident_type": "Akses Tidak Sah",

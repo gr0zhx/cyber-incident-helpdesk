@@ -4,8 +4,9 @@ informasi yang tersedia sudah cukup untuk triase.
 
 Intent yang tersedia (pilih TEPAT SATU):
 - report_incident      : Pengguna melaporkan insiden keamanan siber yang terjadi atau sedang terjadi
+- query_knowledge      : Pengguna bertanya tentang peraturan, prosedur, kebijakan, atau definisi keamanan siber — bisa dijawab dari dokumen referensi (BSSN, NIST, MITRE), bukan melaporkan insiden
 - query_status         : Pengguna menanyakan status tiket yang sudah ada (biasanya menyebut nomor tiket)
-- general_help         : Pengguna bertanya tentang keamanan siber secara umum, bukan melaporkan insiden spesifik
+- general_help         : Pengguna bertanya tentang keamanan siber secara umum yang tidak memerlukan dokumen referensi spesifik
 - needs_clarification  : Pesan terlalu ambigu untuk diklasifikasikan, perlu informasi tambahan
 
 Aturan intent:
@@ -13,6 +14,11 @@ Aturan intent:
 2. confidence antara 0.0 hingga 1.0.
 3. Jika ada indikasi insiden nyata terjadi, selalu pilih report_incident.
 4. clarification_message diisi hanya jika needs_clarification True.
+4b. Gunakan query_knowledge jika pertanyaan meminta penjelasan aturan/regulasi/prosedur/definisi
+    yang bisa dijawab dari dokumen BSSN, NIST, atau MITRE — misalnya "apa itu TLP:RED?",
+    "berapa lama masa berlaku register TTIS?", "langkah containment menurut BSSN?".
+    Gunakan general_help hanya jika pertanyaan bersifat sangat umum atau edukatif
+    dan tidak memerlukan dokumen regulasi spesifik — misalnya "apa itu phishing secara umum?".
 
 Aturan kelengkapan informasi (HANYA berlaku saat intent = report_incident):
 5. Evaluasi apakah laporan memiliki minimal DUA dari tiga elemen berikut:
@@ -95,6 +101,42 @@ Output:
 {
   "intent": "general_help",
   "confidence": 0.93,
+  "needs_clarification": false,
+  "clarification_message": ""
+}
+
+Pesan: "Berapa lama masa berlaku surat tanda register Tim Tanggap Insiden Siber organisasi menurut BSSN?"
+Output:
+{
+  "intent": "query_knowledge",
+  "confidence": 0.95,
+  "needs_clarification": false,
+  "clarification_message": ""
+}
+
+Pesan: "Apa yang dimaksud dengan label TLP:RED dalam pertukaran informasi insiden siber?"
+Output:
+{
+  "intent": "query_knowledge",
+  "confidence": 0.94,
+  "needs_clarification": false,
+  "clarification_message": ""
+}
+
+Pesan: "Langkah containment apa saja yang harus dilakukan saat serangan siber masih aktif menurut panduan BSSN?"
+Output:
+{
+  "intent": "query_knowledge",
+  "confidence": 0.92,
+  "needs_clarification": false,
+  "clarification_message": ""
+}
+
+Pesan: "Dokumen rencana tanggap insiden wajib memuat apa saja?"
+Output:
+{
+  "intent": "query_knowledge",
+  "confidence": 0.91,
   "needs_clarification": false,
   "clarification_message": ""
 }

@@ -199,6 +199,30 @@ def make_general_help_node(orchestrator):
     return general_help_node
 
 
+def make_knowledge_node(mitigation_advisor):
+    async def knowledge_node(state: IncidentState) -> IncidentState:
+        try:
+            result = await mitigation_advisor.generate_knowledge_response(
+                sanitized_input=state["sanitized_input"],
+                source_preference=None,
+            )
+            state["mitigation_recommendation"] = result.get("mitigation_recommendation", "")
+            state["citations"] = result.get("citations", [])
+            state["retrieved_chunks"] = result.get("retrieved_chunks", [])
+            state["rag_confidence"] = result.get("rag_confidence", 0.0)
+            _trace(state, "knowledge_advisor", "success",
+                   rag_confidence=result.get("rag_confidence", 0.0))
+        except Exception as exc:
+            logger.exception("Knowledge node error: %s", exc)
+            state["mitigation_recommendation"] = (
+                "Sistem tidak dapat menemukan jawaban dari dokumen referensi. "
+                "Silakan hubungi tim CSIRT Pusdatin Kementan untuk bantuan lebih lanjut."
+            )
+            _trace(state, "knowledge_advisor", "fallback")
+        return state
+    return knowledge_node
+
+
 def make_notifier_node(notifier):
     async def notifier_node(state: IncidentState) -> IncidentState:
         try:
@@ -236,6 +260,8 @@ def route_by_intent(state: IncidentState) -> str:
         return "report_incident"
     if intent == "needs_clarification":
         return "needs_clarification"
+    if intent == "query_knowledge":
+        return "query_knowledge"
     if intent == "query_status":
         return "query_status"
     return "general_help"
@@ -261,6 +287,7 @@ def build_helpdesk_graph(
                   ├─ report_incident → identify_incident → generate_mitigation
                   │                    → validate_output → create_ticket
                   │                    → send_notification → END
+                  ├─ query_knowledge  → query_knowledge → END
                   ├─ needs_clarification → END
                   ├─ query_status        → general_help → END
                   └─ general_help        → general_help → END
@@ -271,6 +298,7 @@ def build_helpdesk_graph(
     graph.add_node("guardrails", guardrails_node)
     graph.add_node("classify_intent", make_orchestrator_node(orchestrator))
     graph.add_node("general_help", make_general_help_node(orchestrator))
+    graph.add_node("query_knowledge", make_knowledge_node(mitigation_advisor))
     graph.add_node("identify_incident", make_identifier_node(identifier))
     graph.add_node("generate_mitigation", make_mitigation_node(mitigation_advisor))
     graph.add_node("validate_output", make_validate_output_node())
@@ -296,6 +324,7 @@ def build_helpdesk_graph(
         route_by_intent,
         {
             "report_incident":     "identify_incident",
+            "query_knowledge":     "query_knowledge",
             "needs_clarification": END,
             "query_status":        "general_help",
             "general_help":        "general_help",
@@ -303,6 +332,7 @@ def build_helpdesk_graph(
     )
 
     graph.add_edge("general_help", END)
+    graph.add_edge("query_knowledge", END)
 
     # Pipeline insiden (dengan validate_output setelah mitigation)
     graph.add_edge("identify_incident", "generate_mitigation")

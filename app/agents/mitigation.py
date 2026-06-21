@@ -165,6 +165,17 @@ def _compute_rag_confidence(chunks: list[dict]) -> float:
     return round(min(1.0, sum(scores) / len(scores)), 3)
 
 
+_KNOWLEDGE_FALLBACK = {
+    "mitigation_recommendation": (
+        "Informasi ini tidak ditemukan dalam dokumen referensi yang tersedia. "
+        "Silakan hubungi tim CSIRT Pusdatin Kementan untuk pertanyaan lebih lanjut."
+    ),
+    "citations": [],
+    "retrieved_chunks": [],
+    "rag_confidence": 0.0,
+}
+
+
 class MitigationAdvisorAgent:
     def __init__(self, llm_client: AsyncOpenAI, retriever, reranker_fn=None, model: str = "gpt-4o") -> None:
         self.llm = llm_client
@@ -172,6 +183,129 @@ class MitigationAdvisorAgent:
         self.reranker_fn = reranker_fn or rerank
         self.model = model
         self._prompt_template = load_prompt("mitigation")
+        self._knowledge_prompt_template = load_prompt("knowledge")
+
+    def _build_knowledge_messages(self, context: str, sanitized_input: str) -> list[dict]:
+        prompt = (
+            self._knowledge_prompt_template
+            .replace("{assembled_context}", context)
+            .replace("{sanitized_input}", sanitized_input)
+        )
+        return [{"role": "user", "content": prompt}]
+
+    async def generate_knowledge_response(
+        self,
+        sanitized_input: str,
+        source_preference: str | None = None,
+        incident_type: str = "general",
+    ) -> dict:
+        """Answer a regulatory/policy knowledge question using RAG + prose format.
+
+        Uses the same hybrid retrieval + reranker as generate_mitigation(),
+        but outputs a narrative answer (not numbered steps) and validates
+        citations from retrieved chunks.
+        Always returns a dict — never raises.
+        """
+        all_chunks: list[dict] = []
+
+        for iteration in range(1, 3):
+            try:
+                # Iterasi 2: untuk MITRE prefer chunk mitigasi agar tidak didominasi deskripsi serangan
+                use_mitigation_filter = iteration == 2 and source_preference is None
+                current_query = sanitized_input if iteration == 1 else f"mitigasi prosedur kebijakan {incident_type} {sanitized_input}"
+                prefer_src = "NIST" if source_preference == "NIST" else ("BSSN" if source_preference == "BSSN" else None)
+                new_chunks = self.retriever.retrieve(
+                    current_query,
+                    incident_type=incident_type,
+                    top_k=TOP_K_RETRIEVAL,
+                    prefer_mitigations=use_mitigation_filter,
+                    prefer_source=prefer_src,
+                )
+            except Exception as exc:
+                logger.warning("Knowledge retrieval gagal iterasi %d: %s", iteration, exc)
+                new_chunks = []
+
+            all_chunks = _merge_results(all_chunks, new_chunks)
+
+            try:
+                reranked = self.reranker_fn(sanitized_input, all_chunks, top_k=TOP_K_RERANK, incident_type=incident_type)
+            except Exception as exc:
+                logger.error("Reranking gagal: %s", exc)
+                reranked = all_chunks[:TOP_K_RERANK]
+
+            if _check_adequacy(reranked):
+                break
+
+        if not _check_adequacy(reranked if all_chunks else []):
+            logger.warning("Tidak ada dokumen relevan untuk query_knowledge.")
+            return {**_KNOWLEDGE_FALLBACK}
+
+        top_chunks = reranked if all_chunks else []
+
+        # Untuk query_knowledge, buang chunk "Teknik Serangan MITRE ATT&CK" (T-series)
+        # agar LLM hanya mendapat chunk mitigasi/kebijakan, bukan deskripsi cara serangan.
+        filtered = [
+            c for c in top_chunks
+            if not c.get("content", "").startswith("Teknik Serangan MITRE ATT&CK")
+        ]
+        if filtered:
+            top_chunks = filtered
+
+        context = _assemble_context(top_chunks)
+        messages = self._build_knowledge_messages(context, sanitized_input)
+
+        try:
+            response = await self.llm.chat.completions.create(
+                model=self.model,
+                messages=messages,
+                temperature=0.0,
+                max_tokens=600,
+                response_format={"type": "json_object"},
+            )
+            raw = response.choices[0].message.content or ""
+            parsed = parse_llm_json(raw)
+
+            if parsed is None:
+                logger.error("Tidak bisa parse JSON knowledge response: %s", raw[:200])
+                return {**_KNOWLEDGE_FALLBACK, "retrieved_chunks": top_chunks}
+
+            answer = parsed.get("knowledge_answer", "").strip()
+            source_refs = parsed.get("source_refs", [])
+
+            if not answer:
+                return {**_KNOWLEDGE_FALLBACK, "retrieved_chunks": top_chunks}
+
+            # Append source refs as footer
+            recommendation = answer
+            if source_refs:
+                recommendation += "\n\nSumber:"
+                for ref in source_refs:
+                    recommendation += f"\n{ref}"
+
+            citations = [{"source": ref, "step": None} for ref in source_refs if ref]
+            rag_confidence = _compute_rag_confidence(top_chunks)
+
+            return {
+                "mitigation_recommendation": recommendation,
+                "citations": citations,
+                "retrieved_chunks": top_chunks,
+                "rag_confidence": rag_confidence,
+            }
+
+        except APITimeoutError:
+            logger.warning("LLM timeout saat generate_knowledge_response")
+            return {
+                **_KNOWLEDGE_FALLBACK,
+                "retrieved_chunks": top_chunks,
+                "mitigation_recommendation": "LLM timeout. Silakan hubungi tim CSIRT secara langsung.",
+            }
+        except Exception as exc:
+            logger.exception("Error saat generate_knowledge_response: %s", exc)
+            return {
+                **_KNOWLEDGE_FALLBACK,
+                "retrieved_chunks": top_chunks,
+                "mitigation_recommendation": f"Error tidak terduga: {type(exc).__name__}. Hubungi tim CSIRT.",
+            }
 
     def _build_messages(self, context: str, incident_type: str, severity: str, sanitized_input: str) -> list[dict]:
         prompt = (

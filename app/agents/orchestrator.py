@@ -10,7 +10,7 @@ from app.utils.prompt_loader import load_prompt
 
 logger = logging.getLogger(__name__)
 
-VALID_INTENTS = {"report_incident", "query_status", "general_help", "needs_clarification"}
+VALID_INTENTS = {"report_incident", "query_knowledge", "query_status", "general_help", "needs_clarification"}
 
 _FALLBACK_INTENT = {
     "intent": "report_incident",

@@ -1,0 +1,136 @@
+{
+  "summary": {
+    "faithfulness": 0.6666666666666666,
+    "answer_relevancy": 0.8027387878763435,
+    "nv_context_relevance": 0.5
+  },
+  "per_question": [
+    {
+      "user_input": "Beberapa pegawai kantor kami pernah menerima telepon dari seseorang yang mengaku teknisi IT dan meminta password atau akses ke komputer mereka. Bagaimana cara melindungi pegawai dari jenis penipuan semacam ini?",
+      "retrieved_contexts": [
+        "Training and Awareness:\n\n- Educate employees on identifying phishing attempts, securing their social media, and avoiding information leaks.\n\nTeknik yang dimitigasi (84):\n  - T1583.001: Domains\n  - T1583.002: DNS Server\n  - T1583.003: Virtual Private Server\n  - T1583.004: Server\n  - T1583.005: Botnet\n  - T1583.006: Web Services\n  - T1583.007: Serverless\n  - T1583.008: Malvertising\n  - T1583: Acquire Infrastructure\n  - T1584.001: Domains\n  - T1584.002: DNS Server\n  - T1584.003: Virtual Private Server\n  - T1584.004: Server\n  - T1584.005: Botnet\n  - T1584.006: Web Services\n  - T1584.007: Serverless\n  - T1584.008: Network Devices\n  - T1584: Compromise Infrastructure\n  - T1585.001: Social Media Accounts\n  - T1585.002: Email Accounts",
+        "- 19 -  \njika ada strategi dan prosedur yang telah ditentukan. \nOrganisasi harus menetapkan risiko yang dapat diterima dalam \nmenangani Insiden Siber dan mengembangkan strategi yang \nsesuai. Organisasi harus membuat strategi/prosedur \npenahanan terpisah untuk setiap jenis insiden utama, dengan \nkriteria yang didokumentasikan dengan jelas untuk \nmemfasilitasi pengambilan keputusan. Prosedur containment \ndapat dilakukan dengan cara sebagai berikut: \n1) isolasi sistem yang terkena insiden; \n2) backup data yang berkaitan dengan insiden (misalnya hasil \npengumpulan bukti berbentuk log, screenshot, dan lainnya); \n3) identifikasi semua layanan (service) dan koneksi yang \nterhubung; \n4) identifikasi metode penyerang ketika masuk ke sistem \npertama kali, dengan melihat log pada sistem;",
+        "- 18 -  \nii. Antimalware memberi peringatan saat mendeteksi host \n/ media yang terinfeksi malware; \niii. Administrator melihat adanya file baru yang \nmempunyai nama yang tidak biasa digunakan \n(unusual character); \niv. Log pada aplikasi mencatat adanya tindakan \npercobaan login yang banyak dari IP address yang \ntidak diketahui; dan \nv. Administrator melihat  surat elektronik yang tertolak \noleh sistem  (bounced email ) yang banyak dengan \nkonten yang anomali (suspicious content). \n \nAnalisis Insiden Siber dilakukan untuk mengetahui paling \nsedikit: \n1) Sistem Elektronik yang terkena Insiden Siber. \nSistem Elektronik yang terkena Insiden Siber sebagaimana \nperlu diketahui kategori Sistem Elektroniknya. \n2) Ruang lingkup dampak Insiden Siber.",
+        "Teknik yang dimitigasi (37):\n  - T1137.002: Office Test\n  - T1137: Office Application Startup\n  - T1213.004: Customer Relationship Management Software\n  - T1213.006: Databases\n  - T1213: Data from Information Repositories\n  - T1535: Unused/Unsupported Cloud Regions\n  - T1537: Transfer Data to Cloud Account\n  - T1539: Steal Web Session Cookie\n  - T1543.005: Container Service\n  - T1543: Create or Modify System Process\n  - T1546.013: PowerShell Profile\n  - T1550.004: Web Session Cookie\n  - T1553.004: Install Root Certificate\n  - T1553: Subvert Trust Controls\n  - T1555.005: Password Managers\n  - T1559.002: Dynamic Data Exchange\n  - T1559: Inter-Process Communication\n  - T1562.006: Indicator Blocking\n  - T1562.009: Safe Mode Boot\n  - T1562.010: Downgrade Attack"
+      ],
+      "response": "Untuk melindungi pegawai dari penipuan yang melibatkan seseorang yang mengaku sebagai teknisi IT dan meminta password atau akses ke komputer, penting untuk memberikan edukasi kepada pegawai tentang cara mengidentifikasi upaya phishing dan menjaga keamanan informasi. Edukasi ini dapat mencakup cara mengenali tanda-tanda penipuan, seperti permintaan informasi sensitif yang tidak biasa, dan langkah-langkah yang harus diambil jika mereka menerima permintaan semacam itu. Selain itu, pegawai harus diajarkan untuk tidak memberikan informasi sensitif melalui telepon atau email tanpa verifikasi yang tepat. Dengan meningkatkan kesadaran dan pemahaman pegawai tentang ancaman ini, organisasi dapat mengurangi risiko terjadinya insiden keamanan siber yang disebabkan oleh penipuan semacam ini.",
+      "reference": "Laksanakan program pelatihan keamanan dan kesadaran (User Training) untuk mendidik pegawai agar tidak pernah memberikan informasi sensitif seperti password atau akses sistem kepada siapapun melalui telepon, termasuk yang mengaku sebagai staf IT. Pelatihan harus mencakup cara mengenali teknik rekayasa sosial, prosedur verifikasi identitas yang benar sebelum memberikan akses, dan cara melaporkan percobaan penipuan kepada tim keamanan.",
+      "faithfulness": 0.6666666666666666,
+      "answer_relevancy": 0.8027387878763435,
+      "nv_context_relevance": 0.5
+    }
+  ],
+  "qa_pairs": [
+    {
+      "id": "QA-015",
+      "question": "Beberapa pegawai kantor kami pernah menerima telepon dari seseorang yang mengaku teknisi IT dan meminta password atau akses ke komputer mereka. Bagaimana cara melindungi pegawai dari jenis penipuan semacam ini?",
+      "ground_truth": "Laksanakan program pelatihan keamanan dan kesadaran (User Training) untuk mendidik pegawai agar tidak pernah memberikan informasi sensitif seperti password atau akses sistem kepada siapapun melalui telepon, termasuk yang mengaku sebagai staf IT. Pelatihan harus mencakup cara mengenali teknik rekayasa sosial, prosedur verifikasi identitas yang benar sebelum memberikan akses, dan cara melaporkan percobaan penipuan kepada tim keamanan.",
+      "candidate_answer": "Untuk melindungi pegawai dari penipuan yang melibatkan seseorang yang mengaku sebagai teknisi IT dan meminta password atau akses ke komputer, penting untuk memberikan edukasi kepada pegawai tentang cara mengidentifikasi upaya phishing dan menjaga keamanan informasi. Edukasi ini dapat mencakup cara mengenali tanda-tanda penipuan, seperti permintaan informasi sensitif yang tidak biasa, dan langkah-langkah yang harus diambil jika mereka menerima permintaan semacam itu. Selain itu, pegawai harus diajarkan untuk tidak memberikan informasi sensitif melalui telepon atau email tanpa verifikasi yang tepat. Dengan meningkatkan kesadaran dan pemahaman pegawai tentang ancaman ini, organisasi dapat mengurangi risiko terjadinya insiden keamanan siber yang disebabkan oleh penipuan semacam ini.\n\nSumber:\n[1] MITRE ATT&CK Enterprise, Training and Awareness",
+      "retrieved_chunks": [
+        {
+          "id": "9d414522-c882-469f-9734-21821872386e",
+          "content": "Training and Awareness:\n\n- Educate employees on identifying phishing attempts, securing their social media, and avoiding information leaks.\n\nTeknik yang dimitigasi (84):\n  - T1583.001: Domains\n  - T1583.002: DNS Server\n  - T1583.003: Virtual Private Server\n  - T1583.004: Server\n  - T1583.005: Botnet\n  - T1583.006: Web Services\n  - T1583.007: Serverless\n  - T1583.008: Malvertising\n  - T1583: Acquire Infrastructure\n  - T1584.001: Domains\n  - T1584.002: DNS Server\n  - T1584.003: Virtual Private Server\n  - T1584.004: Server\n  - T1584.005: Botnet\n  - T1584.006: Web Services\n  - T1584.007: Serverless\n  - T1584.008: Network Devices\n  - T1584: Compromise Infrastructure\n  - T1585.001: Social Media Accounts\n  - T1585.002: Email Accounts",
+          "metadata": {
+            "doc_id": "mitre-attack-enterprise",
+            "doc_title": "MITRE ATT&CK Enterprise",
+            "source_framework": "MITRE",
+            "language": "en",
+            "incident_types": [
+              "general"
+            ],
+            "page_number": 0,
+            "section_header": "",
+            "chunk_index": 617
+          },
+          "score": 0.56018543,
+          "rrf_score": 0.01639344262295082,
+          "final_score": 0.6904904567377048
+        },
+        {
+          "id": "007a4bd7-94e3-44f5-aee3-fea7884fefb7",
+          "content": "- 19 -  \njika ada strategi dan prosedur yang telah ditentukan. \nOrganisasi harus menetapkan risiko yang dapat diterima dalam \nmenangani Insiden Siber dan mengembangkan strategi yang \nsesuai. Organisasi harus membuat strategi/prosedur \npenahanan terpisah untuk setiap jenis insiden utama, dengan \nkriteria yang didokumentasikan dengan jelas untuk \nmemfasilitasi pengambilan keputusan. Prosedur containment \ndapat dilakukan dengan cara sebagai berikut: \n1) isolasi sistem yang terkena insiden; \n2) backup data yang berkaitan dengan insiden (misalnya hasil \npengumpulan bukti berbentuk log, screenshot, dan lainnya); \n3) identifikasi semua layanan (service) dan koneksi yang \nterhubung; \n4) identifikasi metode penyerang ketika masuk ke sistem \npertama kali, dengan melihat log pada sistem;",
+          "metadata": {
+            "doc_id": "peraturan-bssn-1-2024",
+            "doc_title": "Peraturan BSSN Nomor 1 Tahun 2024",
+            "source_framework": "BSSN",
+            "language": "id",
+            "incident_types": [
+              "phishing",
+              "malware",
+              "ransomware",
+              "akses_tidak_sah",
+              "kebocoran_data",
+              "ddos",
+              "web_defacement",
+              "general"
+            ],
+            "page_number": 18,
+            "section_header": "",
+            "chunk_index": 590,
+            "object_type": "",
+            "external_id": "",
+            "source": "knowledge_base\\documents\\Peraturan BSSN Nomor 1 Tahun 2024.pdf"
+          },
+          "score": 0.4942476,
+          "rrf_score": 0.016129032258064516,
+          "final_score": 0.6427475135483871
+        },
+        {
+          "id": "cb33df73-dc6d-4e02-97cf-acc6da264390",
+          "content": "- 18 -  \nii. Antimalware memberi peringatan saat mendeteksi host \n/ media yang terinfeksi malware; \niii. Administrator melihat adanya file baru yang \nmempunyai nama yang tidak biasa digunakan \n(unusual character); \niv. Log pada aplikasi mencatat adanya tindakan \npercobaan login yang banyak dari IP address yang \ntidak diketahui; dan \nv. Administrator melihat  surat elektronik yang tertolak \noleh sistem  (bounced email ) yang banyak dengan \nkonten yang anomali (suspicious content). \n \nAnalisis Insiden Siber dilakukan untuk mengetahui paling \nsedikit: \n1) Sistem Elektronik yang terkena Insiden Siber. \nSistem Elektronik yang terkena Insiden Siber sebagaimana \nperlu diketahui kategori Sistem Elektroniknya. \n2) Ruang lingkup dampak Insiden Siber.",
+          "metadata": {
+            "doc_id": "peraturan-bssn-1-2024",
+            "doc_title": "Peraturan BSSN Nomor 1 Tahun 2024",
+            "source_framework": "BSSN",
+            "language": "id",
+            "incident_types": [
+              "phishing",
+              "malware",
+              "ransomware",
+              "akses_tidak_sah",
+              "kebocoran_data",
+              "ddos",
+              "web_defacement",
+              "general"
+            ],
+            "page_number": 17,
+            "section_header": "",
+            "chunk_index": 586,
+            "object_type": "",
+            "external_id": "",
+            "source": "knowledge_base\\documents\\Peraturan BSSN Nomor 1 Tahun 2024.pdf"
+          },
+          "score": 0.47922784,
+          "rrf_score": 0.015625,
+          "final_score": 0.629209488
+        },
+        {
+          "id": "83e30a01-3032-4965-a982-e226f0985bdb",
+          "content": "Teknik yang dimitigasi (37):\n  - T1137.002: Office Test\n  - T1137: Office Application Startup\n  - T1213.004: Customer Relationship Management Software\n  - T1213.006: Databases\n  - T1213: Data from Information Repositories\n  - T1535: Unused/Unsupported Cloud Regions\n  - T1537: Transfer Data to Cloud Account\n  - T1539: Steal Web Session Cookie\n  - T1543.005: Container Service\n  - T1543: Create or Modify System Process\n  - T1546.013: PowerShell Profile\n  - T1550.004: Web Session Cookie\n  - T1553.004: Install Root Certificate\n  - T1553: Subvert Trust Controls\n  - T1555.005: Password Managers\n  - T1559.002: Dynamic Data Exchange\n  - T1559: Inter-Process Communication\n  - T1562.006: Indicator Blocking\n  - T1562.009: Safe Mode Boot\n  - T1562.010: Downgrade Attack",
+          "metadata": {
+            "doc_id": "mitre-attack-enterprise",
+            "doc_title": "MITRE ATT&CK Enterprise",
+            "source_framework": "MITRE",
+            "language": "en",
+            "incident_types": [
+              "akses_tidak_sah",
+              "ddos",
+              "general",
+              "kebocoran_data",
+              "malware",
+              "phishing",
+              "ransomware",
+              "web_defacement"
+            ],
+            "page_number": 0,
+            "section_header": "",
+            "chunk_index": 683
+          },
+          "score": 0.46588105,
+          "rrf_score": 0.015384615384615385,
+          "final_score": 0.6184244273076923
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,164 @@
+{
+  "summary": {
+    "faithfulness": 0.9,
+    "answer_relevancy": 0.7612113983290086,
+    "nv_context_relevance": 1.0
+  },
+  "per_question": [
+    {
+      "user_input": "Saat serangan siber masih berjalan, mengapa tindakan containment atau isolasi sistem harus dilakukan terlebih dahulu daripada langsung mematikan sistem?",
+      "retrieved_contexts": [
+        "COMPUTER SECURITY INCIDENT HANDLING GUIDE \n36 \nattacker’s activity other than sandboxing should not be used; if an organization knows that a system has \nbeen compromised and allows the compromise to continue, it may be liable if the attacker uses the \ncompromised system to attack other systems. The delayed containment strategy is dangerous because an \nattacker could escalate unauthorized access or compromise other systems.  \nAnother potential issue regarding containment is that some attacks may cause additional damage when \nthey are contained. For example, a compromised host may run a malicious process that pings another host \nperiodically. When the incident handler attempts to contain the incident by disconnecting the",
+        "COMPUTER SECURITY INCIDENT HANDLING GUIDE \n36 \nattacker’s activity other than sandboxing should not be used; if an organization knows that a system has \nbeen compromised and allows the compromise to continue, it may be liable if the attacker uses the \ncompromised system to attack other systems. The delayed containment strategy is dangerous because an \nattacker could escalate unauthorized access or compromise other systems.  \nAnother potential issue regarding containment is that some attacks may cause additional damage when \nthey are contained. For example, a compromised host may run a malicious process that pings another host \nperiodically. When the incident handler attempts to contain the incident by disconnecting the",
+        "dangerous because an attacker could \nescalate unauthorized access or \ncompromise other systems. \nRS.MI-01 Incidents are contained High N1: Containment refers to preventing the \nexpansion of an incident. Containment can \nprevent additional damage and avoid \noverwhelming the organization’s resources. \nMost incidents require some form of \ncontainment.  \nC1: Consider configuring cybersecurity \ntechnologies (e.g., antivirus software) and \nthe cybersecurity features of other \ntechnologies (e.g., operating systems, \nnetwork infrastructure devices) to \nautomatically perform some containment \nactions, like quarantining malware, \ntransferring a compromised endpoint to an \nisolated remediation network, or halting \nthe execution of an infected container.",
+        "dangerous because an attacker could \nescalate unauthorized access or \ncompromise other systems. \nRS.MI-01 Incidents are contained High N1: Containment refers to preventing the \nexpansion of an incident. Containment can \nprevent additional damage and avoid \noverwhelming the organization’s resources. \nMost incidents require some form of \ncontainment.  \nC1: Consider configuring cybersecurity \ntechnologies (e.g., antivirus software) and \nthe cybersecurity features of other \ntechnologies (e.g., operating systems, \nnetwork infrastructure devices) to \nautomatically perform some containment \nactions, like quarantining malware, \ntransferring a compromised endpoint to an \nisolated remediation network, or halting \nthe execution of an infected container.",
+        "COMPUTER SECURITY INCIDENT HANDLING GUIDE \n35 \n3.3 Containment, Eradication, and Recovery \n \nFigure 3-3. Incident Response Life Cycle (Containment, Eradication, and Recovery) \n3.3.1 Choosing a Containment Strategy \nContainment is important before an incident overwhelms resources or increases damage. Most incidents \nrequire containment, so that is an important consideration early in the course of handling each incident. \nContainment provides time for developing a tailored remediation strategy. An essential part of \ncontainment is decision-making (e.g., shut down a system, disconnect it from a network, disable certain \nfunctions). Such decisions are much easier to make if there are predetermined strategies and procedures"
+      ],
+      "response": "Tindakan containment atau isolasi sistem harus dilakukan terlebih dahulu daripada langsung mematikan sistem karena containment mencegah perluasan insiden dan menghindari kerusakan tambahan serta menghindari pembebanan sumber daya organisasi. Containment memberikan waktu untuk mengembangkan strategi remediasi yang disesuaikan. Selain itu, containment memungkinkan pengambilan keputusan yang lebih mudah, seperti mematikan sistem, memutuskan koneksi dari jaringan, atau menonaktifkan fungsi tertentu, jika ada strategi dan prosedur yang telah ditentukan sebelumnya.",
+      "reference": "Lakukan containment terlebih dahulu untuk mencegah perluasan insiden sebelum kehabisan sumber daya atau kerusakan meningkat. Containment memberikan waktu untuk mengembangkan strategi remediasi yang tepat. Konfigurasikan teknologi keamanan siber seperti antivirus dan fitur keamanan sistem operasi untuk secara otomatis melakukan tindakan containment seperti mengkarantina malware atau memindahkan endpoint ke jaringan remediasi terisolasi.",
+      "faithfulness": 0.9,
+      "answer_relevancy": 0.7612113983290086,
+      "nv_context_relevance": 1.0
+    }
+  ],
+  "qa_pairs": [
+    {
+      "id": "QA-004",
+      "question": "Saat serangan siber masih berjalan, mengapa tindakan containment atau isolasi sistem harus dilakukan terlebih dahulu daripada langsung mematikan sistem?",
+      "ground_truth": "Lakukan containment terlebih dahulu untuk mencegah perluasan insiden sebelum kehabisan sumber daya atau kerusakan meningkat. Containment memberikan waktu untuk mengembangkan strategi remediasi yang tepat. Konfigurasikan teknologi keamanan siber seperti antivirus dan fitur keamanan sistem operasi untuk secara otomatis melakukan tindakan containment seperti mengkarantina malware atau memindahkan endpoint ke jaringan remediasi terisolasi.",
+      "candidate_answer": "Tindakan containment atau isolasi sistem harus dilakukan terlebih dahulu daripada langsung mematikan sistem karena containment mencegah perluasan insiden dan menghindari kerusakan tambahan serta menghindari pembebanan sumber daya organisasi. Containment memberikan waktu untuk mengembangkan strategi remediasi yang disesuaikan. Selain itu, containment memungkinkan pengambilan keputusan yang lebih mudah, seperti mematikan sistem, memutuskan koneksi dari jaringan, atau menonaktifkan fungsi tertentu, jika ada strategi dan prosedur yang telah ditentukan sebelumnya.\n\nSumber:\n[5] Computer Security Incident Handling Guide, 3.3 Containment, Eradication, and Recovery",
+      "retrieved_chunks": [
+        {
+          "id": "41d09b76-1b20-4192-a479-e8be610e51e0",
+          "content": "COMPUTER SECURITY INCIDENT HANDLING GUIDE \n36 \nattacker’s activity other than sandboxing should not be used; if an organization knows that a system has \nbeen compromised and allows the compromise to continue, it may be liable if the attacker uses the \ncompromised system to attack other systems. The delayed containment strategy is dangerous because an \nattacker could escalate unauthorized access or compromise other systems.  \nAnother potential issue regarding containment is that some attacks may cause additional damage when \nthey are contained. For example, a compromised host may run a malicious process that pings another host \nperiodically. When the incident handler attempts to contain the incident by disconnecting the",
+          "metadata": {
+            "doc_id": "nist-800-61-rev2",
+            "doc_title": "Computer Security Incident Handling Guide",
+            "source_framework": "NIST",
+            "language": "en",
+            "incident_types": [
+              "phishing",
+              "malware",
+              "ransomware",
+              "akses_tidak_sah",
+              "kebocoran_data",
+              "general"
+            ],
+            "page_number": 45,
+            "section_header": "",
+            "chunk_index": 202
+          },
+          "score": 0.53754354,
+          "rrf_score": 0.01639344262295082,
+          "final_score": 0.674641133737705
+        },
+        {
+          "id": "0e47b428-bd85-4c05-8f98-826d7f6c56dc",
+          "content": "COMPUTER SECURITY INCIDENT HANDLING GUIDE \n36 \nattacker’s activity other than sandboxing should not be used; if an organization knows that a system has \nbeen compromised and allows the compromise to continue, it may be liable if the attacker uses the \ncompromised system to attack other systems. The delayed containment strategy is dangerous because an \nattacker could escalate unauthorized access or compromise other systems.  \nAnother potential issue regarding containment is that some attacks may cause additional damage when \nthey are contained. For example, a compromised host may run a malicious process that pings another host \nperiodically. When the incident handler attempts to contain the incident by disconnecting the",
+          "metadata": {
+            "doc_id": "nist-800-61-rev2",
+            "doc_title": "Computer Security Incident Handling Guide",
+            "source_framework": "NIST",
+            "language": "en",
+            "incident_types": [
+              "phishing",
+              "malware",
+              "ransomware",
+              "akses_tidak_sah",
+              "kebocoran_data",
+              "general"
+            ],
+            "page_number": 45,
+            "section_header": "",
+            "chunk_index": 202,
+            "object_type": "",
+            "external_id": "",
+            "source": "knowledge_base\\documents\\nist.sp.800-61r2.pdf"
+          },
+          "score": 0.5367631,
+          "rrf_score": 0.016129032258064516,
+          "final_score": 0.6725083635483871
+        },
+        {
+          "id": "13d3e1e3-6e72-4a4f-9425-6a039f87f16a",
+          "content": "dangerous because an attacker could \nescalate unauthorized access or \ncompromise other systems. \nRS.MI-01 Incidents are contained High N1: Containment refers to preventing the \nexpansion of an incident. Containment can \nprevent additional damage and avoid \noverwhelming the organization’s resources. \nMost incidents require some form of \ncontainment.  \nC1: Consider configuring cybersecurity \ntechnologies (e.g., antivirus software) and \nthe cybersecurity features of other \ntechnologies (e.g., operating systems, \nnetwork infrastructure devices) to \nautomatically perform some containment \nactions, like quarantining malware, \ntransferring a compromised endpoint to an \nisolated remediation network, or halting \nthe execution of an infected container.",
+          "metadata": {
+            "doc_id": "nist-800-61-rev3",
+            "doc_title": "Incident Response Recommendations and Considerations for Cybersecurity Risk Management",
+            "source_framework": "NIST",
+            "language": "en",
+            "incident_types": [
+              "phishing",
+              "malware",
+              "ransomware",
+              "akses_tidak_sah",
+              "kebocoran_data",
+              "ddos",
+              "web_defacement",
+              "general"
+            ],
+            "page_number": 39,
+            "section_header": "",
+            "chunk_index": 502,
+            "object_type": "",
+            "external_id": "",
+            "source": "knowledge_base\\documents\\NIST.SP.800-61r3.pdf"
+          },
+          "score": 0.5115661,
+          "rrf_score": 0.015873015873015872,
+          "final_score": 0.6533343652380952
+        },
+        {
+          "id": "e7f9790e-da13-4e64-b858-12a75bfa95b0",
+          "content": "dangerous because an attacker could \nescalate unauthorized access or \ncompromise other systems. \nRS.MI-01 Incidents are contained High N1: Containment refers to preventing the \nexpansion of an incident. Containment can \nprevent additional damage and avoid \noverwhelming the organization’s resources. \nMost incidents require some form of \ncontainment.  \nC1: Consider configuring cybersecurity \ntechnologies (e.g., antivirus software) and \nthe cybersecurity features of other \ntechnologies (e.g., operating systems, \nnetwork infrastructure devices) to \nautomatically perform some containment \nactions, like quarantining malware, \ntransferring a compromised endpoint to an \nisolated remediation network, or halting \nthe execution of an infected container.",
+          "metadata": {
+            "doc_id": "nist-800-61-rev3",
+            "doc_title": "Incident Response Recommendations and Considerations for Cybersecurity Risk Management",
+            "source_framework": "NIST",
+            "language": "en",
+            "incident_types": [
+              "phishing",
+              "malware",
+              "ransomware",
+              "akses_tidak_sah",
+              "kebocoran_data",
+              "ddos",
+              "web_defacement",
+              "general"
+            ],
+            "page_number": 39,
+            "section_header": "",
+            "chunk_index": 503
+          },
+          "score": 0.5115595,
+          "rrf_score": 0.015625,
+          "final_score": 0.6518416499999999
+        },
+        {
+          "id": "a0daaf42-483f-4730-8a3e-d09986d169cd",
+          "content": "COMPUTER SECURITY INCIDENT HANDLING GUIDE \n35 \n3.3 Containment, Eradication, and Recovery \n \nFigure 3-3. Incident Response Life Cycle (Containment, Eradication, and Recovery) \n3.3.1 Choosing a Containment Strategy \nContainment is important before an incident overwhelms resources or increases damage. Most incidents \nrequire containment, so that is an important consideration early in the course of handling each incident. \nContainment provides time for developing a tailored remediation strategy. An essential part of \ncontainment is decision-making (e.g., shut down a system, disconnect it from a network, disable certain \nfunctions). Such decisions are much easier to make if there are predetermined strategies and procedures",
+          "metadata": {
+            "doc_id": "nist-800-61-rev2",
+            "doc_title": "Computer Security Incident Handling Guide",
+            "source_framework": "NIST",
+            "language": "en",
+            "incident_types": [
+              "phishing",
+              "malware",
+              "ransomware",
+              "akses_tidak_sah",
+              "kebocoran_data",
+              "general"
+            ],
+            "page_number": 44,
+            "section_header": "3.3 Containment, Eradication, and Recovery",
+            "chunk_index": 199
+          },
+          "score": 0.47467837,
+          "rrf_score": 0.015384615384615385,
+          "final_score": 0.6245825513076924
+        }
+      ]
+    }
+  ]
+}

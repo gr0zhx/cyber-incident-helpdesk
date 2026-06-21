@@ -18,12 +18,19 @@ from openai import AsyncOpenAI
 
 
 def _resolve_api_key() -> str:
-    """Kembalikan API key yang tersedia: OPENAI_API_KEY atau GITHUB_TOKEN."""
-    key = os.getenv("OPENAI_API_KEY") or os.getenv("GITHUB_TOKEN")
+    """Kembalikan API key yang sesuai dengan endpoint yang dikonfigurasi.
+
+    Jika OPENAI_BASE_URL di-set (GitHub Models), prioritaskan GITHUB_TOKEN
+    agar tidak salah kirim OpenAI key ke endpoint Azure.
+    """
+    if os.getenv("OPENAI_BASE_URL"):
+        key = os.getenv("GITHUB_TOKEN") or os.getenv("OPENAI_API_KEY")
+    else:
+        key = os.getenv("OPENAI_API_KEY") or os.getenv("GITHUB_TOKEN")
     if not key:
         raise EnvironmentError(
             "API key tidak ditemukan. Set OPENAI_API_KEY (OpenAI) "
-            "atau GITHUB_TOKEN (GitHub Models)."
+            "atau GITHUB_TOKEN + OPENAI_BASE_URL (GitHub Models)."
         )
     return key
 

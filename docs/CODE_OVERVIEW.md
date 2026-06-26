@@ -2,7 +2,7 @@
 
 > Dokumen komprehensif untuk persiapan sidang skripsi: penjelasan **setiap file, setiap fungsi, setiap class**, logika internal, dan keterkaitan antar-modul.
 > Target pembaca: penulis (recall cepat) dan dosen penguji (verifikasi teknis).
-> Terakhir diperbarui: 2026-06-21 (Intent ke-5 query_knowledge, knowledge RAG node, BSSN eval, scripts analisis).
+> Terakhir diperbarui: 2026-06-26 (Aturan disambiguasi identifier, skenario TCR lebih realistis, filter --ids di eval_tcr).
 
 ---
 
@@ -33,6 +33,7 @@
 23. [Perubahan Terbaru (2026-06-06)](#23-perubahan-terbaru-2026-06-06)
 24. [Perubahan Terbaru (2026-06-16)](#24-perubahan-terbaru-2026-06-16)
 25. [Perubahan Terbaru (2026-06-21)](#25-perubahan-terbaru-2026-06-21)
+26. [Perubahan Terbaru (2026-06-26)](#26-perubahan-terbaru-2026-06-26)
 
 ---
 
@@ -2372,3 +2373,70 @@ python tests/evaluation/eval_ragas.py --dataset tests/evaluation/rag_qa_dataset_
     --output tests/evaluation/rag_ragas_results_bssn.json
 python scripts/generate_bssn_report.py
 ```
+
+---
+
+## 26. Perubahan Terbaru (2026-06-26)
+
+### 26.1 `config/prompts/identifier.txt` — Aturan Disambiguasi + Contoh Baru
+
+Ditambahkan blok **Aturan disambiguasi** untuk kasus batas yang sering salah klasifikasi:
+
+| Kasus Batas | Aturan |
+| ----------- | ------ |
+| Ransomware vs Malware | Gunakan "Ransomware" jika ada tanda enkripsi file, ekstensi berubah, atau pesan tebusan. "Malware" hanya jika tidak ada tanda enkripsi/tebusan sama sekali. |
+| Web Defacement vs Ransomware | Pesan tebusan di **halaman website** → Web Defacement. Enkripsi **file di perangkat/server** → Ransomware. |
+| Akses Tidak Sah vs Kebocoran Data | "Akses Tidak Sah" jika fokus pada tindakan masuk tanpa izin. "Kebocoran Data" jika data sudah terkonfirmasi keluar (darkweb, file dikirim ke luar, dll.). |
+| Akses fisik | Orang tidak dikenal menggunakan perangkat kantor yang tidak dikunci → "Akses Tidak Sah". |
+
+Tiga contoh few-shot baru ditambahkan:
+
+- Malware — komputer lambat + antivirus bunyi + file masih bisa dibuka (bukan ransomware)
+- Web Defacement — halaman website diganti pesan tebusan BTC (bukan ransomware)
+- Akses Tidak Sah — orang asing pakai komputer kantor yang tidak dikunci (akses fisik)
+
+---
+
+### 26.2 `tests/evaluation/eval_tcr.py` — Filter `--ids`
+
+Argumen CLI baru `--ids` untuk menjalankan subset skenario berdasarkan ID tanpa harus mengubah file `scenarios.json`:
+
+```bash
+# Jalankan hanya dua skenario tertentu
+python tests/evaluation/eval_tcr.py --ids SC-025,SC-056
+```
+
+**Perubahan kode:**
+
+```python
+# Signature fungsi run_evaluation() sekarang
+async def run_evaluation(
+    scenarios_path: str,
+    output_path: str | None = None,
+    category_filter: str | None = None,
+    ids_filter: list[str] | None = None,   # ← baru
+) -> dict:
+    ...
+    if ids_filter:
+        scenarios = [s for s in scenarios if s["id"] in ids_filter]
+```
+
+Berguna untuk re-run hanya skenario yang gagal tanpa menjalankan seluruh suite (hemat kuota API).
+
+---
+
+### 26.3 `tests/evaluation/scenarios.json` — Skenario Lebih Realistis
+
+Seluruh input teks skenario direvisi agar lebih menyerupai laporan nyata dari pegawai awam:
+
+- Menyebut waktu spesifik, nama file/proses, IP address, atau URL palsu yang konkret.
+- Bahasa lebih natural (percakapan sehari-hari, bukan deskripsi teknis formal).
+- Beberapa `expected_severity` disesuaikan agar lebih akurat (contoh: SC-002 ransomware satu komputer → `Tinggi` bukan `Kritis`; SC-009 phishing tidak klik → `Sedang` bukan `Tinggi`).
+
+Tujuan: meningkatkan validitas evaluasi TCR karena skenario sebelumnya terlalu "ideal" dan tidak mewakili input nyata.
+
+---
+
+### 26.4 `tests/evaluation/tcr_results.json` + `TCR_REPORT.md`
+
+Hasil evaluasi TCR diperbarui setelah menjalankan ulang dengan skenario yang sudah direvisi. `TCR_REPORT.md` diperbarui dengan ringkasan hasil terkini.

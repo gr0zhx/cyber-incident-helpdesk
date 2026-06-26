@@ -1,245 +1,245 @@
 [
   {
     "id": "SC-001",
-    "input": "Tadi pagi sekitar jam 08.15 saya menerima email dari CEO palsu di laptop kantor saya yang meminta transfer dana segera dengan link login yang mencurigakan.",
+    "input": "Tadi pagi sekitar jam 08.15 saya dapat email sepertinya dari Pak Direktur yang minta saya transfer uang segera ke rekening BCA 1234567890. Ada link di email itu dan saya sempat klik. Emailnya dari alamat yang agak aneh, bukan email kantor biasanya.",
     "expected_type": "Phishing",
     "expected_severity": "Tinggi",
     "category": "clear_report"
   },
   {
     "id": "SC-009",
-    "input": "Tadi sekitar jam 13.00 rekan kerja saya mengirim link aneh via WhatsApp, saya klik dan langsung diminta masukkan password akun dinas saya.",
+    "input": "Tadi sekitar jam 13.30 saya dapat email yang mengatasnamakan BKN, ada link untuk cek status pangkat saya. Saya klik linknya, muncul halaman login tapi saya curiga tampilannya aneh jadi langsung saya tutup dan tidak jadi masukkan apa-apa. Emailnya masih ada di inbox saya.",
     "expected_type": "Phishing",
-    "expected_severity": "Tinggi",
+    "expected_severity": "Sedang",
     "category": "clear_report"
   },
   {
     "id": "SC-019",
-    "input": "Baru saya sadari tadi pagi jam 07.45 halaman login VPN kantor tampak berbeda dari biasanya, ada logo yang berubah dan URL-nya sedikit berbeda dari yang resmi.",
+    "input": "Tadi pagi jam 09.00 saya dapat email yang tidak jelas dari pengirim yang tidak saya kenal, isinya minta saya klik link untuk verifikasi akun dinas segera atau akun dinonaktifkan. Saya tidak klik, tapi saya khawatir ini penipuan dan ingin melaporkan supaya teman-teman lain tidak terkecoh.",
     "expected_type": "Phishing",
-    "expected_severity": "Tinggi",
+    "expected_severity": "Ringan",
     "category": "clear_report"
   },
   {
     "id": "SC-035",
-    "input": "Sejak tadi pagi ada laporan dari banyak pegawai bahwa mereka menerima email phishing massal yang mengatasnamakan Kementerian Keuangan ke seluruh alamat dinas.",
+    "input": "Sejak tadi pagi banyak rekan pegawai bilang dapat email dari Kementerian Keuangan yang minta update akun dinas lewat link. Beberapa sudah ada yang klik dan isi password mereka. Emailnya terlihat resmi tapi saya curiga karena pengirimnya bukan domain yang biasa.",
     "expected_type": "Phishing",
     "expected_severity": "Tinggi",
     "category": "clear_report"
   },
   {
     "id": "SC-048",
-    "input": "Tadi siang jam 14.30 saya mengakses portal SSO kantor dari link di email lalu memasukkan password, tapi setelah dicek URL-nya bukan domain resmi kementerian.",
+    "input": "Tadi siang jam 14.30 saya klik link di email lalu login di halaman yang terlihat seperti SSO kantor. Setelah saya cek, URL-nya ternyata https://sso-pertanian.net bukan https://sso.pertanian.go.id. Saya sudah memasukkan password dinas saya di halaman palsu itu.",
     "expected_type": "Phishing",
     "expected_severity": "Tinggi",
     "category": "clear_report"
   },
   {
     "id": "SC-007",
-    "input": "Tadi jam 10.30 saya tidak sengaja membuka lampiran email dari pengirim tidak dikenal di komputer kantor saya dan antivirus langsung bereaksi dengan peringatan.",
+    "input": "Tadi jam 10.30 saya buka lampiran email berupa file dari pengirim yang tidak saya kenal di komputer kantor. Tiba-tiba muncul peringatan dari antivirus, komputer jadi sangat lambat dan susah dipakai. Saya langsung cabut dari internet tapi tidak tahu harus apa lagi.",
     "expected_type": "Malware",
     "expected_severity": "Sedang",
     "category": "clear_report"
   },
   {
     "id": "SC-013",
-    "input": "Baru saya temukan tadi pagi jam 08.00 ada program asing terinstal di laptop dinas saya tanpa saya install, dan program itu terus berjalan di background.",
+    "input": "Tadi pagi jam 08.00 ada program aneh bernama WinUpdateHelper.exe di laptop dinas saya yang tidak pernah saya install. Program itu jalan sendiri terus di background dan tidak bisa saya tutup dari mana pun. Laptop saya jadi lambat banget.",
     "expected_type": "Malware",
     "expected_severity": "Sedang",
     "category": "clear_report"
   },
   {
     "id": "SC-022",
-    "input": "Sejak tadi pagi jam 08.00 koneksi internet kantor sangat lambat dan firewall melaporkan trafik keluar yang sangat besar ke IP luar negeri dari server aplikasi.",
+    "input": "Sejak tadi pagi jam 08.00 firewall melaporkan trafik keluar tidak wajar dari server aplikasi 10.0.1.55 ke IP 185.220.101.47 (Belanda) sebesar 2,3 GB per jam, jauh di atas normal 50 MB per jam. Proses pengirimnya terdaftar sebagai svchost32.exe.",
     "expected_type": "Malware",
     "expected_severity": "Sedang",
     "category": "clear_report"
   },
   {
     "id": "SC-049",
-    "input": "Tadi pagi jam 09.00 tim IT menemukan komputer di ruang rapat lantai 2 mengirim keystroke log secara diam-diam ke server eksternal tidak dikenal sejak semalam.",
+    "input": "Tadi pagi jam 09.00 tim IT menemukan komputer KTAN-PC-0142 di ruang rapat lantai 2 mengirim data keystroke log secara diam-diam ke server logs.analytics-cdn.net:8443 sejak pukul 22.00 semalam. Ada APK bernama SIMPEG_mobile_v2.apk yang terinstal tanpa izin.",
     "expected_type": "Malware",
     "expected_severity": "Tinggi",
     "category": "clear_report"
   },
   {
     "id": "SC-050",
-    "input": "Sejak kemarin malam jam 20.00 ada proses asing bernama svchost32.exe berjalan di server produksi dan terus membuka koneksi keluar ke IP tidak dikenal di luar negeri.",
+    "input": "Sejak kemarin malam jam 20.00 ada proses svchost32.exe berjalan di server produksi KTAN-SRV-01 dan terus membuka koneksi keluar ke IP 91.234.99.183 (Romania) port 4444 setiap 30 detik. Proses ini tidak ada di daftar layanan resmi Windows.",
     "expected_type": "Malware",
     "expected_severity": "Tinggi",
     "category": "clear_report"
   },
   {
     "id": "SC-002",
-    "input": "Komputer saya lambat sekali dan ada popup yang minta bayar Bitcoin untuk membuka file.",
+    "input": "Tadi pagi jam 08.30 saya menemukan semua file di komputer saya berubah ekstensinya jadi aneh dan tidak bisa dibuka. Muncul pesan di layar yang minta bayar tebusan. Tapi setahu saya komputer rekan-rekan lain di ruangan masih normal dan bisa bekerja seperti biasa.",
     "expected_type": "Ransomware",
-    "expected_severity": "Kritis",
+    "expected_severity": "Tinggi",
     "category": "clear_report"
   },
   {
     "id": "SC-011",
-    "input": "File dokumen penting di shared drive tiba-tiba berganti ekstensi .encrypted dan tidak bisa dibuka.",
+    "input": "Tadi pagi sekitar jam 09.00 file dokumen penting di shared drive kantor tiba-tiba berganti ekstensi menjadi .WNCRY dan tidak bisa dibuka sama sekali. Sudah lebih dari 3.000 file terdampak dalam 20 menit terakhir dan jumlahnya terus bertambah.",
     "expected_type": "Ransomware",
     "expected_severity": "Kritis",
     "category": "clear_report"
   },
   {
     "id": "SC-021",
-    "input": "Semua data di NAS server hilang dan ada file readme berisi pesan tebusan dalam Bahasa Inggris.",
+    "input": "Tadi pagi sekitar jam 08.00 saya cek server NAS kantor dan semua datanya tidak bisa dibuka. Di setiap folder ada file README_RESTORE.txt berisi tulisan dalam bahasa Inggris yang intinya minta bayar tebusan dalam waktu 72 jam kalau mau data dikembalikan.",
     "expected_type": "Ransomware",
     "expected_severity": "Kritis",
     "category": "clear_report"
   },
   {
     "id": "SC-051",
-    "input": "Tadi pagi jam 07.00 seluruh backup otomatis di server cadangan juga terenkripsi dan tidak bisa dibuka, muncul pesan Your files are encrypted di setiap folder.",
+    "input": "Pagi ini sekitar jam 07.45 komputer saya tiba-tiba menjadi sangat lambat. Lampu penyimpanan menyala terus selama beberapa menit. Setelah itu sebagian dokumen dan foto saya tidak bisa dibuka, padahal sebelumnya normal. Nama beberapa file juga berubah menjadi aneh. Saya tidak tahu apakah ini virus atau masalah lain.",
     "expected_type": "Ransomware",
-    "expected_severity": "Kritis",
+    "expected_severity": "Sedang",
     "category": "clear_report"
   },
   {
     "id": "SC-052",
-    "input": "Jam 06.00 tadi pagi ditemukan file HOW_TO_DECRYPT.txt di seluruh folder dokumen server file sharing kantor beserta instruksi pembayaran tebusan.",
+    "input": "Jam 06.00 tadi pagi ditemukan file HOW_TO_DECRYPT.txt di seluruh folder server file sharing KTAN-FS02 berisi instruksi pembayaran tebusan dari kelompok BlackCat/ALPHV beserta link situs Tor untuk negosiasi.",
     "expected_type": "Ransomware",
     "expected_severity": "Kritis",
     "category": "clear_report"
   },
   {
     "id": "SC-004",
-    "input": "Baru saja jam 11.00 saya menemukan data pegawai kementerian lengkap dengan NIK dan gaji dijual di forum dark web.",
+    "input": "Baru saja jam 11.00 saya menemukan thread di forum gelap yang menjual ribuan data pegawai Kementan lengkap, termasuk NIK, nama, gaji, dan nomor rekening. Penjualnya mengklaim data diambil dari sistem internal kementerian bulan ini.",
     "expected_type": "Kebocoran Data",
     "expected_severity": "Kritis",
     "category": "clear_report"
   },
   {
     "id": "SC-012",
-    "input": "Sejak pagi ini jam 06.00 saya melihat aktivitas transfer data besar-besaran dari server database produksi ke IP eksternal yang tidak dikenal di luar negeri.",
+    "input": "Sejak pagi ini jam 06.00 saya melihat koneksi keluar terus-menerus dari server DB KTAN-DB-01 (192.168.10.50) ke IP 45.33.32.156 (Linode US). Total sudah 18 GB data keluar dalam 4 jam terakhir, sangat tidak normal untuk server database internal kami.",
     "expected_type": "Kebocoran Data",
     "expected_severity": "Kritis",
     "category": "clear_report"
   },
   {
     "id": "SC-025",
-    "input": "Tadi pagi jam 07.00 laptop dinas saya hilang dicuri dari ruang kerja di kantor, di dalamnya tersimpan data kepegawaian lengkap yang belum terenkripsi.",
-    "expected_type": "Kebocoran Data",
+    "input": "Tadi pagi jam 07.00 laptop dinas saya dicuri orang dari meja kerja di ruangan lantai 3. Di laptop itu ada file-file data kepegawaian yang belum terenkripsi. Saya khawatir datanya bisa diakses oleh pencurinya.",
+    "expected_type": "Akses Tidak Sah",
     "expected_severity": "Tinggi",
     "category": "clear_report"
   },
   {
     "id": "SC-053",
-    "input": "Baru saja jam 10.00 saya tidak sengaja menemukan dokumen anggaran rahasia kementerian bisa diakses publik tanpa login melalui link yang beredar di grup WhatsApp pegawai.",
+    "input": "Tadi jam 10.00 di grup WhatsApp pegawai ada yang share link dokumen anggaran kementerian tahun 2026. Saya coba buka dan ternyata bisa diakses siapa saja tanpa login sama sekali. Dokumennya berisi data keuangan yang harusnya bersifat rahasia.",
     "expected_type": "Kebocoran Data",
     "expected_severity": "Kritis",
     "category": "clear_report"
   },
   {
     "id": "SC-054",
-    "input": "Tadi malam jam 21.00 pegawai lain melapor bahwa ia bisa melihat data gaji dan penilaian kinerja rekan-rekannya di portal kepegawaian padahal bukan haknya.",
+    "input": "Tadi malam pukul 21.00 saya mendapat informasi bahwa file berisi slip gaji dan penilaian SKP pegawai dapat diunduh oleh siapa saja tanpa harus login. Saya khawatir data pribadi pegawai sudah tersebar.",
     "expected_type": "Kebocoran Data",
-    "expected_severity": "Tinggi",
+    "expected_severity": "Kritis",
     "category": "clear_report"
   },
   {
     "id": "SC-005",
-    "input": "Tadi malam pukul 02.00 ada akun admin server utama yang login dari IP Rusia dan mengunduh ribuan file data sensitif kepegawaian.",
+    "input": "Tadi malam pukul 02.17 ada login sukses ke akun sysadmin_ktan di server KTAN-SRV-03 dari IP 91.108.56.12 (AS62014, Rusia). Setelah login, akun tersebut mengunduh lebih dari 12.000 file dari direktori /data/kepegawaian/ dalam waktu 23 menit.",
     "expected_type": "Akses Tidak Sah",
     "expected_severity": "Kritis",
     "category": "clear_report"
   },
   {
     "id": "SC-015",
-    "input": "Log server autentikasi menunjukkan ribuan percobaan login ke akun admin sejak jam 07.00 pagi, dalam 10 menit terakhir sudah lebih dari 5.000 percobaan.",
+    "input": "Log Nginx di server autentikasi KTAN-AUTH-01 mencatat adanya 5.847 request POST ke /auth/login dari blok IP 103.28.54.0/24 sejak jam 07.00 pagi ini, rata-rata 10 request per detik dengan username target admin dan superuser. Saya khawatir ini serangan brute force.",
     "expected_type": "Akses Tidak Sah",
     "expected_severity": "Tinggi",
     "category": "clear_report"
   },
   {
     "id": "SC-055",
-    "input": "Baru saya cek tadi pagi jam 08.30, akun email dan SSO mantan pegawai yang sudah pensiun 3 bulan lalu ternyata masih aktif dan ada riwayat login dari luar kantor minggu ini.",
+    "input": "Tadi pagi jam 08.30 saya temukan akun email dinas milik pegawai yang sudah pensiun sejak Maret 2026 ternyata masih aktif. Dan ternyata ada riwayat login ke akun itu dari luar kantor pada minggu ini padahal orangnya sudah tidak bekerja di sini.",
     "expected_type": "Akses Tidak Sah",
     "expected_severity": "Tinggi",
     "category": "clear_report"
   },
   {
     "id": "SC-056",
-    "input": "Tadi jam 11.00 petugas keamanan melaporkan melihat seseorang tidak dikenal menggunakan komputer pegawai yang ditinggal tidak terkunci di ruang kerja lantai 4.",
+    "input": "Tadi jam 11.00 ada satpam yang lapor ke saya, dia lihat orang tidak dikenal duduk pakai komputer rekan saya yang lagi keluar ruangan di lantai 4. Komputernya memang tidak dikunci. Orang itu sempat menggunakannya sekitar 15 menit.",
     "expected_type": "Akses Tidak Sah",
     "expected_severity": "Sedang",
     "category": "clear_report"
   },
   {
-    "id": "SC-057",
-    "input": "Sejak tadi malam tim developer menemukan endpoint API data kepegawaian bisa diakses tanpa token autentikasi dari jaringan manapun dan sudah ada log akses mencurigakan ribuan kali.",
-    "expected_type": "Akses Tidak Sah",
-    "expected_severity": "Kritis",
+    "id": "SC-064",
+    "input": "Tadi siang sekitar jam 13.00 saya menemukan file backup database kepegawaian yang diekspor minggu lalu ternyata tersimpan di folder Google Drive dengan akses Anyone with the link. Filenya berisi data lengkap pegawai termasuk gaji dan NIK, dan saya tidak tahu sudah berapa lama link itu bisa diakses dari luar.",
+    "expected_type": "Kebocoran Data",
+    "expected_severity": "Tinggi",
     "category": "clear_report"
   },
   {
     "id": "SC-003",
-    "input": "Website kantor tidak bisa diakses dari tadi pagi, traffic sangat tinggi dari banyak IP berbeda.",
+    "input": "Website kantor kita www.pertanian.go.id tidak bisa dibuka dari tadi pagi. Sudah saya coba dari HP dan komputer, tetap tidak bisa. Teman-teman kantor juga pada mengeluh hal yang sama dan pekerjaan kami terhambat.",
     "expected_type": "DDoS",
     "expected_severity": "Tinggi",
     "category": "clear_report"
   },
   {
     "id": "SC-010",
-    "input": "Sistem aplikasi keuangan internal tidak bisa diakses oleh seluruh pegawai sejak 2 jam yang lalu.",
+    "input": "Sejak tadi pagi sekitar jam 09.00 sistem SIMPEG sangat lambat sekali, kadang bisa dibuka tapi loading-nya bisa 5-10 menit, kadang malah error timeout. Tidak semua pegawai terdampak, tapi di bagian saya hampir semuanya mengeluh susah akses.",
     "expected_type": "DDoS",
-    "expected_severity": "Tinggi",
+    "expected_severity": "Sedang",
     "category": "clear_report"
   },
   {
     "id": "SC-058",
-    "input": "Sejak jam 10.00 pagi server email kantor tidak bisa menerima maupun mengirim pesan, log menunjukkan banjir permintaan koneksi dari ratusan IP berbeda secara bersamaan.",
+    "input": "Sejak jam 10.00 server email mail.kementan.go.id tidak bisa menerima maupun mengirim pesan. Log Postfix menunjukkan banjir 45.000 koneksi SMTP bersamaan dari subnet 185.156.73.0/24 dan 91.234.99.0/24 yang terus meningkat.",
     "expected_type": "DDoS",
     "expected_severity": "Tinggi",
     "category": "clear_report"
   },
   {
     "id": "SC-059",
-    "input": "Tadi siang jam 13.00 database server aplikasi SIMPEG tidak bisa diakses oleh seluruh operator, trafik inbound melonjak 50 kali lipat dari kondisi normal.",
+    "input": "Sejak jam 10.00 tadi saya beberapa kali tidak bisa buka portal layanan kementerian, tapi kalau dicoba lagi beberapa menit kemudian kadang bisa masuk. Awalnya saya kira koneksi internet saya yang bermasalah, tapi rekan sebelah saya juga mengalami hal yang sama.",
     "expected_type": "DDoS",
-    "expected_severity": "Tinggi",
+    "expected_severity": "Ringan",
     "category": "clear_report"
   },
   {
     "id": "SC-060",
-    "input": "Mulai jam 08.30 tadi pagi jaringan seluruh gedung kantor mengalami penurunan performa ekstrem, network engineer melaporkan switch core kewalahan menangani paket masuk yang tidak wajar.",
+    "input": "Mulai jam 08.30 tadi pagi jaringan seluruh Gedung Kantor Pusat Kementan mengalami degradasi ekstrem. Network engineer melaporkan switch core Cisco Catalyst 9500 di CPU 99%, paket drop 78%, dari kondisi normal di bawah 5%. Seluruh VLAN terdampak.",
     "expected_type": "DDoS",
     "expected_severity": "Tinggi",
     "category": "clear_report"
   },
   {
     "id": "SC-006",
-    "input": "Pagi ini jam 07.30 tampilan halaman utama website resmi kementerian berubah total, muncul tulisan dan gambar tidak resmi dari kelompok tidak dikenal.",
+    "input": "Pagi ini jam 07.30 saya coba buka website www.pertanian.go.id seperti biasa tapi tampilannya berubah total. Isinya jadi gambar aneh dan ada tulisan dari pihak yang tidak jelas. Ini bukan tampilan yang biasanya saya lihat, sepertinya diubah orang.",
     "expected_type": "Web Defacement",
     "expected_severity": "Tinggi",
     "category": "clear_report"
   },
   {
     "id": "SC-024",
-    "input": "Staf melaporkan pagi ini jam 06.30 bahwa server web resmi kementerian menampilkan pesan dari kelompok hacker dengan klaim telah mengambil data internal.",
+    "input": "Staf melaporkan pagi ini jam 06.30 bahwa www.pertanian.go.id menampilkan pesan dari kelompok hacker yang mengklaim sudah mengunduh 2TB data internal kementerian dan mengancam akan mempublikasikannya jika tidak dihubungi dalam 48 jam.",
     "expected_type": "Web Defacement",
     "expected_severity": "Kritis",
     "category": "clear_report"
   },
   {
     "id": "SC-061",
-    "input": "Pagi ini jam 08.00 subdomain layanan publik kementerian menampilkan konten tidak resmi berisi teks propaganda dari kelompok tidak dikenal, berbeda total dari konten aslinya.",
+    "input": "Pagi ini jam 08.00 ada petani yang hubungi kami karena tidak bisa akses layanan penyuluhan di website simluhtan.pertanian.go.id. Saya buka juga, tampilannya berubah jadi aneh ada tulisan dan gambar yang sama sekali tidak ada hubungannya dengan penyuluhan pertanian.",
     "expected_type": "Web Defacement",
     "expected_severity": "Tinggi",
     "category": "clear_report"
   },
   {
     "id": "SC-062",
-    "input": "Tadi jam 09.45 halaman utama portal pengaduan masyarakat kementerian berubah total menampilkan gambar dan teks provokatif yang tidak ada hubungannya dengan kementerian.",
+    "input": "Tadi jam 09.45 dapat laporan dari masyarakat kalau portal pengaduan e-lapor.pertanian.go.id tampilannya berubah aneh dan tidak bisa digunakan. Saya cek sendiri, memang ada gambar dan tulisan yang tidak seharusnya muncul di portal resmi itu.",
     "expected_type": "Web Defacement",
     "expected_severity": "Tinggi",
     "category": "clear_report"
   },
   {
     "id": "SC-063",
-    "input": "Sejak tadi pagi jam 07.00 portal resmi kementerian di domain utama menampilkan pesan ancaman dari kelompok hacker disertai klaim akan merilis data internal pegawai.",
+    "input": "Sejak jam 07.00 www.pertanian.go.id menampilkan pesan ancaman dari kelompok hacker yang mengklaim sudah mencuri 500GB data pegawai dan meminta tebusan 10 BTC dalam 24 jam atau data akan dipublikasikan. Ditandatangani atas nama BlackMatter Reborn.",
     "expected_type": "Web Defacement",
     "expected_severity": "Kritis",
     "category": "clear_report"

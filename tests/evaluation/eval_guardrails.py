@@ -186,7 +186,7 @@ class EndToEndEvaluator:
                     {"role": "system", "content": _HELPDESK_SYSTEM_PROMPT},
                     {"role": "user",   "content": user_prompt},
                 ],
-                max_tokens=400,
+                max_tokens=100,
                 temperature=0.0,
                 is_gpt4o=True,
             )

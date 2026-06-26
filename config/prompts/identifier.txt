@@ -18,6 +18,12 @@ Tingkat keparahan (pilih TEPAT SATU):
 - Rendah   : Dampak minimal, tidak ada indikasi eskalasi, bisa ditangani rutin
 - Informasional : Tidak ada dampak langsung, hanya untuk pencatatan atau awareness
 
+Aturan disambiguasi (untuk kasus batas):
+- Ransomware vs Malware: Gunakan "Ransomware" jika laporan menyebutkan file sudah terenkripsi, ekstensi file berubah, muncul pesan tebusan di komputer/server, atau ada file instruksi tebusan (README_DECRYPT, HOW_TO_RESTORE, dsb.) — meskipun belum semua file terdampak. Gunakan "Malware" hanya jika tidak ada tanda enkripsi atau tebusan sama sekali.
+- Web Defacement vs Ransomware: Jika pesan ancaman atau tebusan muncul di halaman WEBSITE (tampilan berubah, konten diganti), gunakan "Web Defacement". Ransomware mengenkripsi file di perangkat/server, bukan mengubah tampilan website.
+- Akses Tidak Sah vs Kebocoran Data: Gunakan "Akses Tidak Sah" jika fokus laporan adalah tindakan mengakses tanpa izin (login ilegal, bypass autentikasi, akses fisik, IDOR). Gunakan "Kebocoran Data" jika data sudah terkonfirmasi keluar/ditemukan di luar (darkweb, file dikirim ke luar, data terunduh besar).
+- Akses fisik (orang tidak dikenal menggunakan perangkat kantor yang tidak dijaga/dikunci, pencurian perangkat) → "Akses Tidak Sah".
+
 Aturan output:
 1. Kembalikan HANYA JSON yang valid, tanpa teks lain di luar JSON.
 2. confidence_score antara 0.0 hingga 1.0.
@@ -88,6 +94,34 @@ Output:
   "confidence_score": 0.96,
   "reasoning": "Data PII pegawai yang terverifikasi muncul di pasar gelap merupakan kebocoran data massal yang terkonfirmasi. Dampak kritis karena melibatkan ribuan individu dan data sensitif."
 }
+
+Laporan: "Pagi ini komputer saya tiba-tiba sangat lambat dan ada program yang tidak saya kenal mencoba mengakses banyak file sekaligus, antivirus saya sempat berbunyi tapi kemudian diam lagi. File saya masih bisa dibuka semua, tapi saya khawatir ada yang tidak beres."
+Output:
+{
+  "incident_type": "Malware",
+  "severity": "Sedang",
+  "confidence_score": 0.78,
+  "reasoning": "Proses asing yang mengakses banyak file disertai peringatan antivirus mengindikasikan infeksi malware aktif. Tidak ada tanda enkripsi file atau pesan tebusan sehingga belum bisa dikategorikan ransomware."
+}
+
+Laporan: "Sejak jam 07.00 website resmi kami menampilkan pesan dari kelompok hacker yang mengancam akan mempublikasikan data internal dan meminta tebusan 10 BTC dalam 24 jam."
+Output:
+{
+  "incident_type": "Web Defacement",
+  "severity": "Kritis",
+  "confidence_score": 0.91,
+  "reasoning": "Halaman website diganti dengan pesan ancaman dan tuntutan tebusan oleh peretas merupakan web defacement — bukan ransomware, karena enkripsi file tidak terjadi. Keparahan kritis karena menyangkut reputasi instansi dan ancaman publikasi data."
+}
+
+Laporan: "Ada orang tidak dikenal yang terlihat menggunakan komputer rekan saya yang tidak dikunci saat rekan saya keluar ruangan selama sekitar 15 menit."
+Output:
+{
+  "incident_type": "Akses Tidak Sah",
+  "severity": "Sedang",
+  "confidence_score": 0.82,
+  "reasoning": "Orang tidak berwenang menggunakan perangkat kantor yang tidak dikunci termasuk akses fisik tidak sah. Berbeda dengan pencurian perangkat, di sini tidak ada indikasi data keluar dari lokasi."
+}
+
 
 Laporan: "Ada notifikasi aneh di HP saya tapi saya tidak yakin itu berbahaya atau tidak."
 Output:

@@ -156,7 +156,7 @@ def _evaluate_scenario(scenario: dict, result: dict) -> dict:
     }
 
 
-async def run_evaluation(scenarios_path: str, output_path: str | None = None, category_filter: str | None = None) -> dict:
+async def run_evaluation(scenarios_path: str, output_path: str | None = None, category_filter: str | None = None, ids_filter: list[str] | None = None) -> dict:
     load_dotenv()
 
     try:
@@ -177,6 +177,8 @@ async def run_evaluation(scenarios_path: str, output_path: str | None = None, ca
 
     if category_filter:
         scenarios = [s for s in scenarios if s["category"] == category_filter]
+    if ids_filter:
+        scenarios = [s for s in scenarios if s["id"] in ids_filter]
 
     print(f"\n{'='*65}")
     label = f" [{category_filter}]" if category_filter else ""
@@ -280,5 +282,8 @@ if __name__ == "__main__":
                         default=str(Path(__file__).parent / "tcr_results.json"))
     parser.add_argument("--category", default=None,
                         help="Filter skenario berdasarkan kategori (mis. clear_report)")
+    parser.add_argument("--ids", default=None,
+                        help="Filter skenario berdasarkan ID, dipisah koma (mis. SC-025,SC-056)")
     args = parser.parse_args()
-    asyncio.run(run_evaluation(args.scenarios_file, args.output, args.category))
+    ids_filter = [i.strip() for i in args.ids.split(",")] if args.ids else None
+    asyncio.run(run_evaluation(args.scenarios_file, args.output, args.category, ids_filter))

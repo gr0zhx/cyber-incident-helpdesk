@@ -1,4 +1,5 @@
 """Routes generate laporan insiden."""
+import html
 import logging
 
 from fastapi import APIRouter, Depends, Form
@@ -27,15 +28,15 @@ def generate_report(
 ):
     svc = ReportService(db)
     try:
-        html, filename = svc.generate(ticket_id.strip(), prepared_by=prepared_by.strip())
+        report_html, filename = svc.generate(ticket_id.strip(), prepared_by=prepared_by.strip())
     except LookupError:
         logger.warning("REPORT_NOT_FOUND ticket=%s admin=%s", ticket_id, admin.username)
         return HTMLResponse(
-            content=f"<p>Tiket '<strong>{ticket_id}</strong>' tidak ditemukan.</p>",
+            content=f"<p>Tiket '<strong>{html.escape(ticket_id)}</strong>' tidak ditemukan.</p>",
             status_code=404,
         )
     logger.info("REPORT_GENERATED admin=%s ticket=%s", admin.username, ticket_id)
     return HTMLResponse(
-        content=html,
+        content=report_html,
         headers={"Content-Disposition": f'attachment; filename="{filename}"'},
     )

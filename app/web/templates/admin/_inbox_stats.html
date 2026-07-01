@@ -6,9 +6,9 @@
      hx-swap="outerHTML"
      style="display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:24px;">
   {% set stat_items = [
-    ("Total Tiket",       result.total,                         "#2563eb", "📋"),
+    ("Total Tiket",       result.total           | default(0),  "#2563eb", "📋"),
     ("Menunggu Review",   result.pending_count   | default(0),  "#f59e0b", "⏳"),
-    ("Sedang Ditangani",  result.inprogress_count| default(0),  "#3b82f6", "🔄"),
+    ("Sedang Ditangani",  result.inprogress_count | default(0),  "#3b82f6", "🔄"),
     ("Terselesaikan",     result.resolved_count  | default(0),  "#10b981", "✅"),
     ("Ditutup",           result.closed_count    | default(0),  "#6b7280", "🔒"),
   ] %}

@@ -95,6 +95,7 @@ def ticket_detail(
     if ticket is None:
         raise HTTPException(status_code=404, detail="Tiket tidak ditemukan.")
     attachments = ticket.evidence_files or []
+    admins = db.query(Admin).filter_by(is_active=True).order_by(Admin.full_name).all()
     return templates.TemplateResponse(
         "admin/tiket_detail.html",
         {
@@ -105,5 +106,6 @@ def ticket_detail(
             "escalation_levels": ESCALATION_LEVELS,
             "csrf_token": request.session.get("csrf_token", ""),
             "admin": admin,
+            "admins": admins,
         },
     )

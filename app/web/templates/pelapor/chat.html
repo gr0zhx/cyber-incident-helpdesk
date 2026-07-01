@@ -69,9 +69,9 @@
             <div class="bubble-user">{{ msg.content }}</div>
           </div>
           {% else %}
-          <div style="display: flex; justify-content: flex-start; gap: 10px; align-items: flex-start;">
-            <div style="width: 30px; height: 30px; background: #eff6ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; margin-top: 2px;">🤖</div>
-            <div class="bubble-bot">{{ msg.content | render_md | safe }}</div>
+          <div class="bot-response-wrap">
+            <div class="bot-response-label">🤖 Asisten</div>
+            <div class="bot-response">{{ msg.content | render_md | safe }}</div>
           </div>
           {% endif %}
         {% endfor %}
@@ -143,17 +143,24 @@
   word-break: break-word;
   white-space: pre-wrap;
 }
-.bubble-bot {
-  max-width: 75%;
-  background: white;
-  border: 1px solid #e2e8f0;
-  padding: 12px 18px;
-  border-radius: 18px 18px 18px 4px;
+.bot-response-wrap {
+  padding: 4px 0 10px 0;
+}
+.bot-response-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 8px;
+}
+.bot-response {
+  padding-left: 16px;
+  border-left: 3px solid #2563eb;
   font-size: 14px;
-  line-height: 1.65;
+  line-height: 1.75;
+  color: #1e293b;
   word-break: break-word;
-  white-space: pre-wrap;
-  box-shadow: 0 1px 3px rgba(0,0,0,.05);
 }
 
 /* ── Typing indicator ── */
@@ -227,10 +234,10 @@
     // Typing indicator
     const typingWrap = document.createElement("div");
     typingWrap.id = "typing-wrap";
-    typingWrap.style.cssText = "display:flex;justify-content:flex-start;gap:10px;align-items:flex-start;";
+    typingWrap.className = "bot-response-wrap";
     typingWrap.innerHTML =
-      '<div style="width:30px;height:30px;background:#eff6ff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;margin-top:2px;">🤖</div>' +
-      '<div class="typing-indicator"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>';
+      '<div class="bot-response-label">🤖 Asisten</div>' +
+      '<div class="typing-indicator" style="padding-left:16px;border-left:3px solid #2563eb;"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>';
     log.appendChild(typingWrap);
 
     // Clear input, lock button

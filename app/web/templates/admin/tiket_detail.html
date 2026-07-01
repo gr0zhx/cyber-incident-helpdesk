@@ -231,47 +231,78 @@
 
       <hr style="border: none; border-top: 1px solid #f1f5f9; margin: 0 0 20px;">
 
-      {# Assign #}
+      {# Assign — custom dropdown #}
       <p style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;
                 letter-spacing: .5px; margin: 0 0 8px;">Penugasan</p>
       <form hx-post="/admin/tiket/{{ ticket.ticket_id }}/assign"
             hx-target="this" hx-swap="afterend"
             hx-headers='{"X-CSRF-Token": "{{ csrf_token }}"}'
-            style="display: flex; gap: 8px; margin-bottom: 20px; align-items: center;">
+            hx-trigger="assign-pick"
+            style="margin-bottom: 20px;">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-        <select name="assignee" class="form-control" style="flex: 1; font-size: 13px;">
-          <option value="">— Pilih Admin —</option>
-          {% for a in admins %}
-          <option value="{{ a.username }}"
-                  {% if a.username == ticket.assigned_to %}selected{% endif %}>
-            {{ a.full_name }} ({{ a.username }})
-          </option>
-          {% endfor %}
-        </select>
-        <button type="submit" class="btn"
-                style="flex-shrink: 0; font-size: 12px; padding: 8px 14px;">Assign</button>
+        <input type="hidden" name="assignee" id="assignee-val-{{ ticket.ticket_id }}"
+               value="{{ ticket.assigned_to or '' }}">
+        <div class="adm-wrap" id="adm-wrap-{{ ticket.ticket_id }}">
+          <button type="button" class="adm-trigger"
+                  onclick="toggleAdmDrop('{{ ticket.ticket_id }}')">
+            {% set cur = ticket.assigned_to %}
+            {% if cur %}
+              {% for a in admins %}{% if a.username == cur %}
+              <span class="adm-avatar">{{ a.full_name[0] }}</span>
+              <span class="adm-trigger-name">{{ a.full_name }}</span>
+              <span class="adm-trigger-user">@{{ a.username }}</span>
+              {% endif %}{% endfor %}
+            {% else %}
+              <span style="color:#94a3b8; flex:1;">— Pilih Admin —</span>
+            {% endif %}
+            <span class="adm-caret">▾</span>
+          </button>
+          <div class="adm-list" id="adm-list-{{ ticket.ticket_id }}">
+            <div class="adm-opt adm-opt-none" onclick="pickAdm('{{ ticket.ticket_id }}','','')">
+              <span style="color:#94a3b8; font-size:13px;">— Tidak ada —</span>
+            </div>
+            {% for a in admins %}
+            <div class="adm-opt {% if a.username == ticket.assigned_to %}adm-selected{% endif %}"
+                 onclick="pickAdm('{{ ticket.ticket_id }}','{{ a.username }}','{{ a.full_name }}')">
+              <span class="adm-avatar">{{ a.full_name[0] }}</span>
+              <span class="adm-info">
+                <span class="adm-name">{{ a.full_name }}</span>
+                <span class="adm-user">@{{ a.username }}</span>
+              </span>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
       </form>
 
-      {# Escalation #}
+      {# Escalation — range slider #}
+      {% set esc_idx = {'LOW': 0, 'MEDIUM': 1, 'HIGH': 2, 'CRITICAL': 3} %}
+      {% set esc_cur = esc_idx.get(ticket.escalation_level or 'LOW', 0) %}
       <p style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;
-                letter-spacing: .5px; margin: 0 0 8px;">Eskalasi</p>
+                letter-spacing: .5px; margin: 0 0 10px;">Eskalasi</p>
       <form hx-post="/admin/tiket/{{ ticket.ticket_id }}/escalation"
             hx-target="this" hx-swap="afterend"
             hx-headers='{"X-CSRF-Token": "{{ csrf_token }}"}'
-            style="display: flex; gap: 8px; margin-bottom: 20px; align-items: center;">
+            hx-trigger="esc-change"
+            style="margin-bottom: 20px;">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-        <select name="level" class="form-control" style="flex: 1; font-size: 13px;">
-          {% for lv in ["LOW","MEDIUM","HIGH","CRITICAL"] %}
-          <option value="{{ lv }}" {% if lv == ticket.escalation_level %}selected{% endif %}>
-            {% if lv == "LOW" %}🟢 LOW
-            {% elif lv == "MEDIUM" %}🟡 MEDIUM
-            {% elif lv == "HIGH" %}🟠 HIGH
-            {% else %}🔴 CRITICAL{% endif %}
-          </option>
-          {% endfor %}
-        </select>
-        <button type="submit" class="btn"
-                style="flex-shrink: 0; font-size: 12px; padding: 8px 14px;">Simpan</button>
+        <input type="hidden" name="level" id="esc-val-{{ ticket.ticket_id }}"
+               value="{{ ticket.escalation_level or 'LOW' }}">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+          <span class="esc-badge" id="esc-badge-{{ ticket.ticket_id }}"
+                data-idx="{{ esc_cur }}"></span>
+          <span style="font-size:11px; color:#94a3b8;">geser untuk ubah</span>
+        </div>
+        <input type="range" min="0" max="3" step="1" value="{{ esc_cur }}"
+               class="esc-range" id="esc-range-{{ ticket.ticket_id }}"
+               oninput="updateEsc('{{ ticket.ticket_id }}', this.value)"
+               onchange="submitEsc('{{ ticket.ticket_id }}')">
+        <div style="display:flex; justify-content:space-between; margin-top:6px;">
+          <span class="esc-tick">LOW</span>
+          <span class="esc-tick">MED</span>
+          <span class="esc-tick">HIGH</span>
+          <span class="esc-tick">CRIT</span>
+        </div>
       </form>
 
       <hr style="border: none; border-top: 1px solid #f1f5f9; margin: 0 0 16px;">
@@ -346,6 +377,65 @@ function switchTab(name) {
 .status-chip[data-status="RESOLVED"].active       { background: #dcfce7; color: #166534; border-color: #166534; }
 .status-chip[data-status="CLOSED"].active         { background: #f1f5f9; color: #475569; border-color: #475569; }
 .status-chip[data-status="REJECTED"].active       { background: #fee2e2; color: #991b1b; border-color: #991b1b; }
+
+/* ── Custom Admin Dropdown ── */
+.adm-wrap { position: relative; }
+.adm-trigger {
+  display: flex; align-items: center; gap: 9px; width: 100%;
+  padding: 9px 12px; background: white;
+  border: 1.5px solid #e2e8f0; border-radius: 8px;
+  cursor: pointer; font-family: inherit; text-align: left;
+  transition: border-color .15s;
+}
+.adm-trigger:hover { border-color: #94a3b8; }
+.adm-trigger.open  { border-color: #3b82f6; box-shadow: 0 0 0 3px #eff6ff; }
+.adm-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  color: white; font-size: 12px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.adm-trigger-name { font-size: 13px; color: #0f172a; font-weight: 500; flex: 1; }
+.adm-trigger-user { font-size: 11px; color: #94a3b8; }
+.adm-caret { color: #94a3b8; font-size: 11px; margin-left: auto; }
+.adm-list {
+  display: none; position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+  background: white; border: 1.5px solid #e2e8f0; border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.1); z-index: 50; overflow: hidden;
+}
+.adm-list.open { display: block; }
+.adm-opt {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; cursor: pointer; transition: background .1s;
+}
+.adm-opt:hover { background: #f8fafc; }
+.adm-selected  { background: #eff6ff; }
+.adm-info { display: flex; flex-direction: column; }
+.adm-name { font-size: 13px; color: #0f172a; font-weight: 500; }
+.adm-user { font-size: 11px; color: #94a3b8; }
+.adm-opt-none .adm-avatar { background: #f1f5f9; }
+
+/* ── Escalation Slider ── */
+.esc-badge {
+  display: inline-flex; align-items: center;
+  padding: 4px 12px; border-radius: 20px;
+  font-size: 12px; font-weight: 700; letter-spacing: .3px;
+}
+.esc-range {
+  width: 100%; height: 6px; border-radius: 3px; appearance: none;
+  -webkit-appearance: none; cursor: pointer; outline: none;
+  background: linear-gradient(to right, #22c55e 0%, #eab308 33%, #f97316 66%, #ef4444 100%);
+}
+.esc-range::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%;
+  background: white; border: 2.5px solid #64748b;
+  box-shadow: 0 2px 6px rgba(0,0,0,.18); cursor: pointer; transition: border-color .15s;
+}
+.esc-range::-moz-range-thumb {
+  width: 22px; height: 22px; border-radius: 50%; background: white;
+  border: 2.5px solid #64748b; box-shadow: 0 2px 6px rgba(0,0,0,.18); cursor: pointer;
+}
+.esc-tick { font-size: 10px; color: #94a3b8; font-weight: 600; letter-spacing: .3px; }
 </style>
 
 <script>
@@ -353,5 +443,80 @@ function activateChip(btn) {
   document.querySelectorAll('.status-chip').forEach(function(c) { c.classList.remove('active'); });
   btn.classList.add('active');
 }
+
+/* ── Escalation Slider ── */
+var ESC_LEVELS = ['LOW','MEDIUM','HIGH','CRITICAL'];
+var ESC_LABELS = ['🟢 LOW','🟡 MEDIUM','🟠 HIGH','🔴 CRITICAL'];
+var ESC_BG     = ['#dcfce7','#fef9c3','#ffedd5','#fee2e2'];
+var ESC_COL    = ['#166534','#854d0e','#9a3412','#991b1b'];
+var ESC_BORDER = ['#16a34a','#ca8a04','#ea580c','#dc2626'];
+
+function updateEsc(id, val) {
+  var idx   = parseInt(val);
+  var badge = document.getElementById('esc-badge-' + id);
+  badge.textContent        = ESC_LABELS[idx];
+  badge.style.background   = ESC_BG[idx];
+  badge.style.color        = ESC_COL[idx];
+  badge.style.border       = '1.5px solid ' + ESC_BORDER[idx];
+  var thumb = document.getElementById('esc-range-' + id);
+  thumb.style.setProperty('--tw', ESC_COL[idx]);
+  document.getElementById('esc-val-' + id).value = ESC_LEVELS[idx];
+}
+
+function submitEsc(id) {
+  var form = document.getElementById('esc-range-' + id).closest('form');
+  htmx.trigger(form, 'esc-change');
+}
+
+/* ── Custom Admin Dropdown ── */
+function toggleAdmDrop(id) {
+  var wrap = document.getElementById('adm-wrap-' + id);
+  var list = document.getElementById('adm-list-' + id);
+  var btn  = wrap.querySelector('.adm-trigger');
+  var open = list.classList.toggle('open');
+  btn.classList.toggle('open', open);
+  if (open) {
+    function outsideClick(e) {
+      if (!wrap.contains(e.target)) {
+        list.classList.remove('open');
+        btn.classList.remove('open');
+        document.removeEventListener('click', outsideClick);
+      }
+    }
+    setTimeout(function() { document.addEventListener('click', outsideClick); }, 0);
+  }
+}
+
+function pickAdm(id, username, fullname) {
+  var list = document.getElementById('adm-list-' + id);
+  var btn  = document.getElementById('adm-wrap-' + id).querySelector('.adm-trigger');
+  document.getElementById('assignee-val-' + id).value = username;
+  list.querySelectorAll('.adm-opt').forEach(function(o) { o.classList.remove('adm-selected'); });
+  event.currentTarget.classList.add('adm-selected');
+  if (username) {
+    btn.innerHTML = '<span class="adm-avatar">' + fullname.charAt(0) + '</span>' +
+      '<span class="adm-trigger-name">' + fullname + '</span>' +
+      '<span class="adm-trigger-user">@' + username + '</span>' +
+      '<span class="adm-caret">▾</span>';
+  } else {
+    btn.innerHTML = '<span style="color:#94a3b8;flex:1;">— Pilih Admin —</span>' +
+      '<span class="adm-caret">▾</span>';
+  }
+  list.classList.remove('open');
+  btn.classList.remove('open');
+  var form = document.getElementById('adm-wrap-' + id).closest('form');
+  htmx.trigger(form, 'assign-pick');
+}
+
+/* ── Init badge state on load ── */
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.esc-badge[data-idx]').forEach(function(badge) {
+    var idx = parseInt(badge.getAttribute('data-idx'));
+    badge.textContent      = ESC_LABELS[idx];
+    badge.style.background = ESC_BG[idx];
+    badge.style.color      = ESC_COL[idx];
+    badge.style.border     = '1.5px solid ' + ESC_BORDER[idx];
+  });
+});
 </script>
 {% endblock %}

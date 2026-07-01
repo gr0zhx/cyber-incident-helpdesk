@@ -50,9 +50,9 @@ def client():
 
 
 def test_report_page_renders(client):
-    r = client.get("/admin/report")
-    assert r.status_code == 200
-    assert "Generate Laporan" in r.text
+    r = client.get("/admin/report", follow_redirects=False)
+    assert r.status_code == 302
+    assert r.headers["location"] == "/admin/inbox"
 
 
 def test_report_generate_returns_html_download(client):
@@ -66,5 +66,5 @@ def test_report_generate_returns_html_download(client):
 def test_report_generate_missing_ticket_shows_error(client):
     r = client.post("/admin/report/generate",
                     data={"ticket_id": "NOPE", "prepared_by": "Admin", "csrf_token": "x"})
-    assert r.status_code == 200
+    assert r.status_code == 404
     assert "tidak ditemukan" in r.text.lower()

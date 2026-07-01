@@ -11,6 +11,24 @@ from typing import Any, Optional
 
 logger = logging.getLogger(__name__)
 
+# Pola sapaan pembuka — dibalas langsung tanpa pipeline LLM
+_GREETING_RE = re.compile(
+    r"""^\s*
+    (
+        (halo+|hai+|hi+|hey+|hei+|helo+|hello+)   # sapaan dasar
+        (\s+(semuanya|kak|pak|bu|min|admin|bot|semua))?  # opsional panggilan
+        |
+        (selamat\s+(pagi|siang|sore|malam))        # salam waktu
+        (\s+(kak|pak|bu|min|admin|semua))?
+        |
+        (assalamualaikum|assalamu'alaikum|ass\.?wr\.?wb\.?)  # salam islami
+        |
+        (permisi|horas|sugeng|apa\s+kabar)         # variasi lain
+    )
+    \s*[!.,?]*\s*$""",
+    re.IGNORECASE | re.VERBOSE,
+)
+
 # Pola pesan penutup/acknowledgment — dibalas langsung tanpa pipeline LLM
 _FAREWELL_RE = re.compile(
     r"""^\s*
@@ -124,6 +142,31 @@ class ChatService:
         # membuat tiket baru); intent lain (query_knowledge/general_help/dst)
         # tetap diproses seperti biasa.
         existing_ticket = self.get_session_ticket(session_id)
+
+        # Short-circuit: sapaan pembuka — tidak perlu LLM
+        if len(text) <= 80 and _GREETING_RE.match(text):
+            bot_text = (
+                "Halo! Selamat datang di layanan pelaporan insiden siber Pusdatin Kementan. "
+                "Saya siap membantu Anda.\n\n"
+                "Anda dapat:\n"
+                "- **Melaporkan insiden siber** (phishing, malware, ransomware, dll.)\n"
+                "- **Menanyakan informasi** seputar keamanan siber\n"
+                "- **Mengecek prosedur** penanganan insiden\n\n"
+                "Silakan ceritakan apa yang ingin Anda laporkan atau tanyakan!"
+            )
+            history.append({"role": "assistant", "content": bot_text, "ts": ts})
+            self._save_history(session_id, history)
+            return {
+                "user_text": text,
+                "bot_text": bot_text,
+                "requires_clarification": False,
+                "ticket_id": None,
+                "incident_type": "",
+                "severity": "",
+                "escalation_level": "",
+                "confidence_score": 0.0,
+                "error": False,
+            }
 
         # Short-circuit: pesan penutup / acknowledgment — tidak perlu LLM
         if len(text) <= 120 and _FAREWELL_RE.match(text):

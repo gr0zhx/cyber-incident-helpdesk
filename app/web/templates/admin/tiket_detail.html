@@ -235,10 +235,10 @@
       <p style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;
                 letter-spacing: .5px; margin: 0 0 8px;">Penugasan</p>
       <form hx-post="/admin/tiket/{{ ticket.ticket_id }}/assign"
-            hx-target="this" hx-swap="afterend"
+            hx-target="#assign-msg-{{ ticket.ticket_id }}" hx-swap="innerHTML"
             hx-headers='{"X-CSRF-Token": "{{ csrf_token }}"}'
             hx-trigger="assign-pick"
-            style="margin-bottom: 20px;">
+            style="margin-bottom: 6px;">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         <input type="hidden" name="assignee" id="assignee-val-{{ ticket.ticket_id }}"
                value="{{ ticket.assigned_to or '' }}">
@@ -274,6 +274,7 @@
           </div>
         </div>
       </form>
+      <div id="assign-msg-{{ ticket.ticket_id }}" class="action-feedback" style="margin-bottom:14px;"></div>
 
       {# Escalation — range slider #}
       {% set esc_idx = {'LOW': 0, 'MEDIUM': 1, 'HIGH': 2, 'CRITICAL': 3} %}
@@ -281,10 +282,10 @@
       <p style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;
                 letter-spacing: .5px; margin: 0 0 10px;">Eskalasi</p>
       <form hx-post="/admin/tiket/{{ ticket.ticket_id }}/escalation"
-            hx-target="this" hx-swap="afterend"
+            hx-target="#esc-msg-{{ ticket.ticket_id }}" hx-swap="innerHTML"
             hx-headers='{"X-CSRF-Token": "{{ csrf_token }}"}'
             hx-trigger="esc-change"
-            style="margin-bottom: 20px;">
+            style="margin-bottom: 6px;">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         <input type="hidden" name="level" id="esc-val-{{ ticket.ticket_id }}"
                value="{{ ticket.escalation_level or 'LOW' }}">
@@ -304,6 +305,7 @@
           <span class="esc-tick">CRIT</span>
         </div>
       </form>
+      <div id="esc-msg-{{ ticket.ticket_id }}" class="action-feedback" style="margin-bottom:14px;"></div>
 
       <hr style="border: none; border-top: 1px solid #f1f5f9; margin: 0 0 16px;">
 
@@ -436,6 +438,15 @@ function switchTab(name) {
   border: 2.5px solid #64748b; box-shadow: 0 2px 6px rgba(0,0,0,.18); cursor: pointer;
 }
 .esc-tick { font-size: 10px; color: #94a3b8; font-weight: 600; letter-spacing: .3px; }
+
+/* ── Action feedback toast ── */
+.action-feedback { min-height: 18px; }
+.action-flash {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 12px; color: #16a34a; font-weight: 500;
+  opacity: 1; transition: opacity 0.8s ease;
+}
+.action-flash.fade-out { opacity: 0; }
 </style>
 
 <script>
@@ -507,6 +518,19 @@ function pickAdm(id, username, fullname) {
   var form = document.getElementById('adm-wrap-' + id).closest('form');
   htmx.trigger(form, 'assign-pick');
 }
+
+/* ── Action feedback fade-out ── */
+document.body.addEventListener('htmx:afterSwap', function(e) {
+  var target = e.detail.target;
+  if (!target.classList.contains('action-feedback')) return;
+  var flash = target.querySelector('.action-flash');
+  if (!flash) return;
+  clearTimeout(target._fadeTimer);
+  flash.classList.remove('fade-out');
+  target._fadeTimer = setTimeout(function() {
+    flash.classList.add('fade-out');
+  }, 2000);
+});
 
 /* ── Init badge state on load ── */
 document.addEventListener('DOMContentLoaded', function() {

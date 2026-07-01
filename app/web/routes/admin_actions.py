@@ -67,8 +67,9 @@ def assign_ticket(
         "TICKET_ASSIGNED ticket=%s admin=%s assignee=%s",
         ticket_id, admin.username, assignee,
     )
+    name = html.escape(assignee) if assignee.strip() else "—"
     return HTMLResponse(
-        f'<p style="color: #16a34a; font-size: 13px; margin-top: 8px;">Ditugaskan ke <strong>{html.escape(assignee)}</strong></p>'
+        f'<span class="action-flash">✓ Ditugaskan ke <strong>{name}</strong></span>'
     )
 
 
@@ -91,7 +92,7 @@ def set_escalation(
         ticket_id, admin.username, level,
     )
     return HTMLResponse(
-        f'<p style="color: #16a34a; font-size: 13px; margin-top: 8px;">Escalation diset ke <strong>{html.escape(level)}</strong></p>'
+        f'<span class="action-flash">✓ Level eskalasi diubah ke <strong>{html.escape(level)}</strong></span>'
     )
 
 

@@ -70,6 +70,20 @@ def inbox_table_fragment(
     )
 
 
+@router.get("/inbox/stats", response_class=HTMLResponse)
+def inbox_stats_fragment(
+    request: Request,
+    admin: Admin = Depends(get_current_admin),
+    db: Session = Depends(get_db_session),
+):
+    service = TicketService(db)
+    result = service.list_tickets(TicketFilters(), page=1, page_size=1)
+    return templates.TemplateResponse(
+        "admin/_inbox_stats.html",
+        {"request": request, "result": result},
+    )
+
+
 @router.get("/tiket/{ticket_id}", response_class=HTMLResponse)
 def ticket_detail(
     request: Request,

@@ -4,11 +4,30 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+import re
 from datetime import datetime, timezone
 from dataclasses import dataclass
 from typing import Any, Optional
 
 logger = logging.getLogger(__name__)
+
+# Pola pesan penutup/acknowledgment — dibalas langsung tanpa pipeline LLM
+_FAREWELL_RE = re.compile(
+    r"""^\s*
+    (
+        # Ucapan terima kasih saja atau diikuti kalimat pendek
+        (terima\s*kasih|makasih|thanks|thank\s*you)(\s+.{0,50})?
+        |
+        # Pamit / salam penutup
+        (sampai\s*jumpa|selamat\s*tinggal|bye+|see\s*you|dadah)(\s+.{0,30})?
+        |
+        # Oke/baik/sip + opsional terima kasih + opsional kalimat pendek
+        (oke+|ok|baik|sip|siap|mantap|noted|got\s*it|alright|paham|mengerti)
+        (\s*[!.,]?\s*(terima\s*kasih|makasih|thanks)?)?(\s+.{0,40})?
+    )
+    \s*[!.,]*\s*$""",
+    re.IGNORECASE | re.VERBOSE,
+)
 
 _HISTORY_TTL = 86400  # 24h
 
@@ -79,28 +98,6 @@ class ChatService:
         ts = datetime.now(timezone.utc).isoformat()
         history.append({"role": "user", "content": text, "ts": ts})
 
-        # Bug fix: jika tiket sudah dibuat di sesi ini, jangan buat tiket baru
-        existing_ticket = self.get_session_ticket(session_id)
-        if existing_ticket:
-            bot_text = (
-                f"Tiket insiden **{existing_ticket}** sudah dibuat untuk sesi ini. "
-                f"Tim CSIRT akan segera menghubungi Anda. "
-                f"Jika ada informasi tambahan, sampaikan langsung ke CSIRT dengan menyebutkan nomor tiket tersebut."
-            )
-            history.append({"role": "assistant", "content": bot_text, "ts": ts})
-            self._save_history(session_id, history)
-            return {
-                "user_text": text,
-                "bot_text": bot_text,
-                "requires_clarification": False,
-                "ticket_id": existing_ticket,
-                "incident_type": "",
-                "severity": "",
-                "escalation_level": "",
-                "confidence_score": 0.0,
-                "error": False,
-            }
-
         # Hitung berapa kali bot sudah minta klarifikasi sebelumnya.
         # Hanya hitung pesan yang secara eksplisit diberi tag type="clarification"
         # agar pesan timeout/error tidak ikut terhitung.
@@ -121,6 +118,33 @@ class ChatService:
             user_msgs = [m["content"] for m in history if m["role"] == "user"]
             context_text = "\n".join(user_msgs[-3:])
 
+        # Jika tiket sudah dibuat di sesi ini, teruskan ke graph agar orchestrator
+        # bisa memutuskan dalam SATU classify_intent: kalau intent-nya upaya
+        # melapor insiden lagi, graph merutekan ke node existing_ticket (tanpa
+        # membuat tiket baru); intent lain (query_knowledge/general_help/dst)
+        # tetap diproses seperti biasa.
+        existing_ticket = self.get_session_ticket(session_id)
+
+        # Short-circuit: pesan penutup / acknowledgment — tidak perlu LLM
+        if len(text) <= 120 and _FAREWELL_RE.match(text):
+            bot_text = (
+                "Sama-sama! Jika ada insiden siber atau pertanyaan lain, "
+                "jangan ragu menghubungi kami kembali. Semoga harimu menyenangkan!"
+            )
+            history.append({"role": "assistant", "content": bot_text, "ts": ts})
+            self._save_history(session_id, history)
+            return {
+                "user_text": text,
+                "bot_text": bot_text,
+                "requires_clarification": False,
+                "ticket_id": None,
+                "incident_type": "",
+                "severity": "",
+                "escalation_level": "",
+                "confidence_score": 0.0,
+                "error": False,
+            }
+
         state = orchestrator.initialize_state(
             raw_input=context_text,
             reporter_id=reporter_id,
@@ -128,6 +152,7 @@ class ChatService:
             reporter_contact=reporter_contact,
             session_id=session_id,
             clarification_rounds=clarification_rounds,
+            session_existing_ticket=existing_ticket or "",
         )
 
         try:
@@ -177,7 +202,13 @@ class ChatService:
 
         # ticket_id takes priority — if a ticket was created, show it regardless
         # of clarification flags (avoids simultaneous clarification + ticket bug)
-        if ticket_id:
+        if ticket_id and existing_ticket and ticket_id == existing_ticket:
+            bot_text = (
+                f"Tiket insiden **{ticket_id}** sudah dibuat untuk sesi ini. "
+                f"Tim CSIRT akan segera menghubungi Anda. "
+                f"Jika ada informasi tambahan, sampaikan langsung ke CSIRT dengan menyebutkan nomor tiket tersebut."
+            )
+        elif ticket_id:
             bot_text = (
                 f"Tiket insiden berhasil dibuat: **{ticket_id}**.\n\n"
                 f"{result.get('mitigation_recommendation', '')}"

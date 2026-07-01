@@ -1,9 +1,10 @@
 """Routes untuk alur pelapor: identitas -> chat -> status tiket."""
-import html as _html
 import logging
 import os
 import re
 import uuid
+
+import markdown as _md
 
 import redis as _redis_lib
 from fastapi import APIRouter, Depends, Form, HTTPException, Request
@@ -24,9 +25,15 @@ templates = Jinja2Templates(directory="app/web/templates")
 
 
 def _render_md(text: str) -> str:
-    """Escape HTML then convert **bold** → <strong>bold</strong>."""
-    escaped = _html.escape(str(text))
-    return re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", escaped)
+    """Convert LLM markdown output to HTML. Normalises lists that lack a preceding blank line."""
+    t = str(text)
+    # Ensure blank line before list blocks so markdown detects them
+    t = re.sub(r'([^\n])\n([ \t]*[-*][ \t])', r'\1\n\n\2', t)
+    t = re.sub(r'([^\n])\n([ \t]*\d+\.[ \t])', r'\1\n\n\2', t)
+    html = _md.markdown(t)
+    # Strip <p> wrappers inside <li> (loose → tight list rendering)
+    html = re.sub(r'<li>\s*<p>(.*?)</p>\s*</li>', r'<li>\1</li>', html, flags=re.DOTALL)
+    return html
 
 
 templates.env.filters["render_md"] = _render_md

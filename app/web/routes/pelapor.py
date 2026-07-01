@@ -1,4 +1,5 @@
 """Routes untuk alur pelapor: identitas -> chat -> status tiket."""
+import html as _html
 import logging
 import os
 import re
@@ -25,15 +26,45 @@ templates = Jinja2Templates(directory="app/web/templates")
 
 
 def _render_md(text: str) -> str:
-    """Convert LLM markdown output to HTML. Normalises lists that lack a preceding blank line."""
+    """Convert LLM markdown output to HTML with source citation block."""
     t = str(text)
+
+    # Extract trailing "Sumber: ..." block before markdown processing
+    src_match = re.search(r'\n*Sumber:\s*(.+)$', t, flags=re.DOTALL | re.IGNORECASE)
+    if src_match:
+        t = t[:src_match.start()].rstrip()
+        sources_raw = src_match.group(1).strip()
+        parts = re.split(r'\[(\d+)\]', sources_raw)
+        items = []
+        for i in range(1, len(parts) - 1, 2):
+            label = parts[i + 1].strip().lstrip('.,;')
+            if label:
+                items.append(
+                    f'<li><span class="src-num">[{parts[i]}]</span>'
+                    f' {_html.escape(label)}</li>'
+                )
+        if items:
+            sources_html = (
+                '<div class="sources-block">'
+                '<span class="sources-label">📎 Sumber</span>'
+                f'<ul>{"".join(items)}</ul></div>'
+            )
+        else:
+            sources_html = (
+                '<div class="sources-block">'
+                '<span class="sources-label">📎 Sumber</span>'
+                f'<p>{_html.escape(sources_raw)}</p></div>'
+            )
+    else:
+        sources_html = ''
+
     # Ensure blank line before list blocks so markdown detects them
     t = re.sub(r'([^\n])\n([ \t]*[-*][ \t])', r'\1\n\n\2', t)
     t = re.sub(r'([^\n])\n([ \t]*\d+\.[ \t])', r'\1\n\n\2', t)
-    html = _md.markdown(t)
+    body = _md.markdown(t)
     # Strip <p> wrappers inside <li> (loose → tight list rendering)
-    html = re.sub(r'<li>\s*<p>(.*?)</p>\s*</li>', r'<li>\1</li>', html, flags=re.DOTALL)
-    return html
+    body = re.sub(r'<li>\s*<p>(.*?)</p>\s*</li>', r'<li>\1</li>', body, flags=re.DOTALL)
+    return body + sources_html
 
 
 templates.env.filters["render_md"] = _render_md

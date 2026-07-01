@@ -145,6 +145,11 @@
 }
 .bot-response-wrap {
   padding: 4px 0 10px 0;
+  animation: bot-fadein 0.35s ease;
+}
+@keyframes bot-fadein {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 .bot-response-label {
   font-size: 11px;
@@ -162,13 +167,18 @@
   color: #1e293b;
   word-break: break-word;
 }
-.bot-response p { margin: 0 0 10px; }
+.bot-response p { margin: 0 0 14px; }
 .bot-response p:last-child { margin-bottom: 0; }
 .bot-response ul,
-.bot-response ol { padding-left: 20px; margin: 0 0 10px; }
-.bot-response ul { list-style: disc; }
-.bot-response ol { list-style: decimal; }
-.bot-response li { margin-bottom: 4px; }
+.bot-response ol { margin: 0 0 14px; }
+.bot-response ul { list-style: none; padding-left: 16px; }
+.bot-response ol { list-style: decimal; padding-left: 22px; }
+.bot-response ul > li { position: relative; padding-left: 14px; margin-bottom: 6px; }
+.bot-response ul > li::before {
+  content: ''; position: absolute; left: 0; top: 8px;
+  width: 5px; height: 5px; border-radius: 50%; background: #2563eb;
+}
+.bot-response ol > li { margin-bottom: 6px; padding-left: 4px; }
 .bot-response li:last-child { margin-bottom: 0; }
 .bot-response strong { font-weight: 700; }
 .bot-response em { font-style: italic; }
@@ -191,6 +201,23 @@
 .bot-response h1 { font-size: 16px; }
 .bot-response h2 { font-size: 15px; }
 .bot-response h3 { font-size: 14px; }
+
+/* ── Sumber kutipan ── */
+.sources-block {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed #e2e8f0;
+}
+.sources-label {
+  display: block;
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.6px;
+  color: #cbd5e1; margin-bottom: 5px;
+}
+.sources-block ul { list-style: none; padding: 0; margin: 0; }
+.sources-block li { padding-left: 0; margin-bottom: 3px; font-size: 11.5px; color: #94a3b8; }
+.sources-block li::before { display: none; }
+.src-num { font-weight: 700; color: #64748b; margin-right: 4px; }
 
 /* ── Typing indicator ── */
 .typing-indicator {

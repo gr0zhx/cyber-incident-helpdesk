@@ -41,12 +41,29 @@
     <div id="tab-info" style="padding: 20px 24px 24px;">
 
       <h3 style="font-size: 12px; color: #94a3b8; text-transform: uppercase; letter-spacing: .6px; margin: 0 0 8px;">Pelapor</h3>
-      <p style="margin: 0 0 20px;">
+      <p style="margin: 0 0 6px;">
         <strong>{{ ticket.reporter_name or "—" }}</strong>
         <span style="color: #64748b;">({{ ticket.reporter_id }})</span><br>
         {% if ticket.reporter_contact %}<span style="font-size: 13px; color: #475569;">{{ ticket.reporter_contact }}</span>{% endif %}
         {% if ticket.reporter_department %}<span style="font-size: 13px; color: #475569;"> — {{ ticket.reporter_department }}</span>{% endif %}
       </p>
+      <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px;">
+        {% if ticket.media_pelaporan %}
+        <span style="background:#f1f5f9;border:1px solid #e2e8f0;border-radius:6px;padding:4px 10px;font-size:12px;">
+          <span style="color:#94a3b8;">Media</span>&nbsp;<strong>{{ ticket.media_pelaporan }}</strong>
+        </span>
+        {% endif %}
+        {% if ticket.incident_time %}
+        <span style="background:#f1f5f9;border:1px solid #e2e8f0;border-radius:6px;padding:4px 10px;font-size:12px;">
+          <span style="color:#94a3b8;">Waktu Insiden</span>&nbsp;<strong>{{ ticket.incident_time.strftime("%d %b %Y %H:%M") }}</strong>
+        </span>
+        {% endif %}
+        {% if ticket.affected_asset %}
+        <span style="background:#f1f5f9;border:1px solid #e2e8f0;border-radius:6px;padding:4px 10px;font-size:12px;">
+          <span style="color:#94a3b8;">Aset Terdampak</span>&nbsp;<strong>{{ ticket.affected_asset }}</strong>
+        </span>
+        {% endif %}
+      </div>
 
       <h3 style="font-size: 12px; color: #94a3b8; text-transform: uppercase; letter-spacing: .6px; margin: 0 0 8px;">Klasifikasi</h3>
       <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
@@ -309,6 +326,80 @@
 
       <hr style="border: none; border-top: 1px solid #f1f5f9; margin: 0 0 16px;">
 
+      {# CIA Triad #}
+      <p style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;
+                letter-spacing: .5px; margin: 0 0 10px;">Triase CIA</p>
+      <form hx-post="/admin/tiket/{{ ticket.ticket_id }}/cia"
+            hx-target="#cia-msg-{{ ticket.ticket_id }}" hx-swap="innerHTML"
+            hx-headers='{"X-CSRF-Token": "{{ csrf_token }}"}'
+            style="margin-bottom: 6px;">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:10px;">
+          {% for key, label, desc in [
+            ('cia_confidentiality', 'C — Kerahasiaan', 'Data sensitif terekspos'),
+            ('cia_integrity',       'I — Integritas',  'Data berubah/dimanipulasi'),
+            ('cia_availability',    'A — Ketersediaan','Layanan terganggu/down')
+          ] %}
+          {% set checked = ticket | attr(key) %}
+          <label class="cia-toggle-wrap">
+            <input type="checkbox" name="{{ key }}" value="1" class="cia-cb"
+                   {% if checked %}checked{% endif %}>
+            <span class="cia-slider"></span>
+            <span class="cia-label">
+              <strong>{{ label }}</strong>
+              <span>{{ desc }}</span>
+            </span>
+          </label>
+          {% endfor %}
+        </div>
+        <button type="submit" class="btn"
+                style="width:100%; font-size:12px; background:#f8fafc;
+                       border:1.5px solid #e2e8f0; color:#475569; padding:7px;">
+          Simpan CIA
+        </button>
+      </form>
+      <div id="cia-msg-{{ ticket.ticket_id }}" class="action-feedback" style="margin-bottom:14px;"></div>
+
+      <hr style="border: none; border-top: 1px solid #f1f5f9; margin: 0 0 16px;">
+
+      {# Containment & Recovery #}
+      <p style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;
+                letter-spacing: .5px; margin: 0 0 10px;">Penanganan</p>
+      <form hx-post="/admin/tiket/{{ ticket.ticket_id }}/containment"
+            hx-target="#cont-msg-{{ ticket.ticket_id }}" hx-swap="innerHTML"
+            hx-headers='{"X-CSRF-Token": "{{ csrf_token }}"}'
+            style="margin-bottom: 6px;">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <label style="display:block; font-size:12px; font-weight:600;
+                      color:#64748b; margin-bottom:5px;">Tindakan Penahanan (Containment)</label>
+        <textarea name="containment_action" rows="3"
+                  style="width:100%; padding:8px 10px; border:1.5px solid #e2e8f0;
+                         border-radius:7px; font-size:12px; font-family:inherit;
+                         resize:vertical; outline:none; box-sizing:border-box;
+                         transition:border-color .15s; margin-bottom:10px;"
+                  onfocus="this.style.borderColor='#3b82f6'"
+                  onblur="this.style.borderColor='#e2e8f0'"
+                  placeholder="Langkah isolasi, blokir, dsb…">{{ ticket.containment_action or '' }}</textarea>
+        <label style="display:block; font-size:12px; font-weight:600;
+                      color:#64748b; margin-bottom:5px;">Tindakan Pemulihan (Recovery)</label>
+        <textarea name="recovery_action" rows="3"
+                  style="width:100%; padding:8px 10px; border:1.5px solid #e2e8f0;
+                         border-radius:7px; font-size:12px; font-family:inherit;
+                         resize:vertical; outline:none; box-sizing:border-box;
+                         transition:border-color .15s; margin-bottom:10px;"
+                  onfocus="this.style.borderColor='#3b82f6'"
+                  onblur="this.style.borderColor='#e2e8f0'"
+                  placeholder="Restore data, patch sistem, dsb…">{{ ticket.recovery_action or '' }}</textarea>
+        <button type="submit" class="btn"
+                style="width:100%; font-size:12px; background:#f8fafc;
+                       border:1.5px solid #e2e8f0; color:#475569; padding:7px;">
+          Simpan Penanganan
+        </button>
+      </form>
+      <div id="cont-msg-{{ ticket.ticket_id }}" class="action-feedback" style="margin-bottom:14px;"></div>
+
+      <hr style="border: none; border-top: 1px solid #f1f5f9; margin: 0 0 16px;">
+
       {# Notifikasi #}
       <form hx-post="/admin/tiket/{{ ticket.ticket_id }}/notify"
             hx-target="this" hx-swap="afterend"
@@ -399,7 +490,7 @@ function switchTab(name) {
 }
 .adm-trigger-name { font-size: 13px; color: #0f172a; font-weight: 500; flex: 1; }
 .adm-trigger-user { font-size: 11px; color: #94a3b8; }
-.adm-caret { color: #94a3b8; font-size: 11px; margin-left: auto; }
+.adm-caret { color: #64748b; font-size: 18px; line-height: 1; margin-left: auto; }
 .adm-list {
   display: none; position: absolute; top: calc(100% + 4px); left: 0; right: 0;
   background: white; border: 1.5px solid #e2e8f0; border-radius: 8px;
@@ -438,6 +529,28 @@ function switchTab(name) {
   border: 2.5px solid #64748b; box-shadow: 0 2px 6px rgba(0,0,0,.18); cursor: pointer;
 }
 .esc-tick { font-size: 10px; color: #94a3b8; font-weight: 600; letter-spacing: .3px; }
+
+/* ── CIA Toggle Switches ── */
+.cia-toggle-wrap {
+  display: flex; align-items: center; gap: 10px; cursor: pointer;
+}
+.cia-cb { display: none; }
+.cia-slider {
+  width: 36px; height: 20px; border-radius: 10px;
+  background: #cbd5e1; flex-shrink: 0;
+  position: relative; transition: background .2s;
+}
+.cia-slider::after {
+  content: ''; position: absolute; top: 3px; left: 3px;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: white; transition: transform .2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,.2);
+}
+.cia-cb:checked + .cia-slider { background: #2563eb; }
+.cia-cb:checked + .cia-slider::after { transform: translateX(16px); }
+.cia-label { display: flex; flex-direction: column; line-height: 1.3; }
+.cia-label strong { font-size: 13px; color: #0f172a; }
+.cia-label span   { font-size: 11px; color: #94a3b8; }
 
 /* ── Action feedback toast ── */
 .action-feedback { min-height: 18px; }

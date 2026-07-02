@@ -110,6 +110,10 @@ class ChatService:
         orchestrator: Any,
         db: Any = None,
         timeout: float = 60.0,
+        # Bagian A / B dari form identitas
+        media_pelaporan: str = "",
+        incident_time: str = "",
+        affected_asset: str = "",
     ) -> dict:
         """Invoke pipeline dan return dict hasil untuk template."""
         history = self.get_history(session_id)
@@ -259,6 +263,12 @@ class ChatService:
             self._set_session_ticket(session_id, ticket_id)
             if db is not None:
                 self._flush_pending_uploads(session_id, ticket_id, reporter_id, db)
+                self._backfill_form_fields(
+                    ticket_id, db,
+                    media_pelaporan=media_pelaporan,
+                    incident_time_str=incident_time,
+                    affected_asset=affected_asset,
+                )
         elif requires_clarification:
             bot_text = result.get("clarification_message", "Mohon berikan informasi lebih lanjut.")
         else:
@@ -283,6 +293,28 @@ class ChatService:
             "confidence_score": result.get("confidence_score", 0.0),
             "error": False,
         }
+
+    def _backfill_form_fields(
+        self, ticket_id: str, db: Any, *,
+        media_pelaporan: str,
+        incident_time_str: str,
+        affected_asset: str,
+    ) -> None:
+        from app.database.models import IncidentTicket
+        from datetime import datetime as _dt
+        ticket = db.query(IncidentTicket).filter_by(ticket_id=ticket_id).first()
+        if ticket is None:
+            return
+        if media_pelaporan:
+            ticket.media_pelaporan = media_pelaporan
+        if affected_asset:
+            ticket.affected_asset = affected_asset
+        if incident_time_str:
+            try:
+                ticket.incident_time = _dt.fromisoformat(incident_time_str)
+            except ValueError:
+                pass
+        db.commit()
 
     def _flush_pending_uploads(
         self, session_id: str, ticket_id: str, uploaded_by: str, db: Any

@@ -25,20 +25,18 @@ _MODEL = "gpt-4o-mini"
 
 
 class LLMJudge:
-    """Klasifikasi biner jailbreak menggunakan LLM via GitHub Models."""
+    """Klasifikasi biner jailbreak menggunakan LLM (GitHub Models utama, OpenAI fallback)."""
 
     _GITHUB_MODELS_URL = "https://models.inference.ai.azure.com"
 
     def __init__(self) -> None:
         github_token = os.getenv("GITHUB_TOKEN")
         if github_token:
-            # GITHUB_TOKEN selalu pakai GitHub Models endpoint
             api_key = github_token
             base_url = os.getenv("OPENAI_BASE_URL", self._GITHUB_MODELS_URL)
         else:
-            # Fallback ke OpenAI langsung jika hanya OPENAI_API_KEY yang ada
             api_key = os.getenv("OPENAI_API_KEY")
-            base_url = os.getenv("OPENAI_BASE_URL")
+            base_url = None
         self._client: OpenAI | None = (
             OpenAI(api_key=api_key, base_url=base_url) if api_key else None
         )
@@ -69,6 +67,7 @@ class LLMJudge:
                 ],
                 max_tokens=10,
                 temperature=0.0,
+                timeout=8.0,
             )
             verdict = resp.choices[0].message.content.strip().upper()
             return verdict == "JAILBREAK"

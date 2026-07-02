@@ -123,6 +123,61 @@ async def notify_reporter(
     )
 
 
+@router.post("/{ticket_id}/cia", response_class=HTMLResponse)
+def update_cia(
+    request: Request,
+    ticket_id: str,
+    cia_confidentiality: str = Form(None),
+    cia_integrity: str = Form(None),
+    cia_availability: str = Form(None),
+    admin: Admin = Depends(get_current_admin),
+    db: Session = Depends(get_db_session),
+):
+    from app.database.models import IncidentTicket
+    ticket = db.query(IncidentTicket).filter_by(ticket_id=ticket_id).first()
+    if ticket is None:
+        raise HTTPException(status_code=404, detail="Tiket tidak ditemukan.")
+    ticket.cia_confidentiality = cia_confidentiality == "1"
+    ticket.cia_integrity = cia_integrity == "1"
+    ticket.cia_availability = cia_availability == "1"
+    ticket.modified_by = admin.username
+    db.commit()
+    logger.info("TICKET_CIA_UPDATED ticket=%s admin=%s C=%s I=%s A=%s",
+                ticket_id, admin.username,
+                ticket.cia_confidentiality, ticket.cia_integrity, ticket.cia_availability)
+    parts = []
+    if ticket.cia_confidentiality: parts.append("C")
+    if ticket.cia_integrity:       parts.append("I")
+    if ticket.cia_availability:    parts.append("A")
+    label = ", ".join(parts) if parts else "—"
+    return HTMLResponse(
+        f'<span class="action-flash">✓ CIA disimpan: <strong>{html.escape(label)}</strong></span>'
+    )
+
+
+@router.post("/{ticket_id}/containment", response_class=HTMLResponse)
+def update_containment(
+    request: Request,
+    ticket_id: str,
+    containment_action: str = Form(""),
+    recovery_action: str = Form(""),
+    admin: Admin = Depends(get_current_admin),
+    db: Session = Depends(get_db_session),
+):
+    from app.database.models import IncidentTicket
+    ticket = db.query(IncidentTicket).filter_by(ticket_id=ticket_id).first()
+    if ticket is None:
+        raise HTTPException(status_code=404, detail="Tiket tidak ditemukan.")
+    ticket.containment_action = containment_action.strip() or None
+    ticket.recovery_action = recovery_action.strip() or None
+    ticket.modified_by = admin.username
+    db.commit()
+    logger.info("TICKET_CONTAINMENT_UPDATED ticket=%s admin=%s", ticket_id, admin.username)
+    return HTMLResponse(
+        '<span class="action-flash">✓ Data penanganan disimpan</span>'
+    )
+
+
 @router.get("/{ticket_id}/attachment/{att_index}", response_class=FileResponse)
 def download_attachment(
     ticket_id: str,

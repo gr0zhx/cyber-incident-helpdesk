@@ -105,6 +105,7 @@ class OrchestratorAgent:
                     temperature=0.0,
                     max_tokens=200,
                     response_format={"type": "json_object"},
+                    timeout=15.0,
                 )
                 raw = response.choices[0].message.content or ""
                 parsed = parse_llm_json(raw)
@@ -136,6 +137,7 @@ class OrchestratorAgent:
         reporter_contact: str = "",
         session_id: str = "",
         clarification_rounds: int = 0,
+        session_existing_ticket: str = "",
     ) -> IncidentState:
         """Buat IncidentState baru dengan field input terisi."""
         return IncidentState(
@@ -165,6 +167,7 @@ class OrchestratorAgent:
             ticket_id="",
             ticket_status="",
             escalation_level="",
+            session_existing_ticket=session_existing_ticket,
             # Notifier
             notification_sent=False,
             notification_recipients=[],

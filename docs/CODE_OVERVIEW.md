@@ -2,7 +2,7 @@
 
 > Dokumen komprehensif untuk persiapan sidang skripsi: penjelasan **setiap file, setiap fungsi, setiap class**, logika internal, dan keterkaitan antar-modul.
 > Target pembaca: penulis (recall cepat) dan dosen penguji (verifikasi teknis).
-> Terakhir diperbarui: 2026-06-26 (Aturan disambiguasi identifier, skenario TCR lebih realistis, filter --ids di eval_tcr).
+> Terakhir diperbarui: 2026-07-02 (Formulir insiden resmi A–E, CIA triase, existing_ticket node, dashboard stats real-time, chat UI).
 
 ---
 
@@ -34,6 +34,7 @@
 24. [Perubahan Terbaru (2026-06-16)](#24-perubahan-terbaru-2026-06-16)
 25. [Perubahan Terbaru (2026-06-21)](#25-perubahan-terbaru-2026-06-21)
 26. [Perubahan Terbaru (2026-06-26)](#26-perubahan-terbaru-2026-06-26)
+27. [Perubahan Terbaru (2026-07-02)](#27-perubahan-terbaru-2026-07-02)
 
 ---
 
@@ -2440,3 +2441,222 @@ Tujuan: meningkatkan validitas evaluasi TCR karena skenario sebelumnya terlalu "
 ### 26.4 `tests/evaluation/tcr_results.json` + `TCR_REPORT.md`
 
 Hasil evaluasi TCR diperbarui setelah menjalankan ulang dengan skenario yang sudah direvisi. `TCR_REPORT.md` diperbarui dengan ringkasan hasil terkini.
+
+---
+
+## 27. Perubahan Terbaru (2026-07-02)
+
+Perubahan ini mencakup dua kelompok: 18 commit terkait UI/UX dashboard & chat (sudah lokal), dan perubahan arsitektur backend yang melengkapi fitur formulir insiden resmi Pusdatin.
+
+---
+
+### 27.1 Dashboard Admin — Stats Real-Time via HTMX Polling
+
+**File baru `app/web/templates/admin/_inbox_stats.html`** (partial HTMX):
+
+Strip statistik di bagian atas inbox kini menjadi partial tersendiri, di-render ulang setiap 30 detik via `hx-get="/admin/inbox/stats" hx-trigger="every 30s"`. Admin melihat jumlah tiket terkini tanpa reload halaman.
+
+**Route baru `GET /admin/inbox/stats`** di `admin_inbox.py`:
+
+Mengembalikan fragment HTML stats strip (total, pending, in-progress, resolved, closed). Memanggil `repository.get_stats()` yang sudah ada.
+
+**`app/database/repository.py` — `TicketListResult`:** Ditambahkan field `closed_count` ke dataclass hasil query untuk mendukung kolom baru di stats strip.
+
+---
+
+### 27.2 Admin UI — Action Panel Terpadu + Dropdown Penugasan
+
+Empat kartu aksi terpisah (update status, assign, eskalasi, notifikasi) digabungkan menjadi satu **Action Panel terpadu** di halaman `tiket_detail.html`. Perubahan tampilan:
+
+| Sebelum | Sesudah |
+| ------- | ------- |
+| 4 card terpisah | 1 panel dengan tab/section |
+| Dropdown penugasan nama manual | Dropdown dinamis dari daftar admin aktif |
+| Slider eskalasi standar HTML | Custom slider dengan label warna |
+| Feedback sukses tetap di DOM | Feedback flash fade-out otomatis |
+
+**Status baru `REJECTED`:** Ditambahkan ke `TICKET_STATUSES` di `app/web/constants.py`. Admin kini bisa menolak laporan yang tidak valid.
+
+**Fix XSS `admin_actions.py`:** `ticket_id` di error response di-escape dengan `html.escape()` sebelum dimasukkan ke `HTMLResponse`.
+
+---
+
+### 27.3 Admin UI — Laporan Pindah ke Halaman Tiket Detail
+
+Halaman `/admin/report` (form generate laporan terpisah) dihapus. Tombol **Generate Laporan** kini berada langsung di halaman `tiket_detail.html`. Ini menyederhanakan navigasi: admin tidak perlu pindah halaman untuk men-download laporan tiket yang sedang dibuka.
+
+`admin_report.py` dan route-nya dihapus dari `app/web/app.py`.
+
+---
+
+### 27.4 Chat Web — Peningkatan Tampilan Bot Response
+
+Serangkaian perubahan UI pada tampilan pesan bot di chat pelapor:
+
+| Commit | Perubahan |
+| ------ | --------- |
+| `b492325` | Hapus bubble dari typing indicator; sesuaikan dengan gaya bot response |
+| `88bc378` | Render markdown LLM dengan benar — list, paragraph, bold |
+| `f0b2076` | 5 peningkatan keterbacaan: sumber, bullet, spasi, efek fade-in |
+| `bd63bd4` | Deteksi pesan penutup ("terima kasih", "sudah selesai"), balas langsung tanpa pipeline LLM |
+| `cc714fb` | Deteksi sapaan pembuka ("halo", "selamat pagi"), balas langsung tanpa pipeline LLM |
+
+Sapaan dan penutup percakapan kini ditangani dengan **short-circuit** di `chat_service.py` — tidak perlu memanggil LLM pipeline, hemat latency dan kuota API.
+
+---
+
+### 27.5 `app/agents/state.py` — Field Baru `session_existing_ticket`
+
+```python
+session_existing_ticket: str  # ticket_id yang sudah ada di sesi ini (jika ada)
+```
+
+Mencegah pelapor membuat tiket ganda dalam satu sesi chat.
+
+---
+
+### 27.6 `app/agents/graph.py` — Node `existing_ticket_node`
+
+**Node baru `existing_ticket_node`:** Jika sesi sudah punya tiket dan pelapor mencoba melapor lagi, node ini mengembalikan tiket yang sudah ada alih-alih membuat tiket baru.
+
+**Routing baru di `route_by_intent()`:**
+
+```python
+# Jika sesi sudah punya tiket → jangan jalankan pipeline penuh
+if intent == "report_incident" and state.get("session_existing_ticket"):
+    return "existing_ticket"
+```
+
+Graf diperbarui:
+
+```text
+classify_intent
+  ├─ report_incident (sesi belum punya tiket) → identify_incident → ... → END
+  ├─ report_incident (sesi sudah punya tiket) → existing_ticket → END  ← BARU
+  └─ ...
+```
+
+---
+
+### 27.7 `app/agents/orchestrator.py` — Timeout + `session_existing_ticket`
+
+- Timeout 15 detik ditambahkan ke LLM call (`classify_intent`) agar tidak hang lama saat API lambat.
+- `initialize_state()` menerima parameter `session_existing_ticket: str = ""` dan meneruskannya ke `IncidentState`.
+
+---
+
+### 27.8 `app/config.py` + `app/utils/llm_client.py` — GitHub Models Sebagai Prioritas Utama
+
+**`app/config.py`:** Komentar dan validator diperbarui untuk menegaskan bahwa `GITHUB_TOKEN` adalah sumber utama, `OPENAI_API_KEY` adalah fallback.
+
+**`app/utils/llm_client.py`:** Fungsi `_resolve_api_key()` diganti dengan `_resolve_key_and_base()` yang mengembalikan `(api_key, base_url)` sekaligus. Tidak perlu lagi membaca `OPENAI_BASE_URL` dari env — URL GitHub Models di-hardcode sebagai konstanta `_GITHUB_MODELS_URL`.
+
+```python
+def _resolve_key_and_base() -> tuple[str, str | None]:
+    github_token = os.getenv("GITHUB_TOKEN")
+    if github_token:
+        return github_token, _GITHUB_MODELS_URL  # GitHub Models
+    api_key = os.getenv("OPENAI_API_KEY")
+    if api_key:
+        return api_key, None                      # OpenAI langsung
+    raise EnvironmentError(...)
+```
+
+---
+
+### 27.9 `app/security/llm_judge.py` — Simplifikasi + Timeout
+
+- Logic pemilihan base_url disederhanakan: jika `GITHUB_TOKEN` ada → `_GITHUB_MODELS_URL`; jika tidak → `None` (OpenAI default).
+- Timeout 8 detik ditambahkan ke LLM call agar guardrails tidak memblokir terlalu lama saat API timeout.
+
+---
+
+### 27.10 `app/database/models.py` — Field Formulir Insiden Resmi
+
+Tabel `incident_tickets` diperluas dengan kolom baru sesuai **Formulir No. 46.5/TI.100/A.8/01/2026 Pusdatin Kementan**:
+
+| Kolom | Tipe | Bagian Formulir | Keterangan |
+| ----- | ---- | --------------- | ---------- |
+| `media_pelaporan` | `String(50)` | Bagian A | Email / Telepon / WhatsApp / Datang Langsung / Sistem Tiket |
+| `incident_time` | `DateTime` | Bagian B | Waktu kejadian insiden |
+| `affected_asset` | `String(255)` | Bagian B | Sistem atau aset yang terdampak |
+| `cia_confidentiality` | `Boolean` | Bagian C | Dampak terhadap kerahasiaan data |
+| `cia_integrity` | `Boolean` | Bagian C | Dampak terhadap integritas data |
+| `cia_availability` | `Boolean` | Bagian C | Dampak terhadap ketersediaan layanan |
+| `containment_action` | `Text` | Bagian D | Tindakan penahanan (containment) |
+| `recovery_action` | `Text` | Bagian D | Tindakan pemulihan (recovery) |
+
+Migration: `app/database/migrations/versions/20260702_01_add_incident_fields.py`
+
+---
+
+### 27.11 `app/web/routes/admin_actions.py` — Endpoint CIA + Containment
+
+**Dua endpoint HTMX baru:**
+
+| Endpoint | Method | Fungsi |
+| -------- | ------ | ------ |
+| `POST /admin/tiket/{id}/cia` | POST | Update triase CIA (checkbox C/I/A) via form. Return flash HTML. |
+| `POST /admin/tiket/{id}/containment` | POST | Simpan `containment_action` + `recovery_action`. Return flash HTML. |
+
+Kedua endpoint menggunakan `HTMLResponse` dengan pesan flash agar HTMX bisa swap inline tanpa reload halaman.
+
+---
+
+### 27.12 `app/web/routes/pelapor.py` — Validasi Ketat + Field Baru
+
+Formulir identitas pelapor (`POST /lapor`) diperbarui:
+
+- **Validasi wajib baru:** `reporter_unit` dan `reporter_contact` kini wajib diisi — jika kosong, form dikembalikan dengan pesan error.
+- **Field baru:** `incident_time` (datetime-local) dan `affected_asset` (teks) diterima dari form dan disimpan ke session.
+- Session menyimpan `media_pelaporan = "Sistem Tiket"` secara otomatis (fixed value untuk kanal web).
+
+---
+
+### 27.13 `app/web/dependencies.py` — Session Reporter Diperluas
+
+`get_reporter_session()` kini mengembalikan tiga field tambahan dari session:
+
+```python
+"media_pelaporan": session.get("media_pelaporan", ""),
+"incident_time":   session.get("incident_time", ""),
+"affected_asset":  session.get("affected_asset", ""),
+```
+
+---
+
+### 27.14 `app/web/services/chat_service.py` — Backfill Form Fields
+
+Method baru `_backfill_form_fields()` dipanggil setelah tiket berhasil dibuat. Fungsinya mengisi kolom `media_pelaporan`, `incident_time`, dan `affected_asset` di tabel tiket menggunakan data yang pelapor sudah isi di form identitas — tanpa perlu LLM.
+
+```python
+def _backfill_form_fields(self, ticket_id, db, *, media_pelaporan, incident_time_str, affected_asset):
+    ticket = db.query(IncidentTicket).filter_by(ticket_id=ticket_id).first()
+    if media_pelaporan:  ticket.media_pelaporan = media_pelaporan
+    if affected_asset:   ticket.affected_asset  = affected_asset
+    if incident_time_str:
+        ticket.incident_time = datetime.fromisoformat(incident_time_str)
+    db.commit()
+```
+
+---
+
+### 27.15 `app/dashboard/report_generator.py` — Format Formulir Resmi A–E
+
+Generator laporan HTML ditulis ulang total mengikuti **Formulir Resmi Pusdatin Kementan**:
+
+| Bagian | Isi |
+| ------ | --- |
+| **A — Pelapor** | Nama, unit, kontak, media pelaporan |
+| **B — Deskripsi Insiden** | Waktu kejadian, aset terdampak, deskripsi lengkap |
+| **C — Triase CIA** | Checkbox Confidentiality / Integrity / Availability dengan visual berwarna |
+| **D — Penanganan** | Rekomendasi mitigasi sistem + tindakan containment & recovery admin |
+| **E — Timeline & Pengesahan** | Timeline status tiket (dot progress) + kolom tanda tangan |
+
+Fungsi helper baru: `_cia_row()` (render satu baris CIA dengan checkbox), `_tl_row()` (render satu titik timeline), `_safe()` dengan HTML-escape otomatis.
+
+---
+
+### 27.16 `tests/evaluation/baseline_n300_results.json`
+
+File baru: hasil evaluasi baseline dengan 300 sampel untuk keperluan perbandingan performa sistem sebelum dan sesudah tuning.

@@ -223,6 +223,14 @@ def make_knowledge_node(mitigation_advisor):
     return knowledge_node
 
 
+async def existing_ticket_node(state: IncidentState) -> IncidentState:
+    """Node: sesi sudah punya tiket & pesan ini upaya melapor lagi — jangan buat tiket baru."""
+    state["ticket_id"] = state.get("session_existing_ticket", "")
+    state["ticket_status"] = "EXISTING"
+    _trace(state, "ticket_manager", "existing_session_ticket", ticket_id=state["ticket_id"])
+    return state
+
+
 def make_notifier_node(notifier):
     async def notifier_node(state: IncidentState) -> IncidentState:
         try:
@@ -248,6 +256,11 @@ def make_notifier_node(notifier):
 def route_by_intent(state: IncidentState) -> str:
     intent = state.get("intent", "report_incident")
     rounds = state.get("clarification_rounds", 0)
+
+    # Sesi sudah punya tiket & pesan ini upaya melapor insiden lagi → jangan
+    # jalankan pipeline pembuatan tiket baru, cukup rujuk ke tiket yang ada.
+    if intent == "report_incident" and state.get("session_existing_ticket"):
+        return "existing_ticket"
 
     # Hard limit: setelah 1 ronde klarifikasi, langsung proses — jangan tanya lagi
     if rounds >= 1 and intent == "report_incident":
@@ -284,9 +297,12 @@ def build_helpdesk_graph(
       guardrails (sanitize + injection check + PII redact)
         ├─ blocked → END
         └─ ok → classify_intent
-                  ├─ report_incident → identify_incident → generate_mitigation
-                  │                    → validate_output → create_ticket
-                  │                    → send_notification → END
+                  ├─ report_incident (sesi belum punya tiket)
+                  │        → identify_incident → generate_mitigation
+                  │        → validate_output → create_ticket
+                  │        → send_notification → END
+                  ├─ report_incident (sesi sudah punya tiket)
+                  │        → existing_ticket → END
                   ├─ query_knowledge  → query_knowledge → END
                   ├─ needs_clarification → END
                   ├─ query_status        → general_help → END
@@ -304,6 +320,7 @@ def build_helpdesk_graph(
     graph.add_node("validate_output", make_validate_output_node())
     graph.add_node("create_ticket", make_ticket_node(ticket_manager))
     graph.add_node("send_notification", make_notifier_node(notifier))
+    graph.add_node("existing_ticket", existing_ticket_node)
 
     # Entry point: guardrails dulu
     graph.set_entry_point("guardrails")
@@ -328,11 +345,13 @@ def build_helpdesk_graph(
             "needs_clarification": END,
             "query_status":        "general_help",
             "general_help":        "general_help",
+            "existing_ticket":     "existing_ticket",
         },
     )
 
     graph.add_edge("general_help", END)
     graph.add_edge("query_knowledge", END)
+    graph.add_edge("existing_ticket", END)
 
     # Pipeline insiden (dengan validate_output setelah mitigation)
     graph.add_edge("identify_incident", "generate_mitigation")

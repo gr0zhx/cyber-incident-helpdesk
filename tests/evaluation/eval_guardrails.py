@@ -10,6 +10,9 @@ Skenario perbandingan:
   --baseline   : semua prompt langsung ke GPT-4o tanpa guardrails (Skenario A)
   --e2e        : prompt yang lolos guardrails ke GPT-4o (Skenario B)
 
+Sampling:
+  --stratified N : ambil N sampel proporsional per kategori (default: semua)
+
 False Positive Rate diukur dari rag_qa_dataset.json (laporan helpdesk normal),
 bukan dari JailbreakHub (karena seluruh JailbreakHub adalah prompt adversarial).
 
@@ -17,6 +20,7 @@ Cara pakai:
     python tests/evaluation/eval_guardrails.py
     python tests/evaluation/eval_guardrails.py --limit 50
     python tests/evaluation/eval_guardrails.py --baseline
+    python tests/evaluation/eval_guardrails.py --baseline --stratified 300
     python tests/evaluation/eval_guardrails.py --e2e
     python tests/evaluation/eval_guardrails.py --e2e --with-llm-judge
     python tests/evaluation/eval_guardrails.py --e2e --checkpoint checkpoint.json
@@ -30,6 +34,7 @@ import io
 import json
 import logging
 import os
+import random
 import sys
 import time
 from datetime import datetime
@@ -160,7 +165,7 @@ class EndToEndEvaluator:
                 msg = str(exc)
                 is_rate_limit = "429" in msg or "rate limit" in msg.lower() or "too many" in msg.lower()
                 if is_rate_limit and attempt < _MAX_RETRIES - 1:
-                    wait = _RATE_LIMIT_SLEEP * (2 ** attempt)  # 4, 8, 16 detik
+                    wait = self._rate_limit_sleep * (2 ** attempt)
                     print(f"    [429] Rate limit, tunggu {wait:.0f}s... (percobaan {attempt+1}/{_MAX_RETRIES})")
                     time.sleep(wait)
                     self._last_gpt4o_call = 0.0  # reset throttle setelah backoff
@@ -333,6 +338,46 @@ def load_normal_reports(qa_path: Path) -> list[dict]:
         for item in data
         if item.get("question")
     ]
+
+
+def stratified_sample(prompts: list[dict], n: int, seed: int = 42) -> list[dict]:
+    """Ambil n sampel proporsional per kategori (stratified random sampling).
+
+    Proporsi tiap kategori dipertahankan semirip mungkin dengan populasi asli.
+    Seed fixed agar reproducible.
+    """
+    rng = random.Random(seed)
+    by_cat: dict[str, list[dict]] = {}
+    for p in prompts:
+        by_cat.setdefault(p["category"], []).append(p)
+
+    total = len(prompts)
+    sample: list[dict] = []
+    remainder: list[tuple[float, str]] = []
+
+    # Alokasi proporsional (floor) + kumpulkan sisa desimal
+    alloc: dict[str, int] = {}
+    for cat, items in by_cat.items():
+        exact = n * len(items) / total
+        alloc[cat] = int(exact)
+        remainder.append((exact - int(exact), cat))
+
+    # Isi sisa kuota dengan kategori yang punya desimal terbesar
+    deficit = n - sum(alloc.values())
+    remainder.sort(reverse=True)
+    for _, cat in remainder[:deficit]:
+        alloc[cat] += 1
+
+    for cat, items in by_cat.items():
+        k = min(alloc.get(cat, 0), len(items))
+        sample.extend(rng.sample(items, k))
+
+    rng.shuffle(sample)
+    print(f"Stratified sample: {len(sample)}/{total} prompt dipilih (seed={seed})")
+    for cat, items in sorted(by_cat.items(), key=lambda x: -len(x[1])):
+        picked = alloc.get(cat, 0)
+        print(f"  {cat:<20}: {picked:>3}/{len(items):>4}  ({len(items)/total*100:.1f}%)")
+    return sample
 
 
 # ---------------------------------------------------------------------------
@@ -702,6 +747,10 @@ def main() -> None:
                         help="Path file checkpoint JSON untuk resume jika terputus.")
     parser.add_argument("--clear-checkpoint", action="store_true",
                         help="Hapus checkpoint lama dan mulai dari awal.")
+    parser.add_argument("--stratified", type=int, default=None, metavar="N",
+                        help="Stratified random sample N prompt proporsional per kategori.")
+    parser.add_argument("--baseline-output", default=None,
+                        help="Path output JSON khusus untuk Skenario A (default: sama dengan --output).")
     args = parser.parse_args()
 
     # --- Kontrol LLM judge di layer guardrails ---
@@ -747,6 +796,8 @@ def main() -> None:
     jailbreak_prompts = download_jailbreakhub(cache_path, refresh=args.refresh_dataset)
     if args.limit is not None:
         jailbreak_prompts = jailbreak_prompts[: args.limit]
+    if args.stratified is not None:
+        jailbreak_prompts = stratified_sample(jailbreak_prompts, args.stratified)
 
     # 2. Load laporan normal (untuk FPR)
     normal_reports: list[dict] = []
@@ -764,6 +815,7 @@ def main() -> None:
         print(f"[Skenario A] Selesai. Total: {len(baseline_results)}")
 
     # 3b. Skenario B — dengan guardrails
+    # Jika hanya --baseline (tanpa --e2e), jalankan gate-only (lokal, cepat) untuk FPR/breakdown
     print("\n[Skenario B] Menjalankan pengujian adversarial dengan guardrails...")
     adv_results = run_adversarial_eval(
         jailbreak_prompts,
@@ -828,8 +880,13 @@ def main() -> None:
         "false_positive_cases":  [r for r in fp_results if r["blocked"]],
     }
 
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(
+    # Tentukan output path: --baseline-output untuk Skenario A, --output untuk default
+    if args.baseline and args.baseline_output:
+        save_path = Path(args.baseline_output)
+    else:
+        save_path = output_path
+    save_path.parent.mkdir(parents=True, exist_ok=True)
+    save_path.write_text(
         json.dumps(output, indent=2, ensure_ascii=False), encoding="utf-8"
     )
 
@@ -841,7 +898,7 @@ def main() -> None:
         else "Dilewati (--no-fp-test)"
     )
     print_report(metrics, dataset_label, normal_label)
-    print(f"\nHasil disimpan: {output_path}")
+    print(f"\nHasil disimpan: {save_path}")
 
     # 8. Hapus checkpoint setelah selesai penuh
     if not args.limit:

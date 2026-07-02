@@ -69,11 +69,33 @@ def test_get_chat_redirects_without_session(client):
     assert "/lapor" in r.headers["location"]
 
 
+def test_post_identitas_requires_unit(client):
+    r = client.post("/lapor", data={
+        "reporter_name": "Budi",
+        "reporter_contact": "budi@test.id",
+        "reporter_unit": "",
+        "csrf_token": "x",
+    })
+    assert r.status_code == 200
+    assert "Unit / Divisi tidak boleh kosong." in r.text
+
+
+def test_post_identitas_requires_contact(client):
+    r = client.post("/lapor", data={
+        "reporter_name": "Budi",
+        "reporter_contact": "",
+        "reporter_unit": "IT",
+        "csrf_token": "x",
+    })
+    assert r.status_code == 200
+    assert "Kontak tidak boleh kosong." in r.text
+
+
 def test_get_chat_renders_with_session(client):
     client.post("/lapor", data={
         "reporter_name": "Sari",
-        "reporter_contact": "",
-        "reporter_unit": "",
+        "reporter_contact": "sari@test.id",
+        "reporter_unit": "IT",
         "csrf_token": "x",
     })
     r = client.get("/lapor/chat")
@@ -83,7 +105,7 @@ def test_get_chat_renders_with_session(client):
 
 def test_send_message_returns_bubbles(client, monkeypatch):
     # Setup session
-    client.post("/lapor", data={"reporter_name": "A", "reporter_contact": "", "reporter_unit": "", "csrf_token": "x"})
+    client.post("/lapor", data={"reporter_name": "A", "reporter_contact": "a@test.id", "reporter_unit": "IT", "csrf_token": "x"})
 
     import app.web.routes.pelapor as pelapor_mod
     mock_result = {
@@ -104,12 +126,12 @@ def test_send_message_returns_bubbles(client, monkeypatch):
 
 
 def test_reset_clears_session(client):
-    client.post("/lapor", data={"reporter_name": "A", "reporter_contact": "", "reporter_unit": "", "csrf_token": "x"})
+    client.post("/lapor", data={"reporter_name": "A", "reporter_contact": "a@test.id", "reporter_unit": "IT", "csrf_token": "x"})
     r = client.post("/lapor/chat/reset", data={"csrf_token": "x"}, follow_redirects=False)
     assert r.status_code in (302, 303)
 
 
 def test_tiket_status_not_found(client):
-    client.post("/lapor", data={"reporter_name": "A", "reporter_contact": "", "reporter_unit": "", "csrf_token": "x"})
+    client.post("/lapor", data={"reporter_name": "A", "reporter_contact": "a@test.id", "reporter_unit": "IT", "csrf_token": "x"})
     r = client.get("/lapor/tiket/NOPE")
     assert r.status_code == 404

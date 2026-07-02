@@ -17,7 +17,7 @@
 
     <div style="position:relative;">
       <select name="status"
-              style="width:100%;padding:9px 12px;border:1.5px solid #e2e8f0;border-radius:8px;
+              style="width:100%;padding:9px 32px 9px 12px;border:1.5px solid #e2e8f0;border-radius:8px;
                      font-size:13px;font-family:inherit;color:#0f172a;background:white;
                      outline:none;appearance:none;cursor:pointer;">
         <option value="">Semua Status</option>
@@ -31,11 +31,13 @@
         </option>
         {% endfor %}
       </select>
+      <span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);
+                   font-size:18px;line-height:1;color:#64748b;pointer-events:none;">▾</span>
     </div>
 
     <div style="position:relative;">
       <select name="severity"
-              style="width:100%;padding:9px 12px;border:1.5px solid #e2e8f0;border-radius:8px;
+              style="width:100%;padding:9px 32px 9px 12px;border:1.5px solid #e2e8f0;border-radius:8px;
                      font-size:13px;font-family:inherit;color:#0f172a;background:white;
                      outline:none;appearance:none;cursor:pointer;">
         <option value="">Semua Severity</option>
@@ -45,6 +47,8 @@
         </option>
         {% endfor %}
       </select>
+      <span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);
+                   font-size:18px;line-height:1;color:#64748b;pointer-events:none;">▾</span>
     </div>
 
     <input type="text" name="search"

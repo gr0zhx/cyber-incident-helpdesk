@@ -60,4 +60,7 @@ def get_reporter_session(request: Request) -> dict:
         "reporter_name": session.get("reporter_name", ""),
         "reporter_contact": session.get("reporter_contact", ""),
         "reporter_unit": session.get("reporter_unit", ""),
+        "media_pelaporan": session.get("media_pelaporan", ""),
+        "incident_time": session.get("incident_time", ""),
+        "affected_asset": session.get("affected_asset", ""),
     }

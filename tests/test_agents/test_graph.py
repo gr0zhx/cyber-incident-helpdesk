@@ -127,6 +127,22 @@ def test_route_unknown_falls_back_to_general_help():
     assert route_by_intent(state) == "general_help"
 
 
+def test_route_report_incident_with_session_existing_ticket_routes_to_existing_ticket():
+    state = _make_initial_state()
+    state["intent"] = "report_incident"
+    state["session_existing_ticket"] = "TICKET-2026-0001"
+    assert route_by_intent(state) == "existing_ticket"
+
+
+def test_route_other_intent_ignores_session_existing_ticket():
+    """session_existing_ticket only short-circuits report_incident — other
+    intents (e.g. general_help) must still be processed normally."""
+    state = _make_initial_state()
+    state["intent"] = "general_help"
+    state["session_existing_ticket"] = "TICKET-2026-0001"
+    assert route_by_intent(state) == "general_help"
+
+
 # ---------------------------------------------------------------------------
 # Full pipeline end-to-end tests
 # ---------------------------------------------------------------------------
@@ -195,6 +211,36 @@ async def test_pipeline_needs_clarification_stops_at_orchestrator():
 
     # Tiket tidak dibuat
     assert result["ticket_id"] == ""
+
+
+@pytest.mark.asyncio
+async def test_pipeline_report_incident_with_existing_session_ticket_skips_ticket_creation():
+    """Skenario: sesi sudah punya tiket & pesan baru upaya melapor lagi →
+    graph merutekan ke existing_ticket, TIDAK menjalankan identifier/mitigation/
+    create_ticket/notifier, dan classify_intent hanya dipanggil sekali."""
+    ticket_manager = _make_ticket_manager()
+    graph = build_helpdesk_graph(
+        orchestrator=_make_orchestrator("report_incident"),
+        identifier=_make_identifier(),
+        mitigation_advisor=_make_mitigation_advisor(),
+        ticket_manager=ticket_manager,
+        notifier=_make_notifier(),
+    )
+    state = _make_initial_state("Laptop saya kena ransomware lagi.")
+    state["session_existing_ticket"] = "TICKET-2026-0001"
+    result = await graph.ainvoke(state)
+
+    assert result["intent"] == "report_incident"
+    assert result["ticket_id"] == "TICKET-2026-0001"
+    assert result["ticket_status"] == "EXISTING"
+
+    agents_traced = {t["agent"] for t in result["agent_trace"]}
+    assert "identifier" not in agents_traced
+    assert "mitigation_advisor" not in agents_traced
+    assert "notifier" not in agents_traced
+    # ticket_manager.create_ticket (repo.create_ticket) must not be invoked —
+    # only the existing_ticket node ran, echoing session_existing_ticket back.
+    ticket_manager.repo.create_ticket.assert_not_called()
 
 
 @pytest.mark.asyncio

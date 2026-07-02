@@ -33,6 +33,7 @@ class IncidentState(TypedDict):
     ticket_id: str
     ticket_status: str
     escalation_level: str
+    session_existing_ticket: str  # ticket_id yang sudah ada di sesi ini (jika ada)
 
     # Notifier
     notification_sent: bool

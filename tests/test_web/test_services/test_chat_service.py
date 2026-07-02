@@ -31,9 +31,15 @@ def _make_graph(requires_clarification=False, ticket_id="", clarification_msg=""
     return graph
 
 
-def _make_orchestrator():
+def _make_orchestrator(classify_intent_result=None):
     from app.agents.state import IncidentState
     orch = MagicMock()
+    orch.classify_intent = AsyncMock(
+        return_value=classify_intent_result or {
+            "intent": "report_incident", "confidence": 0.9,
+            "needs_clarification": False, "clarification_message": "",
+        }
+    )
     orch.initialize_state.return_value = IncidentState(
         raw_input="x", sanitized_input="x", reporter_id="web:abc",
         reporter_name="Test", reporter_contact="", session_id="sess-1",
@@ -44,7 +50,8 @@ def _make_orchestrator():
         rag_confidence=0.0, ticket_id="", ticket_status="",
         escalation_level="", notification_sent=False,
         notification_recipients=[], notification_timestamp="",
-        processing_errors=[], agent_trace=[],
+        processing_errors=[], agent_trace=[], clarification_rounds=0,
+        session_existing_ticket="",
     )
     return orch
 
@@ -128,6 +135,53 @@ def test_handle_message_timeout_returns_fallback_message(tmp_path):
     ))
     assert result["error"] is False
     assert "sistem sedang sibuk" in result["bot_text"].lower()
+
+
+def test_handle_message_existing_ticket_blocks_new_report(tmp_path):
+    """Repeat report_incident attempts in a session with a ticket already
+    created should get the canned reply instead of a second ticket.
+
+    Routing happens inside the graph (existing_ticket node), so classify_intent
+    is only ever invoked once — chat_service just forwards session_existing_ticket
+    into the state and reacts to the ticket_id the graph returns.
+    """
+    r = fakeredis.FakeStrictRedis(decode_responses=False)
+    r.setex("web:session_ticket:sess-1", 86400, b"INC-1")
+    # Graph would route report_incident + session_existing_ticket to the
+    # existing_ticket node, which echoes back the same ticket_id.
+    graph = _make_graph(ticket_id="INC-1")
+    orch = _make_orchestrator()
+    svc = _make_service(r)
+    result = asyncio.run(svc.handle_message(
+        session_id="sess-1", reporter_id="web:abc", reporter_name="X",
+        reporter_contact="", text="laptop saya kena ransomware lagi",
+        graph=graph, orchestrator=orch,
+    ))
+    assert result["ticket_id"] == "INC-1"
+    assert "sudah dibuat untuk sesi ini" in result["bot_text"]
+    graph.ainvoke.assert_called_once()
+    orch.classify_intent.assert_not_called()
+    orch.initialize_state.assert_called_once()
+    assert orch.initialize_state.call_args.kwargs["session_existing_ticket"] == "INC-1"
+
+
+def test_handle_message_existing_ticket_allows_followup_question(tmp_path):
+    """Follow-up questions (e.g. general_help) after a ticket exists should
+    still reach the pipeline and produce a normal (non-canned) response."""
+    r = fakeredis.FakeStrictRedis(decode_responses=False)
+    r.setex("web:session_ticket:sess-1", 86400, b"INC-1")
+    # Graph classifies as general_help internally and never touches ticket_id.
+    graph = _make_graph(ticket_id="")
+    orch = _make_orchestrator()
+    svc = _make_service(r)
+    result = asyncio.run(svc.handle_message(
+        session_id="sess-1", reporter_id="web:abc", reporter_name="X",
+        reporter_contact="", text="halo saya ingin bertanya-tanya lagi",
+        graph=graph, orchestrator=orch,
+    ))
+    graph.ainvoke.assert_called_once()
+    orch.classify_intent.assert_not_called()
+    assert "sudah dibuat untuk sesi ini" not in result["bot_text"]
 
 
 def test_clear_history(tmp_path):

@@ -6,10 +6,9 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    # LLM — gunakan OPENAI_API_KEY (produksi) atau GITHUB_TOKEN (development)
+    # LLM — GitHub Models utama (GITHUB_TOKEN), OpenAI sebagai fallback (OPENAI_API_KEY)
     openai_api_key: Optional[str] = None
     github_token: Optional[str] = None
-    openai_base_url: Optional[str] = None  # set ke GitHub Models URL saat dev
     openai_model: str = "gpt-4o"
     embedding_model: str = "text-embedding-3-small"
 
@@ -32,9 +31,9 @@ class Settings(BaseSettings):
 
     @model_validator(mode="after")
     def _require_api_key(self) -> "Settings":
-        if not self.openai_api_key and not self.github_token:
+        if not self.github_token and not self.openai_api_key:
             raise ValueError(
-                "Harus set salah satu: OPENAI_API_KEY (OpenAI) atau GITHUB_TOKEN (GitHub Models)."
+                "Harus set salah satu: GITHUB_TOKEN (GitHub Models) atau OPENAI_API_KEY (OpenAI)."
             )
         return self
 

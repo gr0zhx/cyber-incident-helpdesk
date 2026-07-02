@@ -250,7 +250,7 @@
   <main class="id-form-wrap">
     <div class="id-card">
       <div class="id-card-header">
-        <h2>Identitas Pelapor</h2>
+        <h2>Data Pelapor &amp; Insiden</h2>
         <p>Isi data berikut agar tim Keamanan Siber dapat menghubungi Anda.</p>
       </div>
 
@@ -275,24 +275,44 @@
 
         <div class="id-field">
           <label for="reporter_unit">
-            Unit / Divisi
-            <span class="hint">(opsional)</span>
+            Unit / Divisi <span class="required">*</span>
           </label>
           <input id="reporter_unit" class="id-input" type="text"
-                 name="reporter_unit"
+                 name="reporter_unit" required
                  placeholder="Contoh: Divisi IT Pusdatin, Bagian Jaringan"
                  autocomplete="organization">
         </div>
 
         <div class="id-field" style="margin-bottom: 28px;">
           <label for="reporter_contact">
-            Kontak
-            <span class="hint">(WhatsApp / email dinas — opsional)</span>
+            Kontak <span class="required">*</span>
+            <span class="hint">(WhatsApp / email dinas)</span>
           </label>
           <input id="reporter_contact" class="id-input" type="text"
-                 name="reporter_contact"
+                 name="reporter_contact" required
                  placeholder="08xx... atau nama@kementan.go.id"
                  autocomplete="tel">
+        </div>
+
+        <div class="id-divider">Detail Insiden (opsional)</div>
+
+        <div class="id-field">
+          <label for="incident_time">
+            Waktu Kejadian
+            <span class="hint">(jika sudah diketahui)</span>
+          </label>
+          <input id="incident_time" class="id-input" type="datetime-local"
+                 name="incident_time">
+        </div>
+
+        <div class="id-field" style="margin-bottom: 28px;">
+          <label for="affected_asset">
+            Sistem / Aset Terdampak
+            <span class="hint">(opsional)</span>
+          </label>
+          <input id="affected_asset" class="id-input" type="text"
+                 name="affected_asset"
+                 placeholder="Contoh: Server SIMPEG, PC Staf Bagian X">
         </div>
 
         <button type="submit" class="id-submit">

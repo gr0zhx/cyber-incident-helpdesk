@@ -97,6 +97,8 @@ async def identitas_submit(
     reporter_name: str = Form(...),
     reporter_contact: str = Form(""),
     reporter_unit: str = Form(""),
+    incident_time: str = Form(""),
+    affected_asset: str = Form(""),
     db: Session = Depends(get_db_session),
 ):
     reporter_name = reporter_name.strip()
@@ -109,12 +111,27 @@ async def identitas_submit(
             {"request": request, "csrf_token": request.session.get("csrf_token", ""),
              "error": "Nama tidak boleh kosong."},
         )
+    if not reporter_unit:
+        return templates.TemplateResponse(
+            "pelapor/identitas.html",
+            {"request": request, "csrf_token": request.session.get("csrf_token", ""),
+             "error": "Unit / Divisi tidak boleh kosong."},
+        )
+    if not reporter_contact:
+        return templates.TemplateResponse(
+            "pelapor/identitas.html",
+            {"request": request, "csrf_token": request.session.get("csrf_token", ""),
+             "error": "Kontak tidak boleh kosong."},
+        )
     session_id = str(uuid.uuid4())
     request.session["session_id"] = session_id
     request.session["reporter_id"] = f"web:{session_id}"
     request.session["reporter_name"] = reporter_name
     request.session["reporter_contact"] = reporter_contact
     request.session["reporter_unit"] = reporter_unit
+    request.session["media_pelaporan"] = "Sistem Tiket"
+    request.session["incident_time"] = incident_time.strip()
+    request.session["affected_asset"] = affected_asset.strip()
     return RedirectResponse(url="/lapor/chat", status_code=303)
 
 
@@ -161,6 +178,9 @@ async def send_message(
         graph=graph,
         orchestrator=orchestrator,
         db=db,
+        media_pelaporan=reporter.get("media_pelaporan", ""),
+        incident_time=reporter.get("incident_time", ""),
+        affected_asset=reporter.get("affected_asset", ""),
     )
 
     if result.get("error"):

@@ -55,6 +55,22 @@ class IncidentTicket(Base):
     is_duplicate = Column(Boolean, default=False)
     parent_ticket_id = Column(String(20))
 
+    # Bagian A – Pelapor (tambahan)
+    media_pelaporan = Column(String(50))  # Email/Telepon/WhatsApp/Datang Langsung/Sistem Tiket
+
+    # Bagian B – Deskripsi insiden (tambahan)
+    incident_time = Column(DateTime)     # waktu kejadian
+    affected_asset = Column(String(255)) # sistem/aset terdampak
+
+    # Bagian C – Triase CIA
+    cia_confidentiality = Column(Boolean)
+    cia_integrity = Column(Boolean)
+    cia_availability = Column(Boolean)
+
+    # Bagian D – Penanganan
+    containment_action = Column(Text)
+    recovery_action = Column(Text)
+
     created_by = Column(String(50), default="SYSTEM")
     modified_by = Column(String(50))
 

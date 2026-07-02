@@ -1,6 +1,6 @@
-# 🛡️ Sistem Helpdesk Keamanan Siber Multi-Agent
+# Sistem Helpdesk Keamanan Siber Multi-Agent
 
-> Chatbot Telegram berbasis AI untuk otomatisasi pra-triase laporan insiden keamanan siber di lingkungan Pusdatin Kementerian Pertanian.
+> Sistem berbasis AI untuk otomatisasi pra-triase laporan insiden keamanan siber. Menerima laporan dalam bahasa alami melalui Telegram Bot dan Web Chat, lalu memproses secara otomatis menggunakan pipeline multi-agent.
 
 [![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://python.org)
 [![LangGraph](https://img.shields.io/badge/LangGraph-Multi--Agent-green.svg)](https://langchain-ai.github.io/langgraph/)
@@ -8,40 +8,40 @@
 
 ## Tentang Proyek
 
-Proyek ini merupakan **Tugas Akhir (Skripsi)** pada Program Rekayasa Kriptografi, Politeknik Siber dan Sandi Negara. Sistem menerima laporan insiden keamanan siber dalam bahasa alami dari pegawai melalui Telegram, lalu secara otomatis:
+Sistem menerima laporan insiden keamanan siber dalam bahasa alami, lalu secara otomatis:
 
 1. **Mengidentifikasi** jenis insiden dan tingkat keparahan
-2. **Mengambil** dokumen SOP/referensi yang relevan (RAG)
-3. **Menghasilkan** rekomendasi mitigasi awal berbasis dokumen sumber
+2. **Mengambil** dokumen referensi yang relevan via Agentic RAG (NIST SP 800-61, MITRE ATT&CK, BSSN)
+3. **Menghasilkan** rekomendasi mitigasi awal berbasis dokumen sumber dengan citation validation
 4. **Membuat** tiket terstruktur di database
 5. **Mengirim** notifikasi ke tim CSIRT
 
-Semua output bersifat **advis** — keputusan akhir tetap di tangan tim CSIRT (human-in-the-loop).
+Semua output bersifat **advis** — keputusan akhir tetap di tangan analis CSIRT (human-in-the-loop).
 
 ## Arsitektur
 
 ```
-Pegawai Kementan
+Pelapor
     │
     ▼
-[Telegram Bot] → [Sanitasi & Guardrails] → [Orchestrator Agent]
-                                                │
-                    ┌───────────────────────────┤
-                    ▼                           ▼
-            [Identificator]            [Mitigation Advisor]
-            Klasifikasi insiden        RAG → Rekomendasi + Sitasi
-                    │                           │
-                    └───────────┬───────────────┘
-                                ▼
-                        [Ticket Manager]
-                        Buat tiket di DB
-                                │
-                                ▼
-                          [Notifier]
-                    Kirim ke CSIRT + Pelapor
+[Telegram Bot / Web Chat] → [Sanitasi & Guardrails] → [Orchestrator Agent]
+                                                               │
+                               ┌───────────────────────────────┤
+                               ▼                               ▼
+                       [Identifier Agent]           [Mitigation Advisor]
+                       Klasifikasi insiden          Agentic RAG → Mitigasi + Sitasi
+                               │                               │
+                               └──────────────┬────────────────┘
+                                              ▼
+                                      [Ticket Manager]
+                                      Buat tiket di DB
+                                              │
+                                              ▼
+                                        [Notifier]
+                                  Kirim ke CSIRT + Pelapor
 ```
 
-**Tech Stack:** Python · FastAPI · LangGraph · GPT-4o · Qdrant · PostgreSQL · Redis · Telegram Bot
+**Tech Stack:** Python · FastAPI · LangGraph · GPT-4o · Qdrant · PostgreSQL · Redis · Telegram Bot · HTMX
 
 ## Quick Start
 
@@ -49,7 +49,7 @@ Pegawai Kementan
 
 - Python 3.11+
 - Docker & Docker Compose
-- API Key OpenAI
+- GitHub Token (GitHub Models) atau OpenAI API Key
 - Token Bot Telegram (dari @BotFather)
 
 ### Setup
@@ -57,11 +57,11 @@ Pegawai Kementan
 ```bash
 # 1. Clone repository
 git clone https://github.com/gr0zhx/pusdatin-help.git
-cd cybersec-helpdesk
+cd pusdatin-help
 
 # 2. Buat file environment
 cp .env.example .env
-# Edit .env → isi OPENAI_API_KEY dan TELEGRAM_BOT_TOKEN
+# Edit .env → isi GITHUB_TOKEN (atau OPENAI_API_KEY) dan TELEGRAM_BOT_TOKEN
 
 # 3. Jalankan infrastruktur
 docker compose up -d
@@ -75,37 +75,29 @@ pip install -r requirements.txt
 # 5. Jalankan migrasi database
 alembic upgrade head
 
-# 6. Ingest basis pengetahuan
+# 6. Seed akun admin pertama
+python scripts/seed_admin.py
+
+# 7. Ingest basis pengetahuan
 python scripts/ingest_knowledge.py --docs-dir knowledge_base/documents/
 
-# 7. Jalankan API server
+# 8. Jalankan API server
 uvicorn app.main:app --reload
 
-# 8. Jalankan bot Telegram (terminal terpisah)
+# 9. Jalankan bot Telegram (terminal terpisah)
 python -m app.telegram.bot
-```
-
-### Atau Jalankan Semuanya via Docker
-
-```bash
-cp .env.example .env
-# Edit .env
-./scripts/setup.sh
-docker compose up
 ```
 
 ## Penggunaan
 
-### Melaporkan Insiden
-
-Kirim pesan ke bot Telegram:
+### Melaporkan Insiden via Telegram
 
 ```
-/report Saya menerima email mencurigakan dari akun yang mengaku CEO,
+/report Saya menerima email mencurigakan yang mengaku dari direktur,
 berisi link ke halaman login palsu yang meminta memasukkan password.
 ```
 
-Bot akan membalas:
+Bot akan membalas dengan tiket + rekomendasi mitigasi:
 
 ```
 ✅ Laporan Anda telah diterima.
@@ -125,36 +117,18 @@ Bot akan membalas:
 Tim Keamanan Siber telah diberitahu dan akan menindaklanjuti.
 ```
 
-### Cek Status Tiket
+### Web Chat
 
-```
-/status TICKET-2026-0047
-```
+Akses melalui browser di `/lapor` — isi formulir identitas lalu mulai percakapan dengan chatbot.
 
-## Evaluasi
+### Dashboard Admin CSIRT
 
-Sistem dievaluasi menggunakan tiga metrik utama:
-
-| Metrik | Target |
-|--------|--------|
-| Task Completion Rate (TCR) | ≥ 80% |
-| RAG Quality (RAGAS: Context Relevance, Answer Relevance, Faithfulness) | ≥ 0.75 / 0.80 / 0.85 |
-| System Usability Scale (SUS) | ≥ 68 |
-
-Jalankan evaluasi:
-
-```bash
-# Evaluasi Task Completion Rate
-python tests/evaluation/eval_tcr.py
-
-# Evaluasi RAG
-python tests/evaluation/eval_rag.py
-```
+Akses di `/admin/login` — kelola tiket, update status, triase CIA, generate laporan insiden.
 
 ## Jenis Insiden yang Didukung
 
 | Jenis | Contoh |
-|-------|--------|
+| ----- | ------ |
 | Phishing | Email palsu, link login palsu, permintaan data sensitif |
 | Malware | Program mencurigakan terinstall, perilaku aneh pada komputer |
 | Ransomware | File terenkripsi, permintaan tebusan, popup pembayaran |
@@ -164,28 +138,37 @@ python tests/evaluation/eval_rag.py
 | Kebocoran Data | Data internal ditemukan di luar organisasi |
 | Lainnya | Insiden yang tidak masuk kategori di atas |
 
+## Evaluasi
+
+Sistem dievaluasi menggunakan tiga metrik utama:
+
+| Metrik | Target |
+|--------|--------|
+| Task Completion Rate (TCR) | ≥ 80% |
+| RAG Quality — RAGAS (Context Relevance / Answer Relevance / Faithfulness) | ≥ 0.75 / 0.80 / 0.85 |
+| System Usability Scale (SUS) | ≥ 68 |
+
+```bash
+# Evaluasi Task Completion Rate
+python tests/evaluation/eval_tcr.py
+
+# Evaluasi RAG (RAGAS)
+python tests/evaluation/eval_ragas.py --dataset tests/evaluation/rag_qa_dataset_nist.json
+```
+
 ## Dokumentasi
 
-- **Masterplan Teknis:** `docs/MASTERPLAN.md` — arsitektur lengkap, desain agen, pipeline RAG, skema data
-- **Panduan Fase:** `docs/PHASE_GUIDE.md` — 11 fase implementasi dengan checklist
-- **PRD:** `docs/PRD.md` — kebutuhan produk, fitur, kriteria sukses
-- **Diagram:** `docs/ARCHITECTURE_DIAGRAMS.md` — diagram Mermaid arsitektur sistem
+- **Code Overview:** `docs/CODE_OVERVIEW.md` — penjelasan setiap file, fungsi, dan logika internal
+- **Masterplan Teknis:** `docs/MASTERPLAN.md` — arsitektur lengkap dan desain sistem
+- **Panduan Kontribusi:** `CLAUDE.md` — konteks, aturan koding, dan referensi
 
 ## Pengembangan
 
-### Untuk Kontributor / Claude Code
-
-Baca `CLAUDE.md` di root proyek — berisi semua konteks, aturan koding, dan referensi yang dibutuhkan.
-
-### Menjalankan Test
-
 ```bash
+# Jalankan test suite
 pytest tests/ -v
-```
 
-### Linting
-
-```bash
+# Linting
 ruff check app/
 ruff format app/
 ```
@@ -193,18 +176,11 @@ ruff format app/
 ## Referensi
 
 - NIST SP 800-61 Rev. 2 — Computer Security Incident Handling Guide
-- MITRE ATT&CK Framework
+- MITRE ATT&CK Enterprise Framework
+- Peraturan BSSN Nomor 1 Tahun 2024
 - LangGraph Documentation
 - OWASP Top 10 for LLM Applications
 
-## Penulis
-
-**Agry Zharfa** — NPM 2221101769  
-Program Rekayasa Kriptografi — Rekayasa Perangkat Lunak Kripto  
-Politeknik Siber dan Sandi Negara  
-
-Pembimbing Materi: Girinoto, S.Si., M.Si.
-
 ---
 
-*Proyek ini dikembangkan sebagai bagian dari Tugas Akhir dan ditujukan untuk keperluan penelitian akademis.*
+*Proyek ini dikembangkan untuk keperluan penelitian akademis.*

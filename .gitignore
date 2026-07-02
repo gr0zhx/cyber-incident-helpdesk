@@ -37,6 +37,10 @@ tests/evaluation/guardrails_results.json
 app/database/migrations/versions/*.pyc
 TA (Progress Saya)/
 TA (Rujukan)/
+TA Rujukan/
+TA Progress/
+Skill/
+docs/superpowers/
 .superpowers/
 
 # Web interface

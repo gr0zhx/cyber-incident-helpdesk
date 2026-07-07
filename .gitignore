@@ -16,8 +16,6 @@ env/
 
 # Data
 data/
-knowledge_base/documents/
-knowledge_base/enterprise-attack.json
 
 # IDE
 .vscode/
@@ -42,6 +40,7 @@ TA Progress/
 Skill/
 docs/superpowers/
 .superpowers/
+knowledge_base/documents/.claude/
 
 # Web interface
 web_uploads/

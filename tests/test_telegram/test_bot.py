@@ -9,7 +9,6 @@ from app.telegram.bot import (
     report_receive_handler,
     cancel_handler,
     status_handler,
-    unknown_handler,
     build_bot_application,
     WAITING_REPORT,
 )
@@ -148,6 +147,50 @@ async def test_report_receive_full_pipeline_success():
 
 
 @pytest.mark.asyncio
+async def test_report_receive_uses_tg_prefixed_reporter_id():
+    """reporter_id yang dikirim ke pipeline harus diprefix 'tg:' supaya bisa
+    dibedakan dari channel lain (web) saat admin kirim notifikasi status."""
+    mock_graph = MagicMock()
+    mock_graph.ainvoke = AsyncMock(return_value=_make_pipeline_result())
+    mock_orchestrator = MagicMock()
+    mock_orchestrator.initialize_state = MagicMock(return_value={"raw_input": "test"})
+
+    update = _make_update("Saya klik link phishing.", user_id=987654)
+    context = _make_context(bot_data={
+        "helpdesk_graph": mock_graph,
+        "orchestrator": mock_orchestrator,
+    })
+
+    await report_receive_handler(update, context)
+
+    reporter_id = mock_orchestrator.initialize_state.call_args.kwargs["reporter_id"]
+    assert reporter_id == "tg:987654"
+
+
+@pytest.mark.asyncio
+async def test_report_receive_duplicate_check_uses_tg_prefixed_id():
+    """Cek tiket duplikat juga harus pakai reporter_id ber-prefix 'tg:' yang
+    sama dengan yang dipakai saat membuat tiket, supaya lookup konsisten."""
+    mock_graph = MagicMock()
+    mock_graph.ainvoke = AsyncMock(return_value=_make_pipeline_result())
+    mock_orchestrator = MagicMock()
+    mock_orchestrator.initialize_state = MagicMock(return_value={"raw_input": "test"})
+    mock_repo = MagicMock()
+    mock_repo.get_tickets_by_reporter = MagicMock(return_value=[])
+
+    update = _make_update("Saya klik link phishing.", user_id=555111)
+    context = _make_context(bot_data={
+        "helpdesk_graph": mock_graph,
+        "orchestrator": mock_orchestrator,
+        "ticket_repository": mock_repo,
+    })
+
+    await report_receive_handler(update, context)
+
+    mock_repo.get_tickets_by_reporter.assert_called_once_with("tg:555111")
+
+
+@pytest.mark.asyncio
 async def test_report_receive_needs_clarification():
     """Jika pipeline minta klarifikasi, kirim pesan klarifikasi ke pelapor."""
     mock_graph = MagicMock()
@@ -233,6 +276,66 @@ async def test_report_csirt_notification_not_sent_when_no_chat_id():
     context.bot.send_message.assert_not_called()
 
 
+@pytest.mark.asyncio
+async def test_free_text_question_gets_answer_without_ticket_template():
+    """Pertanyaan bebas (intent general_help, tanpa tiket) harus dibalas
+    jawabannya langsung — bukan template konfirmasi 'Tiket: DALAM PROSES',
+    dan tanpa alert ke grup CSIRT."""
+    answer = "Phishing adalah upaya penipuan untuk mencuri kredensial Anda."
+    mock_graph = MagicMock()
+    mock_graph.ainvoke = AsyncMock(return_value=_make_pipeline_result(
+        intent="general_help",
+        ticket_id="",
+    ) | {"mitigation_recommendation": answer})
+    mock_orchestrator = MagicMock()
+    mock_orchestrator.initialize_state = MagicMock(return_value={})
+
+    update = _make_update("saya hanya ingin tanya-tanya soal phishing")
+    context = _make_context(bot_data={
+        "helpdesk_graph": mock_graph,
+        "orchestrator": mock_orchestrator,
+    })
+
+    with patch.dict("os.environ", {"CSIRT_CHAT_ID": "999888"}):
+        await report_receive_handler(update, context)
+
+    reply = update.message.reply_text.call_args[0][0]
+    assert answer in reply
+    assert "DALAM PROSES" not in reply
+    context.bot.send_message.assert_not_called()
+
+
+def test_free_text_fallback_routes_to_pipeline_not_canned_reply():
+    """MessageHandler fallback (teks di luar percakapan /report) harus
+    merutekan ke pipeline (report_receive_handler), bukan unknown_handler
+    yang cuma menjawab 'Ketik /report...'."""
+    from telegram.ext import MessageHandler as PTBMessageHandler
+
+    mock_graph = MagicMock()
+    mock_orchestrator = MagicMock()
+
+    with patch("app.telegram.bot.Application") as mock_app_class:
+        mock_builder = MagicMock()
+        mock_app_class.builder.return_value = mock_builder
+        mock_builder.token.return_value = mock_builder
+        mock_app = MagicMock()
+        mock_app.bot_data = {}
+        mock_builder.build.return_value = mock_app
+
+        build_bot_application(
+            token="fake-token",
+            helpdesk_graph=mock_graph,
+            orchestrator=mock_orchestrator,
+        )
+
+        plain_message_handlers = [
+            c.args[0] for c in mock_app.add_handler.call_args_list
+            if isinstance(c.args[0], PTBMessageHandler)
+        ]
+        assert plain_message_handlers, "fallback MessageHandler tidak terdaftar"
+        assert plain_message_handlers[-1].callback is report_receive_handler
+
+
 # ---------------------------------------------------------------------------
 # /cancel handler
 # ---------------------------------------------------------------------------
@@ -305,19 +408,6 @@ async def test_status_ticket_not_found():
     await status_handler(update, context)
     call_text = update.message.reply_text.call_args[0][0]
     assert "tidak ditemukan" in call_text.lower()
-
-
-# ---------------------------------------------------------------------------
-# unknown handler
-# ---------------------------------------------------------------------------
-
-@pytest.mark.asyncio
-async def test_unknown_handler_suggests_commands():
-    update = _make_update("halo ini apa")
-    context = _make_context()
-    await unknown_handler(update, context)
-    call_text = update.message.reply_text.call_args[0][0]
-    assert "/report" in call_text or "/help" in call_text
 
 
 # ---------------------------------------------------------------------------

@@ -33,7 +33,7 @@ class LLMJudge:
         github_token = os.getenv("GITHUB_TOKEN")
         if github_token:
             api_key = github_token
-            base_url = os.getenv("OPENAI_BASE_URL", self._GITHUB_MODELS_URL)
+            base_url = self._GITHUB_MODELS_URL  # hardcoded, konsisten dengan llm_client.py
         else:
             api_key = os.getenv("OPENAI_API_KEY")
             base_url = None

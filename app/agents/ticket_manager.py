@@ -63,6 +63,7 @@ class TicketManagerAgent:
             "reporter_id": reporter_id,
             "reporter_name": incident_state.get("reporter_name", ""),
             "reporter_contact": incident_state.get("reporter_contact", ""),
+            "reporter_department": incident_state.get("reporter_department", ""),
             "incident_type": incident_state["incident_type"],
             "severity": severity,
             "confidence_score": incident_state.get("confidence_score"),

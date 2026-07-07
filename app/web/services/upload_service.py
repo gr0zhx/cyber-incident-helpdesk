@@ -55,11 +55,13 @@ class UploadService:
 
         month_dir = self._root / datetime.utcnow().strftime("%Y-%m")
         month_dir.mkdir(parents=True, exist_ok=True)
-        stored_name = f"{uuid.uuid4()}{ext}"
+        file_id = str(uuid.uuid4())
+        stored_name = f"{file_id}{ext}"
         stored_path = month_dir / stored_name
         stored_path.write_bytes(data)
 
         meta = {
+            "file_id": file_id,
             "original_filename": filename,
             "stored_path": str(stored_path),
             "mime_type": detected,
@@ -68,7 +70,7 @@ class UploadService:
         key = f"web:pending_uploads:{session_id}"
         existing = _load_list(self._redis.get(key))
         existing.append(meta)
-        self._redis.setex(key, 3600, json.dumps(existing).encode())
+        self._redis.setex(key, 86400, json.dumps(existing).encode())
         return meta
 
     def flush_pending(self, session_id: str) -> list[dict]:

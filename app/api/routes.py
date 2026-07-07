@@ -49,6 +49,7 @@ async def create_report(
         reporter_name=body.reporter_name,
         reporter_contact=body.reporter_contact,
         session_id=session_id,
+        session_existing_ticket=body.session_existing_ticket,
     )
 
     try:
@@ -157,9 +158,10 @@ async def _notify_reporter_status(reporter_id: str, ticket_id: str, new_status: 
             new_status=new_status,
             updated_at=datetime.now(timezone.utc).strftime("%d %b %Y %H:%M UTC"),
         )
+        chat_id = reporter_id.removeprefix("tg:")
         bot = Bot(token=token)
         async with bot:
-            await bot.send_message(chat_id=reporter_id, text=message)
+            await bot.send_message(chat_id=chat_id, text=message)
         logger.info("Notifikasi status dikirim ke reporter %s (tiket %s)", reporter_id, ticket_id)
     except Exception as exc:
         logger.warning("Gagal kirim notifikasi status ke %s: %s", reporter_id, exc)

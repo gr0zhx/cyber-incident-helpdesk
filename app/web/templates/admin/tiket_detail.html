@@ -4,13 +4,14 @@
 <div style="display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px;">
 
   {# ── Left: main card ── #}
-  <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
+  <div style="background: white; border: 1px solid #d1fae5; border-radius: 10px; overflow: hidden;
+              box-shadow: 0 1px 6px rgba(22,163,74,.06);">
 
     {# Header #}
     <div style="padding: 20px 24px 0; display: flex; justify-content: space-between; align-items: center;">
       <div>
-        <div style="font-family: monospace; font-size: 20px; color: #0f172a;">{{ ticket.ticket_id }}</div>
-        <div style="color: #64748b; font-size: 13px;">{{ ticket.created_at.strftime("%d %b %Y %H:%M UTC") }}</div>
+        <div style="font-family: monospace; font-size: 20px; color: #14532d; font-weight: 800;">{{ ticket.ticket_id }}</div>
+        <div style="color: #4b7a56; font-size: 13px;">{{ ticket.created_at.strftime("%d %b %Y %H:%M UTC") }}</div>
       </div>
       <div id="status-badge">
         {% include "admin/_status_badge.html" %}
@@ -18,21 +19,31 @@
     </div>
 
     {# Tab nav #}
-    <div style="display: flex; gap: 0; border-bottom: 1px solid #e2e8f0; margin-top: 16px; padding: 0 24px;">
+    <div style="display: flex; gap: 0; border-bottom: 1px solid #d1fae5; margin-top: 16px; padding: 0 24px;">
       <button onclick="switchTab('info')" id="tab-btn-info"
               style="padding: 9px 16px; font-size: 13px; font-weight: 600; border: none;
-                     background: none; cursor: pointer; color: #2563eb;
-                     border-bottom: 2px solid #2563eb; margin-bottom: -1px;">
+                     background: none; cursor: pointer; color: #16a34a;
+                     border-bottom: 2px solid #16a34a; margin-bottom: -1px; font-family: inherit;">
         Informasi Tiket
       </button>
       <button onclick="switchTab('trace')" id="tab-btn-trace"
               style="padding: 9px 16px; font-size: 13px; font-weight: 600; border: none;
                      background: none; cursor: pointer; color: #64748b;
-                     border-bottom: 2px solid transparent; margin-bottom: -1px;">
+                     border-bottom: 2px solid transparent; margin-bottom: -1px; font-family: inherit;">
         Agent Trace
         {% if ticket.agent_trace %}
-        <span style="background: #eff6ff; color: #2563eb; font-size: 10px; padding: 1px 6px;
+        <span style="background: #f0fdf4; color: #16a34a; font-size: 10px; padding: 1px 6px;
                      border-radius: 10px; margin-left: 4px;">{{ ticket.agent_trace | length }}</span>
+        {% endif %}
+      </button>
+      <button onclick="switchTab('attach')" id="tab-btn-attach"
+              style="padding: 9px 16px; font-size: 13px; font-weight: 600; border: none;
+                     background: none; cursor: pointer; color: #64748b;
+                     border-bottom: 2px solid transparent; margin-bottom: -1px; font-family: inherit;">
+        📎 Lampiran
+        {% if attachments %}
+        <span style="background: #f0fdf4; color: #16a34a; font-size: 10px; padding: 1px 6px;
+                     border-radius: 10px; margin-left: 4px;">{{ attachments | length }}</span>
         {% endif %}
       </button>
     </div>
@@ -40,7 +51,7 @@
     {# ── Tab: Informasi ── #}
     <div id="tab-info" style="padding: 20px 24px 24px;">
 
-      <h3 style="font-size: 12px; color: #94a3b8; text-transform: uppercase; letter-spacing: .6px; margin: 0 0 8px;">Pelapor</h3>
+      <h3 style="font-size: 12px; color: #4b7a56; text-transform: uppercase; letter-spacing: .6px; margin: 0 0 8px;">Pelapor</h3>
       <p style="margin: 0 0 6px;">
         <strong>{{ ticket.reporter_name or "—" }}</strong>
         <span style="color: #64748b;">({{ ticket.reporter_id }})</span><br>
@@ -65,7 +76,7 @@
         {% endif %}
       </div>
 
-      <h3 style="font-size: 12px; color: #94a3b8; text-transform: uppercase; letter-spacing: .6px; margin: 0 0 8px;">Klasifikasi</h3>
+      <h3 style="font-size: 12px; color: #4b7a56; text-transform: uppercase; letter-spacing: .6px; margin: 0 0 8px;">Klasifikasi</h3>
       <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
         <span style="background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 6px; padding: 5px 10px; font-size: 13px;">
           <span style="color: #94a3b8; font-size: 11px;">Jenis</span><br>
@@ -86,23 +97,23 @@
       </div>
 
       {% if ticket.classification_reasoning %}
-      <h3 style="font-size: 12px; color: #94a3b8; text-transform: uppercase; letter-spacing: .6px; margin: 0 0 8px;">Reasoning Klasifikasi</h3>
+      <h3 style="font-size: 12px; color: #4b7a56; text-transform: uppercase; letter-spacing: .6px; margin: 0 0 8px;">Reasoning Klasifikasi</h3>
       <p style="font-size: 13px; color: #475569; background: #f8fafc; padding: 10px 12px; border-radius: 6px; margin-bottom: 20px;">{{ ticket.classification_reasoning }}</p>
       {% endif %}
 
-      <h3 style="font-size: 12px; color: #94a3b8; text-transform: uppercase; letter-spacing: .6px; margin: 0 0 8px;">Deskripsi (sanitized)</h3>
+      <h3 style="font-size: 12px; color: #4b7a56; text-transform: uppercase; letter-spacing: .6px; margin: 0 0 8px;">Deskripsi (sanitized)</h3>
       <pre style="background: #f1f5f9; padding: 12px; border-radius: 6px; white-space: pre-wrap; font-size: 13px; margin: 0 0 20px;">{{ ticket.description_sanitized }}</pre>
 
       {% if ticket.mitigation_recommendation %}
-      <h3 style="font-size: 12px; color: #94a3b8; text-transform: uppercase; letter-spacing: .6px; margin: 0 0 8px;">Rekomendasi Mitigasi</h3>
-      <div style="background: #eff6ff; padding: 12px 16px; border-left: 3px solid #2563eb; border-radius: 4px; font-size: 13px; margin-bottom: 20px;">
+      <h3 style="font-size: 12px; color: #4b7a56; text-transform: uppercase; letter-spacing: .6px; margin: 0 0 8px;">Rekomendasi Mitigasi</h3>
+      <div style="background: #f0fdf4; padding: 12px 16px; border-left: 3px solid #16a34a; border-radius: 4px; font-size: 13px; margin-bottom: 20px; color: #1a2e1c;">
         {{ ticket.mitigation_recommendation }}
       </div>
       {% endif %}
 
       {% if ticket.citations %}
-      <h3 style="font-size: 12px; color: #94a3b8; text-transform: uppercase; letter-spacing: .6px; margin: 0 0 8px;">Sitasi RAG
-        {% if ticket.rag_confidence %}<span style="color: #2563eb; font-weight: 700; font-size: 11px; margin-left: 6px;">conf {{ ticket.rag_confidence }}</span>{% endif %}
+      <h3 style="font-size: 12px; color: #4b7a56; text-transform: uppercase; letter-spacing: .6px; margin: 0 0 8px;">Sitasi RAG
+        {% if ticket.rag_confidence %}<span style="color: #16a34a; font-weight: 700; font-size: 11px; margin-left: 6px;">conf {{ ticket.rag_confidence }}</span>{% endif %}
       </h3>
       <ul style="font-size: 12px; color: #475569; margin: 0 0 20px; padding-left: 18px;">
         {% for c in ticket.citations %}
@@ -111,15 +122,53 @@
       </ul>
       {% endif %}
 
-      {% if attachments %}
-      <h3 style="font-size: 12px; color: #94a3b8; text-transform: uppercase; letter-spacing: .6px; margin: 0 0 8px;">Attachment</h3>
-      <ul style="margin: 0; padding-left: 18px; font-size: 13px;">
-        {% for att in attachments %}
-        <li><a href="/admin/tiket/{{ ticket.ticket_id }}/attachment/{{ loop.index0 }}" style="color: #2563eb;">{{ att.filename }}</a> ({{ att.size_kb }} KB)</li>
-        {% endfor %}
-      </ul>
-      {% endif %}
+    </div>
 
+    {# ── Tab: Lampiran ── #}
+    <div id="tab-attach" style="padding: 20px 24px 24px; display: none;">
+      {% if attachments %}
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        {% for att in attachments %}
+        {% set is_image = att.mime_type and att.mime_type.startswith("image/") %}
+        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px;
+                    background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 10px;">
+          <span style="font-size: 28px; flex-shrink: 0;">{% if is_image %}🖼{% else %}📄{% endif %}</span>
+          <div style="flex: 1; min-width: 0;">
+            <p style="font-size: 13px; font-weight: 600; color: #14532d; margin: 0 0 2px;
+                      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+              {{ att.original_filename }}
+            </p>
+            <p style="font-size: 11px; color: #4b7a56; margin: 0;">
+              {{ att.mime_type }} · {{ (att.size_bytes / 1024) | round(1) }} KB
+            </p>
+          </div>
+          {% if is_image %}
+          <a href="/admin/tiket/{{ ticket.ticket_id }}/attachment/{{ att.id }}"
+             target="_blank"
+             style="padding: 6px 14px; background: #dcfce7; color: #166534;
+                    border: 1px solid #86efac; border-radius: 7px; font-size: 12px;
+                    font-weight: 600; text-decoration: none; white-space: nowrap;">
+            Lihat
+          </a>
+          {% else %}
+          <a href="/admin/tiket/{{ ticket.ticket_id }}/attachment/{{ att.id }}"
+             download="{{ att.original_filename }}"
+             style="padding: 6px 14px; background: linear-gradient(135deg, #16a34a, #15803d);
+                    color: white; border-radius: 7px; font-size: 12px;
+                    font-weight: 600; text-decoration: none; white-space: nowrap;
+                    box-shadow: 0 2px 6px rgba(22,163,74,.3);">
+            ↓ Download
+          </a>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div style="text-align: center; color: #9eb8a2; padding: 48px 0; font-size: 14px;">
+        <div style="font-size: 36px; margin-bottom: 10px;">📎</div>
+        Tidak ada lampiran untuk tiket ini.
+      </div>
+      {% endif %}
     </div>
 
     {# ── Tab: Agent Trace ── #}
@@ -341,6 +390,7 @@
             ('cia_availability',    'A — Ketersediaan','Layanan terganggu/down')
           ] %}
           {% set checked = ticket | attr(key) %}
+          <input type="hidden" name="{{ key }}" value="0">
           <label class="cia-toggle-wrap">
             <input type="checkbox" name="{{ key }}" value="1" class="cia-cb"
                    {% if checked %}checked{% endif %}>
@@ -442,11 +492,11 @@
 
 <script>
 function switchTab(name) {
-  ['info', 'trace'].forEach(function(t) {
+  ['info', 'trace', 'attach'].forEach(function(t) {
     document.getElementById('tab-' + t).style.display = t === name ? 'block' : 'none';
     var btn = document.getElementById('tab-btn-' + t);
-    btn.style.color = t === name ? '#2563eb' : '#64748b';
-    btn.style.borderBottomColor = t === name ? '#2563eb' : 'transparent';
+    btn.style.color = t === name ? '#16a34a' : '#64748b';
+    btn.style.borderBottomColor = t === name ? '#16a34a' : 'transparent';
     btn.style.fontWeight = t === name ? '700' : '600';
   });
 }
@@ -481,10 +531,10 @@ function switchTab(name) {
   transition: border-color .15s;
 }
 .adm-trigger:hover { border-color: #94a3b8; }
-.adm-trigger.open  { border-color: #3b82f6; box-shadow: 0 0 0 3px #eff6ff; }
+.adm-trigger.open  { border-color: #16a34a; box-shadow: 0 0 0 3px #f0fdf4; }
 .adm-avatar {
   width: 28px; height: 28px; border-radius: 50%;
-  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  background: linear-gradient(135deg, #16a34a, #15803d);
   color: white; font-size: 12px; font-weight: 700;
   display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 }
@@ -502,7 +552,7 @@ function switchTab(name) {
   padding: 10px 12px; cursor: pointer; transition: background .1s;
 }
 .adm-opt:hover { background: #f8fafc; }
-.adm-selected  { background: #eff6ff; }
+.adm-selected  { background: #f0fdf4; }
 .adm-info { display: flex; flex-direction: column; }
 .adm-name { font-size: 13px; color: #0f172a; font-weight: 500; }
 .adm-user { font-size: 11px; color: #94a3b8; }
@@ -546,7 +596,7 @@ function switchTab(name) {
   background: white; transition: transform .2s;
   box-shadow: 0 1px 3px rgba(0,0,0,.2);
 }
-.cia-cb:checked + .cia-slider { background: #2563eb; }
+.cia-cb:checked + .cia-slider { background: #16a34a; }
 .cia-cb:checked + .cia-slider::after { transform: translateX(16px); }
 .cia-label { display: flex; flex-direction: column; line-height: 1.3; }
 .cia-label strong { font-size: 13px; color: #0f172a; }

@@ -196,7 +196,7 @@ def download_attachment(
     if ".." in filename or "/" in filename or "\\" in filename:
         raise HTTPException(status_code=400, detail="Nama file tidak valid.")
 
-    abs_path = os.path.abspath(raw_path)
+    abs_path = os.path.realpath(raw_path)  # realpath mengikuti symlink, abspath tidak
     try:
         if os.path.commonpath([abs_path, UPLOAD_ROOT]) != UPLOAD_ROOT:
             raise HTTPException(status_code=400, detail="Path file di luar direktori upload.")

@@ -1,4 +1,28 @@
 {# app/web/templates/pelapor/_attachment_pill.html #}
-<span style="display: inline-flex; align-items: center; gap: 6px; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 999px; padding: 4px 12px; font-size: 13px;">
-  &#128206; {{ filename }} ({{ size_kb }} KB)
+{% set is_image = mime_type and mime_type.startswith("image/") %}
+<span id="pill-{{ file_id }}"
+      style="display: inline-flex; align-items: center; gap: 7px;
+             background: white; border: 1.5px solid #bbf7d0;
+             border-radius: 999px; padding: 5px 10px 5px 12px;
+             font-size: 12px; color: #166534; font-weight: 500;
+             box-shadow: 0 1px 4px rgba(22,163,74,.1);">
+  <span>{% if is_image %}🖼{% else %}📄{% endif %}</span>
+  <span style="max-width: 160px; overflow: hidden; text-overflow: ellipsis;
+               white-space: nowrap;">{{ filename }}</span>
+  <span style="color: #9eb8a2; font-size: 11px;">{{ size_kb }} KB</span>
+  <button hx-post="/lapor/chat/upload/remove"
+          hx-vals='{"file_id": "{{ file_id }}"}'
+          hx-target="#pill-{{ file_id }}"
+          hx-swap="outerHTML"
+          title="Hapus lampiran"
+          style="width: 18px; height: 18px; border-radius: 50%; border: none;
+                 background: #dcfce7; color: #16a34a; cursor: pointer;
+                 font-size: 13px; line-height: 1; padding: 0;
+                 display: flex; align-items: center; justify-content: center;
+                 flex-shrink: 0; font-family: inherit;
+                 transition: background .12s, color .12s;"
+          onmouseover="this.style.background='#dc2626';this.style.color='white'"
+          onmouseout="this.style.background='#dcfce7';this.style.color='#16a34a'">
+    &times;
+  </button>
 </span>

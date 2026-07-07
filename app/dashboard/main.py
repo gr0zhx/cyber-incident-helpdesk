@@ -31,7 +31,7 @@ from app.dashboard.api_client import (
     health_check,
     update_ticket,
 )
-from app.dashboard.report_generator import generate_report_filename, generate_report_html
+from app.dashboard.pdf_report_generator import generate_report_filename, generate_report_pdf
 
 # ---------------------------------------------------------------------------
 # Config
@@ -590,8 +590,8 @@ def _render_report_tab(ticket: dict) -> None:
     tid = ticket.get("ticket_id", "")
     st.markdown("#### 📄 Generate Laporan Insiden")
     st.caption(
-        "Laporan dihasilkan dalam format HTML. "
-        "Download dan buka di browser, lalu **Ctrl+P → Save as PDF** untuk cetak."
+        "Laporan dihasilkan sebagai PDF sesuai Formulir Laporan Insiden Keamanan "
+        "Informasi resmi Pusdatin (No. 46.5/TI.100/A.8/01/2026)."
     )
 
     prepared_by = st.text_input(
@@ -607,13 +607,13 @@ def _render_report_tab(ticket: dict) -> None:
     with col_dl:
         if st.button("⬇️ Generate & Download", type="primary", use_container_width=True, key=f"gen_{tid}"):
             with st.spinner("Membuat laporan..."):
-                html_content = generate_report_html(ticket, prepared_by)
+                pdf_bytes = generate_report_pdf(ticket, prepared_by)
                 filename = generate_report_filename(ticket)
             st.download_button(
-                label="📥 Download Laporan HTML",
-                data=html_content.encode("utf-8"),
+                label="📥 Download Laporan PDF",
+                data=pdf_bytes,
                 file_name=filename,
-                mime="text/html",
+                mime="application/pdf",
                 use_container_width=True,
                 key=f"dl_{tid}",
             )
@@ -696,16 +696,15 @@ def page_buat_laporan(tickets: list[dict]) -> None:
                 if ticket is None:
                     st.error("Tiket tidak ditemukan.")
                 else:
-                    html_content = generate_report_html(ticket, prepared_by)
-                    filename     = generate_report_filename(ticket)
+                    pdf_bytes = generate_report_pdf(ticket, prepared_by)
+                    filename  = generate_report_filename(ticket)
                     st.download_button(
-                        label="📥 Download Laporan HTML",
-                        data=html_content.encode("utf-8"),
+                        label="📥 Download Laporan PDF",
+                        data=pdf_bytes,
                         file_name=filename,
-                        mime="text/html",
+                        mime="application/pdf",
                         use_container_width=True,
                     )
-                    st.info("💡 Buka file di browser → Ctrl+P → Save as PDF untuk cetak.")
             except Exception as exc:
                 st.error(f"Error: {exc}")
 

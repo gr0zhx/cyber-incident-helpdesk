@@ -9,6 +9,7 @@ class IncidentState(TypedDict):
     reporter_id: str
     reporter_name: str
     reporter_contact: str
+    reporter_department: str
     timestamp_received: str
     session_id: str
 

@@ -79,6 +79,20 @@ def test_inbox_filter_by_status(client):
     assert "Tidak ada tiket" in r.text
 
 
+def test_inbox_filter_by_date_range_excludes_out_of_range(client):
+    tomorrow = (datetime.now(timezone.utc) + timedelta(days=1)).strftime("%Y-%m-%d")
+    r = client.get(f"/admin/inbox/table?date_from={tomorrow}")
+    assert r.status_code == 200
+    assert "Tidak ada tiket" in r.text
+
+
+def test_inbox_stats_reflect_date_filter(client):
+    tomorrow = (datetime.now(timezone.utc) + timedelta(days=1)).strftime("%Y-%m-%d")
+    r = client.get(f"/admin/inbox/stats?date_from={tomorrow}")
+    assert r.status_code == 200
+    assert "Total Tiket" in r.text
+
+
 def test_ticket_detail_renders(client):
     r = client.get("/admin/tiket/INC-0")
     assert r.status_code == 200

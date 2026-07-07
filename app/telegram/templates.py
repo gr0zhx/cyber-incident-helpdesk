@@ -68,10 +68,10 @@ def format_csirt_alert(
 
 
 _STATUS_INFO: dict[str, tuple[str, str, str]] = {
-    STATUS_PENDING_REVIEW: ("⏳", "Menunggu Tinjauan",  "Laporan Anda sedang dalam antrian tinjauan tim CSIRT"),
-    STATUS_IN_PROGRESS:    ("🔄", "Sedang Ditangani",   "Tim CSIRT sedang aktif menangani insiden Anda"),
-    STATUS_RESOLVED:       ("✅", "Terselesaikan",       "Insiden Anda telah berhasil ditangani oleh tim CSIRT"),
-    STATUS_CLOSED:         ("🔒", "Ditutup",             "Tiket ini telah ditutup. Hubungi CSIRT jika masalah muncul kembali"),
+    STATUS_PENDING_REVIEW: ("⏳", "Menunggu Tinjauan",  "Laporan Anda sedang dalam antrian tinjauan Tim Keamanan Siber dan PDP"),
+    STATUS_IN_PROGRESS:    ("🔄", "Sedang Ditangani",   "Tim Keamanan Siber dan PDP sedang aktif menangani insiden Anda"),
+    STATUS_RESOLVED:       ("✅", "Terselesaikan",       "Insiden Anda telah berhasil ditangani oleh Tim Keamanan Siber dan PDP"),
+    STATUS_CLOSED:         ("🔒", "Ditutup",             "Tiket ini telah ditutup. Hubungi Tim Keamanan Siber dan PDP jika masalah muncul kembali"),
 }
 
 STATUS_UPDATE_TEMPLATE = """\
@@ -113,5 +113,5 @@ def format_reporter_confirmation(
         incident_type=incident_type,
         severity=severity,
         confidence=confidence_pct,
-        mitigation_steps=mitigation_steps[:2000] if mitigation_steps else "Hubungi tim CSIRT secara langsung.",
+        mitigation_steps=mitigation_steps[:2000] if mitigation_steps else "Hubungi Tim Keamanan Siber dan PDP secara langsung.",
     )

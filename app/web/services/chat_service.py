@@ -105,6 +105,7 @@ class ChatService:
         reporter_id: str,
         reporter_name: str,
         reporter_contact: str,
+        reporter_unit: str = "",
         text: str,
         graph: Any,
         orchestrator: Any,
@@ -139,6 +140,28 @@ class ChatService:
         else:
             user_msgs = [m["content"] for m in history if m["role"] == "user"]
             context_text = "\n".join(user_msgs[-3:])
+
+        # Sertakan info file lampiran (jika ada) ke dalam konteks teks
+        # supaya LLM pipeline tahu bahwa ada bukti visual / dokumen.
+        pending_key = f"web:pending_uploads:{session_id}"
+        pending_raw = self._redis.get(pending_key)
+        if pending_raw:
+            try:
+                pending_files = json.loads(pending_raw)
+                if pending_files:
+                    attach_lines = []
+                    for pf in pending_files:
+                        name = pf.get("original_filename", "file")
+                        mime = pf.get("mime_type", "")
+                        kind = "gambar" if mime.startswith("image/") else "dokumen PDF" if "pdf" in mime else "file"
+                        attach_lines.append(f"- {name} ({kind})")
+                    context_text += (
+                        "\n\n[Lampiran yang disertakan pengguna:\n"
+                        + "\n".join(attach_lines)
+                        + "\nFile-file ini akan direview oleh Tim Keamanan Siber dan PDP.]"
+                    )
+            except (json.JSONDecodeError, ValueError):
+                pass
 
         # Jika tiket sudah dibuat di sesi ini, teruskan ke graph agar orchestrator
         # bisa memutuskan dalam SATU classify_intent: kalau intent-nya upaya
@@ -197,6 +220,7 @@ class ChatService:
             reporter_id=reporter_id,
             reporter_name=reporter_name,
             reporter_contact=reporter_contact,
+            reporter_unit=reporter_unit,
             session_id=session_id,
             clarification_rounds=clarification_rounds,
             session_existing_ticket=existing_ticket or "",
@@ -252,8 +276,8 @@ class ChatService:
         if ticket_id and existing_ticket and ticket_id == existing_ticket:
             bot_text = (
                 f"Tiket insiden **{ticket_id}** sudah dibuat untuk sesi ini. "
-                f"Tim CSIRT akan segera menghubungi Anda. "
-                f"Jika ada informasi tambahan, sampaikan langsung ke CSIRT dengan menyebutkan nomor tiket tersebut."
+                f"Tim Keamanan Siber dan PDP akan segera menghubungi Anda. "
+                f"Jika ada informasi tambahan, sampaikan langsung dengan menyebutkan nomor tiket tersebut."
             )
         elif ticket_id:
             bot_text = (
@@ -263,21 +287,30 @@ class ChatService:
             self._set_session_ticket(session_id, ticket_id)
             if db is not None:
                 self._flush_pending_uploads(session_id, ticket_id, reporter_id, db)
-                self._backfill_form_fields(
-                    ticket_id, db,
-                    media_pelaporan=media_pelaporan,
-                    incident_time_str=incident_time,
-                    affected_asset=affected_asset,
-                )
+                try:
+                    self._backfill_form_fields(
+                        ticket_id, db,
+                        media_pelaporan=media_pelaporan,
+                        incident_time_str=incident_time,
+                        affected_asset=affected_asset,
+                    )
+                except Exception as exc:
+                    logger.warning(
+                        "Backfill form fields gagal (tiket %s tetap ada): %s",
+                        ticket_id, exc,
+                    )
         elif requires_clarification:
             bot_text = result.get("clarification_message", "Mohon berikan informasi lebih lanjut.")
         else:
             mitigation = result.get("mitigation_recommendation", "")
             bot_text = mitigation if mitigation else "Respons tidak tersedia."
 
-        # Tag pesan klarifikasi agar counter clarification_rounds akurat
+        # Tag pesan klarifikasi agar counter clarification_rounds akurat.
+        # JANGAN tag jika ini hasil blokir guardrails — guardrails mengisi
+        # processing_errors; klarifikasi asli dari orchestrator tidak.
         msg_entry: dict = {"role": "assistant", "content": bot_text, "ts": ts}
-        if requires_clarification and not ticket_id:
+        guardrails_blocked = bool(result.get("processing_errors"))
+        if requires_clarification and not ticket_id and not guardrails_blocked:
             msg_entry["type"] = "clarification"
         history.append(msg_entry)
         self._save_history(session_id, history)
@@ -321,9 +354,12 @@ class ChatService:
     ) -> None:
         from app.database.models import TicketAttachment
         key = f"web:pending_uploads:{session_id}"
-        # GET dulu tanpa DELETE — DELETE hanya dilakukan setelah commit sukses
-        # agar data tidak hilang jika commit gagal (bug_054).
-        pending_raw = self._redis.get(key)
+        # Atomic GET+DELETE via pipeline — mencegah race condition jika ada upload
+        # bersamaan selama pipeline LLM berjalan (~10-30 detik).
+        pipe = self._redis.pipeline()
+        pipe.get(key)
+        pipe.delete(key)
+        pending_raw, _ = pipe.execute()
         if not pending_raw:
             return
         try:
@@ -342,4 +378,3 @@ class ChatService:
             )
             db.add(att)
         db.commit()
-        self._redis.delete(key)

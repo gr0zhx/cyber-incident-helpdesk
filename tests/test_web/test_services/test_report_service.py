@@ -33,12 +33,11 @@ def db():
     session.close()
 
 
-def test_generate_returns_html_string(db):
+def test_generate_returns_pdf_bytes(db):
     svc = ReportService(db)
-    html, filename = svc.generate("INC-R1")
-    assert "<html" in html.lower() or "<!DOCTYPE" in html.lower()
-    assert "INC-R1" in html
-    assert filename.endswith(".html")
+    pdf_bytes, filename = svc.generate("INC-R1")
+    assert pdf_bytes[:5] == b"%PDF-"
+    assert filename.endswith(".pdf")
 
 
 def test_generate_raises_for_missing_ticket(db):

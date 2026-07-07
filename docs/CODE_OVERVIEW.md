@@ -2,7 +2,7 @@
 
 > Dokumen komprehensif untuk persiapan sidang skripsi: penjelasan **setiap file, setiap fungsi, setiap class**, logika internal, dan keterkaitan antar-modul.
 > Target pembaca: penulis (recall cepat) dan dosen penguji (verifikasi teknis).
-> Terakhir diperbarui: 2026-07-02 (Formulir insiden resmi A–E, CIA triase, existing_ticket node, dashboard stats real-time, chat UI).
+> Terakhir diperbarui: 2026-07-07 (15 perbaikan bug hasil code review: embedder RAG, timezone WIB, reporter_unit, CIA NULL, routing timeout, duplikasi tiket Telegram/API, TTL upload, notifier, symlink, race condition, dan lainnya).
 
 ---
 
@@ -35,6 +35,7 @@
 25. [Perubahan Terbaru (2026-06-21)](#25-perubahan-terbaru-2026-06-21)
 26. [Perubahan Terbaru (2026-06-26)](#26-perubahan-terbaru-2026-06-26)
 27. [Perubahan Terbaru (2026-07-02)](#27-perubahan-terbaru-2026-07-02)
+28. [Perbaikan Bug Code Review (2026-07-07)](#28-perbaikan-bug-code-review-2026-07-07)
 
 ---
 
@@ -2660,3 +2661,124 @@ Fungsi helper baru: `_cia_row()` (render satu baris CIA dengan checkbox), `_tl_r
 ### 27.16 `tests/evaluation/baseline_n300_results.json`
 
 File baru: hasil evaluasi baseline dengan 300 sampel untuk keperluan perbandingan performa sistem sebelum dan sesudah tuning.
+
+---
+
+## 28. Perbaikan Bug Code Review (2026-07-07)
+
+Code review menyeluruh (10 sudut analisis paralel + verifikasi) menemukan **15 bug**: 9 terkonfirmasi (langsung dapat dipicu) dan 6 plausible (butuh kondisi khusus). Semuanya telah diperbaiki. Bagian ini mendokumentasikan setiap bug, akar masalah, dan perbaikannya.
+
+### 28.1 Bug Terkonfirmasi (9)
+
+#### 28.1.1 `app/utils/llm_client.py` — RAG mati total saat GITHUB_TOKEN diset
+
+**Masalah:** `create_embedder()` meneruskan URL GitHub Models (`https://models.inference.ai.azure.com`) sebagai `openai_api_base`, padahal GitHub Models **tidak menyediakan** endpoint `text-embedding-3-small`. Karena GITHUB_TOKEN adalah kredensial utama, semua pencarian dokumen RAG gagal di deployment standar — rekomendasi mitigasi tidak pernah punya sitasi.
+
+**Perbaikan:** `create_embedder()` sekarang selalu memakai endpoint OpenAI standar (`base_url=None`) dengan prioritas key `OPENAI_API_KEY` → `GITHUB_TOKEN`. LLM chat tetap memakai GitHub Models; hanya embeddings yang dialihkan.
+
+#### 28.1.2 `app/dashboard/report_generator.py` — Timestamp salah 7 jam di laporan resmi
+
+**Masalah:** Timestamp disimpan sebagai UTC di database, tetapi `_fmt_dt()` hanya memotong string dan menempelkan label `" WIB"` tanpa konversi. Insiden pukul 10:00 WIB tampil sebagai "03:00 WIB" di formulir resmi.
+
+**Perbaikan:** `_fmt_dt()` ditulis ulang — parse nilai ke `datetime`, asumsikan UTC jika naive, lalu `astimezone(_WIB)` (UTC+7) sebelum format. Konstanta modul `_WIB = timezone(timedelta(hours=7))`. `report_date` juga memakai `datetime.now(_WIB)`.
+
+#### 28.1.3 `app/web/routes/pelapor.py` — Field Unit/Divisi tidak pernah tersimpan
+
+**Masalah:** `reporter_unit` divalidasi dan disimpan ke session, tetapi tidak pernah diteruskan ke pipeline — kolom `reporter_department` selalu NULL untuk semua tiket web. Bagian A formulir resmi selalu kosong.
+
+**Perbaikan:** Plumbing lengkap di 5 file: `IncidentState` mendapat key `reporter_department`, `initialize_state()` mendapat param `reporter_unit`, `ChatService.handle_message()` mendapat kwarg `reporter_unit`, `pelapor.py` meneruskan `reporter.get("reporter_unit", "")`, dan `ticket_manager.create_ticket()` menulis `reporter_department` ke DB.
+
+#### 28.1.4 `app/web/templates/admin/tiket_detail.html` — CIA NULL berubah jadi False diam-diam
+
+**Masalah:** Checkbox HTML yang tidak dicentang **tidak mengirim** field-nya sama sekali → FastAPI menerima `None` → `None == "1"` = `False` → status "belum dinilai" (NULL) tertimpa jadi "tidak terdampak" (False) setiap kali form CIA disimpan.
+
+**Perbaikan:** Hidden input `<input type="hidden" name="{{ key }}" value="0">` ditambahkan sebelum setiap checkbox. Checkbox tidak dicentang kini mengirim `"0"` secara eksplisit — semantik unchecked = False adalah keputusan sadar admin, bukan efek samping parsing.
+
+#### 28.1.5 `app/agents/orchestrator.py` + `graph.py` — LLM timeout salah rute
+
+**Masalah:** Saat LLM orchestrator timeout, fallback menyetel `intent="report_incident"`. Jika sesi sudah punya tiket, guard `existing_ticket` menangkapnya — pengguna yang bertanya "apa itu ransomware?" saat LLM sibuk dijawab "Tiket sudah dibuat".
+
+**Perbaikan:** `_FALLBACK_INTENT` diubah ke `needs_clarification` dengan pesan "Sistem sedang sibuk... coba kirim ulang". Fallback exception di `graph.py` diubah ke `general_help` agar tidak memicu guard existing_ticket.
+
+#### 28.1.6 `app/web/services/chat_service.py` — Error backfill menyebabkan HTTP 500 setelah tiket dibuat
+
+**Masalah:** `_backfill_form_fields()` dipanggil di luar blok try/except. Jika kolom baru belum dimigrasi, `db.commit()` melempar `OperationalError` → pengguna melihat halaman error padahal tiketnya sudah berhasil dibuat.
+
+**Perbaikan:** Panggilan dibungkus `try/except Exception` — kegagalan backfill hanya di-log (`logger.warning`), respon sukses tetap dikirim ke pengguna.
+
+#### 28.1.7 `app/telegram/bot.py` — Guard duplikasi tiket tidak pernah aktif dari Telegram
+
+**Masalah:** Bot membuat `session_id` UUID baru di setiap `/report` dan tidak pernah mengisi `session_existing_ticket` — dua `/report` beruntun menghasilkan dua tiket duplikat.
+
+**Perbaikan:** Sebelum `initialize_state()`, bot memanggil `ticket_repo.get_tickets_by_reporter()` dan mencari tiket dengan status bukan CLOSED/RESOLVED. Jika ada, `ticket_id`-nya diteruskan sebagai `session_existing_ticket` sehingga guard di `route_by_intent` aktif.
+
+#### 28.1.8 `app/api/schemas.py` + `routes.py` — REST API tidak meneruskan session_existing_ticket
+
+**Masalah:** Sama seperti Telegram — `POST /api/v1/report` tidak pernah mengisi `session_existing_ticket`, pencegahan duplikasi tidak berfungsi lewat API.
+
+**Perbaikan:** Field `session_existing_ticket` (opsional, max 50 char) ditambahkan ke `ReportRequest` dan diteruskan ke `initialize_state()`.
+
+#### 28.1.9 `app/web/services/upload_service.py` — Lampiran hilang setelah 1 jam
+
+**Masalah:** TTL Redis untuk pending uploads hanya 3600 detik (1 jam), sementara sesi chat berlaku 24 jam. Pengguna yang mengupload bukti lalu menulis deskripsi lebih dari 1 jam kehilangan lampirannya tanpa peringatan.
+
+**Perbaikan:** TTL dinaikkan ke 86400 detik (24 jam), konsisten dengan TTL sesi.
+
+### 28.2 Bug Plausible (6)
+
+#### 28.2.1 `app/agents/notifier.py` — Notifikasi "terkirim" padahal tidak dikirim
+
+**Masalah:** Mode log-only (`telegram_client=None`, dipakai jalur web dan REST API) mengembalikan `notification_sent=True` — dashboard menampilkan "terkirim" untuk notifikasi yang tidak pernah ada.
+
+**Perbaikan:** Mode log-only kini mengembalikan `notification_sent=False`; log diberi prefix `(log-only)`.
+
+#### 28.2.2 `app/web/routes/admin_actions.py` — Symlink bisa melewati pengecekan path
+
+**Masalah:** Validasi download lampiran memakai `os.path.abspath` yang **tidak mengikuti symlink** — symlink di dalam folder upload yang menunjuk file di luar (mis. `/etc/shadow`) lolos pengecekan `commonpath`.
+
+**Perbaikan:** Diganti `os.path.realpath` yang meresolusi symlink sebelum dibandingkan dengan `UPLOAD_ROOT`.
+
+#### 28.2.3 `app/web/services/chat_service.py` — Race condition pending uploads
+
+**Masalah:** `_flush_pending_uploads()` melakukan GET lalu DELETE terpisah. File yang diupload di antara kedua operasi (selama pipeline LLM berjalan 10–30 detik) terhapus dari Redis tanpa pernah dikaitkan ke tiket.
+
+**Perbaikan:** GET+DELETE kini atomik via Redis pipeline — pola yang sama dengan `UploadService.flush_pending()`.
+
+#### 28.2.4 `app/web/services/chat_service.py` — Blokir guardrails menginflasi counter klarifikasi
+
+**Masalah:** Pesan yang diblokir guardrails ditandai `type="clarification"` → `clarification_rounds` naik → pesan samar berikutnya melewati langkah klarifikasi dan langsung jadi tiket.
+
+**Perbaikan:** Tag `clarification` hanya diberikan jika `processing_errors` kosong (guardrails mengisi `processing_errors`; klarifikasi asli dari orchestrator tidak).
+
+#### 28.2.5 `app/security/llm_judge.py` — Split-brain routing endpoint
+
+**Masalah:** `LLMJudge` masih membaca env var `OPENAI_BASE_URL` (sudah dihapus dari `config.py`), sehingga judge dan LLM utama bisa memakai endpoint berbeda.
+
+**Perbaikan:** `base_url` di-hardcode ke `_GITHUB_MODELS_URL`, konsisten dengan `llm_client.py`.
+
+#### 28.2.6 `app/web/services/ticket_service.py` — Datetime naive vs aware
+
+**Masalah:** `update_status()` memakai `datetime.utcnow()` (naive) sementara kolom lain aware — `ticket.reviewed_at - ticket.created_at` melempar `TypeError`.
+
+**Perbaikan:** Semua `datetime.utcnow()` diganti `datetime.now(timezone.utc)`.
+
+### 28.3 Ringkasan File yang Diubah
+
+| File | Bug yang diperbaiki |
+| --- | --- |
+| `app/utils/llm_client.py` | 28.1.1 |
+| `app/dashboard/report_generator.py` | 28.1.2 |
+| `app/agents/state.py`, `orchestrator.py`, `ticket_manager.py` | 28.1.3, 28.1.5 |
+| `app/agents/graph.py` | 28.1.5 |
+| `app/web/routes/pelapor.py` | 28.1.3 |
+| `app/web/templates/admin/tiket_detail.html` | 28.1.4 |
+| `app/web/services/chat_service.py` | 28.1.3, 28.1.6, 28.2.3, 28.2.4 |
+| `app/telegram/bot.py` | 28.1.7 |
+| `app/api/schemas.py`, `app/api/routes.py` | 28.1.8 |
+| `app/web/services/upload_service.py` | 28.1.9 |
+| `app/agents/notifier.py` | 28.2.1 |
+| `app/web/routes/admin_actions.py` | 28.2.2 |
+| `app/security/llm_judge.py` | 28.2.5 |
+| `app/web/services/ticket_service.py` | 28.2.6 |
+
+**Catatan sidang:** perubahan perilaku yang perlu diingat — (1) embeddings kini *wajib* `OPENAI_API_KEY` untuk berfungsi penuh; (2) `notification_sent=False` di jalur web adalah perilaku benar yang baru, test lama yang mengharap `True` untuk mode log-only perlu disesuaikan; (3) fallback intent saat LLM timeout berubah dari `report_incident` (fail-safe buat tiket) menjadi `needs_clarification` (minta pengguna kirim ulang) — trade-off: tidak ada lagi tiket "hantu" dari misrouting, tapi laporan insiden nyata saat LLM down butuh satu interaksi ekstra.

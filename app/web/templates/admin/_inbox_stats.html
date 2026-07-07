@@ -2,7 +2,8 @@
 {# Stats strip — di-include oleh inbox.html; juga di-serve oleh /admin/inbox/stats untuk HTMX polling #}
 <div id="inbox-stats-wrap"
      hx-get="/admin/inbox/stats"
-     hx-trigger="every 30s"
+     hx-include="#inbox-filter-form"
+     hx-trigger="every 30s, change from:#inbox-filter-form select, change from:#inbox-filter-form input[type='date'], keyup changed delay:400ms from:#inbox-filter-form input[name='search']"
      hx-swap="outerHTML"
      style="display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:24px;">
   {% set stat_items = [

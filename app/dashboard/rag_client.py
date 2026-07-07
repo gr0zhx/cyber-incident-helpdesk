@@ -41,7 +41,7 @@ def get_collection_info() -> dict:
         info = client.get_collection(COLLECTION_NAME)
         return {
             "name": COLLECTION_NAME,
-            "total_vectors": info.vectors_count or 0,
+            "total_vectors": info.points_count or 0,
             "indexed_vectors": info.indexed_vectors_count or 0,
             "status": str(info.status),
             "on_disk": info.config.params.vectors.on_disk if info.config.params.vectors else False,
@@ -120,6 +120,14 @@ def delete_metadata(meta_filename: str) -> None:
 
 def save_pdf(filename: str, file_bytes: bytes) -> Path:
     """Simpan file PDF ke direktori dokumen knowledge base."""
+    _DOCS_DIR.mkdir(parents=True, exist_ok=True)
+    dest = _DOCS_DIR / filename
+    dest.write_bytes(file_bytes)
+    return dest
+
+
+def save_document(filename: str, file_bytes: bytes) -> Path:
+    """Simpan file dokumen (pdf/txt/md/csv/json) ke direktori dokumen knowledge base."""
     _DOCS_DIR.mkdir(parents=True, exist_ok=True)
     dest = _DOCS_DIR / filename
     dest.write_bytes(file_bytes)
@@ -241,14 +249,14 @@ def get_chunks_sample(doc_id: str, limit: int = 5) -> list[dict]:
 # ---------------------------------------------------------------------------
 
 def reingest_document(meta_filename: str) -> dict:
-    """Re-ingest satu dokumen PDF: hapus chunks lama, embed ulang, upload.
+    """Re-ingest satu dokumen (pdf/txt/md/csv/json): hapus chunks lama, embed ulang, upload.
 
     Returns:
         {"doc_id": ..., "deleted": N, "uploaded": N, "error": ...}
     """
     from app.rag.chunker import chunk_documents
     from app.rag.embedder import embed_chunks, upload_chunks
-    from app.rag.ingestion import ingest_document, load_metadata
+    from app.rag.ingestion import ingest_document, ingest_text_document, load_metadata
     from app.utils.llm_client import create_embedder
 
     meta_path = _META_DIR / meta_filename
@@ -256,17 +264,21 @@ def reingest_document(meta_filename: str) -> dict:
         return {"error": f"Metadata tidak ditemukan: {meta_filename}"}
 
     meta = load_metadata(meta_path)
-    pdf_path = _DOCS_DIR / meta.get("filename", "")
-    if not pdf_path.exists():
-        return {"error": f"PDF tidak ditemukan: {pdf_path.name}"}
+    file_path = _DOCS_DIR / meta.get("filename", "")
+    if not file_path.exists():
+        return {"error": f"File tidak ditemukan: {file_path.name}"}
 
     doc_id = meta["doc_id"]
+    ext = file_path.suffix.lower()
 
     # 1. Hapus chunks lama
     deleted = delete_chunks_by_doc_id(doc_id)
 
-    # 2. Load + chunk
-    docs = ingest_document(pdf_path, meta)
+    # 2. Load + chunk (pilih loader sesuai tipe file)
+    if ext == ".pdf":
+        docs = ingest_document(file_path, meta)
+    else:
+        docs = ingest_text_document(file_path, meta)
     chunks = chunk_documents(docs)
 
     # 3. Embed

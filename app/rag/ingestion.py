@@ -51,6 +51,9 @@ def _incident_types_from_tactics(tactics: list[str]) -> list[str]:
     return sorted(types)
 
 
+SUPPORTED_EXTENSIONS = {".pdf", ".txt", ".md", ".csv", ".json"}
+
+
 # ---------------------------------------------------------------------------
 # PDF ingestion (existing)
 # ---------------------------------------------------------------------------
@@ -105,6 +108,50 @@ def ingest_directory(
         all_documents.extend(docs)
 
     return all_documents
+
+
+# ---------------------------------------------------------------------------
+# Plain-text ingestion: txt / md / csv / json (non-STIX)
+# ---------------------------------------------------------------------------
+
+def ingest_text_document(file_path: str | Path, metadata: dict) -> list[Document]:
+    """Load txt/md/csv/json dan kembalikan sebagai Document dengan metadata lengkap."""
+    import csv as _csv
+    import io as _io
+
+    path = Path(file_path)
+    ext = path.suffix.lower()
+    raw = path.read_text(encoding="utf-8", errors="replace")
+
+    if ext == ".csv":
+        reader = _csv.DictReader(_io.StringIO(raw))
+        rows = list(reader)
+        if rows:
+            content = "\n".join(
+                ", ".join(f"{k}: {v}" for k, v in row.items())
+                for row in rows
+            )
+        else:
+            content = raw
+    elif ext == ".json":
+        try:
+            content = json.dumps(json.loads(raw), indent=2, ensure_ascii=False)
+        except Exception:
+            content = raw
+    else:
+        content = raw
+
+    base_meta = {
+        "doc_id": metadata["doc_id"],
+        "doc_title": metadata["doc_title"],
+        "source_framework": metadata["source_framework"],
+        "language": metadata.get("language", "id"),
+        "incident_types": metadata.get("incident_types", []),
+        "version": metadata.get("version", ""),
+        "source": f"{metadata['doc_title']} ({path.name})",
+        "file_type": ext.lstrip("."),
+    }
+    return [Document(page_content=content, metadata=base_meta)]
 
 
 # ---------------------------------------------------------------------------

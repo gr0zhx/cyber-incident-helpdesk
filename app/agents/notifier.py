@@ -47,9 +47,10 @@ class NotifierAgent:
         timestamp = datetime.now(timezone.utc).isoformat()
 
         if self.telegram is None:
-            # Mode log — digunakan saat testing atau tidak ada bot token
-            logger.info("[NOTIFIER] Notifikasi CSIRT:\n%s", csirt_message)
-            logger.info("[NOTIFIER] Konfirmasi pelapor:\n%s", reporter_message)
+            # Mode log — tidak ada pengiriman Telegram nyata, tapi notifikasi
+            # tetap "berhasil" ditangani (di-log) untuk channel ini.
+            logger.info("[NOTIFIER] (log-only) Notifikasi CSIRT:\n%s", csirt_message)
+            logger.info("[NOTIFIER] (log-only) Konfirmasi pelapor:\n%s", reporter_message)
             return {
                 "notification_sent": True,
                 "notification_recipients": csirt_recipients,
@@ -63,8 +64,9 @@ class NotifierAgent:
                 await self.telegram.send_message(chat_id=chat_id, text=csirt_message)
 
             reporter_id = incident_state.get("reporter_id", "")
-            if reporter_id:
-                await self.telegram.send_message(chat_id=reporter_id, text=reporter_message)
+            if reporter_id.startswith("tg:"):
+                chat_id = reporter_id.removeprefix("tg:")
+                await self.telegram.send_message(chat_id=chat_id, text=reporter_message)
 
             sent = True
         except Exception as exc:

@@ -19,7 +19,7 @@ _MIN_SOURCE_MATCH_LENGTH = 5
 _FALLBACK_RESULT = {
     "mitigation_recommendation": (
         "Sistem tidak menemukan panduan SOP yang relevan untuk jenis insiden ini. "
-        "Silakan hubungi tim CSIRT secara langsung untuk penanganan lebih lanjut."
+        "Silakan hubungi Tim Keamanan Siber dan PDP secara langsung untuk penanganan lebih lanjut."
     ),
     "citations": [],
     "retrieved_chunks": [],
@@ -168,7 +168,7 @@ def _compute_rag_confidence(chunks: list[dict]) -> float:
 _KNOWLEDGE_FALLBACK = {
     "mitigation_recommendation": (
         "Informasi ini tidak ditemukan dalam dokumen referensi yang tersedia. "
-        "Silakan hubungi tim CSIRT Pusdatin Kementan untuk pertanyaan lebih lanjut."
+        "Silakan hubungi Tim Keamanan Siber dan PDP Pusdatin Kementan untuk pertanyaan lebih lanjut."
     ),
     "citations": [],
     "retrieved_chunks": [],
@@ -297,14 +297,14 @@ class MitigationAdvisorAgent:
             return {
                 **_KNOWLEDGE_FALLBACK,
                 "retrieved_chunks": top_chunks,
-                "mitigation_recommendation": "LLM timeout. Silakan hubungi tim CSIRT secara langsung.",
+                "mitigation_recommendation": "LLM timeout. Silakan hubungi Tim Keamanan Siber dan PDP secara langsung.",
             }
         except Exception as exc:
             logger.exception("Error saat generate_knowledge_response: %s", exc)
             return {
                 **_KNOWLEDGE_FALLBACK,
                 "retrieved_chunks": top_chunks,
-                "mitigation_recommendation": f"Error tidak terduga: {type(exc).__name__}. Hubungi tim CSIRT.",
+                "mitigation_recommendation": f"Error tidak terduga: {type(exc).__name__}. Hubungi Tim Keamanan Siber dan PDP.",
             }
 
     def _build_messages(self, context: str, incident_type: str, severity: str, sanitized_input: str) -> list[dict]:
@@ -494,7 +494,7 @@ class MitigationAdvisorAgent:
                     return {
                         **_FALLBACK_RESULT,
                         "retrieved_chunks": top_chunks,
-                        "mitigation_recommendation": "LLM timeout. Silakan hubungi tim CSIRT secara langsung.",
+                        "mitigation_recommendation": "LLM timeout. Silakan hubungi Tim Keamanan Siber dan PDP secara langsung.",
                     }
 
             except Exception as exc:
@@ -502,7 +502,7 @@ class MitigationAdvisorAgent:
                 return {
                     **_FALLBACK_RESULT,
                     "retrieved_chunks": top_chunks,
-                    "mitigation_recommendation": f"Error tidak terduga: {type(exc).__name__}. Hubungi tim CSIRT.",
+                    "mitigation_recommendation": f"Error tidak terduga: {type(exc).__name__}. Hubungi Tim Keamanan Siber dan PDP.",
                 }
 
         return {**_FALLBACK_RESULT, "retrieved_chunks": top_chunks}

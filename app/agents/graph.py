@@ -81,7 +81,7 @@ def make_validate_output_node():
                 if any("PII" in i for i in validation["issues"]):
                     state["mitigation_recommendation"] = (
                         "Rekomendasi tidak dapat ditampilkan karena terdeteksi data sensitif. "
-                        "Silakan hubungi tim CSIRT secara langsung."
+                        "Silakan hubungi Tim Keamanan Siber dan PDP secara langsung."
                     )
             _trace(state, "output_validator", "success" if validation["is_valid"] else "issues_found",
                    issues=validation["issues"])
@@ -109,7 +109,9 @@ def make_orchestrator_node(orchestrator):
         except Exception as exc:
             logger.exception("Orchestrator node error: %s", exc)
             _error(state, f"Orchestrator error: {type(exc).__name__}")
-            state["intent"] = "report_incident"
+            # Gunakan general_help agar tidak memicu guard existing_ticket
+            # saat terjadi error tak terduga di orchestrator
+            state["intent"] = "general_help"
             state["requires_clarification"] = False
             _trace(state, "orchestrator", "fallback")
         return state
@@ -156,7 +158,7 @@ def make_mitigation_node(mitigation_advisor):
             _error(state, f"Mitigation error: {type(exc).__name__}")
             state["mitigation_recommendation"] = (
                 "Sistem tidak dapat menghasilkan rekomendasi. "
-                "Silakan hubungi tim CSIRT secara langsung."
+                "Silakan hubungi Tim Keamanan Siber dan PDP secara langsung."
             )
             _trace(state, "mitigation_advisor", "fallback")
         return state
@@ -192,7 +194,7 @@ def make_general_help_node(orchestrator):
             logger.exception("General help node error: %s", exc)
             state["mitigation_recommendation"] = (
                 "Maaf, saya tidak dapat memproses pertanyaan Anda saat ini. "
-                "Silakan hubungi tim CSIRT untuk bantuan lebih lanjut."
+                "Silakan hubungi Tim Keamanan Siber dan PDP untuk bantuan lebih lanjut."
             )
             _trace(state, "general_help", "fallback")
         return state
@@ -216,7 +218,7 @@ def make_knowledge_node(mitigation_advisor):
             logger.exception("Knowledge node error: %s", exc)
             state["mitigation_recommendation"] = (
                 "Sistem tidak dapat menemukan jawaban dari dokumen referensi. "
-                "Silakan hubungi tim CSIRT Pusdatin Kementan untuk bantuan lebih lanjut."
+                "Silakan hubungi Tim Keamanan Siber dan PDP Pusdatin Kementan untuk bantuan lebih lanjut."
             )
             _trace(state, "knowledge_advisor", "fallback")
         return state

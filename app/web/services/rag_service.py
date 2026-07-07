@@ -15,8 +15,9 @@ from app.dashboard.rag_client import (
     list_metadata_documents,
     reingest_document,
     save_metadata,
-    save_pdf,
+    save_document,
 )
+from app.rag.ingestion import SUPPORTED_EXTENSIONS
 
 logger = logging.getLogger(__name__)
 _JOB_TTL = 3600  # 1 jam
@@ -42,7 +43,7 @@ class RagService:
             logger.warning("list_metadata_documents gagal: %s", exc)
             return []
 
-    def upload_pdf(
+    def upload_document(
         self,
         filename: str,
         data: bytes,
@@ -52,16 +53,20 @@ class RagService:
         incident_types: list[str],
         language: str = "id",
     ) -> str:
-        """Simpan PDF + metadata ke knowledge_base/, return meta_filename."""
+        """Simpan dokumen + metadata ke knowledge_base/, return meta_filename.
+
+        Mendukung: .pdf, .txt, .md, .csv, .json
+        """
         if not _DOC_ID_RE.match(doc_id):
-            raise ValueError("doc_id hanya boleh alfanumerik, dash, underscore (maks 64 char).")
+            raise ValueError("doc_id hanya boleh alfanumerik, dash, underscore (maks 64 karakter).")
         base_name = Path(filename).name
         if not base_name or base_name.startswith("."):
             raise ValueError("Nama file tidak valid.")
         safe_name = base_name.replace(" ", "_")
-        if not safe_name.lower().endswith(".pdf"):
-            raise ValueError("File harus berekstensi .pdf")
-        save_pdf(safe_name, data)
+        ext = Path(safe_name).suffix.lower()
+        if ext not in SUPPORTED_EXTENSIONS:
+            raise ValueError(f"Tipe file tidak didukung: {ext}. Gunakan: {', '.join(sorted(SUPPORTED_EXTENSIONS))}")
+        save_document(safe_name, data)
         meta_filename = f"{doc_id}.json"
         save_metadata(meta_filename, {
             "doc_id": doc_id,

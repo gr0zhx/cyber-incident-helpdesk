@@ -40,6 +40,18 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
+def _build_notifier(telegram_bot) -> NotifierAgent:
+    """NotifierAgent log-only untuk pipeline bot Telegram.
+
+    app/telegram/bot.py::_send_result sudah mengirim konfirmasi ke pelapor
+    (reply_text) dan alert ke grup CSIRT (context.bot.send_message) untuk
+    channel ini. Memberi telegram_client asli di sini akan membuat node
+    send_notification di graph JUGA mengirim pesan Telegram — setiap laporan
+    jadi terkirim dua kali ke pelapor maupun grup CSIRT.
+    """
+    return NotifierAgent(telegram_client=None)
+
+
 def _check_env() -> None:
     missing = []
     if not os.getenv("TELEGRAM_BOT_TOKEN"):
@@ -73,7 +85,7 @@ def main() -> None:
     # Telegram notifier — gunakan token yang sama
     from telegram import Bot as TelegramBot
     telegram_bot = TelegramBot(token=token)
-    notifier = NotifierAgent(telegram_client=telegram_bot)
+    notifier = _build_notifier(telegram_bot)
 
     # TicketManager — coba DB, fallback ke mock
     ticket_repository = None

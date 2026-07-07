@@ -5,7 +5,7 @@
 <style>
   .app-shell { display: block; }
 
-  body { background: #f1f5f9; }
+  body { background: #f0fdf4; }
 
   .tk-shell {
     min-height: 100vh;
@@ -14,13 +14,14 @@
 
   /* ── Top bar ── */
   .tk-topbar {
-    background: #0f172a;
-    color: #f8fafc;
+    background: #0c1f0e;
+    color: #f0fdf4;
     padding: 14px 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
+    border-bottom: 1px solid rgba(34,197,94,.12);
   }
   .tk-topbar-brand {
     display: flex; align-items: center; gap: 10px;
@@ -28,20 +29,22 @@
   }
   .tk-topbar-brand .dot {
     width: 30px; height: 30px;
-    background: #2563eb; border-radius: 7px;
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    border-radius: 7px;
     display: flex; align-items: center; justify-content: center;
     font-size: 15px;
+    box-shadow: 0 2px 8px rgba(22,163,74,.4);
   }
   .tk-back {
-    font-size: 13px; color: #94a3b8;
+    font-size: 13px; color: #4b7a56;
     text-decoration: none;
     display: flex; align-items: center; gap: 6px;
     padding: 7px 14px;
-    border: 1px solid #334155;
+    border: 1px solid rgba(255,255,255,.1);
     border-radius: 7px;
     transition: color .15s, border-color .15s;
   }
-  .tk-back:hover { color: #f8fafc; border-color: #64748b; }
+  .tk-back:hover { color: #f0fdf4; border-color: rgba(255,255,255,.25); }
 
   /* ── Content ── */
   .tk-content {
@@ -57,19 +60,19 @@
   .tk-card {
     background: white;
     border-radius: 14px;
-    border: 1px solid #e2e8f0;
+    border: 1px solid #d1fae5;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(15,23,42,.05);
+    box-shadow: 0 2px 12px rgba(22,163,74,.07);
   }
   .tk-card-head {
     padding: 18px 24px;
-    border-bottom: 1px solid #f1f5f9;
+    border-bottom: 1px solid #f0fdf4;
     display: flex; align-items: center; justify-content: space-between;
   }
   .tk-card-head h3 {
     font-size: 13px; font-weight: 700;
     text-transform: uppercase; letter-spacing: .6px;
-    color: #64748b;
+    color: #4b7a56;
   }
   .tk-card-body { padding: 24px; }
 
@@ -84,10 +87,10 @@
   .tk-status-dot { width: 7px; height: 7px; border-radius: 50%; }
   .status-PENDING_REVIEW    { background:#fef9c3; color:#854d0e; }
   .status-PENDING_REVIEW .tk-status-dot { background:#eab308; }
-  .status-IN_PROGRESS       { background:#dbeafe; color:#1e40af; }
-  .status-IN_PROGRESS .tk-status-dot { background:#3b82f6; animation: pulse 1.5s infinite; }
+  .status-IN_PROGRESS       { background:#dcfce7; color:#166534; }
+  .status-IN_PROGRESS .tk-status-dot { background:#22c55e; animation: pulse 1.5s infinite; }
   .status-RESOLVED          { background:#dcfce7; color:#166534; }
-  .status-RESOLVED .tk-status-dot { background:#22c55e; }
+  .status-RESOLVED .tk-status-dot { background:#16a34a; }
   .status-CLOSED            { background:#f1f5f9; color:#475569; }
   .status-CLOSED .tk-status-dot { background:#94a3b8; }
   @keyframes pulse {
@@ -111,26 +114,26 @@
   .tk-info-item label {
     font-size: 11px; font-weight: 600;
     text-transform: uppercase; letter-spacing: .5px;
-    color: #94a3b8; display: block; margin-bottom: 5px;
+    color: #6b9e76; display: block; margin-bottom: 5px;
   }
   .tk-info-item .val {
-    font-size: 14px; font-weight: 600; color: #0f172a;
+    font-size: 14px; font-weight: 600; color: #14532d;
   }
   .tk-info-item .val.mono {
-    font-family: monospace; font-size: 15px; color: #2563eb;
+    font-family: monospace; font-size: 15px; color: #16a34a;
   }
 
   /* ── Confidence bar ── */
   .conf-bar-wrap { display:flex; align-items:center; gap:10px; }
   .conf-bar-bg {
-    flex:1; height:6px; background:#e2e8f0; border-radius:3px; overflow:hidden;
+    flex:1; height:6px; background:#d1fae5; border-radius:3px; overflow:hidden;
   }
   .conf-bar-fill {
     height:100%; border-radius:3px;
-    background: linear-gradient(90deg, #2563eb, #7c3aed);
+    background: linear-gradient(90deg, #16a34a, #22c55e);
     transition: width .6s ease;
   }
-  .conf-pct { font-size:13px; font-weight:700; color:#2563eb; min-width:36px; text-align:right; }
+  .conf-pct { font-size:13px; font-weight:700; color:#16a34a; min-width:36px; text-align:right; }
 
   /* ── Timeline ── */
   .tk-timeline { display:flex; flex-direction:column; gap:0; }
@@ -142,45 +145,46 @@
   .tl-item:not(:last-child)::before {
     content:""; position:absolute;
     left:15px; top:30px; bottom:0; width:2px;
-    background:#e2e8f0;
+    background:#d1fae5;
   }
   .tl-dot {
     width:32px; height:32px; flex-shrink:0;
-    border-radius:50%; border:2px solid #e2e8f0;
+    border-radius:50%; border:2px solid #d1fae5;
     background:white;
     display:flex; align-items:center; justify-content:center;
     font-size:14px; z-index:1;
   }
-  .tl-dot.done { border-color:#2563eb; background:#eff6ff; }
-  .tl-dot.active { border-color:#f59e0b; background:#fffbeb; }
-  .tl-dot.pending { border-color:#e2e8f0; background:#f8fafc; }
+  .tl-dot.done    { border-color:#16a34a; background:#f0fdf4; color:#16a34a; }
+  .tl-dot.active  { border-color:#f59e0b; background:#fffbeb; }
+  .tl-dot.pending { border-color:#d1fae5; background:#f9fefe; }
   .tl-text { padding-top:4px; }
-  .tl-text strong { font-size:14px; font-weight:600; color:#0f172a; display:block; margin-bottom:2px; }
-  .tl-text span { font-size:12px; color:#94a3b8; }
+  .tl-text strong { font-size:14px; font-weight:600; color:#14532d; display:block; margin-bottom:2px; }
+  .tl-text span { font-size:12px; color:#6b9e76; }
 
   /* ── Mitigation steps ── */
   .mit-step {
     display:flex; gap:14px; align-items:flex-start;
     padding: 14px 0;
-    border-bottom: 1px solid #f1f5f9;
+    border-bottom: 1px solid #f0fdf4;
   }
   .mit-step:last-child { border-bottom: none; }
   .mit-num {
     width:26px; height:26px; flex-shrink:0;
-    background:#2563eb; color:white;
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    color:white;
     border-radius:50%;
     display:flex; align-items:center; justify-content:center;
     font-size:12px; font-weight:700; margin-top:1px;
   }
-  .mit-step p { font-size:14px; line-height:1.65; color:#1e293b; }
+  .mit-step p { font-size:14px; line-height:1.65; color:#1a2e1c; }
 
   /* ── Description box ── */
   .desc-box {
-    background:#f8fafc;
-    border:1px solid #e2e8f0;
+    background:#f0fdf4;
+    border:1px solid #d1fae5;
     border-radius:8px;
     padding:16px;
-    font-size:14px; line-height:1.7; color:#334155;
+    font-size:14px; line-height:1.7; color:#1a2e1c;
     white-space:pre-wrap; word-break:break-word;
   }
 
@@ -191,15 +195,19 @@
     padding:10px 18px;
     border-radius:9px;
     font-size:13px; font-weight:600; font-family:inherit;
-    cursor:pointer; transition:background .15s;
+    cursor:pointer; transition:background .15s, box-shadow .15s;
     text-decoration:none;
   }
-  .tk-action-primary { background:#2563eb; color:white; border:none; }
-  .tk-action-primary:hover { background:#1d4ed8; }
-  .tk-action-outline { background:white; color:#0f172a; border:1.5px solid #e2e8f0; }
-  .tk-action-outline:hover { border-color:#2563eb; color:#2563eb; }
-  .tk-action-ghost { background:#f8fafc; color:#64748b; border:1.5px solid #e2e8f0; }
-  .tk-action-ghost:hover { background:#e2e8f0; }
+  .tk-action-primary {
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    color:white; border:none;
+    box-shadow: 0 2px 8px rgba(22,163,74,.35);
+  }
+  .tk-action-primary:hover { box-shadow: 0 4px 14px rgba(22,163,74,.5); }
+  .tk-action-outline { background:white; color:#14532d; border:1.5px solid #d1fae5; }
+  .tk-action-outline:hover { border-color:#16a34a; color:#16a34a; }
+  .tk-action-ghost { background:#f0fdf4; color:#4b7a56; border:1.5px solid #d1fae5; }
+  .tk-action-ghost:hover { background:#dcfce7; }
 
   /* Copy flash */
   #copy-flash {
@@ -233,7 +241,7 @@
             <p style="font-size:12px;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">
               Nomor Tiket
             </p>
-            <p style="font-family:monospace;font-size:26px;font-weight:800;color:#0f172a;letter-spacing:.5px;">
+            <p style="font-family:monospace;font-size:26px;font-weight:800;color:#14532d;letter-spacing:.5px;">
               {{ ticket.ticket_id }}
             </p>
           </div>
@@ -361,9 +369,9 @@
       <div class="tk-card-body">
         <div class="desc-box">{{ ticket.description_sanitized }}</div>
         {% if ticket.classification_reasoning %}
-        <div style="margin-top:14px;padding:12px 14px;background:#f8fafc;border-radius:8px;border-left:3px solid #2563eb;">
-          <p style="font-size:12px;font-weight:600;color:#64748b;margin-bottom:4px;">ANALISIS AI</p>
-          <p style="font-size:13px;color:#334155;line-height:1.6;">{{ ticket.classification_reasoning }}</p>
+        <div style="margin-top:14px;padding:12px 14px;background:#f0fdf4;border-radius:8px;border-left:3px solid #22c55e;">
+          <p style="font-size:12px;font-weight:600;color:#4b7a56;margin-bottom:4px;">ANALISIS AI</p>
+          <p style="font-size:13px;color:#1a2e1c;line-height:1.6;">{{ ticket.classification_reasoning }}</p>
         </div>
         {% endif %}
       </div>
@@ -396,9 +404,9 @@
               <p>{{ text }}</p>
             </div>
           {% elif stripped.startswith('Panduan umum:') %}
-            <div style="margin-top:16px;padding:14px;background:#eff6ff;border-radius:8px;border-left:3px solid #3b82f6;">
-              <p style="font-size:12px;font-weight:700;color:#1d4ed8;margin-bottom:4px;">PANDUAN UMUM</p>
-              <p style="font-size:13px;color:#1e3a5f;line-height:1.65;">{{ stripped.replace('Panduan umum:', '', 1).strip() }}</p>
+            <div style="margin-top:16px;padding:14px;background:#f0fdf4;border-radius:8px;border-left:3px solid #22c55e;">
+              <p style="font-size:12px;font-weight:700;color:#15803d;margin-bottom:4px;">PANDUAN UMUM</p>
+              <p style="font-size:13px;color:#1a2e1c;line-height:1.65;">{{ stripped.replace('Panduan umum:', '', 1).strip() }}</p>
             </div>
           {% elif stripped.startswith('Catatan eskalasi:') %}
             <div style="margin-top:12px;padding:14px;background:#fff7ed;border-radius:8px;border-left:3px solid #f59e0b;">
@@ -428,7 +436,7 @@
     {% endif %}
 
     {# ── Hubungi CSIRT ── #}
-    <div class="tk-card" style="background:linear-gradient(135deg,#0f172a,#1e3a5f);border:none;">
+    <div class="tk-card" style="background:linear-gradient(135deg,#0c1f0e,#0a3320);border:none;">
       <div class="tk-card-body" style="padding:28px;">
         <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
           <div style="font-size:36px;">📞</div>
@@ -445,7 +453,7 @@
             </div>
             <div style="background:rgba(255,255,255,.08);border-radius:8px;padding:10px 14px;">
               <p style="font-size:11px;color:#64748b;margin-bottom:2px;">Email</p>
-              <p style="font-size:13px;font-weight:600;color:#60a5fa;">csirt@pusdatin.kementan.go.id</p>
+              <p style="font-size:13px;font-weight:600;color:#4ade80;">csirt@pusdatin.kementan.go.id</p>
             </div>
           </div>
         </div>

@@ -3,7 +3,7 @@ import html
 import logging
 
 from fastapi import APIRouter, Depends, Form
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse, Response
 from sqlalchemy.orm import Session
 
 from app.database.models import Admin
@@ -19,7 +19,7 @@ def report_page():
     return RedirectResponse(url="/admin/inbox", status_code=302)
 
 
-@router.post("/generate", response_class=HTMLResponse)
+@router.post("/generate")
 def generate_report(
     ticket_id: str = Form(...),
     prepared_by: str = Form("Tim Keamanan Siber Pusdatin"),
@@ -28,7 +28,7 @@ def generate_report(
 ):
     svc = ReportService(db)
     try:
-        report_html, filename = svc.generate(ticket_id.strip(), prepared_by=prepared_by.strip())
+        pdf_bytes, filename = svc.generate(ticket_id.strip(), prepared_by=prepared_by.strip())
     except LookupError:
         logger.warning("REPORT_NOT_FOUND ticket=%s admin=%s", ticket_id, admin.username)
         return HTMLResponse(
@@ -36,7 +36,8 @@ def generate_report(
             status_code=404,
         )
     logger.info("REPORT_GENERATED admin=%s ticket=%s", admin.username, ticket_id)
-    return HTMLResponse(
-        content=report_html,
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
         headers={"Content-Disposition": f'attachment; filename="{filename}"'},
     )

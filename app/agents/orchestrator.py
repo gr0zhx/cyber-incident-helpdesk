@@ -13,10 +13,13 @@ logger = logging.getLogger(__name__)
 VALID_INTENTS = {"report_incident", "query_knowledge", "query_status", "general_help", "needs_clarification"}
 
 _FALLBACK_INTENT = {
-    "intent": "report_incident",
+    "intent": "needs_clarification",
     "confidence": 0.0,
-    "needs_clarification": False,
-    "clarification_message": "",
+    "needs_clarification": True,
+    "clarification_message": (
+        "Sistem sedang sibuk memproses permintaan Anda. "
+        "Silakan coba kirim ulang pesan dalam beberapa saat lagi."
+    ),
 }
 
 
@@ -86,7 +89,7 @@ class OrchestratorAgent:
             logger.exception("Error generating help response: %s", exc)
             return (
                 "Maaf, saya tidak dapat memproses pertanyaan Anda saat ini. "
-                "Untuk bantuan, silakan hubungi tim CSIRT Pusdatin Kementan."
+                "Untuk bantuan, silakan hubungi Tim Keamanan Siber dan PDP Pusdatin Kementan."
             )
 
     async def classify_intent(self, sanitized_input: str) -> dict:
@@ -135,6 +138,7 @@ class OrchestratorAgent:
         reporter_id: str,
         reporter_name: str = "",
         reporter_contact: str = "",
+        reporter_unit: str = "",
         session_id: str = "",
         clarification_rounds: int = 0,
         session_existing_ticket: str = "",
@@ -147,6 +151,7 @@ class OrchestratorAgent:
             reporter_id=reporter_id,
             reporter_name=reporter_name,
             reporter_contact=reporter_contact,
+            reporter_department=reporter_unit,
             timestamp_received=datetime.now(timezone.utc).isoformat(),
             session_id=session_id,
             # Orchestrator

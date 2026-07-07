@@ -13,8 +13,8 @@
 
   /* ── Sidebar ── */
   .adm-sidebar {
-    background: #0f172a;
-    color: #f8fafc;
+    background: #0c1f0e;
+    color: #d1fae5;
     padding: 0;
     display: flex;
     flex-direction: column;
@@ -23,27 +23,38 @@
     height: 100vh;
     overflow-y: auto;
   }
+  .adm-sidebar::before {
+    content: '';
+    position: absolute; top: -60px; right: -40px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(34,197,94,.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
 
   .adm-sidebar-head {
     padding: 20px 16px;
     border-bottom: 1px solid rgba(255,255,255,.06);
     display: flex; align-items: center; gap: 10px;
+    position: relative; z-index: 1;
   }
   .adm-sidebar-head .dot {
     width: 32px; height: 32px;
-    background: #dc2626; border-radius: 8px;
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    border-radius: 8px;
     display: flex; align-items: center; justify-content: center;
     font-size: 16px; flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(22,163,74,.4);
   }
-  .adm-sidebar-head .brand strong { font-size: 14px; font-weight: 700; display: block; }
-  .adm-sidebar-head .brand span { font-size: 11px; color: #64748b; }
+  .adm-sidebar-head .brand strong { font-size: 14px; font-weight: 700; display: block; color: #f0fdf4; }
+  .adm-sidebar-head .brand span { font-size: 11px; color: #4b7a56; }
 
   .adm-nav {
     padding: 12px 10px;
     flex: 1;
+    position: relative; z-index: 1;
   }
   .adm-nav-label {
-    font-size: 10px; font-weight: 700; color: #475569;
+    font-size: 10px; font-weight: 700; color: #2d5a38;
     text-transform: uppercase; letter-spacing: .7px;
     padding: 0 8px; margin: 16px 0 6px;
   }
@@ -51,23 +62,29 @@
     display: flex; align-items: center; gap: 9px;
     padding: 9px 10px;
     border-radius: 7px;
-    color: #94a3b8; font-size: 13px;
+    color: #6b9e76; font-size: 13px;
     text-decoration: none;
     transition: background .12s, color .12s;
     margin-bottom: 2px;
   }
-  .adm-nav a:hover { background: #1e293b; color: #f1f5f9; }
-  .adm-nav a.active { background: #1e3a5f; color: #60a5fa; font-weight: 600; }
+  .adm-nav a:hover { background: rgba(22,163,74,.08); color: #86efac; }
+  .adm-nav a.active {
+    background: rgba(22,163,74,.15);
+    color: #4ade80; font-weight: 600;
+    border-left: 3px solid #22c55e;
+    padding-left: 7px;
+  }
   .adm-nav a .nav-icon { font-size: 15px; width: 20px; text-align: center; flex-shrink: 0; }
 
   .adm-sidebar-foot {
     padding: 12px 10px;
     border-top: 1px solid rgba(255,255,255,.06);
+    position: relative; z-index: 1;
   }
 
   /* ── Main area ── */
   .adm-main {
-    background: #f1f5f9;
+    background: #f0fdf4;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -75,17 +92,24 @@
 
   .adm-topbar {
     background: white;
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid #d1fae5;
     padding: 14px 28px;
     display: flex; align-items: center; justify-content: space-between;
     position: sticky; top: 0; z-index: 10;
+    box-shadow: 0 1px 6px rgba(22,163,74,.06);
+  }
+  .adm-topbar::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, #16a34a, #22c55e, transparent);
+    opacity: .5;
   }
   .adm-topbar h1 {
-    font-size: 18px; font-weight: 700; color: #0f172a;
+    font-size: 18px; font-weight: 700; color: #14532d;
   }
   .adm-topbar-right {
     display: flex; align-items: center; gap: 12px;
-    font-size: 13px; color: #64748b;
+    font-size: 13px; color: #4b7a56;
   }
 
   .adm-content {
@@ -101,7 +125,7 @@
     <div class="adm-sidebar-head">
       <div class="dot">🛡</div>
       <div class="brand">
-        <strong>Pusdatin CSIRT</strong>
+        <strong>Pusdatin Keamanan Siber</strong>
         <span>Panel Admin</span>
       </div>
     </div>
@@ -123,17 +147,20 @@
     <div class="adm-sidebar-foot">
       {% if admin is defined %}
       <div style="padding: 8px 10px; margin-bottom: 8px;">
-        <p style="font-size: 12px; font-weight: 600; color: #e2e8f0;">{{ admin.full_name }}</p>
-        <p style="font-size: 11px; color: #64748b;">{{ admin.username }}</p>
+        <p style="font-size: 12px; font-weight: 600; color: #d1fae5;">{{ admin.full_name }}</p>
+        <p style="font-size: 11px; color: #4b7a56;">{{ admin.username }}</p>
       </div>
       {% endif %}
       <form method="post" action="/admin/logout" style="margin:0;"
             onsubmit="this.querySelector('[name=csrf_token]').value = document.querySelector('meta[name=csrf-token]').content">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         <button type="submit"
-                style="width: 100%; background: transparent; color: #64748b; border: 1px solid #334155;
+                style="width: 100%; background: transparent; color: #4b7a56; border: 1px solid rgba(255,255,255,.1);
                        border-radius: 7px; padding: 8px 10px; font-size: 12px; cursor: pointer;
-                       font-family: inherit; text-align: left; display: flex; align-items: center; gap: 8px;">
+                       font-family: inherit; text-align: left; display: flex; align-items: center; gap: 8px;
+                       transition: background .12s, color .12s;"
+                onmouseover="this.style.background='rgba(255,255,255,.05)';this.style.color='#86efac'"
+                onmouseout="this.style.background='transparent';this.style.color='#4b7a56'">
           <span>⬡</span> Logout
         </button>
       </form>
@@ -145,10 +172,9 @@
     <header class="adm-topbar">
       <h1>{% block page_title %}{% endblock %}</h1>
       <div class="adm-topbar-right">
-        <span>🕐 {{ now().strftime("%d %b %Y") if now is defined else "" }}</span>
         <a href="/lapor" target="_blank"
-           style="color: #2563eb; text-decoration: none; font-size: 12px; padding: 5px 10px;
-                  border: 1px solid #dbeafe; border-radius: 6px; background: #eff6ff;">
+           style="color: #16a34a; text-decoration: none; font-size: 12px; padding: 5px 10px;
+                  border: 1px solid #bbf7d0; border-radius: 6px; background: #f0fdf4;">
           Portal Pelapor ↗
         </a>
       </div>

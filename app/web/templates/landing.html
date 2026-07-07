@@ -1,29 +1,501 @@
 {% extends "base.html" %}
-{% block title %}Pusdatin Helpdesk — Beranda{% endblock %}
+{% block title %}Pusdatin Helpdesk — Sistem Pelaporan Insiden{% endblock %}
 
 {% block layout %}
-<aside class="sidebar">
-  <div class="logo">
-    <div class="logo-dot">P</div>
-    <span>Pusdatin</span>
-  </div>
-  <div style="font-size: 10px; text-transform: uppercase; color: #94a3b8; letter-spacing: 0.5px; margin-bottom: 10px;">Statistik Publik</div>
-  <div style="margin-bottom: 14px;">
-    <div style="font-size: 20px; font-weight: 700;">—</div>
-    <div style="font-size: 11px; color: #94a3b8;">Total Tiket</div>
-  </div>
-</aside>
+<style>
+  /* ── CSS vars (light / dark) ── */
+  :root {
+    --bg:        #ffffff;
+    --bg-2:      #f8fafc;
+    --bg-3:      #f0fdf4;
+    --fg:        #0f172a;
+    --fg-2:      #475569;
+    --fg-3:      #94a3b8;
+    --border:    rgba(0,0,0,.08);
+    --card-bg:   #ffffff;
+    --primary:   #16a34a;
+    --pri-fg:    #ffffff;
+    --pri-10:    rgba(22,163,74,.10);
+    --pri-20:    rgba(22,163,74,.20);
+    --pri-30:    rgba(22,163,74,.30);
+    --ring:      rgba(22,163,74,.25);
+    --radius:    12px;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+    --shadow:    0 4px 16px rgba(0,0,0,.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:        #0a0f0b;
+      --bg-2:      #111a12;
+      --bg-3:      #0c1f0e;
+      --fg:        #f0fdf4;
+      --fg-2:      #86a98e;
+      --fg-3:      #4b7a56;
+      --border:    rgba(255,255,255,.08);
+      --card-bg:   #111a12;
+      --primary:   #22c55e;
+      --pri-fg:    #0a0f0b;
+      --pri-10:    rgba(34,197,94,.10);
+      --pri-20:    rgba(34,197,94,.18);
+      --pri-30:    rgba(34,197,94,.28);
+      --ring:      rgba(34,197,94,.25);
+      --shadow-sm: 0 1px 3px rgba(0,0,0,.3);
+      --shadow:    0 4px 16px rgba(0,0,0,.45);
+    }
+  }
 
-<main class="main" style="display: flex; align-items: center; justify-content: center;">
-  <div style="max-width: 520px; text-align: center;">
-    <h1 style="font-size: 28px; margin-bottom: 10px;">Helpdesk Keamanan Siber</h1>
-    <p style="color: #64748b; margin-bottom: 24px;">
-      Pra-triase insiden otomatis · Kementerian Pertanian
-    </p>
-    <div style="display: flex; gap: 12px; justify-content: center;">
-      <a class="btn btn-primary" href="/lapor">Lapor Insiden →</a>
-      <a class="btn btn-outline" href="/admin/login">Admin Login</a>
+  .app-shell { display: block; }
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); }
+
+  /* ── Topbar ── */
+  .lp-topbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 32px;
+    background: color-mix(in srgb, var(--bg) 75%, transparent);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+  }
+  .lp-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+  .lp-brand-icon {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px; line-height: 1;
+    background: var(--pri-10); border: 1px solid var(--pri-20);
+    filter: brightness(0) invert(1) drop-shadow(0 0 6px rgba(255,255,255,.8));
+  }
+  .lp-brand-name { font-size: 14px; font-weight: 700; color: var(--fg); line-height: 1.1; }
+  .lp-brand-sub  { font-size: 11px; color: var(--fg-3); display: block; }
+  .lp-sep { width: 1px; height: 20px; background: var(--border); flex-shrink: 0; }
+  .lp-topbar-nav { display: flex; align-items: center; gap: 2px; flex: 1; }
+  .lp-nav-link {
+    padding: 5px 12px; border-radius: 8px; font-size: 13px; font-weight: 500;
+    color: var(--fg-2); text-decoration: none;
+    transition: background .15s, color .15s;
+  }
+  .lp-nav-link:hover { background: var(--pri-10); color: var(--primary); }
+  .lp-topbar-end { display: flex; align-items: center; gap: 8px; }
+  .lp-btn-ghost {
+    padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 500;
+    color: var(--fg-2); text-decoration: none;
+    border: 1px solid var(--border); background: transparent;
+    transition: background .15s, border-color .15s, color .15s;
+  }
+  .lp-btn-ghost:hover { background: var(--pri-10); border-color: var(--pri-20); color: var(--primary); }
+  .lp-btn-solid {
+    padding: 6px 16px; border-radius: 8px; font-size: 13px; font-weight: 600;
+    background: var(--primary); color: var(--pri-fg); text-decoration: none;
+    border: none; transition: opacity .15s, transform .1s; cursor: pointer;
+  }
+  .lp-btn-solid:hover { opacity: .88; transform: translateY(-1px); }
+
+  /* ── Hero ── */
+  .lp-hero {
+    max-width: 1120px; margin: 0 auto;
+    padding: 120px 32px 80px;
+    display: grid; grid-template-columns: 1.2fr .8fr;
+    gap: 48px; align-items: center;
+  }
+  @media (max-width: 800px) {
+    .lp-hero { grid-template-columns: 1fr; padding: 96px 20px 56px; }
+    .lp-hero-cards { display: none; }
+  }
+
+  .lp-badge {
+    display: inline-flex; align-items: center; gap: 6px; margin-bottom: 20px;
+    padding: 4px 12px; border-radius: 999px;
+    background: var(--pri-10); border: 1px solid var(--pri-30);
+    font-size: 12px; font-weight: 600; color: var(--primary);
+  }
+  .lp-hero-title {
+    font-size: clamp(28px, 4vw, 46px); font-weight: 800;
+    line-height: 1.15; letter-spacing: -.5px; color: var(--fg);
+    margin: 0 0 16px;
+  }
+  .lp-hero-title em { font-style: normal; color: var(--primary); }
+  .lp-hero-sub {
+    font-size: 16px; color: var(--fg-2); line-height: 1.7;
+    max-width: 480px; margin: 0 0 32px;
+  }
+  .lp-hero-cta { display: flex; gap: 12px; flex-wrap: wrap; }
+  .lp-cta-primary {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 22px; border-radius: 10px;
+    background: var(--primary); color: var(--pri-fg);
+    font-size: 14px; font-weight: 600; text-decoration: none;
+    box-shadow: 0 2px 12px var(--ring);
+    transition: opacity .15s, transform .1s;
+  }
+  .lp-cta-primary:hover { opacity: .88; transform: translateY(-1px); }
+  .lp-cta-secondary {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 22px; border-radius: 10px;
+    background: transparent; color: var(--fg-2);
+    font-size: 14px; font-weight: 500; text-decoration: none;
+    border: 1px solid var(--border);
+    transition: background .15s, border-color .15s, color .15s;
+  }
+  .lp-cta-secondary:hover { background: var(--pri-10); border-color: var(--pri-20); color: var(--primary); }
+
+  .lp-hero-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .lp-stat-card {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px;
+    box-shadow: var(--shadow-sm);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .lp-stat-icon {
+    width: 40px; height: 40px; flex-shrink: 0; border-radius: 10px;
+    background: var(--pri-10); border: 1px solid var(--pri-20);
+    display: grid; place-items: center; font-size: 18px;
+  }
+  .lp-stat-label { font-size: 11px; color: var(--fg-3); }
+  .lp-stat-value { font-size: 16px; font-weight: 700; color: var(--fg); line-height: 1.2; }
+
+  /* ── Divider ── */
+  .lp-divider { height: 1px; background: var(--border); }
+
+  /* ── Section wrapper ── */
+  .lp-section { max-width: 1120px; margin: 0 auto; padding: 72px 32px; }
+  @media (max-width: 600px) { .lp-section { padding: 48px 20px; } }
+  .lp-section-head { margin-bottom: 36px; }
+  .lp-section-head h2 {
+    font-size: clamp(20px, 2.5vw, 28px); font-weight: 800;
+    letter-spacing: -.3px; color: var(--fg); margin: 0 0 8px;
+  }
+  .lp-section-head p { font-size: 15px; color: var(--fg-2); margin: 0; }
+
+  /* ── Feature cards (horizontal) ── */
+  .lp-feat-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px;
+  }
+  .lp-feat-card {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px;
+    box-shadow: var(--shadow-sm);
+    display: flex; gap: 14px; align-items: flex-start;
+    transition: box-shadow .2s, border-color .2s, transform .2s;
+  }
+  .lp-feat-card:hover { box-shadow: var(--shadow); border-color: var(--pri-20); transform: translateY(-2px); }
+  .lp-feat-icon {
+    width: 44px; height: 44px; flex-shrink: 0; border-radius: 10px;
+    background: var(--pri-10); border: 1px solid var(--pri-20);
+    display: grid; place-items: center; font-size: 20px;
+  }
+  .lp-feat-body h3 { font-size: 14px; font-weight: 700; color: var(--fg); margin: 0 0 5px; }
+  .lp-feat-body p  { font-size: 13px; color: var(--fg-2); line-height: 1.6; margin: 0; }
+  .lp-feat-link {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 12px; font-weight: 600; color: var(--primary);
+    text-decoration: none; margin-top: 8px;
+  }
+  .lp-feat-link:hover { text-decoration: underline; }
+
+  /* ── Steps ── */
+  .lp-steps-wrap {
+    display: grid; grid-template-columns: .8fr 1.2fr; gap: 56px; align-items: center;
+  }
+  @media (max-width: 800px) { .lp-steps-wrap { grid-template-columns: 1fr; } }
+  .lp-steps { display: flex; flex-direction: column; gap: 20px; }
+  .lp-step  { display: flex; align-items: flex-start; gap: 14px; }
+  .lp-step-num {
+    width: 28px; height: 28px; flex-shrink: 0; border-radius: 50%;
+    background: var(--pri-10); border: 1px solid var(--pri-20);
+    display: grid; place-items: center;
+    font-size: 12px; font-weight: 700; color: var(--primary);
+  }
+  .lp-step-title { font-size: 14px; font-weight: 700; color: var(--fg); margin: 0 0 3px; }
+  .lp-step-desc  { font-size: 13px; color: var(--fg-2); line-height: 1.6; margin: 0; }
+
+  .lp-data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .lp-data-card {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 14px;
+    box-shadow: var(--shadow-sm);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .lp-data-icon {
+    width: 36px; height: 36px; flex-shrink: 0; border-radius: 8px;
+    background: var(--pri-10); display: grid; place-items: center; font-size: 16px;
+  }
+  .lp-data-title { font-size: 13px; font-weight: 600; color: var(--fg); margin: 0 0 2px; }
+  .lp-data-sub   { font-size: 12px; color: var(--fg-3); margin: 0; }
+
+  /* ── Benefits ── */
+  .lp-benefits-wrap {
+    background: var(--bg-3); border: 1px solid var(--pri-20);
+    border-radius: 16px; padding: 40px 48px;
+  }
+  @media (max-width: 600px) { .lp-benefits-wrap { padding: 28px 20px; } }
+  .lp-benefits-wrap h2 {
+    font-size: clamp(18px, 2.5vw, 24px); font-weight: 800; color: var(--fg); margin: 0 0 24px;
+  }
+  .lp-checklist { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 32px; list-style: none; margin: 0; padding: 0; }
+  @media (max-width: 600px) { .lp-checklist { grid-template-columns: 1fr; } }
+  .lp-checklist li {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 13px; color: var(--fg-2); line-height: 1.6;
+  }
+  .lp-checklist li::before {
+    content: '✓'; color: var(--primary); font-weight: 700; font-size: 13px; flex-shrink: 0; margin-top: 1px;
+  }
+
+  /* ── CTA ── */
+  .lp-cta-box {
+    background: linear-gradient(135deg, var(--pri-10), var(--bg-3));
+    border: 1px solid var(--pri-20);
+    border-radius: 16px; padding: 48px; text-align: center;
+  }
+  @media (max-width: 600px) { .lp-cta-box { padding: 32px 20px; } }
+  .lp-cta-box h2 { font-size: clamp(20px, 3vw, 26px); font-weight: 800; color: var(--fg); margin: 0 0 10px; }
+  .lp-cta-box p  { font-size: 15px; color: var(--fg-2); margin: 0 0 28px; }
+  .lp-cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+  /* ── Footer ── */
+  .lp-footer {
+    border-top: 1px solid var(--border);
+    max-width: 1120px; margin: 0 auto;
+    padding: 32px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;
+    font-size: 13px; color: var(--fg-3);
+  }
+  @media (max-width: 600px) { .lp-footer { grid-template-columns: 1fr; } }
+  .lp-footer h4 { font-size: 13px; font-weight: 600; color: var(--fg); margin: 0 0 10px; }
+  .lp-footer ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+  .lp-footer a { color: var(--fg-3); text-decoration: none; }
+  .lp-footer a:hover { color: var(--primary); }
+  .lp-footer-copy {
+    border-top: 1px solid var(--border); text-align: center;
+    padding: 16px 32px; font-size: 12px; color: var(--fg-3);
+  }
+</style>
+
+{# ── Topbar ── #}
+<nav class="lp-topbar">
+  <a href="/" class="lp-brand">
+    <div class="lp-brand-icon">🛡</div>
+    <div>
+      <span class="lp-brand-name">Pusdatin Helpdesk</span>
+      <span class="lp-brand-sub">Keamanan Siber Kementan</span>
+    </div>
+  </a>
+  <div class="lp-sep"></div>
+  <nav class="lp-topbar-nav">
+    <a href="#fitur" class="lp-nav-link">Fitur</a>
+    <a href="#alur" class="lp-nav-link">Cara Kerja</a>
+  </nav>
+  <div class="lp-topbar-end">
+    <a href="/admin/login" class="lp-btn-ghost">Panel Admin</a>
+    <a href="/lapor" class="lp-btn-solid">Lapor Insiden</a>
+  </div>
+</nav>
+
+{# ── Hero ── #}
+<section style="background: var(--bg);">
+  <div class="lp-hero">
+    <div>
+      <div class="lp-badge">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+        Sistem Pra-Triase Berbasis AI
+      </div>
+      <h1 class="lp-hero-title">
+        Laporkan Insiden Siber,<br>
+        <em>Cepat dan Terstruktur</em>
+      </h1>
+      <p class="lp-hero-sub">
+        Platform pelaporan insiden keamanan informasi untuk Kementerian Pertanian —
+        klasifikasi AI, panduan mitigasi RAG, dan tiket yang terlacak hingga pengesahan dokumen resmi.
+      </p>
+      <div class="lp-hero-cta">
+        <a href="/lapor" class="lp-cta-primary">
+          Lapor Sekarang
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+        <a href="/admin/login" class="lp-cta-secondary">Panel Admin</a>
+      </div>
     </div>
   </div>
-</main>
+</section>
+
+<div class="lp-divider"></div>
+
+{# ── Features ── #}
+<section id="fitur" style="background: var(--bg-2);">
+  <div class="lp-section">
+    <div class="lp-section-head">
+      <h2>Apa yang difasilitasi sistem ini</h2>
+      <p>Dari pelaporan awal hingga laporan resmi dalam satu alur dan satu platform.</p>
+    </div>
+    <div class="lp-feat-grid">
+      <div class="lp-feat-card">
+        <div class="lp-feat-icon">🤖</div>
+        <div class="lp-feat-body">
+          <h3>Klasifikasi AI Otomatis</h3>
+          <p>Setiap laporan dianalisis pipeline LangGraph untuk menentukan jenis insiden, tingkat keparahan, dan rekomendasi mitigasi awal.</p>
+        </div>
+      </div>
+      <div class="lp-feat-card">
+        <div class="lp-feat-icon">📚</div>
+        <div class="lp-feat-body">
+          <h3>Panduan Mitigasi RAG</h3>
+          <p>Rekomendasi dari knowledge base berbasis NIST, MITRE ATT&amp;CK, dan prosedur internal Pusdatin via Retrieval-Augmented Generation.</p>
+        </div>
+      </div>
+      <div class="lp-feat-card">
+        <div class="lp-feat-icon">🔐</div>
+        <div class="lp-feat-body">
+          <h3>Triase CIA Triad</h3>
+          <p>Penilaian dampak berdasarkan Kerahasiaan, Integritas, dan Ketersediaan.</p>
+        </div>
+      </div>
+      <div class="lp-feat-card">
+        <div class="lp-feat-icon">📥</div>
+        <div class="lp-feat-body">
+          <h3>Inbox &amp; Manajemen Tiket</h3>
+          <p>Panel admin untuk memonitor, assign, ubah status, dan eskalasi tiket insiden secara real-time.</p>
+          <a href="/admin/login" class="lp-feat-link">
+            Buka Panel
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="lp-feat-card">
+        <div class="lp-feat-icon">📄</div>
+        <div class="lp-feat-body">
+          <h3>Laporan Resmi Otomatis</h3>
+          <p>Generate Formulir Laporan Insiden sesuai format standar dengan satu klik — lengkap Bagian A–E dan kolom pengesahan.</p>
+        </div>
+      </div>
+      <div class="lp-feat-card">
+        <div class="lp-feat-icon">🔔</div>
+        <div class="lp-feat-body">
+          <h3>Notifikasi Telegram</h3>
+          <p>Tim Keamanan Siber dan pelapor menerima notifikasi otomatis saat tiket dibuat maupun status penanganan diperbarui.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="lp-divider"></div>
+
+{# ── How it works ── #}
+<section id="alur" style="background: var(--bg);">
+  <div class="lp-section">
+    <div class="lp-steps-wrap">
+      <div>
+        <div class="lp-section-head">
+          <h2>Alur Penanganan Insiden</h2>
+          <p>Dari laporan masuk hingga pengesahan dokumen resmi.</p>
+        </div>
+        <div class="lp-steps">
+          <div class="lp-step">
+            <div class="lp-step-num">1</div>
+            <div>
+              <p class="lp-step-title">Isi Identitas &amp; Deskripsi</p>
+              <p class="lp-step-desc">Pelapor mengisi formulir chat: nama, unit kerja, jenis insiden, dan kronologi singkat.</p>
+            </div>
+          </div>
+          <div class="lp-step">
+            <div class="lp-step-num">2</div>
+            <div>
+              <p class="lp-step-title">AI Menganalisis &amp; Mengklasifikasi</p>
+              <p class="lp-step-desc">Pipeline AI menentukan kategori insiden, dampak CIA, dan rekomendasi mitigasi awal berbasis knowledge base.</p>
+            </div>
+          </div>
+          <div class="lp-step">
+            <div class="lp-step-num">3</div>
+            <div>
+              <p class="lp-step-title">Tim CSIRT Menangani</p>
+              <p class="lp-step-desc">Admin menerima notifikasi, assign tiket, dan memperbarui status penanganan secara real-time.</p>
+            </div>
+          </div>
+          <div class="lp-step">
+            <div class="lp-step-num">4</div>
+            <div>
+              <p class="lp-step-title">Laporan Resmi Diterbitkan</p>
+              <p class="lp-step-desc">Formulir insiden digenerate otomatis dan siap untuk disahkan serta diarsipkan.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="lp-data-grid">
+        <div class="lp-data-card">
+          <div class="lp-data-icon">💬</div>
+          <div>
+            <p class="lp-data-title">Chat Pelapor</p>
+            <p class="lp-data-sub">Formulir berbasis percakapan</p>
+          </div>
+        </div>
+        <div class="lp-data-card">
+          <div class="lp-data-icon">🛡</div>
+          <div>
+            <p class="lp-data-title">Triase CIA</p>
+            <p class="lp-data-sub">Klasifikasi dampak standar</p>
+          </div>
+        </div>
+        <div class="lp-data-card">
+          <div class="lp-data-icon">📎</div>
+          <div>
+            <p class="lp-data-title">Lampiran Bukti</p>
+            <p class="lp-data-sub">Upload screenshot / log</p>
+          </div>
+        </div>
+        <div class="lp-data-card">
+          <div class="lp-data-icon">🗂</div>
+          <div>
+            <p class="lp-data-title">Tiket Terlacak</p>
+            <p class="lp-data-sub">Status &amp; riwayat lengkap</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{# ── CTA ── #}
+<div class="lp-section">
+  <div class="lp-cta-box">
+    <h2>Siap Melaporkan Insiden?</h2>
+    <p>Tim Keamanan Siber dan PDP Pusdatin siap membantu menangani laporan Anda.</p>
+    <div class="lp-cta-btns">
+      <a href="/lapor" class="lp-cta-primary">
+        Lapor Sekarang
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+      <a href="/admin/login" class="lp-cta-secondary">Masuk sebagai Admin</a>
+    </div>
+  </div>
+</div>
+
+{# ── Footer ── #}
+<footer>
+  <div class="lp-footer">
+    <div>
+      <h4>Tentang Platform</h4>
+      <p style="margin:0;line-height:1.6;">Sistem prototipe helpdesk keamanan siber berbasis AI untuk insiden keamanan informasi di Kementan.</p>
+    </div>
+    <div>
+      <h4>Navigasi</h4>
+      <ul>
+        <li><a href="/lapor">Lapor Insiden</a></li>
+        <li><a href="/admin/login">Panel Admin</a></li>
+        <li><a href="#fitur">Fitur Sistem</a></li>
+        <li><a href="#alur">Cara Kerja</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Cakupan Sistem</h4>
+      <ul>
+        <li>Pelaporan &amp; Klasifikasi Insiden</li>
+        <li>Manajemen Tiket CSIRT</li>
+        <li>Laporan Formulir Resmi</li>
+      </ul>
+    </div>
+  </div>
+  <div class="lp-footer-copy">
+    © 2026 Pusdatin Kementan — Sistem Prototipe · Hanya untuk penggunaan internal
+  </div>
+</footer>
+
 {% endblock %}

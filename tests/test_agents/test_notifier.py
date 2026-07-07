@@ -20,7 +20,7 @@ def _make_state(**overrides) -> dict:
         "ticket_id": "TICKET-2026-0001",
         "incident_type": "Phishing",
         "severity": "Tinggi",
-        "reporter_id": "user_123",
+        "reporter_id": "tg:user_123",
         "reporter_name": "Budi Santoso",
         "reporter_contact": "@budi",
         "sanitized_input": "Email phishing dari CEO palsu.",
@@ -103,7 +103,7 @@ def test_format_reporter_confirmation_empty_mitigation():
         ticket_id="T", incident_type="DDoS", severity="Sedang",
         confidence=0.5, mitigation_steps=""
     )
-    assert "CSIRT" in msg
+    assert "Tim Keamanan Siber dan PDP" in msg
 
 
 # ---------------------------------------------------------------------------
@@ -162,8 +162,32 @@ async def test_send_notifications_with_telegram_calls_send_message():
         result = await agent.send_notifications(_make_state())
 
     assert result["notification_sent"] is True
-    # 1x CSIRT + 1x pelapor (reporter_id="user_123")
+    # 1x CSIRT + 1x pelapor (reporter_id="tg:user_123")
     assert mock_bot.send_message.call_count >= 2
+    # chat_id ke pelapor harus prefix "tg:" sudah dilepas
+    reporter_call = next(
+        c for c in mock_bot.send_message.call_args_list
+        if c.kwargs.get("chat_id") == "user_123"
+    )
+    assert reporter_call is not None
+
+
+@pytest.mark.asyncio
+async def test_send_notifications_skips_reporter_send_for_non_telegram_channel():
+    """reporter_id dari channel lain (mis. 'web:xxx') tidak boleh dikirim
+    lewat Telegram — cuma CSIRT yang boleh dapat pesan."""
+    mock_bot = MagicMock()
+    mock_bot.send_message = AsyncMock()
+    agent = NotifierAgent(telegram_client=mock_bot)
+
+    with patch.dict("os.environ", {"CSIRT_CHAT_ID": "csirt_001", "CSIRT_MANAGER_CHAT_ID": ""}):
+        result = await agent.send_notifications(_make_state(reporter_id="web:abc123"))
+
+    assert result["notification_sent"] is True
+    # hanya 1x ke CSIRT, tidak ada percobaan kirim ke "web:abc123"
+    assert mock_bot.send_message.call_count == 1
+    sent_chat_ids = [c.kwargs.get("chat_id") for c in mock_bot.send_message.call_args_list]
+    assert "web:abc123" not in sent_chat_ids
 
 
 @pytest.mark.asyncio

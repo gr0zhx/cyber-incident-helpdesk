@@ -145,7 +145,7 @@
     {% if result.page > 1 %}
     <button style="padding:7px 14px;border:1.5px solid #e2e8f0;border-radius:7px;background:white;
                    font-size:13px;font-family:inherit;cursor:pointer;color:#0f172a;"
-            hx-get="/admin/inbox/table?page={{ result.page - 1 }}&status={{ filters.status or '' }}&severity={{ filters.severity or '' }}&search={{ filters.search or '' }}"
+            hx-get="/admin/inbox/table?page={{ result.page - 1 }}&status={{ filters.status or '' }}&severity={{ filters.severity or '' }}&search={{ filters.search or '' }}&date_from={{ raw_filters.date_from if raw_filters is defined else '' }}&date_to={{ raw_filters.date_to if raw_filters is defined else '' }}"
             hx-target="#inbox-table-wrap">
       ← Sebelumnya
     </button>
@@ -153,7 +153,7 @@
     {% if result.page < result.total_pages %}
     <button style="padding:7px 14px;border:1.5px solid #2563eb;border-radius:7px;background:#2563eb;
                    font-size:13px;font-family:inherit;cursor:pointer;color:white;"
-            hx-get="/admin/inbox/table?page={{ result.page + 1 }}&status={{ filters.status or '' }}&severity={{ filters.severity or '' }}&search={{ filters.search or '' }}"
+            hx-get="/admin/inbox/table?page={{ result.page + 1 }}&status={{ filters.status or '' }}&severity={{ filters.severity or '' }}&search={{ filters.search or '' }}&date_from={{ raw_filters.date_from if raw_filters is defined else '' }}&date_to={{ raw_filters.date_to if raw_filters is defined else '' }}"
             hx-target="#inbox-table-wrap">
       Berikutnya →
     </button>

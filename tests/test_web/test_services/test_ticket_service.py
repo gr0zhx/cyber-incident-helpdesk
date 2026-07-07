@@ -74,6 +74,24 @@ def test_list_tickets_search_by_ticket_id_or_name(db):
     assert result.total == 1 and result.items[0].ticket_id == "INC-200"
 
 
+def test_list_tickets_filters_by_date_range(db):
+    _make_ticket(db, "OLD", offset_min=60 * 24 * 10)  # 10 hari lalu
+    _make_ticket(db, "NEW", offset_min=0)
+    svc = TicketService(db)
+    date_from = datetime.now(timezone.utc) - timedelta(days=1)
+    result = svc.list_tickets(TicketFilters(date_from=date_from), page=1, page_size=25)
+    assert result.total == 1 and result.items[0].ticket_id == "NEW"
+
+
+def test_list_tickets_status_counts_respect_date_range(db):
+    _make_ticket(db, "OLD", status="RESOLVED", offset_min=60 * 24 * 10)
+    _make_ticket(db, "NEW", status="RESOLVED", offset_min=0)
+    svc = TicketService(db)
+    date_from = datetime.now(timezone.utc) - timedelta(days=1)
+    result = svc.list_tickets(TicketFilters(date_from=date_from), page=1, page_size=25)
+    assert result.resolved_count == 1
+
+
 def test_list_tickets_pagination(db):
     for i in range(30):
         _make_ticket(db, f"INC-{i:03d}", offset_min=i)

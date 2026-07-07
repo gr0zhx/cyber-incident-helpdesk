@@ -307,7 +307,7 @@ async def test_fallback_no_relevant_docs():
 
     assert result["rag_confidence"] == 0.0
     assert result["citations"] == []
-    assert "CSIRT" in result["mitigation_recommendation"]
+    assert "Tim Keamanan Siber dan PDP" in result["mitigation_recommendation"]
 
 
 @pytest.mark.asyncio
@@ -352,7 +352,7 @@ async def test_llm_timeout_returns_fallback():
     result = await agent.generate_mitigation("DDoS terdeteksi", "DDoS", "Kritis")
 
     assert result["rag_confidence"] == 0.0
-    assert "CSIRT" in result["mitigation_recommendation"] or "timeout" in result["mitigation_recommendation"].lower()
+    assert "Tim Keamanan Siber dan PDP" in result["mitigation_recommendation"] or "timeout" in result["mitigation_recommendation"].lower()
 
 
 @pytest.mark.asyncio
@@ -372,7 +372,7 @@ async def test_all_citations_fail_validation_returns_fallback():
     # Semua sitasi palsu → harus fallback, rag_confidence harus 0.0 (bukan nilai chunk)
     assert result["rag_confidence"] == 0.0
     assert result["citations"] == []
-    assert "CSIRT" in result["mitigation_recommendation"]
+    assert "Tim Keamanan Siber dan PDP" in result["mitigation_recommendation"]
 
 
 def test_validate_citations_rejects_short_generic_word():

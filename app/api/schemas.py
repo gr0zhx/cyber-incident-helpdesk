@@ -12,6 +12,11 @@ class ReportRequest(BaseModel):
     reporter_name: str = Field(default="", max_length=100)
     reporter_contact: str = Field(default="", max_length=100)
     session_id: str = Field(default="", max_length=50)
+    session_existing_ticket: str = Field(
+        default="",
+        max_length=50,
+        description="ticket_id aktif di sesi ini; diisi untuk mencegah pembuatan tiket duplikat",
+    )
 
 
 class CitationOut(BaseModel):

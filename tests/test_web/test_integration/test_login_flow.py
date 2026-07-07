@@ -91,4 +91,4 @@ def test_full_login_flow(test_db, fake_redis_patch):
     r = client.get("/admin/inbox")
     assert r.status_code == 200
     assert "Inbox Tiket" in r.text
-    assert "Pusdatin CSIRT" in r.text
+    assert "Pusdatin Keamanan Siber" in r.text

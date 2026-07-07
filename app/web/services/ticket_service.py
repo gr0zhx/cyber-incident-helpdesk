@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timezone
 from math import ceil
 from typing import Optional
 
@@ -71,8 +71,13 @@ class TicketService:
             .limit(page_size)
             .all()
         )
-        # Status counts (selalu dari keseluruhan, bukan filtered)
+        # Status counts — mengikuti rentang tanggal yang difilter (bukan status/severity/search,
+        # karena breakdown ini sendiri sudah tersegmentasi per status)
         base = self.db.query(IncidentTicket)
+        if filters.date_from:
+            base = base.filter(IncidentTicket.created_at >= filters.date_from)
+        if filters.date_to:
+            base = base.filter(IncidentTicket.created_at <= filters.date_to)
         pending_count   = base.filter(IncidentTicket.status == "PENDING_REVIEW").count()
         inprogress_count = base.filter(IncidentTicket.status == "IN_PROGRESS").count()
         resolved_count  = base.filter(IncidentTicket.status == "RESOLVED").count()
@@ -105,11 +110,11 @@ class TicketService:
         ticket.status = new_status
         ticket.modified_by = modified_by
         if new_status == "IN_PROGRESS" and ticket.reviewed_at is None:
-            ticket.reviewed_at = datetime.utcnow()
+            ticket.reviewed_at = datetime.now(timezone.utc)
         if new_status == "RESOLVED":
-            ticket.resolved_at = datetime.utcnow()
+            ticket.resolved_at = datetime.now(timezone.utc)
         if new_status == "CLOSED":
-            ticket.closed_at = datetime.utcnow()
+            ticket.closed_at = datetime.now(timezone.utc)
         return old
 
     def assign(self, ticket_id: str, assignee: str, modified_by: str) -> None:

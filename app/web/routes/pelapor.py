@@ -35,14 +35,33 @@ def _render_md(text: str) -> str:
         t = t[:src_match.start()].rstrip()
         sources_raw = src_match.group(1).strip()
         parts = re.split(r'\[(\d+)\]', sources_raw)
+
+        def _base_label(lbl: str) -> str:
+            """Strip trailing section refs like ', Bagian 2.a.4'."""
+            stripped = re.sub(
+                r',?\s*(bagian|pasal|lampiran|ayat|huruf|angka|poin[t]?|bab|butir|klausul|section|article|chapter)\b.*$',
+                '', lbl, flags=re.IGNORECASE,
+            ).strip().rstrip(',').strip()
+            return stripped if stripped else lbl
+
         items = []
+        seen_nums: set[str] = set()      # dedup by [N]
+        seen_bases: set[str] = set()     # dedup same doc under different [N]
         for i in range(1, len(parts) - 1, 2):
-            label = parts[i + 1].strip().lstrip('.,;')
-            if label:
-                items.append(
-                    f'<li><span class="src-num">[{parts[i]}]</span>'
-                    f' {_html.escape(label)}</li>'
-                )
+            num = parts[i]
+            raw_label = parts[i + 1].strip().lstrip('.,; ')
+            if not raw_label or num in seen_nums:
+                continue
+            base = _base_label(raw_label)
+            base_key = base.lower()
+            if base_key in seen_bases:
+                continue
+            seen_nums.add(num)
+            seen_bases.add(base_key)
+            items.append(
+                f'<li><span class="src-num">[{num}]</span>'
+                f' {_html.escape(base)}</li>'
+            )
         if items:
             sources_html = (
                 '<div class="sources-block">'
@@ -139,22 +158,28 @@ async def identitas_submit(
 def chat_page(
     request: Request,
     reporter: dict = Depends(get_reporter_session),
+    db: Session = Depends(get_db_session),
 ):
     svc = ChatService(redis=_redis_client())
     history = svc.get_history(reporter["session_id"])
+    session_ticket_id = svc.get_session_ticket(reporter["session_id"])
+    session_ticket = None
+    if session_ticket_id:
+        session_ticket = db.query(IncidentTicket).filter_by(ticket_id=session_ticket_id).first()
     return templates.TemplateResponse(
         "pelapor/chat.html",
         {
             "request": request,
             "reporter": reporter,
             "history": history,
+            "session_ticket": session_ticket,
             "csrf_token": request.session.get("csrf_token", ""),
         },
     )
 
 
 @router.post("/chat/message", response_class=HTMLResponse)
-@limiter.limit("20/minute")
+@limiter.limit("60/minute")
 async def send_message(
     request: Request,
     text: str = Form(...),
@@ -174,6 +199,7 @@ async def send_message(
         reporter_id=reporter["reporter_id"],
         reporter_name=reporter["reporter_name"],
         reporter_contact=reporter["reporter_contact"],
+        reporter_unit=reporter.get("reporter_unit", ""),
         text=text,
         graph=graph,
         orchestrator=orchestrator,
@@ -196,7 +222,7 @@ async def send_message(
 
 
 @router.post("/chat/upload", response_class=HTMLResponse)
-@limiter.limit("10/minute")
+@limiter.limit("20/minute")
 async def upload_file(
     request: Request,
     reporter: dict = Depends(get_reporter_session),
@@ -221,8 +247,49 @@ async def upload_file(
     size_kb = meta["size_bytes"] // 1024
     return templates.TemplateResponse(
         "pelapor/_attachment_pill.html",
-        {"request": request, "filename": filename, "size_kb": size_kb},
+        {
+            "request": request,
+            "filename": filename,
+            "size_kb": size_kb,
+            "file_id": meta["file_id"],
+            "mime_type": meta["mime_type"],
+        },
     )
+
+
+@router.post("/chat/upload/remove", response_class=HTMLResponse)
+async def remove_upload(
+    request: Request,
+    reporter: dict = Depends(get_reporter_session),
+):
+    """Hapus satu pending upload berdasarkan file_id."""
+    import json as _json
+    from pathlib import Path as _Path
+
+    form = await request.form()
+    file_id = (form.get("file_id") or "").strip()
+    if not file_id:
+        return HTMLResponse("")
+
+    redis = _redis_client()
+    key = f"web:pending_uploads:{reporter['session_id']}"
+    raw = redis.get(key)
+    if raw:
+        try:
+            pending = _json.loads(raw)
+        except (ValueError, _json.JSONDecodeError):
+            pending = []
+        to_delete = [p for p in pending if p.get("file_id") == file_id]
+        new_pending = [p for p in pending if p.get("file_id") != file_id]
+        # Hapus file dari disk
+        for p in to_delete:
+            try:
+                _Path(p["stored_path"]).unlink(missing_ok=True)
+            except Exception:
+                pass
+        redis.setex(key, 86400, _json.dumps(new_pending).encode())
+
+    return HTMLResponse("")  # HTMX akan swap pill dengan string kosong
 
 
 @router.post("/chat/reset", response_class=HTMLResponse)

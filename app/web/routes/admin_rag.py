@@ -62,11 +62,11 @@ async def upload_document(
     db: Session = Depends(get_db_session),
 ):
     data = await file.read()
-    filename = file.filename or "upload.pdf"
+    filename = file.filename or "upload.bin"
     types_list = [t.strip() for t in incident_types.split(",") if t.strip()] or ["general"]
     svc = _make_service()
     try:
-        meta_filename = svc.upload_pdf(
+        meta_filename = svc.upload_document(
             filename=filename, data=data, doc_id=doc_id,
             doc_title=doc_title, source_framework=source_framework,
             incident_types=types_list, language=language,

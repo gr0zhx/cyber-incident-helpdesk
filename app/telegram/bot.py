@@ -22,19 +22,17 @@ logger = logging.getLogger(__name__)
 # Conversation states
 WAITING_REPORT = 0
 
-# Env vars / fallback config
+# Env vars / prefix config
 _ADMIN_CHAT_ID_ENV = "CSIRT_CHAT_ID"
-_ADMIN_CHAT_ID_FALLBACK = "-1003971618295"
+# Prefix reporter_id untuk channel Telegram — dibedakan dari "web:..." supaya
+# NotificationService tahu tiket ini bisa dinotifikasi balik lewat Telegram.
+_TELEGRAM_REPORTER_PREFIX = "tg:"
 
 
 def _get_admin_chat_id() -> str | None:
     # Return None when env var is not explicitly set so tests can assert
-    # "no chat id" behavior. The fallback ID is only for production/runtime
-    # scenarios and should be provided via environment in deployments.
-    val = os.getenv(_ADMIN_CHAT_ID_ENV)
-    if val:
-        return val
-    return None
+    # "no chat id" behavior. Deployments must set CSIRT_CHAT_ID via environment.
+    return os.getenv(_ADMIN_CHAT_ID_ENV) or None
 
 
 # ---------------------------------------------------------------------------
@@ -49,7 +47,7 @@ async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
         "• /report — Laporkan insiden keamanan siber\n"
         "• /status <ticket_id> — Cek status tiket\n"
         "• /help — Panduan penggunaan\n\n"
-        "Tim CSIRT siap membantu Anda."
+        "Tim Keamanan Siber dan PDP siap membantu Anda."
     )
 
 
@@ -64,7 +62,7 @@ async def help_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         "   • Langkah mitigasi awal\n"
         "   • Nomor tiket untuk tindak lanjut\n\n"
         "3. Gunakan /status TICKET-XXXX-XXXX untuk cek status tiket.\n\n"
-        "⚠️ Untuk situasi darurat, hubungi tim CSIRT langsung."
+        "⚠️ Untuk situasi darurat, hubungi Tim Keamanan Siber dan PDP langsung."
     )
 
 
@@ -90,7 +88,7 @@ async def report_receive_handler(update: Update, context: ContextTypes.DEFAULT_T
     if not graph or not orchestrator:
         logger.error("Pipeline tidak terinisialisasi di bot_data")
         await update.message.reply_text(
-            "Sistem sedang tidak tersedia. Silakan coba lagi nanti atau hubungi tim CSIRT langsung."
+            "Sistem sedang tidak tersedia. Silakan coba lagi nanti atau hubungi Tim Keamanan Siber dan PDP langsung."
         )
         return ConversationHandler.END
 
@@ -99,12 +97,33 @@ async def report_receive_handler(update: Update, context: ContextTypes.DEFAULT_T
 
     try:
         session_id = str(uuid.uuid4())
+        # Prefix "tg:" membedakan reporter_id channel Telegram dari channel
+        # web ("web:...") — dipakai NotificationService untuk memutuskan
+        # apakah tiket bisa dinotifikasi balik lewat Telegram.
+        reporter_id = f"{_TELEGRAM_REPORTER_PREFIX}{user.id}"
+
+        # Cek apakah user sudah punya tiket terbuka — cegah duplikasi
+        existing_ticket_id = ""
+        ticket_repo = context.bot_data.get("ticket_repository")
+        if ticket_repo:
+            try:
+                user_tickets = ticket_repo.get_tickets_by_reporter(reporter_id)
+                open_ticket = next(
+                    (t for t in user_tickets if t.status not in ("CLOSED", "RESOLVED")),
+                    None,
+                )
+                if open_ticket:
+                    existing_ticket_id = open_ticket.ticket_id
+            except Exception:
+                pass  # gagal cek — lanjut tanpa guard duplikasi
+
         state = orchestrator.initialize_state(
             raw_input=text,
-            reporter_id=str(user.id),
+            reporter_id=reporter_id,
             reporter_name=user.full_name or "",
             reporter_contact=f"@{user.username}" if user.username else str(user.id),
             session_id=session_id,
+            session_existing_ticket=existing_ticket_id,
         )
 
         result = await graph.ainvoke(state)
@@ -119,7 +138,7 @@ async def report_receive_handler(update: Update, context: ContextTypes.DEFAULT_T
         await processing_msg.delete()
         await update.message.reply_text(
             "Terjadi kesalahan saat memproses laporan Anda. "
-            "Silakan coba lagi atau hubungi tim CSIRT secara langsung."
+            "Silakan coba lagi atau hubungi Tim Keamanan Siber dan PDP secara langsung."
         )
 
     return ConversationHandler.END
@@ -136,12 +155,23 @@ async def _send_result(
         await update.message.reply_text(clarification_message)
         return
 
+    # Pertanyaan umum / pengetahuan (tanpa tiket): balas jawabannya langsung —
+    # jangan pakai template konfirmasi tiket, dan jangan alert grup CSIRT.
+    intent = result.get("intent", "")
+    if not result.get("ticket_id") and intent in ("general_help", "query_knowledge", "query_status"):
+        answer = result.get("mitigation_recommendation") or (
+            "Maaf, saya belum bisa menjawab pertanyaan itu. "
+            "Ketik /report untuk melaporkan insiden, atau /help untuk panduan."
+        )
+        await update.message.reply_text(answer)
+        return
+
     # Respons ke pelapor
     ticket_id = result.get("ticket_id") or "DALAM PROSES"
     incident_type = result.get("incident_type") or "Tidak terklasifikasi"
     severity = result.get("severity") or "Tidak diketahui"
     confidence = result.get("confidence_score", 0.0)
-    mitigation = result.get("mitigation_recommendation") or "Hubungi tim CSIRT secara langsung."
+    mitigation = result.get("mitigation_recommendation") or "Hubungi Tim Keamanan Siber dan PDP secara langsung."
 
     reporter_msg = format_reporter_confirmation(
         ticket_id=ticket_id,
@@ -192,7 +222,7 @@ async def status_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         await update.message.reply_text(
             f"Tiket {ticket_id} sedang diperiksa. "
             "Fitur pengecekan status otomatis belum tersedia. "
-            "Silakan hubungi tim CSIRT untuk informasi lebih lanjut."
+            "Silakan hubungi Tim Keamanan Siber dan PDP untuk informasi lebih lanjut."
         )
         return
 
@@ -221,13 +251,6 @@ async def status_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     except Exception as exc:
         logger.exception("Error mengambil tiket %s: %s", ticket_id, exc)
         await update.message.reply_text("Gagal mengambil informasi tiket. Coba lagi nanti.")
-
-
-async def unknown_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Handler untuk pesan di luar conversation — arahkan ke /help."""
-    await update.message.reply_text(
-        "Ketik /report untuk melaporkan insiden, atau /help untuk bantuan."
-    )
 
 
 # ---------------------------------------------------------------------------
@@ -270,6 +293,15 @@ def build_bot_application(
     app.add_handler(CommandHandler("help", help_handler))
     app.add_handler(CommandHandler("status", status_handler))
     app.add_handler(conv_handler)
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, unknown_handler))
+    # Teks bebas di luar percakapan /report → tetap masuk pipeline (seperti
+    # web chat): pertanyaan dijawab via general_help/query_knowledge, deskripsi
+    # insiden tetap bisa jadi tiket. Dibatasi chat privat agar obrolan grup
+    # (mis. grup CSIRT) tidak ikut diproses LLM.
+    app.add_handler(
+        MessageHandler(
+            filters.ChatType.PRIVATE & filters.TEXT & ~filters.COMMAND,
+            report_receive_handler,
+        )
+    )
 
     return app

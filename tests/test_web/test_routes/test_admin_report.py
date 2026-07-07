@@ -55,12 +55,14 @@ def test_report_page_renders(client):
     assert r.headers["location"] == "/admin/inbox"
 
 
-def test_report_generate_returns_html_download(client):
+def test_report_generate_returns_pdf_download(client):
     r = client.post("/admin/report/generate",
                     data={"ticket_id": "INC-R1", "prepared_by": "Admin", "csrf_token": "x"})
     assert r.status_code == 200
-    assert "INC-R1" in r.text
+    assert r.content[:5] == b"%PDF-"
+    assert r.headers["content-type"] == "application/pdf"
     assert "attachment" in r.headers.get("content-disposition", "")
+    assert ".pdf" in r.headers["content-disposition"]
 
 
 def test_report_generate_missing_ticket_shows_error(client):

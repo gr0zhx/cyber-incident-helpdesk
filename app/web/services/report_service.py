@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from sqlalchemy.orm import Session
 
-from app.dashboard.report_generator import generate_report_filename, generate_report_html
+from app.dashboard.pdf_report_generator import generate_report_filename, generate_report_pdf
 from app.database.models import IncidentTicket
 
 
@@ -11,8 +11,8 @@ class ReportService:
     def __init__(self, db: Session) -> None:
         self.db = db
 
-    def generate(self, ticket_id: str, prepared_by: str = "Tim Keamanan Siber Pusdatin") -> tuple[str, str]:
-        """Generate laporan HTML untuk satu tiket. Return (html_string, filename)."""
+    def generate(self, ticket_id: str, prepared_by: str = "Tim Keamanan Siber Pusdatin") -> tuple[bytes, str]:
+        """Generate laporan PDF (formulir resmi Kementan) untuk satu tiket. Return (pdf_bytes, filename)."""
         ticket = self.db.query(IncidentTicket).filter_by(ticket_id=ticket_id).first()
         if ticket is None:
             raise LookupError(f"Tiket {ticket_id} tidak ditemukan.")
@@ -48,6 +48,6 @@ class ReportService:
             "resolved_at": str(ticket.resolved_at) if ticket.resolved_at else None,
             "closed_at": str(ticket.closed_at) if ticket.closed_at else None,
         }
-        html = generate_report_html(ticket_dict, prepared_by=prepared_by)
+        pdf_bytes = generate_report_pdf(ticket_dict, prepared_by=prepared_by)
         filename = generate_report_filename(ticket_dict)
-        return html, filename
+        return pdf_bytes, filename

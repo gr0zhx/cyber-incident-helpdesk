@@ -159,7 +159,7 @@ async def test_classify_intent_invalid_json_returns_fallback():
     agent.llm.chat.completions.create = AsyncMock(return_value=completion)
 
     result = await agent.classify_intent("test")
-    assert result["intent"] == "report_incident"
+    assert result["intent"] == "needs_clarification"
 
 
 @pytest.mark.asyncio
@@ -167,7 +167,7 @@ async def test_classify_intent_timeout_returns_fallback():
     from openai import APITimeoutError
     agent = _make_agent(side_effect=APITimeoutError(request=MagicMock()))
     result = await agent.classify_intent("test")
-    assert result["intent"] == "report_incident"
+    assert result["intent"] == "needs_clarification"
     assert result["confidence"] == 0.0
 
 
@@ -195,6 +195,7 @@ def test_initialize_state_basic_fields():
     assert state["raw_input"] == "Email phishing"
     assert state["sanitized_input"] == "Email phishing"
     assert state["reporter_id"] == "user_001"
+    assert state["reporter_access_token"] == ""
     assert state["reporter_name"] == "Budi"
     assert state["session_id"] == "sess_abc"
     assert state["timestamp_received"] != ""
@@ -206,7 +207,7 @@ def test_initialize_state_all_keys_present():
     agent = _make_agent(_intent_response("report_incident"))
     state = agent.initialize_state(raw_input="test", reporter_id="u1")
     required = {
-        "raw_input", "sanitized_input", "reporter_id", "reporter_name",
+        "raw_input", "sanitized_input", "reporter_id", "reporter_access_token", "reporter_name",
         "reporter_contact", "timestamp_received", "session_id",
         "intent", "requires_clarification", "clarification_message",
         "incident_type", "severity", "confidence_score", "classification_reasoning",

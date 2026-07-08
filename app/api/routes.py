@@ -147,6 +147,9 @@ async def update_ticket(
 
 async def _notify_reporter_status(reporter_id: str, ticket_id: str, new_status: str) -> None:
     """Kirim pesan Telegram ke pelapor saat status tiket berubah."""
+    if not reporter_id.startswith("tg:"):
+        logger.info("Reporter %s bukan channel Telegram, notifikasi status dilewati.", reporter_id)
+        return
     token = os.getenv("TELEGRAM_BOT_TOKEN", "")
     if not token:
         logger.warning("TELEGRAM_BOT_TOKEN tidak ada, notifikasi status dilewati.")

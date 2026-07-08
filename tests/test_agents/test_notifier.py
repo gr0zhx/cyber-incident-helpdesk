@@ -94,8 +94,8 @@ def test_format_csirt_alert_truncates_long_description():
         reporter_name="X", timestamp="2026-01-01",
         description_short=long_desc, mitigation_short="m"
     )
-    assert "A" * 300 in msg
-    assert "A" * 301 not in msg
+    assert "..." in msg
+    assert "A" * 281 not in msg
 
 
 def test_format_reporter_confirmation_empty_mitigation():
@@ -209,11 +209,30 @@ async def test_format_csirt_notification_uses_state():
     """_format_csirt_notification harus mengisi field dari state."""
     agent = NotifierAgent()
     state = _make_state(ticket_id="TICKET-2026-0042", incident_type="Ransomware", severity="Kritis")
-    msg = agent._format_csirt_notification(state)
+    msg = await agent._format_csirt_notification(state)
 
     assert "TICKET-2026-0042" in msg
     assert "Ransomware" in msg
     assert "Kritis" in msg
+
+
+@pytest.mark.asyncio
+async def test_format_csirt_notification_summarizes_long_text():
+    mock_llm = MagicMock()
+    choice = MagicMock()
+    choice.message.content = "Ringkasan singkat Telegram."
+    completion = MagicMock()
+    completion.choices = [choice]
+    mock_llm.chat.completions.create = AsyncMock(return_value=completion)
+    agent = NotifierAgent(llm_client=mock_llm)
+
+    state = _make_state(
+        sanitized_input="A" * 400,
+        mitigation_recommendation="B" * 500,
+    )
+    msg = await agent._format_csirt_notification(state)
+
+    assert "Ringkasan singkat Telegram." in msg
 
 
 @pytest.mark.asyncio

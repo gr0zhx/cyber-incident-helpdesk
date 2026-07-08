@@ -45,6 +45,20 @@ Tim Keamanan Siber telah diberitahu dan akan menindaklanjuti.
 Simpan nomor tiket di atas untuk referensi."""
 
 
+def _trim_for_telegram(text: str, limit: int) -> str:
+    value = (text or "").strip()
+    if not value:
+        return "-"
+    if len(value) <= limit:
+        return value
+
+    clipped = value[:limit].rstrip()
+    last_break = max(clipped.rfind("\n"), clipped.rfind(". "), clipped.rfind("; "), clipped.rfind(", "))
+    if last_break >= int(limit * 0.55):
+        clipped = clipped[: last_break + 1].rstrip()
+    return clipped.rstrip(" .,;:") + "..."
+
+
 def format_csirt_alert(
     ticket_id: str,
     incident_type: str,
@@ -62,8 +76,8 @@ def format_csirt_alert(
         severity_emoji=emoji,
         reporter_name=reporter_name or "Tidak diketahui",
         timestamp=timestamp,
-        description_short=description_short[:300] if description_short else "-",
-        mitigation_short=mitigation_short[:300] if mitigation_short else "Hubungi tim CSIRT.",
+        description_short=_trim_for_telegram(description_short, 280),
+        mitigation_short=_trim_for_telegram(mitigation_short or "Hubungi tim CSIRT.", 280),
     )
 
 
@@ -113,5 +127,8 @@ def format_reporter_confirmation(
         incident_type=incident_type,
         severity=severity,
         confidence=confidence_pct,
-        mitigation_steps=mitigation_steps[:2000] if mitigation_steps else "Hubungi Tim Keamanan Siber dan PDP secara langsung.",
+        mitigation_steps=_trim_for_telegram(
+            mitigation_steps or "Hubungi Tim Keamanan Siber dan PDP secara langsung.",
+            1600,
+        ),
     )

@@ -21,6 +21,7 @@ class IncidentTicket(Base):
 
     ticket_id = Column(String(20), primary_key=True)
     reporter_id = Column(String(50), nullable=False)
+    reporter_access_token = Column(String(64), index=True)
     reporter_name = Column(String(100))
     reporter_contact = Column(String(100))
     reporter_department = Column(String(100))

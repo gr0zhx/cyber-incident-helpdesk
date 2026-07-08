@@ -70,11 +70,39 @@ class ChatService:
         val = self._redis.get(f"web:session_ticket:{session_id}")
         return val.decode() if val else None
 
-    def _set_session_ticket(self, session_id: str, ticket_id: str) -> None:
-        self._redis.setex(f"web:session_ticket:{session_id}", _HISTORY_TTL, ticket_id.encode())
+    def get_reporter_ticket(self, access_token: str) -> Optional[str]:
+        val = self._redis.get(f"web:reporter_ticket:{access_token}")
+        return val.decode() if val else None
 
-    def get_history(self, session_id: str) -> list[dict]:
+    def get_reporter_tickets(self, access_token: str) -> list[str]:
+        raw = self._redis.get(f"web:reporter_tickets:{access_token}")
+        if not raw:
+            return []
+        try:
+            data = json.loads(raw)
+            return data if isinstance(data, list) else []
+        except (json.JSONDecodeError, ValueError):
+            logger.warning("Corrupt reporter_tickets access_token=%s, reset", access_token[:8])
+            self._redis.delete(f"web:reporter_tickets:{access_token}")
+            return []
+
+    def _set_session_ticket(self, session_id: str, ticket_id: str, access_token: str = "") -> None:
+        self._redis.setex(f"web:session_ticket:{session_id}", _HISTORY_TTL, ticket_id.encode())
+        if access_token:
+            self._redis.setex(f"web:reporter_ticket:{access_token}", _HISTORY_TTL * 30, ticket_id.encode())
+            tickets = self.get_reporter_tickets(access_token)
+            if ticket_id not in tickets:
+                tickets.append(ticket_id)
+                self._redis.setex(
+                    f"web:reporter_tickets:{access_token}",
+                    _HISTORY_TTL * 30,
+                    json.dumps(tickets).encode(),
+                )
+
+    def get_history(self, session_id: str, access_token: str = "") -> list[dict]:
         raw = self._redis.get(f"web:chat:{session_id}")
+        if not raw and access_token:
+            raw = self._redis.get(f"web:chat_token:{access_token}")
         if not raw:
             return []
         try:
@@ -83,16 +111,26 @@ class ChatService:
         except (json.JSONDecodeError, ValueError):
             logger.warning("Corrupt chat history session=%s, reset", session_id[:8])
             self._redis.delete(f"web:chat:{session_id}")
+            if access_token:
+                self._redis.delete(f"web:chat_token:{access_token}")
             return []
 
-    def _save_history(self, session_id: str, history: list[dict]) -> None:
+    def _save_history(self, session_id: str, history: list[dict], access_token: str = "") -> None:
         self._redis.setex(
             f"web:chat:{session_id}", _HISTORY_TTL, json.dumps(history).encode()
         )
+        if access_token:
+            self._redis.setex(
+                f"web:chat_token:{access_token}", _HISTORY_TTL * 30, json.dumps(history).encode()
+            )
 
-    def clear_history(self, session_id: str) -> None:
+    def clear_history(self, session_id: str, access_token: str = "") -> None:
         self._redis.delete(f"web:chat:{session_id}")
         self._redis.delete(f"web:session_ticket:{session_id}")
+        if access_token:
+            self._redis.delete(f"web:chat_token:{access_token}")
+            self._redis.delete(f"web:reporter_ticket:{access_token}")
+            self._redis.delete(f"web:reporter_tickets:{access_token}")
 
     # ------------------------------------------------------------------
     # Message handling
@@ -105,6 +143,7 @@ class ChatService:
         reporter_id: str,
         reporter_name: str,
         reporter_contact: str,
+        reporter_access_token: str = "",
         reporter_unit: str = "",
         text: str,
         graph: Any,
@@ -117,7 +156,7 @@ class ChatService:
         affected_asset: str = "",
     ) -> dict:
         """Invoke pipeline dan return dict hasil untuk template."""
-        history = self.get_history(session_id)
+        history = self.get_history(session_id, reporter_access_token)
         ts = datetime.now(timezone.utc).isoformat()
         history.append({"role": "user", "content": text, "ts": ts})
 
@@ -182,7 +221,7 @@ class ChatService:
                 "Silakan ceritakan apa yang ingin Anda laporkan atau tanyakan!"
             )
             history.append({"role": "assistant", "content": bot_text, "ts": ts})
-            self._save_history(session_id, history)
+            self._save_history(session_id, history, reporter_access_token)
             return {
                 "user_text": text,
                 "bot_text": bot_text,
@@ -202,7 +241,7 @@ class ChatService:
                 "jangan ragu menghubungi kami kembali. Semoga harimu menyenangkan!"
             )
             history.append({"role": "assistant", "content": bot_text, "ts": ts})
-            self._save_history(session_id, history)
+            self._save_history(session_id, history, reporter_access_token)
             return {
                 "user_text": text,
                 "bot_text": bot_text,
@@ -218,6 +257,7 @@ class ChatService:
         state = orchestrator.initialize_state(
             raw_input=context_text,
             reporter_id=reporter_id,
+            reporter_access_token=reporter_access_token,
             reporter_name=reporter_name,
             reporter_contact=reporter_contact,
             reporter_unit=reporter_unit,
@@ -230,13 +270,13 @@ class ChatService:
             result = await asyncio.wait_for(graph.ainvoke(state), timeout=timeout)
         except asyncio.TimeoutError:
             logger.warning("Pipeline timeout session=%s", session_id[:8])
-            self._save_history(session_id, history)
+            self._save_history(session_id, history, reporter_access_token)
             bot_text = (
                 "Maaf, sistem sedang sibuk memproses laporan Anda. "
                 "Silakan coba kirim ulang pesan dalam beberapa saat lagi."
             )
             history.append({"role": "assistant", "content": bot_text, "ts": ts})
-            self._save_history(session_id, history)
+            self._save_history(session_id, history, reporter_access_token)
             return {
                 "user_text": text,
                 "bot_text": bot_text,
@@ -255,7 +295,7 @@ class ChatService:
                 "Silakan coba lagi sebentar lagi."
             )
             history.append({"role": "assistant", "content": bot_text, "ts": ts})
-            self._save_history(session_id, history)
+            self._save_history(session_id, history, reporter_access_token)
             return {
                 "user_text": text,
                 "bot_text": bot_text,
@@ -284,12 +324,13 @@ class ChatService:
                 f"Tiket insiden berhasil dibuat: **{ticket_id}**.\n\n"
                 f"{result.get('mitigation_recommendation', '')}"
             ).strip()
-            self._set_session_ticket(session_id, ticket_id)
+            self._set_session_ticket(session_id, ticket_id, reporter_access_token)
             if db is not None:
                 self._flush_pending_uploads(session_id, ticket_id, reporter_id, db)
                 try:
                     self._backfill_form_fields(
                         ticket_id, db,
+                        reporter_access_token=reporter_access_token,
                         media_pelaporan=media_pelaporan,
                         incident_time_str=incident_time,
                         affected_asset=affected_asset,
@@ -313,7 +354,7 @@ class ChatService:
         if requires_clarification and not ticket_id and not guardrails_blocked:
             msg_entry["type"] = "clarification"
         history.append(msg_entry)
-        self._save_history(session_id, history)
+        self._save_history(session_id, history, reporter_access_token)
 
         return {
             "user_text": text,
@@ -329,6 +370,7 @@ class ChatService:
 
     def _backfill_form_fields(
         self, ticket_id: str, db: Any, *,
+        reporter_access_token: str,
         media_pelaporan: str,
         incident_time_str: str,
         affected_asset: str,
@@ -338,6 +380,8 @@ class ChatService:
         ticket = db.query(IncidentTicket).filter_by(ticket_id=ticket_id).first()
         if ticket is None:
             return
+        if reporter_access_token:
+            ticket.reporter_access_token = reporter_access_token
         if media_pelaporan:
             ticket.media_pelaporan = media_pelaporan
         if affected_asset:

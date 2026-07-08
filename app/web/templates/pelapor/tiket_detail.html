@@ -1,6 +1,6 @@
 {# app/web/templates/pelapor/tiket_detail.html #}
 {% extends "base.html" %}
-{% block title %}{{ ticket.ticket_id }} — Status Tiket{% endblock %}
+{% block title %}{% if ticket %}{{ ticket.ticket_id }} — Status Tiket{% else %}Akses Tiket{% endif %}{% endblock %}
 {% block layout %}
 <style>
   .app-shell { display: block; }
@@ -209,6 +209,25 @@
   .tk-action-ghost { background:#f0fdf4; color:#4b7a56; border:1.5px solid #d1fae5; }
   .tk-action-ghost:hover { background:#dcfce7; }
 
+  .warn-box {
+    background: #fff7ed;
+    border: 1px solid #fdba74;
+    color: #9a3412;
+    border-radius: 14px;
+    padding: 18px 20px;
+    box-shadow: 0 2px 12px rgba(251,146,60,.08);
+  }
+  .warn-box h2 {
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  .warn-box p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #9a3412;
+  }
+
   /* Copy flash */
   #copy-flash {
     display:none; font-size:12px; color:#166534;
@@ -232,6 +251,7 @@
   </nav>
 
   <div class="tk-content">
+    {% if ticket %}
 
     {# ── Hero: Ticket ID + Status ── #}
     <div class="tk-card">
@@ -300,6 +320,11 @@
           <button class="tk-action-btn tk-action-primary" onclick="copyTicketId()">
             📋 Salin Nomor Tiket
           </button>
+          {% if resume_link %}
+          <button class="tk-action-btn tk-action-outline" onclick="copyResumeLink()">
+            🔐 Salin Tautan Aman
+          </button>
+          {% endif %}
           <a href="/lapor/chat" class="tk-action-btn tk-action-outline">
             💬 Kembali ke Chat
           </a>
@@ -449,20 +474,41 @@
           <div style="display:flex;flex-direction:column;gap:8px;min-width:180px;">
             <div style="background:rgba(255,255,255,.08);border-radius:8px;padding:10px 14px;">
               <p style="font-size:11px;color:#64748b;margin-bottom:2px;">Telepon / WhatsApp</p>
-              <p style="font-size:14px;font-weight:700;color:#f8fafc;">Ext. 1234</p>
+              <a href="{{ support_whatsapp_url }}" target="_blank" rel="noopener noreferrer"
+                 style="font-size:14px;font-weight:700;color:#4ade80;text-decoration:none;">
+                {{ support_phone_label }}
+              </a>
             </div>
             <div style="background:rgba(255,255,255,.08);border-radius:8px;padding:10px 14px;">
               <p style="font-size:11px;color:#64748b;margin-bottom:2px;">Email</p>
-              <p style="font-size:13px;font-weight:600;color:#4ade80;">csirt@pusdatin.kementan.go.id</p>
+              <a href="mailto:{{ support_email }}"
+                 style="font-size:13px;font-weight:600;color:#4ade80;text-decoration:none;">
+                {{ support_email }}
+              </a>
             </div>
           </div>
         </div>
       </div>
     </div>
+    {% else %}
+    <div class="tk-card">
+      <div class="tk-card-body" style="padding:28px;">
+        <div class="warn-box">
+          <h2>Akses ditolak</h2>
+          <p>{{ warning or "Tiket ini tidak dapat dibuka dari sesi Anda." }}</p>
+          <div class="tk-actions" style="margin-top:16px;">
+            <a href="{{ resume_link or '/lapor' }}" class="tk-action-btn tk-action-primary">Kembali</a>
+            <a href="/lapor" class="tk-action-btn tk-action-outline">Ke Halaman Pelapor</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
 
   </div>{# /tk-content #}
 </div>
 
+{% if ticket %}
 <script>
 function copyTicketId() {
   navigator.clipboard.writeText("{{ ticket.ticket_id }}").then(function() {
@@ -471,5 +517,17 @@ function copyTicketId() {
     setTimeout(function() { f.style.display = "none"; }, 2000);
   });
 }
+function copyResumeLink() {
+  navigator.clipboard.writeText("{{ resume_link }}").then(function() {
+    var f = document.getElementById("copy-flash");
+    f.style.display = "flex";
+    f.textContent = "✓ Tautan aman disalin!";
+    setTimeout(function() {
+      f.style.display = "none";
+      f.textContent = "✓ Disalin!";
+    }, 2000);
+  });
+}
 </script>
+{% endif %}
 {% endblock %}

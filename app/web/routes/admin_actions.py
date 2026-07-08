@@ -109,14 +109,22 @@ async def notify_reporter(
         reporter_id=ticket.reporter_id,
         ticket_id=ticket.ticket_id,
         new_status=ticket.status,
+        reporter_access_token=ticket.reporter_access_token or "",
     )
     logger.info(
         "NOTIFICATION_SENT ticket=%s admin=%s success=%s",
-        ticket_id, admin.username, ok,
+        ticket_id, admin.username, ok.get("ok"),
     )
-    if ok:
+    if ok.get("ok") and ok.get("channel") == "telegram":
         return HTMLResponse(
             '<p style="color: #16a34a; font-size: 13px; margin-top: 8px;">Notifikasi berhasil dikirim ke pelapor.</p>'
+        )
+    if ok.get("ok") and ok.get("channel") == "web_link":
+        link = html.escape(ok.get("link", ""))
+        return HTMLResponse(
+            '<p style="color: #166534; font-size: 13px; margin-top: 8px;">'
+            'Pelapor web tidak punya push notification otomatis. '
+            f'Bagikan tautan aman ini bila perlu: <code>{link}</code></p>'
         )
     return HTMLResponse(
         '<p style="color: #dc2626; font-size: 13px; margin-top: 8px;">Notifikasi gagal (channel non-telegram atau error bot).</p>'

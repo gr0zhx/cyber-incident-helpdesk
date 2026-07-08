@@ -7,6 +7,7 @@ class IncidentState(TypedDict):
     raw_input: str
     sanitized_input: str
     reporter_id: str
+    reporter_access_token: str
     reporter_name: str
     reporter_contact: str
     reporter_department: str

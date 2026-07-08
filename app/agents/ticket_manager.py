@@ -61,6 +61,7 @@ class TicketManagerAgent:
         # 3. Bangun data tiket dari IncidentState
         ticket_data: dict = {
             "reporter_id": reporter_id,
+            "reporter_access_token": incident_state.get("reporter_access_token", ""),
             "reporter_name": incident_state.get("reporter_name", ""),
             "reporter_contact": incident_state.get("reporter_contact", ""),
             "reporter_department": incident_state.get("reporter_department", ""),

@@ -5,6 +5,7 @@ from typing import Generator
 
 from qdrant_client import QdrantClient
 from sqlalchemy.orm import Session
+from telegram import Bot
 
 from app.agents.graph import build_helpdesk_graph
 from app.agents.identifier import IncidentIdentifierAgent
@@ -35,7 +36,12 @@ def _build_pipeline():
     mitigation_advisor = MitigationAdvisorAgent(
         llm_client=llm, retriever=retriever, reranker_fn=rerank
     )
-    notifier = NotifierAgent(telegram_client=None)  # log-only di API mode
+    telegram_bot = None
+    telegram_token = os.getenv("TELEGRAM_BOT_TOKEN", "")
+    if telegram_token:
+        telegram_bot = Bot(token=telegram_token)
+
+    notifier = NotifierAgent(telegram_client=telegram_bot, llm_client=llm)
 
     return orchestrator, identifier, mitigation_advisor, notifier
 

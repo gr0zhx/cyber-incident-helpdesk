@@ -28,6 +28,11 @@
       {% if reporter.reporter_contact %}
       <p class="cs-card-meta" style="color:#4b7a56;">{{ reporter.reporter_contact }}</p>
       {% endif %}
+      {% if resume_link %}
+      <p class="cs-card-meta" style="margin-top:10px;color:#86efac;word-break:break-all;">
+        Tautan aman: {{ resume_link }}
+      </p>
+      {% endif %}
     </div>
 
     {# Incident info (if filled in identitas) #}
@@ -43,18 +48,21 @@
     </div>
     {% endif %}
 
-    {# Active ticket — shown when a ticket exists for this session #}
-    {% if session_ticket %}
-    <div class="cs-card cs-ticket-card">
-      <p class="cs-card-label">🎫 Tiket Aktif</p>
-      <p class="cs-ticket-id">{{ session_ticket.ticket_id }}</p>
-      <p class="cs-card-meta">
-        {% if session_ticket.incident_type %}{{ session_ticket.incident_type }}{% endif %}
-        {% if session_ticket.severity %} · {{ session_ticket.severity }}{% endif %}
-      </p>
-      <a href="/lapor/tiket/{{ session_ticket.ticket_id }}" class="cs-ticket-link">
-        Lihat Status →
-      </a>
+    {% if reporter_tickets %}
+    <div class="cs-card">
+      <p class="cs-card-label">Daftar Tiket Saya</p>
+      {% for ticket in reporter_tickets[:3] %}
+      <div style="padding:10px 0; border-top: {% if not loop.first %}1px solid rgba(255,255,255,.08){% else %}none{% endif %};">
+        <p class="cs-ticket-id" style="font-size:12px; margin-bottom:4px;">{{ ticket.ticket_id }}</p>
+        <p class="cs-card-meta" style="margin-bottom:8px;">
+          {{ ticket.incident_type }}{% if ticket.status %} · {{ ticket.status }}{% endif %}
+        </p>
+        <a href="/lapor/tiket/{{ ticket.ticket_id }}" class="cs-ticket-link" style="margin-top:0;">Buka Tiket</a>
+      </div>
+      {% endfor %}
+      {% if reporter_tickets|length > 3 %}
+      <a href="/lapor/tiket-saya" class="cs-ticket-link" style="margin-top:8px;">Lihat Semua Tiket</a>
+      {% endif %}
     </div>
     {% endif %}
 

@@ -136,6 +136,7 @@ class OrchestratorAgent:
         self,
         raw_input: str,
         reporter_id: str,
+        reporter_access_token: str = "",
         reporter_name: str = "",
         reporter_contact: str = "",
         reporter_unit: str = "",
@@ -149,6 +150,7 @@ class OrchestratorAgent:
             raw_input=raw_input,
             sanitized_input=raw_input,  # akan diisi ulang oleh sanitizer di Fase 7
             reporter_id=reporter_id,
+            reporter_access_token=reporter_access_token,
             reporter_name=reporter_name,
             reporter_contact=reporter_contact,
             reporter_department=reporter_unit,

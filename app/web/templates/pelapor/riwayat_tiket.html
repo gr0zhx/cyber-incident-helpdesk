@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Riwayat Tiket Pelapor{% endblock %}
+{% block layout %}
+<style>
+  .app-shell { display: block; }
+  body { background: linear-gradient(180deg, #f8fafc 0%, #f0fdf4 100%); }
+  .rh-shell { min-height: 100vh; padding: 32px 20px 48px; }
+  .rh-wrap { max-width: 960px; margin: 0 auto; }
+  .rh-hero {
+    background: linear-gradient(135deg, #0c1f0e, #14532d);
+    color: #f0fdf4;
+    border-radius: 20px;
+    padding: 28px;
+    box-shadow: 0 16px 40px rgba(12,31,14,.18);
+    margin-bottom: 22px;
+  }
+  .rh-hero h1 { font-size: 28px; margin: 0 0 8px; }
+  .rh-hero p { color: #bbf7d0; margin: 0; line-height: 1.7; }
+  .rh-link {
+    display: inline-block;
+    margin-top: 14px;
+    color: #dcfce7;
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,.18);
+    padding: 8px 12px;
+    border-radius: 10px;
+  }
+  .rh-list { display: grid; gap: 14px; }
+  .rh-card {
+    background: white;
+    border: 1px solid #d1fae5;
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: 0 6px 20px rgba(22,163,74,.06);
+  }
+  .rh-top { display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+  .rh-id { font-family: monospace; font-size: 18px; font-weight: 800; color: #14532d; }
+  .rh-meta { font-size: 13px; color: #4b7a56; margin-top: 6px; }
+  .rh-pill {
+    display:inline-flex; align-items:center; justify-content:center; text-align:center;
+    min-height: 28px;
+    padding:4px 10px; border-radius:999px; background:#dcfce7; color:#166534;
+    font-size:12px; font-weight:700; line-height:1.1;
+  }
+  .rh-actions { margin-top: 14px; display:flex; gap:10px; flex-wrap:wrap; }
+  .rh-btn {
+    display:inline-flex; align-items:center; justify-content:center;
+    padding:10px 14px; border-radius:10px; text-decoration:none; font-weight:700; font-size:13px;
+  }
+  .rh-btn-primary { background: linear-gradient(135deg,#16a34a,#15803d); color:white; }
+  .rh-btn-outline { background:white; color:#14532d; border:1.5px solid #d1fae5; }
+</style>
+
+<div class="rh-shell">
+  <div class="rh-wrap">
+    <section class="rh-hero">
+      <h1>Daftar Tiket Anda</h1>
+      <p>Berikut tiket yang terhubung dengan tautan aman ini. Anda bisa membuka detail status, melihat riwayat, dan kembali ke chat jika perlu.</p>
+      <a class="rh-link" href="{{ resume_link }}">Tautan aman aktif</a>
+    </section>
+
+    <div class="rh-list">
+      {% for ticket in tickets %}
+      <article class="rh-card">
+        <div class="rh-top">
+          <div>
+            <div class="rh-id">{{ ticket.ticket_id }}</div>
+            <div class="rh-meta">{{ ticket.incident_type }} · {{ ticket.severity or "—" }} · {{ ticket.created_at.strftime("%d %b %Y %H:%M") if ticket.created_at else "—" }}</div>
+          </div>
+          {% set status_label = ticket.status or "PENDING REVIEW" %}
+          <span class="rh-pill">{{ status_label.replace("_", " ") }}</span>
+        </div>
+        <div class="rh-actions">
+          <a class="rh-btn rh-btn-primary" href="/lapor/tiket/{{ ticket.ticket_id }}">Buka Detail</a>
+          <a class="rh-btn rh-btn-outline" href="{{ resume_link }}">{{ resume_label or "Kembali" }}</a>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

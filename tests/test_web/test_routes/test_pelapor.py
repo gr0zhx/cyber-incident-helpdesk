@@ -1,5 +1,4 @@
 import json
-import uuid
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import fakeredis
@@ -14,6 +13,7 @@ from starlette.requests import Request
 from starlette.responses import RedirectResponse
 
 from app.database.models import Base
+from app.database.models import IncidentTicket
 from app.web.dependencies import _ReporterNotFound, get_db_session
 from app.web.routes.pelapor import router
 
@@ -67,6 +67,7 @@ def test_get_chat_redirects_without_session(client):
     r = client.get("/lapor/chat", follow_redirects=False)
     assert r.status_code in (302, 303)
     assert "/lapor" in r.headers["location"]
+    assert "alert=session_invalid" in r.headers["location"]
 
 
 def test_post_identitas_requires_unit(client):
@@ -89,6 +90,90 @@ def test_post_identitas_requires_contact(client):
     })
     assert r.status_code == 200
     assert "Kontak tidak boleh kosong." in r.text
+
+
+def test_get_identitas_form_track_mode(client):
+    r = client.get("/lapor?mode=track")
+    assert r.status_code == 200
+    assert "Lacak Tiket Anda" in r.text
+
+
+def test_track_ticket_success_redirects_to_ticket_home(client):
+    db = next(client.app.dependency_overrides[get_db_session]())
+    db.add(
+        IncidentTicket(
+            ticket_id="TICKET-2026-0010",
+            reporter_id="web:abc",
+            reporter_name="Sari",
+            reporter_contact="sari@test.id",
+            reporter_department="IT",
+            incident_type="Phishing",
+            severity="Tinggi",
+            description_raw="x",
+            description_sanitized="x",
+        )
+    )
+    db.commit()
+
+    r = client.post("/lapor/track", data={
+        "ticket_id": "TICKET-2026-0010",
+        "reporter_contact": "sari@test.id",
+        "csrf_token": "x",
+    }, follow_redirects=False)
+    assert r.status_code in (302, 303)
+    assert r.headers["location"] == "/lapor/tiket-saya"
+
+
+def test_track_ticket_accepts_plus62_format(client):
+    db = next(client.app.dependency_overrides[get_db_session]())
+    db.add(
+        IncidentTicket(
+            ticket_id="TICKET-2026-0012",
+            reporter_id="web:abc",
+            reporter_name="Sari",
+            reporter_contact="081234567890",
+            reporter_department="IT",
+            incident_type="Phishing",
+            severity="Tinggi",
+            description_raw="x",
+            description_sanitized="x",
+        )
+    )
+    db.commit()
+
+    r = client.post("/lapor/track", data={
+        "ticket_id": "TICKET-2026-0012",
+        "reporter_contact": "+6281234567890",
+        "csrf_token": "x",
+    }, follow_redirects=False)
+    assert r.status_code in (302, 303)
+    assert r.headers["location"] == "/lapor/tiket-saya"
+
+
+def test_track_ticket_rejects_mismatched_contact(client):
+    db = next(client.app.dependency_overrides[get_db_session]())
+    db.add(
+        IncidentTicket(
+            ticket_id="TICKET-2026-0011",
+            reporter_id="web:abc",
+            reporter_name="Sari",
+            reporter_contact="sari@test.id",
+            reporter_department="IT",
+            incident_type="Phishing",
+            severity="Tinggi",
+            description_raw="x",
+            description_sanitized="x",
+        )
+    )
+    db.commit()
+
+    r = client.post("/lapor/track", data={
+        "ticket_id": "TICKET-2026-0011",
+        "reporter_contact": "oranglain@test.id",
+        "csrf_token": "x",
+    })
+    assert r.status_code == 200
+    assert "Kontak verifikasi tidak cocok" in r.text
 
 
 def test_get_chat_renders_with_session(client):
@@ -135,3 +220,81 @@ def test_tiket_status_not_found(client):
     client.post("/lapor", data={"reporter_name": "A", "reporter_contact": "a@test.id", "reporter_unit": "IT", "csrf_token": "x"})
     r = client.get("/lapor/tiket/NOPE")
     assert r.status_code == 404
+
+
+def test_restore_reporter_access_rebuilds_session(client):
+    access_token = "a" * 64
+
+    db = next(client.app.dependency_overrides[get_db_session]())
+    db.add(
+        IncidentTicket(
+            ticket_id="TICKET-2026-0001",
+            reporter_id="web:abc",
+            reporter_access_token=access_token,
+            reporter_name="A",
+            reporter_contact="a@test.id",
+            reporter_department="IT",
+            incident_type="Phishing",
+            severity="Tinggi",
+            description_raw="x",
+            description_sanitized="x",
+        )
+    )
+    db.commit()
+
+    r = client.get(f"/lapor/akses/{access_token}", follow_redirects=False)
+    assert r.status_code in (302, 303)
+    assert r.headers["location"] == f"/lapor/akses/{access_token}/riwayat"
+
+
+def test_reporter_ticket_history_page(client):
+    access_token = "b" * 64
+
+    db = next(client.app.dependency_overrides[get_db_session]())
+    db.add(
+        IncidentTicket(
+            ticket_id="TICKET-2026-0002",
+            reporter_id="web:abc",
+            reporter_access_token=access_token,
+            reporter_name="A",
+            reporter_contact="a@test.id",
+            reporter_department="IT",
+            incident_type="Phishing",
+            severity="Tinggi",
+            description_raw="x",
+            description_sanitized="x",
+        )
+    )
+    db.commit()
+
+    r = client.get(f"/lapor/akses/{access_token}/riwayat")
+    assert r.status_code == 200
+    assert "Daftar Tiket Anda" in r.text
+    assert "TICKET-2026-0002" in r.text
+
+
+def test_track_session_ticket_home_uses_tracked_ticket_session(client):
+    db = next(client.app.dependency_overrides[get_db_session]())
+    db.add(
+        IncidentTicket(
+            ticket_id="TICKET-2026-0020",
+            reporter_id="web:track-1",
+            reporter_name="Sari",
+            reporter_contact="sari@test.id",
+            reporter_department="IT",
+            incident_type="Phishing",
+            severity="Tinggi",
+            description_raw="x",
+            description_sanitized="x",
+        )
+    )
+    db.commit()
+
+    client.post("/lapor/track", data={
+        "ticket_id": "TICKET-2026-0020",
+        "reporter_contact": "sari@test.id",
+        "csrf_token": "x",
+    })
+    r = client.get("/lapor/tiket-saya")
+    assert r.status_code == 200
+    assert "TICKET-2026-0020" in r.text

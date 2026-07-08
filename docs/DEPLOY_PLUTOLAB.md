@@ -38,8 +38,8 @@ sudo usermod -aG docker $USER
 ## 3. Clone aplikasi
 
 ```bash
-git clone https://github.com/gr0zhx/pusdatin-help.git
-cd pusdatin-help
+git clone https://github.com/gr0zhx/cyber-incident-helpdesk.git
+cd cyber-incident-helpdesk
 cp .env.example .env
 nano .env   # isi GITHUB_TOKEN/OPENAI_API_KEY, TELEGRAM_BOT_TOKEN, dst
             # (nilai sama seperti di .env laptop, generate baru untuk
@@ -56,8 +56,8 @@ RAG jalan tanpa basis pengetahuan sama sekali.
 Dari laptop (masih di jaringan lab yang sama), copy folder itu ke VPS:
 
 ```bash
-scp -r knowledge_base/documents ubuntu@192.168.100.129:~/pusdatin-help/knowledge_base/
-scp knowledge_base/enterprise-attack.json ubuntu@192.168.100.129:~/pusdatin-help/knowledge_base/
+scp -r knowledge_base/documents ubuntu@192.168.100.129:~/cyber-incident-helpdesk/knowledge_base/
+scp knowledge_base/enterprise-attack.json ubuntu@192.168.100.129:~/cyber-incident-helpdesk/knowledge_base/
 ```
 
 ## 5. Jalankan aplikasi
@@ -70,30 +70,44 @@ docker compose exec api python scripts/seed_admin.py
 `scripts/setup.sh` otomatis menjalankan docker compose, migrasi database, dan
 ingest knowledge base (dari folder yang sudah di-copy di langkah 4).
 
-## 6. Alur kerja: tetap koding di laptop, deploy ke VPS
+## 6. Alur kerja: dua repo terpisah
+
+Repo kerja sehari-hari (`pusdatin-help`, riwayat commit lengkap) **beda**
+dengan repo yang di-clone di VPS (`cyber-incident-helpdesk`, snapshot untuk
+deploy). Jadi `git push` biasa ke `pusdatin-help` **tidak** otomatis sampai
+ke VPS — perlu satu langkah sync tambahan.
+
+**Sekali saja**, tambahkan remote kedua di repo lokal:
 
 ```bash
-# di laptop — seperti biasa
-git add .
-git commit -m "..."
-git push
-
-# lalu SSH ke VPS untuk deploy versi terbaru
-ssh ubuntu@192.168.100.129
-cd pusdatin-help
-git pull
-docker compose up -d --build
+git remote add deploy https://github.com/gr0zhx/cyber-incident-helpdesk.git
 ```
 
-Bisa disederhanakan jadi satu script `deploy.sh` di VPS:
+Setiap kali siap deploy versi terbaru:
 
 ```bash
-#!/bin/bash
-set -e
-cd ~/pusdatin-help
+# 1. Kerja seperti biasa di pusdatin-help
+git add .
+git commit -m "..."
+git push origin main
+
+# 2. Kalau sudah siap di-deploy, mirror ke repo VPS
+#    (--force karena riwayat commit kedua repo beda, ini menimpa history
+#    cyber-incident-helpdesk supaya selalu sama persis dengan pusdatin-help)
+git push deploy main:main --force
+```
+
+Setelah langkah 2, VPS akan otomatis `git pull` + rebuild dalam ≤2 menit
+(lihat bagian 8) — tidak perlu SSH manual lagi.
+
+**Alternatif kalau bagian 8 (cron) belum dipasang:** SSH manual ke VPS dan
+jalankan sendiri:
+
+```bash
+ssh ubuntu@192.168.100.129
+cd cyber-incident-helpdesk
 git pull
 docker compose up -d --build
-echo "Deploy selesai: $(date)"
 ```
 
 ## 7. Verifikasi
@@ -115,10 +129,10 @@ Setup satu kali di VPS:
 
 ```bash
 # 1. Pastikan script deploy bisa dieksekusi
-chmod +x ~/pusdatin-help/scripts/auto_deploy.sh
+chmod +x ~/cyber-incident-helpdesk/scripts/auto_deploy.sh
 
 # 2. Daftarkan ke cron (cek tiap 2 menit)
-( crontab -l 2>/dev/null; echo "*/2 * * * * /home/ubuntu/pusdatin-help/scripts/auto_deploy.sh" ) | crontab -
+( crontab -l 2>/dev/null; echo "*/2 * * * * /home/ubuntu/cyber-incident-helpdesk/scripts/auto_deploy.sh" ) | crontab -
 
 # 3. Verifikasi cron terpasang
 crontab -l

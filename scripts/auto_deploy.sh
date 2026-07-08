@@ -3,7 +3,7 @@
 # Dipasang sebagai cron job di VPS (lihat docs/DEPLOY_PLUTOLAB.md bagian 8).
 set -e
 
-REPO_DIR="$HOME/pusdatin-help"
+REPO_DIR="$HOME/cyber-incident-helpdesk"
 LOG_FILE="$HOME/auto_deploy.log"
 LOCK_FILE="/tmp/auto_deploy.lock"
 

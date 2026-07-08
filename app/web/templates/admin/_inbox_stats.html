@@ -1,0 +1,29 @@
+{# app/web/templates/admin/_inbox_stats.html #}
+{# Stats strip — di-include oleh inbox.html; juga di-serve oleh /admin/inbox/stats untuk HTMX polling #}
+<div id="inbox-stats-wrap"
+     hx-get="/admin/inbox/stats"
+     hx-include="#inbox-filter-form"
+     hx-trigger="every 30s, change from:#inbox-filter-form select, change from:#inbox-filter-form input[type='date'], keyup changed delay:400ms from:#inbox-filter-form input[name='search']"
+     hx-swap="outerHTML"
+     style="display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:24px;">
+  {% set stat_items = [
+    ("Total Tiket",       result.total           | default(0),  "#2563eb", "📋"),
+    ("Menunggu Review",   result.pending_count   | default(0),  "#f59e0b", "⏳"),
+    ("Sedang Ditangani",  result.inprogress_count | default(0),  "#3b82f6", "🔄"),
+    ("Terselesaikan",     result.resolved_count  | default(0),  "#10b981", "✅"),
+    ("Ditutup",           result.closed_count    | default(0),  "#6b7280", "🔒"),
+  ] %}
+  {% for label, val, color, icon in stat_items %}
+  <div style="background:white;border:1px solid #e2e8f0;border-radius:12px;padding:18px 20px;
+              display:flex;align-items:center;gap:14px;box-shadow:0 1px 4px rgba(15,23,42,.04);">
+    <div style="width:40px;height:40px;border-radius:10px;background:{{ color }}1a;
+                display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">
+      {{ icon }}
+    </div>
+    <div>
+      <p style="font-size:22px;font-weight:800;color:#0f172a;line-height:1;">{{ val }}</p>
+      <p style="font-size:12px;color:#64748b;margin-top:2px;">{{ label }}</p>
+    </div>
+  </div>
+  {% endfor %}
+</div>

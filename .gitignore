@@ -1,0 +1,56 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+env/
+
+# Environment
+.env
+
+# Data
+data/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+results/
+tests/evaluation/
+
+# Evaluation artifacts
+tests/evaluation/jailbreakhub_cache.csv
+tests/evaluation/guardrails_results.json
+tests/evaluation/TCR_REPORT copy.md
+
+# Alembic
+app/database/migrations/versions/*.pyc
+TA (Progress Saya)/
+TA (Rujukan)/
+TA Rujukan/
+TA Progress/
+Skill/
+docs/superpowers/
+.superpowers/
+knowledge_base/documents/.claude/
+knowledge_base/documents/
+knowledge_base/*.pdf
+docs/DEMO_SCENARIO.md
+
+# Web interface
+web_uploads/
+
+# Local tooling
+.claude/
+.agents/

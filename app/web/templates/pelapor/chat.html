@@ -1,0 +1,814 @@
+{# app/web/templates/pelapor/chat.html #}
+{% extends "base.html" %}
+{% block title %}Laporkan Insiden — Pusdatin Helpdesk{% endblock %}
+{% block layout %}
+<style>.app-shell { display: block; }</style>
+
+<div class="chat-shell">
+
+  {# ── Sidebar ── #}
+  <aside class="chat-sidebar">
+
+    {# Logo #}
+    <div class="cs-logo">
+      <div class="cs-logo-icon">🛡</div>
+      <div class="cs-logo-text">
+        <strong>Helpdesk</strong>
+        <span>Keamanan Siber</span>
+      </div>
+    </div>
+
+    {# Session card #}
+    <div class="cs-card">
+      <p class="cs-card-label">Sesi Aktif</p>
+      <p class="cs-card-name">{{ reporter.reporter_name }}</p>
+      {% if reporter.reporter_unit %}
+      <p class="cs-card-meta">{{ reporter.reporter_unit }}</p>
+      {% endif %}
+    {% if reporter.reporter_contact %}
+      <p class="cs-card-meta" style="color:#4b7a56;">{{ reporter.reporter_contact }}</p>
+      {% endif %}
+    </div>
+
+    {% if reporter.reporter_access_token %}
+    <div id="reporter-updates"
+         class="cs-card"
+         hx-get="/lapor/notifikasi"
+         hx-trigger="load, every 15s"
+         hx-swap="innerHTML">
+      {% include "pelapor/_updates_feed.html" %}
+    </div>
+    {% endif %}
+
+    {# Incident info (if filled in identitas) #}
+    {% if reporter.affected_asset or reporter.incident_time %}
+    <div class="cs-card">
+      <p class="cs-card-label">Info Insiden</p>
+      {% if reporter.incident_time %}
+      <p class="cs-card-meta"><span style="color:#86efac;">⏱</span> {{ reporter.incident_time }}</p>
+      {% endif %}
+      {% if reporter.affected_asset %}
+      <p class="cs-card-meta"><span style="color:#86efac;">🖥</span> {{ reporter.affected_asset }}</p>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    {% if reporter_tickets %}
+    <div class="cs-card">
+      <p class="cs-card-label">Daftar Tiket Saya</p>
+      {% for ticket in reporter_tickets[:3] %}
+      <div style="padding:10px 0; border-top: {% if not loop.first %}1px solid rgba(255,255,255,.08){% else %}none{% endif %};">
+        <p class="cs-ticket-id" style="font-size:12px; margin-bottom:4px;">{{ ticket.ticket_id }}</p>
+        <p class="cs-card-meta" style="margin-bottom:8px;">
+          {{ ticket.incident_type }}{% if ticket.status %} · {{ ticket.status }}{% endif %}
+        </p>
+        <a href="/lapor/tiket/{{ ticket.ticket_id }}" class="cs-ticket-link" style="margin-top:0;">Buka Tiket</a>
+      </div>
+      {% endfor %}
+      {% if reporter_tickets|length > 3 %}
+      <a href="/lapor/tiket-saya" class="cs-ticket-link" style="margin-top:8px;">Lihat Semua Tiket</a>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    {# Guide #}
+    <div class="cs-card cs-card-guide">
+      <p class="cs-card-label">Panduan Laporan</p>
+      <ul class="cs-guide-list">
+        <li>📌 Jenis insiden yang terjadi</li>
+        <li>🕐 Waktu dan lokasi kejadian</li>
+        <li>💻 Sistem atau data yang terdampak</li>
+        <li>🔧 Langkah yang sudah dilakukan</li>
+      </ul>
+    </div>
+
+    {# Footer #}
+    <div class="cs-footer">
+      <button hx-post="/lapor/chat/reset"
+              hx-target="body"
+              hx-swap="none"
+              class="cs-reset-btn">
+        ↺ Mulai Sesi Baru
+      </button>
+      <p class="cs-footer-note">🔒 Data dilindungi &amp; teraudit</p>
+    </div>
+  </aside>
+
+  {# ── Main chat area ── #}
+  <main class="chat-main">
+
+    {# Header #}
+    <header class="chat-header">
+      <div class="ch-avatar">🌿</div>
+      <div class="ch-info">
+        <p class="ch-name">Asisten Keamanan Siber</p>
+        <p class="ch-status">
+          <span class="ch-dot"></span>
+          Online — siap menerima laporan
+        </p>
+      </div>
+      <div class="ch-badge">Pusdatin Kementan</div>
+    </header>
+
+    {# Tiket banner — shown when a ticket exists for this session #}
+    {% if session_ticket %}
+    <div class="ticket-banner">
+      <div class="tb-left">
+        <span class="tb-icon">🎫</span>
+        <div>
+          <p class="tb-label">Tiket Aktif</p>
+          <p class="tb-id">{{ session_ticket.ticket_id }}</p>
+        </div>
+        {% if session_ticket.status %}
+        <span class="tb-status">{{ session_ticket.status }}</span>
+        {% endif %}
+      </div>
+      <a href="/lapor/tiket/{{ session_ticket.ticket_id }}" class="tb-btn">
+        Lihat Progress →
+      </a>
+    </div>
+    {% endif %}
+
+    {# Chat log #}
+    <div id="chat-log" class="chat-log">
+      {% if not history %}
+      <div class="chat-empty">
+        <div class="chat-empty-icon">🌿</div>
+        <p class="chat-empty-title">Halo, {{ reporter.reporter_name }}!</p>
+        <p class="chat-empty-sub">Apa yang ingin Anda lakukan?</p>
+        <div class="mode-cards">
+          <div class="mode-card" data-fill="Saya ingin melaporkan insiden keamanan siber yang terjadi.">
+            <span class="mode-card-icon">🚨</span>
+            <p class="mode-card-title">Lapor Insiden</p>
+            <p class="mode-card-desc">Laporkan phishing, malware, ransomware, akses tidak sah, dll.</p>
+          </div>
+          {% if session_ticket %}
+          <a href="/lapor/tiket/{{ session_ticket.ticket_id }}" class="mode-card mode-card-ticket">
+            <span class="mode-card-icon">🎫</span>
+            <p class="mode-card-title">Cek Progress Tiket</p>
+            <p class="mode-card-desc">{{ session_ticket.ticket_id }}</p>
+          </a>
+          {% endif %}
+          <div class="mode-card" data-fill="Saya ingin bertanya tentang keamanan siber.">
+            <span class="mode-card-icon">💬</span>
+            <p class="mode-card-title">Tanya-Tanya</p>
+            <p class="mode-card-desc">Tanyakan prosedur atau informasi keamanan siber.</p>
+          </div>
+        </div>
+      </div>
+      {% else %}
+        {% set ns = namespace(card_shown=false) %}
+        {% for msg in history %}
+          {% if msg.role == "user" %}
+          <div class="msg-user-wrap">
+            <div class="bubble-user">{{ msg.content }}</div>
+          </div>
+          {% else %}
+          <div class="bot-response-wrap">
+            <div class="bot-response-label">🌿 Asisten</div>
+            <div class="bot-response">{{ msg.content | render_md | safe }}</div>
+          </div>
+          {% if session_ticket and not ns.card_shown and session_ticket.ticket_id in msg.content %}
+          {% set ns.card_shown = true %}
+          <div style="margin-top: 12px; max-width: 80%;
+                      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+                      border: 2px solid #22c55e; border-radius: 14px; padding: 18px;
+                      box-shadow: 0 4px 16px rgba(22,163,74,.15);">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+              <span style="font-size:18px;">🎫</span>
+              <span style="font-size:11px; color:#16a34a; text-transform:uppercase;
+                           font-weight:800; letter-spacing:.7px;">Tiket Berhasil Dibuat</span>
+            </div>
+            <p style="font-family:monospace; font-size:20px; font-weight:800;
+                      color:#14532d; margin:0 0 14px; letter-spacing:.5px;">
+              {{ session_ticket.ticket_id }}
+            </p>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:14px;">
+              <div style="background:rgba(255,255,255,.7); border-radius:8px; padding:8px 10px;
+                          border:1px solid #bbf7d0;">
+                <div style="font-size:10px; color:#4b7a56; text-transform:uppercase;
+                            letter-spacing:.5px; margin-bottom:3px;">Jenis</div>
+                <div style="font-size:13px; font-weight:700; color:#14532d;">
+                  {{ session_ticket.incident_type or "—" }}</div>
+              </div>
+              <div style="background:rgba(255,255,255,.7); border-radius:8px; padding:8px 10px;
+                          border:1px solid #bbf7d0;">
+                <div style="font-size:10px; color:#4b7a56; text-transform:uppercase;
+                            letter-spacing:.5px; margin-bottom:3px;">Severity</div>
+                <div style="font-size:13px; font-weight:700; color:#14532d;">
+                  {{ session_ticket.severity or "—" }}</div>
+              </div>
+              <div style="background:rgba(255,255,255,.7); border-radius:8px; padding:8px 10px;
+                          border:1px solid #bbf7d0;">
+                <div style="font-size:10px; color:#4b7a56; text-transform:uppercase;
+                            letter-spacing:.5px; margin-bottom:3px;">Eskalasi</div>
+                <div style="font-size:13px; font-weight:700; color:#14532d;">
+                  {{ session_ticket.escalation_level or "—" }}</div>
+              </div>
+              <div style="background:rgba(255,255,255,.7); border-radius:8px; padding:8px 10px;
+                          border:1px solid #bbf7d0;">
+                <div style="font-size:10px; color:#4b7a56; text-transform:uppercase;
+                            letter-spacing:.5px; margin-bottom:3px;">Confidence</div>
+                <div style="font-size:13px; font-weight:700; color:#14532d;">
+                  {% if session_ticket.confidence_score %}
+                    {{ "%.0f"|format(session_ticket.confidence_score * 100) }}%
+                  {% else %}—{% endif %}
+                </div>
+              </div>
+            </div>
+            <a href="/lapor/tiket/{{ session_ticket.ticket_id }}"
+               style="display:flex; align-items:center; justify-content:space-between;
+                      padding:9px 14px;
+                      background:linear-gradient(135deg,#16a34a,#15803d);
+                      color:white; text-decoration:none;
+                      border-radius:8px; font-size:13px; font-weight:600;
+                      box-shadow:0 2px 8px rgba(22,163,74,.35);">
+              <span>Lihat Status Tiket</span><span>→</span>
+            </a>
+          </div>
+          {% endif %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    </div>
+
+    {# Pending file uploads #}
+    <div id="pending-uploads" class="pending-uploads"></div>
+
+    {# Input footer #}
+    <footer class="chat-footer">
+      <form id="chat-form"
+            hx-post="/lapor/chat/message"
+            hx-target="#chat-log"
+            hx-swap="beforeend"
+            class="chat-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+        <textarea id="chat-input"
+                  name="text"
+                  rows="2"
+                  required
+                  placeholder="Ceritakan insiden yang Anda alami… (Enter kirim · Shift+Enter baris baru)"
+                  class="chat-input"></textarea>
+
+        <div class="chat-actions">
+          <label class="attach-btn" title="Lampirkan file (PNG, JPG, PDF, maks 10 MB)">
+            📎
+            <input type="file" name="file" accept=".png,.jpg,.jpeg,.pdf" style="display:none;"
+                   hx-post="/lapor/chat/upload"
+                   hx-target="#pending-uploads"
+                   hx-swap="beforeend"
+                   hx-trigger="change"
+                   hx-encoding="multipart/form-data">
+          </label>
+          <button id="send-btn" type="submit" class="send-btn">➤</button>
+        </div>
+      </form>
+    </footer>
+  </main>
+</div>
+
+<style>
+/* ════════════════════════════════════════════════
+   COLOR PALETTE — Kementerian Pertanian RI
+   ════════════════════════════════════════════════ */
+:root {
+  --g-900: #052e16;   /* darkest forest */
+  --g-800: #0c1f0e;   /* sidebar bg */
+  --g-700: #14421a;   /* sidebar card bg */
+  --g-600: #166534;   /* primary dark */
+  --g-500: #16a34a;   /* primary */
+  --g-400: #22c55e;   /* accent */
+  --g-300: #4ade80;   /* light */
+  --g-100: #dcfce7;   /* very light */
+  --g-50:  #f0fdf4;   /* chat bg */
+  --gold:  #ca8a04;   /* accent warm */
+  --text:  #1a2e1c;   /* main text */
+  --muted: #4b7a56;   /* muted green */
+  --sidebar-text: #d1fae5;
+}
+
+/* ── Layout shell ── */
+.chat-shell {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 100vh;
+}
+
+/* ════ SIDEBAR ════ */
+.chat-sidebar {
+  background: var(--g-800);
+  color: var(--sidebar-text);
+  padding: 20px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+}
+/* Decorative gradient glow */
+.chat-sidebar::before {
+  content: '';
+  position: absolute;
+  top: -80px; right: -60px;
+  width: 240px; height: 240px;
+  background: radial-gradient(circle, rgba(34,197,94,.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.chat-sidebar::after {
+  content: '';
+  position: absolute;
+  bottom: -60px; left: -40px;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(202,138,4,.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Logo */
+.cs-logo {
+  display: flex; align-items: center; gap: 10px;
+  padding: 4px 4px 12px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  margin-bottom: 4px;
+  position: relative; z-index: 1;
+}
+.cs-logo-icon {
+  width: 34px; height: 34px;
+  background: linear-gradient(135deg, var(--g-500), var(--g-600));
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px;
+  box-shadow: 0 2px 10px rgba(22,163,74,.4);
+  flex-shrink: 0;
+}
+.cs-logo-text strong { font-size: 14px; font-weight: 700; display: block; color: #f0fdf4; }
+.cs-logo-text span   { font-size: 10px; color: var(--muted); }
+
+/* Cards */
+.cs-card {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 10px;
+  padding: 13px 14px;
+  position: relative; z-index: 1;
+}
+.cs-card-label {
+  font-size: 10px; font-weight: 700; color: var(--g-400);
+  text-transform: uppercase; letter-spacing: .7px;
+  margin: 0 0 7px;
+}
+.cs-card-name {
+  font-size: 14px; font-weight: 700; color: #f0fdf4;
+  margin: 0 0 3px;
+}
+.cs-card-meta {
+  font-size: 11px; color: #6b9e76;
+  margin: 0 0 2px; line-height: 1.5;
+}
+.cs-card-guide { background: rgba(22,163,74,.06); border-color: rgba(22,163,74,.15); }
+.cs-card.cs-ticket-card { background: rgba(22,163,74,.1); border-color: rgba(34,197,94,.35); }
+.cs-ticket-id {
+  font-family: monospace; font-size: 13px; font-weight: 800;
+  color: #4ade80; margin: 0 0 4px; letter-spacing: .3px;
+  word-break: break-all;
+}
+.cs-ticket-link {
+  display: block; text-align: center;
+  padding: 7px 12px; margin-top: 10px;
+  background: linear-gradient(135deg, #16a34a, #15803d);
+  color: white; text-decoration: none;
+  border-radius: 7px; font-size: 12px; font-weight: 600;
+  transition: box-shadow .15s;
+}
+.cs-ticket-link:hover { box-shadow: 0 3px 12px rgba(22,163,74,.55); }
+
+/* Guide list */
+.cs-guide-list {
+  list-style: none; padding: 0; margin: 0;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.cs-guide-list li {
+  font-size: 11.5px; color: #6b9e76;
+  line-height: 1.5;
+}
+
+/* Footer */
+.cs-footer {
+  margin-top: auto;
+  padding-top: 10px;
+  position: relative; z-index: 1;
+}
+.cs-reset-btn {
+  width: 100%;
+  background: transparent;
+  color: #4b7a56;
+  border: 1px solid rgba(255,255,255,.08);
+  font-size: 12px; padding: 9px;
+  border-radius: 7px; cursor: pointer;
+  font-family: inherit;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.cs-reset-btn:hover {
+  background: rgba(255,255,255,.05);
+  color: #86efac;
+  border-color: rgba(255,255,255,.15);
+}
+.cs-footer-note {
+  font-size: 10px; color: #2d5a38;
+  text-align: center; margin: 8px 0 0;
+}
+
+/* ════ MAIN ════ */
+.chat-main {
+  display: flex; flex-direction: column;
+  background: var(--g-50);
+  height: 100vh; overflow: hidden;
+  /* Subtle leaf-pattern overlay */
+  background-image:
+    radial-gradient(circle at 20% 80%, rgba(22,163,74,.04) 0%, transparent 40%),
+    radial-gradient(circle at 80% 20%, rgba(202,138,4,.03) 0%, transparent 40%);
+}
+
+/* Header */
+.chat-header {
+  padding: 13px 28px;
+  border-bottom: 1px solid #d1fae5;
+  background: white;
+  display: flex; align-items: center; gap: 12px;
+  flex-shrink: 0;
+  box-shadow: 0 1px 8px rgba(22,163,74,.07);
+  position: relative;
+}
+.chat-header::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--g-500), var(--g-400), #86efac, transparent);
+  opacity: .6;
+}
+.ch-avatar {
+  width: 40px; height: 40px;
+  background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  border: 2px solid #bbf7d0;
+  flex-shrink: 0;
+}
+.ch-name { font-size: 15px; font-weight: 700; color: var(--text); margin: 0; }
+.ch-status {
+  font-size: 12px; color: var(--g-500); margin: 0;
+  display: flex; align-items: center; gap: 5px;
+}
+.ch-dot {
+  width: 7px; height: 7px;
+  background: var(--g-400); border-radius: 50%; display: inline-block;
+  box-shadow: 0 0 6px var(--g-400);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: .6; transform: scale(1.3); }
+}
+.ch-badge {
+  margin-left: auto;
+  padding: 4px 12px;
+  background: linear-gradient(135deg, var(--g-50), #dcfce7);
+  border: 1px solid #bbf7d0;
+  border-radius: 999px;
+  font-size: 11px; font-weight: 700; color: var(--g-600);
+  letter-spacing: .3px;
+}
+
+/* Ticket banner */
+.ticket-banner {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 28px;
+  background: linear-gradient(90deg, #f0fdf4, #dcfce7);
+  border-bottom: 1px solid #bbf7d0;
+  flex-shrink: 0;
+  gap: 12px;
+}
+.tb-left { display: flex; align-items: center; gap: 10px; }
+.tb-icon { font-size: 20px; }
+.tb-label {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .6px; color: #4b7a56; margin: 0;
+}
+.tb-id {
+  font-family: monospace; font-size: 13px; font-weight: 800;
+  color: #14532d; margin: 0;
+}
+.tb-status {
+  padding: 3px 8px;
+  background: rgba(22,163,74,.12); border: 1px solid rgba(22,163,74,.25);
+  border-radius: 999px; font-size: 10px; font-weight: 700;
+  color: #166534; text-transform: uppercase; letter-spacing: .5px;
+}
+.tb-btn {
+  padding: 7px 16px;
+  background: linear-gradient(135deg, #16a34a, #15803d);
+  color: white; text-decoration: none; border-radius: 8px;
+  font-size: 12px; font-weight: 700; white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(22,163,74,.3);
+  transition: box-shadow .15s, transform .1s;
+  flex-shrink: 0;
+}
+.tb-btn:hover { box-shadow: 0 4px 14px rgba(22,163,74,.5); transform: translateY(-1px); }
+
+/* Mode cards */
+.mode-cards {
+  display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
+  margin-bottom: 24px;
+}
+.mode-card {
+  width: 140px; padding: 16px 12px;
+  background: white; border: 1.5px solid #d1fae5;
+  border-radius: 14px; cursor: pointer; text-align: center;
+  transition: border-color .15s, box-shadow .15s, transform .1s;
+  text-decoration: none; display: block;
+}
+.mode-card:hover {
+  border-color: var(--g-400);
+  box-shadow: 0 4px 16px rgba(22,163,74,.15);
+  transform: translateY(-2px);
+}
+.mode-card.mode-card-ticket {
+  background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+  border-color: #86efac;
+}
+.mode-card-icon { font-size: 28px; display: block; margin-bottom: 8px; }
+.mode-card-title {
+  font-size: 13px; font-weight: 700; color: var(--g-600);
+  margin: 0 0 4px;
+}
+.mode-card-desc {
+  font-size: 11px; color: #9eb8a2; line-height: 1.4; margin: 0;
+  word-break: break-all;
+}
+
+/* Chat log */
+.chat-log {
+  flex: 1; overflow-y: auto;
+  padding: 28px 40px;
+  display: flex; flex-direction: column; gap: 16px;
+  scroll-behavior: smooth;
+}
+.chat-log::-webkit-scrollbar { width: 5px; }
+.chat-log::-webkit-scrollbar-track { background: transparent; }
+.chat-log::-webkit-scrollbar-thumb { background: #bbf7d0; border-radius: 4px; }
+
+/* Empty state */
+.chat-empty {
+  text-align: center; padding: 80px 0 40px;
+  display: flex; flex-direction: column; align-items: center;
+}
+.chat-empty-icon {
+  font-size: 52px; margin-bottom: 16px;
+  filter: drop-shadow(0 4px 12px rgba(22,163,74,.3));
+}
+.chat-empty-title {
+  font-weight: 700; font-size: 17px; color: var(--g-600); margin: 0 0 8px;
+}
+.chat-empty-sub {
+  font-size: 13px; color: #6b9e76; line-height: 1.7; margin: 0 0 24px;
+}
+/* Pending uploads */
+.pending-uploads {
+  padding: 0 40px 8px;
+  display: flex; gap: 8px; flex-wrap: wrap; flex-shrink: 0;
+}
+
+/* Input footer */
+.chat-footer {
+  padding: 14px 40px 18px;
+  border-top: 1px solid #d1fae5;
+  background: white;
+  flex-shrink: 0;
+  box-shadow: 0 -1px 8px rgba(22,163,74,.05);
+}
+.chat-form {
+  display: flex; gap: 10px; align-items: flex-end;
+}
+.chat-input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1.5px solid #d1fae5;
+  border-radius: 12px;
+  resize: none;
+  font-size: 14px; line-height: 1.6;
+  font-family: inherit; color: var(--text);
+  background: var(--g-50);
+  outline: none;
+  transition: border-color .15s, box-shadow .15s, background .15s;
+}
+.chat-input::placeholder { color: #9eb8a2; }
+.chat-input:focus {
+  border-color: var(--g-500);
+  background: white;
+  box-shadow: 0 0 0 3px rgba(22,163,74,.12);
+}
+.chat-actions {
+  display: flex; flex-direction: column; gap: 6px;
+}
+.attach-btn {
+  width: 42px; height: 42px;
+  border: 1.5px solid #d1fae5;
+  border-radius: 10px;
+  background: white; color: #9eb8a2;
+  font-size: 20px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color .15s, color .15s, background .15s;
+}
+.attach-btn:hover {
+  border-color: var(--g-400); color: var(--g-500);
+  background: var(--g-50);
+}
+.send-btn {
+  width: 42px; height: 42px; padding: 0;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--g-500), var(--g-600));
+  color: white; border: none;
+  font-size: 18px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 10px rgba(22,163,74,.4);
+  transition: transform .12s, box-shadow .12s;
+  font-family: inherit;
+}
+.send-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(22,163,74,.55);
+}
+.send-btn:active  { transform: translateY(0); }
+.send-btn:disabled { opacity: .45; cursor: not-allowed; transform: none; box-shadow: none; }
+
+/* ════ CHAT MESSAGES ════ */
+
+/* User bubble */
+.msg-user-wrap { display: flex; justify-content: flex-end; }
+.bubble-user {
+  max-width: 72%;
+  background: linear-gradient(135deg, var(--g-500) 0%, var(--g-600) 100%);
+  color: white;
+  padding: 12px 18px;
+  border-radius: 18px 18px 4px 18px;
+  font-size: 14px; line-height: 1.65;
+  word-break: break-word; white-space: pre-wrap;
+  box-shadow: 0 2px 12px rgba(22,163,74,.3);
+}
+
+/* Bot response */
+.bot-response-wrap {
+  padding: 4px 0 10px;
+  animation: bot-fadein .35s ease;
+}
+@keyframes bot-fadein {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.bot-response-label {
+  font-size: 11px; font-weight: 700;
+  color: var(--g-500);
+  text-transform: uppercase; letter-spacing: .6px;
+  margin-bottom: 8px;
+}
+.bot-response {
+  padding-left: 16px;
+  border-left: 3px solid var(--g-400);
+  font-size: 14px; line-height: 1.75;
+  color: var(--text); word-break: break-word;
+}
+.bot-response p { margin: 0 0 14px; }
+.bot-response p:last-child { margin-bottom: 0; }
+.bot-response ul,
+.bot-response ol { margin: 0 0 14px; }
+.bot-response ul { list-style: none; padding-left: 16px; }
+.bot-response ol { list-style: decimal; padding-left: 22px; }
+.bot-response ul > li { position: relative; padding-left: 14px; margin-bottom: 6px; }
+.bot-response ul > li::before {
+  content: ''; position: absolute; left: 0; top: 8px;
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--g-500);
+}
+.bot-response ol > li { margin-bottom: 6px; padding-left: 4px; }
+.bot-response li:last-child { margin-bottom: 0; }
+.bot-response strong { font-weight: 700; }
+.bot-response em { font-style: italic; }
+.bot-response code {
+  font-family: monospace; font-size: 12.5px;
+  background: #f0fdf4; color: var(--g-600);
+  padding: 1px 5px; border-radius: 4px;
+  border: 1px solid #d1fae5;
+}
+.bot-response pre {
+  background: #f0fdf4; border: 1px solid #d1fae5;
+  border-radius: 6px; padding: 12px 14px;
+  overflow-x: auto; margin: 0 0 10px;
+}
+.bot-response pre code { background: none; padding: 0; border: none; font-size: 13px; }
+.bot-response h1, .bot-response h2, .bot-response h3 {
+  font-weight: 700; margin: 12px 0 6px; line-height: 1.4; color: var(--g-600);
+}
+.bot-response h1 { font-size: 16px; }
+.bot-response h2 { font-size: 15px; }
+.bot-response h3 { font-size: 14px; }
+
+/* Sources block */
+.sources-block {
+  margin-top: 12px; padding-top: 10px;
+  border-top: 1px dashed #d1fae5;
+}
+.sources-label {
+  display: block; font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .6px;
+  color: #9eb8a2; margin-bottom: 5px;
+}
+.sources-block ul { list-style: none; padding: 0; margin: 0; }
+.sources-block li { padding-left: 0; margin-bottom: 3px; font-size: 11.5px; color: #9eb8a2; }
+.sources-block li::before { display: none; }
+.src-num { font-weight: 700; color: var(--muted); margin-right: 4px; }
+
+/* Typing indicator */
+.typing-indicator {
+  display: inline-flex; align-items: center;
+  gap: 5px; padding: 4px 0;
+}
+.typing-dot {
+  width: 7px; height: 7px;
+  background: #9eb8a2; border-radius: 50%;
+  animation: tdot 1.3s infinite ease-in-out;
+}
+.typing-dot:nth-child(2) { animation-delay: .16s; }
+.typing-dot:nth-child(3) { animation-delay: .32s; }
+@keyframes tdot {
+  0%, 60%, 100% { transform: translateY(0);   opacity: .4; }
+  30%            { transform: translateY(-7px); opacity: 1; }
+}
+</style>
+
+<script>
+(function () {
+  const form    = document.getElementById("chat-form");
+  const log     = document.getElementById("chat-log");
+  const input   = document.getElementById("chat-input");
+  const sendBtn = document.getElementById("send-btn");
+
+  function scrollBottom() { log.scrollTop = log.scrollHeight; }
+  scrollBottom();
+
+  // Mode cards — isi otomatis lalu langsung kirim
+  document.querySelectorAll(".mode-card[data-fill]").forEach(function(card) {
+    card.addEventListener("click", function() {
+      input.value = card.dataset.fill;
+      if (!sendBtn.disabled)
+        form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+    });
+  });
+
+  // Enter = submit, Shift+Enter = newline
+  input.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      if (!sendBtn.disabled)
+        form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+    }
+  });
+
+  // Before request: optimistic user bubble + typing indicator
+  document.body.addEventListener("htmx:beforeRequest", function (evt) {
+    if (evt.detail.elt !== form) return;
+    const text = input.value.trim();
+    if (!text) return;
+
+    const userWrap = document.createElement("div");
+    userWrap.className = "msg-user-wrap";
+    const userBubble = document.createElement("div");
+    userBubble.className = "bubble-user";
+    userBubble.textContent = text;
+    userWrap.appendChild(userBubble);
+    log.appendChild(userWrap);
+
+    const typingWrap = document.createElement("div");
+    typingWrap.id = "typing-wrap";
+    typingWrap.className = "bot-response-wrap";
+    typingWrap.innerHTML =
+      '<div class="bot-response-label">🌿 Asisten</div>' +
+      '<div class="typing-indicator" style="padding-left:16px;border-left:3px solid #22c55e;">' +
+      '<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>';
+    log.appendChild(typingWrap);
+
+    input.value = "";
+    sendBtn.disabled = true;
+    scrollBottom();
+  });
+
+  // After request: remove typing indicator, unlock, scroll
+  document.body.addEventListener("htmx:afterRequest", function (evt) {
+    if (evt.detail.elt !== form) return;
+    const tw = document.getElementById("typing-wrap");
+    if (tw) tw.remove();
+    sendBtn.disabled = false;
+    scrollBottom();
+  });
+})();
+</script>
+{% endblock %}

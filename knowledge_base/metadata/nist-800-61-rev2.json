@@ -1,0 +1,9 @@
+{
+  "doc_id": "nist-800-61-rev2",
+  "doc_title": "Computer Security Incident Handling Guide",
+  "source_framework": "NIST",
+  "version": "Rev. 2",
+  "language": "en",
+  "filename": "nist.sp.800-61r2.pdf",
+  "incident_types": ["phishing", "malware", "ransomware", "akses_tidak_sah", "kebocoran_data", "general"]
+}

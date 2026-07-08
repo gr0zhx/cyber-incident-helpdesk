@@ -1,0 +1,5 @@
+{# app/web/templates/pelapor/_error_bubble.html #}
+<div style="display: flex; justify-content: flex-start; gap: 10px; align-items: flex-start; max-width: 75%; background: #fee2e2; border: 1px solid #fca5a5; padding: 12px 16px; border-radius: 18px 18px 18px 4px; color: #dc2626; font-size: 14px;">
+  Maaf, terjadi kesalahan saat menganalisis laporan Anda.
+  {% if trace_id %}<br><small style="color: #94a3b8;">Trace: {{ trace_id }}</small>{% endif %}
+</div>

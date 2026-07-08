@@ -1,0 +1,9 @@
+{
+  "doc_id": "peraturan-bssn-1-2024",
+  "doc_title": "Peraturan BSSN Nomor 1 Tahun 2024",
+  "source_framework": "BSSN",
+  "version": "2024",
+  "language": "id",
+  "filename": "Peraturan BSSN Nomor 1 Tahun 2024.pdf",
+  "incident_types": ["phishing", "malware", "ransomware", "akses_tidak_sah", "kebocoran_data", "ddos", "web_defacement", "general"]
+}

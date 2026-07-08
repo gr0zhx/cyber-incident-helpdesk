@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" content="{{ csrf_token | default('') }}">
+  <title>{% block title %}Pusdatin Helpdesk{% endblock %}</title>
+  <link rel="stylesheet" href="/web/static/css/style.css">
+  <script src="/web/static/js/htmx.min.js" defer></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      document.body.addEventListener("htmx:configRequest", function(evt) {
+        var token = document.querySelector('meta[name="csrf-token"]').content;
+        if (token) evt.detail.headers["X-CSRF-Token"] = token;
+      });
+    });
+  </script>
+</head>
+<body>
+  <div class="app-shell">
+    {% block layout %}{% endblock %}
+  </div>
+</body>
+</html>

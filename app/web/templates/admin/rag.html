@@ -1,0 +1,296 @@
+{# app/web/templates/admin/rag.html #}
+{% extends "admin/_shell.html" %}
+{% block page_title %}Knowledge Base RAG{% endblock %}
+{% block content %}
+<style>
+  /* ── stat cards ── */
+  .rag-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 24px; }
+  .rag-stat {
+    background: white; border: 1px solid #d1fae5; border-radius: 12px;
+    padding: 20px 24px; display: flex; align-items: center; gap: 16px;
+    box-shadow: 0 1px 4px rgba(22,163,74,.06);
+  }
+  .rag-stat-icon {
+    width: 44px; height: 44px; border-radius: 10px; flex-shrink: 0;
+    background: rgba(22,163,74,.08); border: 1px solid rgba(22,163,74,.15);
+    display: grid; place-items: center; font-size: 20px;
+  }
+  .rag-stat-label { font-size: 11px; font-weight: 600; color: #4b7a56; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
+  .rag-stat-value { font-size: 26px; font-weight: 800; color: #14532d; line-height: 1; }
+  .rag-stat-sub   { font-size: 12px; color: #6b9e76; margin-top: 3px; }
+
+  /* ── upload card ── */
+  .rag-upload-card {
+    background: white; border: 1px solid #d1fae5; border-radius: 12px;
+    padding: 28px; margin-bottom: 24px;
+    box-shadow: 0 1px 4px rgba(22,163,74,.06);
+  }
+  .rag-upload-card h2 {
+    font-size: 15px; font-weight: 700; color: #14532d; margin: 0 0 22px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .rag-upload-card h2::before {
+    content: ''; width: 3px; height: 16px; border-radius: 2px;
+    background: #16a34a; display: block;
+  }
+
+  /* drop zone */
+  .rag-dropzone {
+    border: 2px dashed #bbf7d0; border-radius: 10px;
+    padding: 32px 24px; text-align: center; cursor: pointer;
+    background: #f0fdf4; transition: border-color .2s, background .2s;
+    margin-bottom: 20px; position: relative;
+  }
+  .rag-dropzone:hover, .rag-dropzone.drag-over {
+    border-color: #16a34a; background: rgba(22,163,74,.05);
+  }
+  .rag-dropzone input[type=file] {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+  }
+  .rag-dropzone-icon { font-size: 32px; margin-bottom: 8px; }
+  .rag-dropzone-text { font-size: 14px; font-weight: 600; color: #14532d; }
+  .rag-dropzone-sub  { font-size: 12px; color: #6b9e76; margin-top: 4px; }
+  .rag-dropzone-file { font-size: 13px; color: #16a34a; font-weight: 600; margin-top: 8px; display: none; }
+
+  /* form grid */
+  .rag-form-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px;
+  }
+  .rag-field label {
+    display: block; font-size: 12px; font-weight: 600;
+    color: #4b7a56; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .4px;
+  }
+  .rag-input {
+    width: 100%; padding: 9px 12px; border-radius: 8px;
+    border: 1px solid #d1fae5; background: #f8fff9;
+    font-size: 13px; color: #0f172a; font-family: inherit;
+    transition: border-color .15s, box-shadow .15s; outline: none;
+  }
+  .rag-input:focus {
+    border-color: #16a34a;
+    box-shadow: 0 0 0 3px rgba(22,163,74,.12);
+  }
+  .rag-input::placeholder { color: #9eb8a2; }
+
+  /* submit btn */
+  .rag-submit {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 22px; border-radius: 9px;
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    color: white; font-size: 13px; font-weight: 600;
+    border: none; cursor: pointer; font-family: inherit;
+    box-shadow: 0 2px 10px rgba(22,163,74,.35);
+    transition: opacity .15s, transform .1s;
+  }
+  .rag-submit:hover { opacity: .9; transform: translateY(-1px); }
+
+  /* job notice */
+  .rag-job-notice {
+    margin-top: 16px; padding: 12px 16px; border-radius: 8px;
+    background: rgba(22,163,74,.08); border: 1px solid #bbf7d0;
+    font-size: 13px; color: #15803d;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .rag-job-notice code {
+    background: rgba(22,163,74,.12); padding: 2px 6px; border-radius: 4px;
+    font-size: 12px; font-weight: 600;
+  }
+
+  /* ── docs table card ── */
+  .rag-table-card {
+    background: white; border: 1px solid #d1fae5; border-radius: 12px;
+    overflow: hidden; box-shadow: 0 1px 4px rgba(22,163,74,.06);
+  }
+  .rag-table-head {
+    padding: 18px 24px; border-bottom: 1px solid #d1fae5;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .rag-table-head h2 {
+    font-size: 15px; font-weight: 700; color: #14532d; margin: 0;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .rag-table-head h2::before {
+    content: ''; width: 3px; height: 16px; border-radius: 2px;
+    background: #16a34a; display: block;
+  }
+  .rag-reindex-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 14px; border-radius: 8px;
+    background: transparent; border: 1px solid #bbf7d0;
+    color: #16a34a; font-size: 12px; font-weight: 600;
+    cursor: pointer; font-family: inherit;
+    transition: background .15s, border-color .15s;
+  }
+  .rag-reindex-btn:hover { background: rgba(22,163,74,.06); border-color: #16a34a; }
+
+  .rag-table { width: 100%; border-collapse: collapse; }
+  .rag-table thead th {
+    padding: 10px 16px; text-align: left;
+    font-size: 11px; font-weight: 700; color: #4b7a56;
+    text-transform: uppercase; letter-spacing: .5px;
+    background: #f0fdf4; border-bottom: 1px solid #d1fae5;
+  }
+  .rag-table tbody tr { border-bottom: 1px solid #f0fdf4; }
+  .rag-table tbody tr:last-child { border-bottom: none; }
+  .rag-table tbody tr:hover { background: #f8fff9; }
+  .rag-table td { padding: 12px 16px; font-size: 13px; color: #374151; }
+  .rag-table .td-id { font-family: monospace; font-size: 12px; color: #4b7a56; }
+  .rag-table .td-title { font-weight: 500; color: #14532d; }
+
+  .rag-fw-badge {
+    display: inline-block; padding: 2px 8px; border-radius: 4px;
+    font-size: 11px; font-weight: 600;
+    background: rgba(22,163,74,.08); color: #15803d;
+    border: 1px solid rgba(22,163,74,.15);
+  }
+  .rag-pdf-ok   { color: #16a34a; font-size: 13px; font-weight: 600; }
+  .rag-pdf-err  { color: #dc2626; font-size: 13px; font-weight: 600; }
+  .rag-empty td { text-align: center; padding: 40px; color: #9eb8a2; }
+</style>
+
+{# ── Stat Cards ── #}
+<div class="rag-stats">
+  <div class="rag-stat">
+    <div class="rag-stat-icon">🗄</div>
+    <div>
+      <div class="rag-stat-label">Koleksi Qdrant</div>
+      {% if collection.error %}
+      <div style="font-size:13px;color:#dc2626;">{{ collection.error }}</div>
+      {% else %}
+      <div class="rag-stat-value">{{ collection.total_vectors or 0 }}</div>
+      <div class="rag-stat-sub">vectors · {{ collection.status or "—" }}</div>
+      {% endif %}
+    </div>
+  </div>
+  <div class="rag-stat">
+    <div class="rag-stat-icon">📚</div>
+    <div>
+      <div class="rag-stat-label">Dokumen Terdaftar</div>
+      <div class="rag-stat-value">{{ documents|length }}</div>
+      <div class="rag-stat-sub">PDF di knowledge_base/</div>
+    </div>
+  </div>
+</div>
+
+{# ── Upload Form ── #}
+<div class="rag-upload-card">
+  <h2>Upload Dokumen Baru</h2>
+  <form method="post" action="/admin/rag/upload" enctype="multipart/form-data" id="rag-upload-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+    <div class="rag-dropzone" id="rag-dropzone">
+      <input type="file" name="file" accept=".pdf,.txt,.md,.csv,.json" required id="rag-file-input">
+      <div class="rag-dropzone-icon">📄</div>
+      <div class="rag-dropzone-text">Klik atau seret file ke sini</div>
+      <div class="rag-dropzone-sub">.pdf · .txt · .md · .csv · .json · maks. 50 MB</div>
+      <div class="rag-dropzone-file" id="rag-file-name"></div>
+    </div>
+
+    <div class="rag-form-grid">
+      <div class="rag-field">
+        <label>Doc ID (unik) *</label>
+        <input type="text" name="doc_id" required class="rag-input" placeholder="nist-csf-v2">
+      </div>
+      <div class="rag-field">
+        <label>Judul Dokumen *</label>
+        <input type="text" name="doc_title" required class="rag-input" placeholder="NIST Cybersecurity Framework v2">
+      </div>
+      <div class="rag-field">
+        <label>Framework Sumber</label>
+        <select name="source_framework" class="rag-input">
+          {% for f in ["NIST","MITRE","BSSN","ISO27001","LAINNYA"] %}
+          <option value="{{ f }}">{{ f }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="rag-field">
+        <label>Bahasa</label>
+        <select name="language" class="rag-input">
+          <option value="id">Indonesia</option>
+          <option value="en">English</option>
+        </select>
+      </div>
+      <div class="rag-field" style="grid-column: span 2;">
+        <label>Incident Types (pisah koma)</label>
+        <input type="text" name="incident_types" class="rag-input" placeholder="phishing, malware, ransomware">
+      </div>
+    </div>
+
+    <button type="submit" class="rag-submit">
+      <span>⬆</span> Upload &amp; Ingest
+    </button>
+  </form>
+
+  {% if job_id %}
+  <div class="rag-job-notice">
+    <span>✓</span>
+    Ingest dimulai · Job ID: <code>{{ job_id }}</code> · Refresh halaman untuk melihat status.
+  </div>
+  {% endif %}
+</div>
+
+{# ── Documents Table ── #}
+<div class="rag-table-card">
+  <div class="rag-table-head">
+    <h2>Dokumen Terdaftar</h2>
+    <form method="post" action="/admin/rag/reindex" style="margin:0;">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <button type="submit" class="rag-reindex-btn">↺ Reindex Semua</button>
+    </form>
+  </div>
+  <table class="rag-table">
+    <thead>
+      <tr>
+        <th>Doc ID</th>
+        <th>Judul</th>
+        <th>Framework</th>
+        <th>PDF</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for doc in documents %}
+      <tr>
+        <td class="td-id">{{ doc.doc_id }}</td>
+        <td class="td-title">{{ doc.doc_title }}</td>
+        <td><span class="rag-fw-badge">{{ doc.source_framework }}</span></td>
+        <td>
+          {% if doc._pdf_exists %}
+          <span class="rag-pdf-ok">✓ {{ doc._pdf_size_kb }} KB</span>
+          {% else %}
+          <span class="rag-pdf-err">✗ hilang</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% else %}
+      <tr class="rag-empty">
+        <td colspan="4">Belum ada dokumen terdaftar.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<script>
+  const dz = document.getElementById('rag-dropzone');
+  const fi = document.getElementById('rag-file-input');
+  const fn = document.getElementById('rag-file-name');
+
+  fi.addEventListener('change', () => {
+    if (fi.files.length) {
+      fn.textContent = '📎 ' + fi.files[0].name;
+      fn.style.display = 'block';
+    }
+  });
+  dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag-over'); });
+  dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
+  dz.addEventListener('drop', e => {
+    e.preventDefault(); dz.classList.remove('drag-over');
+    if (e.dataTransfer.files.length) {
+      fi.files = e.dataTransfer.files;
+      fn.textContent = '📎 ' + e.dataTransfer.files[0].name;
+      fn.style.display = 'block';
+    }
+  });
+</script>
+
+{% endblock %}

@@ -1,0 +1,92 @@
+{# app/web/templates/admin/inbox.html #}
+{% extends "admin/_shell.html" %}
+{% block page_title %}Inbox Tiket{% endblock %}
+{% block content %}
+
+{# ── Stats strip ── #}
+{% include "admin/_inbox_stats.html" %}
+
+{# ── Filter bar ── #}
+<div style="background:white;border:1px solid #e2e8f0;border-radius:12px;padding:16px 20px;margin-bottom:16px;
+            box-shadow:0 1px 4px rgba(15,23,42,.04);">
+  <form id="inbox-filter-form"
+        hx-get="/admin/inbox/table"
+        hx-target="#inbox-table-wrap"
+        hx-trigger="change from:select, change from:input[type='date'], keyup changed delay:400ms from:input[name='search']"
+        hx-include="this"
+        style="display:grid;grid-template-columns:160px 160px 150px 150px 1fr 100px;gap:10px;align-items:center;">
+
+    <div style="position:relative;">
+      <select name="status"
+              style="width:100%;padding:9px 32px 9px 12px;border:1.5px solid #e2e8f0;border-radius:8px;
+                     font-size:13px;font-family:inherit;color:#0f172a;background:white;
+                     outline:none;appearance:none;cursor:pointer;">
+        <option value="">Semua Status</option>
+        {% for s in statuses %}
+        <option value="{{ s }}" {% if s == filters.status %}selected{% endif %}>
+          {% if s == 'PENDING_REVIEW' %}⏳ Menunggu Review
+          {% elif s == 'IN_PROGRESS' %}🔄 Sedang Ditangani
+          {% elif s == 'RESOLVED' %}✅ Terselesaikan
+          {% elif s == 'CLOSED' %}🔒 Ditutup
+          {% else %}{{ s }}{% endif %}
+        </option>
+        {% endfor %}
+      </select>
+      <span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);
+                   font-size:18px;line-height:1;color:#64748b;pointer-events:none;">▾</span>
+    </div>
+
+    <div style="position:relative;">
+      <select name="severity"
+              style="width:100%;padding:9px 32px 9px 12px;border:1.5px solid #e2e8f0;border-radius:8px;
+                     font-size:13px;font-family:inherit;color:#0f172a;background:white;
+                     outline:none;appearance:none;cursor:pointer;">
+        <option value="">Semua Severity</option>
+        {% for s in ["Kritis","Tinggi","Sedang","Rendah"] %}
+        <option value="{{ s }}" {% if s == filters.severity %}selected{% endif %}>
+          {% if s=="Kritis" %}🔴{% elif s=="Tinggi" %}🟠{% elif s=="Sedang" %}🟡{% else %}🟢{% endif %} {{ s }}
+        </option>
+        {% endfor %}
+      </select>
+      <span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);
+                   font-size:18px;line-height:1;color:#64748b;pointer-events:none;">▾</span>
+    </div>
+
+    <input type="date" name="date_from"
+           value="{{ raw_filters.date_from if raw_filters is defined else '' }}"
+           title="Dari tanggal"
+           style="padding:9px 10px;border:1.5px solid #e2e8f0;border-radius:8px;
+                  font-size:13px;font-family:inherit;color:#0f172a;outline:none;cursor:pointer;">
+
+    <input type="date" name="date_to"
+           value="{{ raw_filters.date_to if raw_filters is defined else '' }}"
+           title="Sampai tanggal"
+           style="padding:9px 10px;border:1.5px solid #e2e8f0;border-radius:8px;
+                  font-size:13px;font-family:inherit;color:#0f172a;outline:none;cursor:pointer;">
+
+    <input type="text" name="search"
+           placeholder="🔍  Cari nomor tiket, nama pelapor, jenis insiden…"
+           value="{{ filters.search or '' }}"
+           style="padding:9px 14px;border:1.5px solid #e2e8f0;border-radius:8px;
+                  font-size:13px;font-family:inherit;color:#0f172a;outline:none;
+                  transition:border-color .15s;"
+           onfocus="this.style.borderColor='#2563eb'"
+           onblur="this.style.borderColor='#e2e8f0'">
+
+    <button type="button"
+            onclick="this.form.reset(); htmx.trigger(this.form, 'change');"
+            style="padding:9px 14px;border:1.5px solid #e2e8f0;border-radius:8px;
+                   font-size:13px;font-family:inherit;background:white;color:#64748b;
+                   cursor:pointer;transition:background .12s;"
+            onmouseover="this.style.background='#f1f5f9'"
+            onmouseout="this.style.background='white'">
+      ↺ Reset
+    </button>
+  </form>
+</div>
+
+{# ── Table ── #}
+<div id="inbox-table-wrap">
+  {% include "admin/_inbox_table.html" %}
+</div>
+{% endblock %}

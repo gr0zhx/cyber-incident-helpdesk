@@ -1,0 +1,12 @@
+{# app/web/templates/pelapor/_message.html
+   Dirender via HTMX setelah server membalas.
+   User bubble TIDAK dirender di sini — sudah ditampilkan secara
+   optimistik oleh JS di chat.html sebelum request dikirim.
+#}
+<div class="bot-response-wrap">
+  <div class="bot-response-label">🌿 Asisten</div>
+  <div class="bot-response">{{ bot_text | render_md | safe }}</div>
+</div>
+{% if ticket_id %}
+  {% include "pelapor/_tiket_card.html" %}
+{% endif %}

@@ -1,0 +1,57 @@
+# Core
+fastapi==0.115.*
+uvicorn==0.34.*
+python-dotenv==1.1.*
+
+# LLM & Agents
+langchain==0.3.*
+langgraph==0.3.*
+langchain-openai==0.3.*
+openai==1.76.*
+
+# Vector DB
+qdrant-client==1.13.*
+
+# Database
+sqlalchemy==2.0.*
+psycopg2-binary==2.9.*
+alembic==1.15.*
+
+# Telegram
+python-telegram-bot==21.*
+
+# RAG
+pypdf==5.*
+langchain-text-splitters==0.3.*
+
+# Security
+# nemo-guardrails==0.11.*  # Aktifkan di Fase 7
+
+# Utilities
+pydantic==2.11.*
+pydantic-settings==2.9.*
+redis==5.3.*
+structlog==25.*
+
+# Dashboard admin
+streamlit==1.45.*
+requests==2.32.*
+
+# Testing
+pytest==8.*
+pytest-asyncio==0.26.*
+
+# Evaluation
+ragas>=0.2.0
+datasets>=2.0.0
+
+# Web interface (Plan A)
+passlib[bcrypt]==1.7.4
+bcrypt==4.0.1  # passlib 1.7.4 tidak kompatibel dengan bcrypt>=4.1
+itsdangerous==2.2.0
+slowapi==0.1.9
+python-multipart==0.0.20
+python-magic; platform_system != "Windows"
+python-magic-bin; platform_system == "Windows"
+fakeredis==2.26.1
+markdown==3.10.*

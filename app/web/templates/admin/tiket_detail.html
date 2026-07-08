@@ -1,0 +1,710 @@
+{% extends "admin/_shell.html" %}
+{% block page_title %}Tiket {{ ticket.ticket_id }}{% endblock %}
+{% block content %}
+<div style="display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px;">
+
+  {# ── Left: main card ── #}
+  <div style="background: white; border: 1px solid #d1fae5; border-radius: 10px; overflow: hidden;
+              box-shadow: 0 1px 6px rgba(22,163,74,.06);">
+
+    {# Header #}
+    <div style="padding: 20px 24px 0; display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <div style="font-family: monospace; font-size: 20px; color: #14532d; font-weight: 800;">{{ ticket.ticket_id }}</div>
+        <div style="color: #4b7a56; font-size: 13px;">{{ ticket.created_at.strftime("%d %b %Y %H:%M UTC") }}</div>
+      </div>
+      <div id="status-badge">
+        {% include "admin/_status_badge.html" %}
+      </div>
+    </div>
+
+    {# Tab nav #}
+    <div style="display: flex; gap: 0; border-bottom: 1px solid #d1fae5; margin-top: 16px; padding: 0 24px;">
+      <button onclick="switchTab('info')" id="tab-btn-info"
+              style="padding: 9px 16px; font-size: 13px; font-weight: 600; border: none;
+                     background: none; cursor: pointer; color: #16a34a;
+                     border-bottom: 2px solid #16a34a; margin-bottom: -1px; font-family: inherit;">
+        Informasi Tiket
+      </button>
+      <button onclick="switchTab('trace')" id="tab-btn-trace"
+              style="padding: 9px 16px; font-size: 13px; font-weight: 600; border: none;
+                     background: none; cursor: pointer; color: #64748b;
+                     border-bottom: 2px solid transparent; margin-bottom: -1px; font-family: inherit;">
+        Agent Trace
+        {% if ticket.agent_trace %}
+        <span style="background: #f0fdf4; color: #16a34a; font-size: 10px; padding: 1px 6px;
+                     border-radius: 10px; margin-left: 4px;">{{ ticket.agent_trace | length }}</span>
+        {% endif %}
+      </button>
+      <button onclick="switchTab('attach')" id="tab-btn-attach"
+              style="padding: 9px 16px; font-size: 13px; font-weight: 600; border: none;
+                     background: none; cursor: pointer; color: #64748b;
+                     border-bottom: 2px solid transparent; margin-bottom: -1px; font-family: inherit;">
+        📎 Lampiran
+        {% if attachments %}
+        <span style="background: #f0fdf4; color: #16a34a; font-size: 10px; padding: 1px 6px;
+                     border-radius: 10px; margin-left: 4px;">{{ attachments | length }}</span>
+        {% endif %}
+      </button>
+    </div>
+
+    {# ── Tab: Informasi ── #}
+    <div id="tab-info" style="padding: 20px 24px 24px;">
+
+      <h3 style="font-size: 12px; color: #4b7a56; text-transform: uppercase; letter-spacing: .6px; margin: 0 0 8px;">Pelapor</h3>
+      <p style="margin: 0 0 6px;">
+        <strong>{{ ticket.reporter_name or "—" }}</strong>
+        <span style="color: #64748b;">({{ ticket.reporter_id }})</span><br>
+        {% if ticket.reporter_contact %}<span style="font-size: 13px; color: #475569;">{{ ticket.reporter_contact }}</span>{% endif %}
+        {% if ticket.reporter_department %}<span style="font-size: 13px; color: #475569;"> — {{ ticket.reporter_department }}</span>{% endif %}
+      </p>
+      <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px;">
+        {% if ticket.media_pelaporan %}
+        <span style="background:#f1f5f9;border:1px solid #e2e8f0;border-radius:6px;padding:4px 10px;font-size:12px;">
+          <span style="color:#94a3b8;">Media</span>&nbsp;<strong>{{ ticket.media_pelaporan }}</strong>
+        </span>
+        {% endif %}
+        {% if ticket.incident_time %}
+        <span style="background:#f1f5f9;border:1px solid #e2e8f0;border-radius:6px;padding:4px 10px;font-size:12px;">
+          <span style="color:#94a3b8;">Waktu Insiden</span>&nbsp;<strong>{{ ticket.incident_time.strftime("%d %b %Y %H:%M") }}</strong>
+        </span>
+        {% endif %}
+        {% if ticket.affected_asset %}
+        <span style="background:#f1f5f9;border:1px solid #e2e8f0;border-radius:6px;padding:4px 10px;font-size:12px;">
+          <span style="color:#94a3b8;">Aset Terdampak</span>&nbsp;<strong>{{ ticket.affected_asset }}</strong>
+        </span>
+        {% endif %}
+      </div>
+
+      <h3 style="font-size: 12px; color: #4b7a56; text-transform: uppercase; letter-spacing: .6px; margin: 0 0 8px;">Klasifikasi</h3>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
+        <span style="background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 6px; padding: 5px 10px; font-size: 13px;">
+          <span style="color: #94a3b8; font-size: 11px;">Jenis</span><br>
+          <strong>{{ ticket.incident_type }}</strong>
+        </span>
+        <span style="background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 6px; padding: 5px 10px; font-size: 13px;">
+          <span style="color: #94a3b8; font-size: 11px;">Severity</span><br>
+          <strong>{{ ticket.severity }}</strong>
+        </span>
+        <span style="background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 6px; padding: 5px 10px; font-size: 13px;">
+          <span style="color: #94a3b8; font-size: 11px;">Confidence</span><br>
+          <strong>{{ ticket.confidence_score or "n/a" }}</strong>
+        </span>
+        <span style="background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 6px; padding: 5px 10px; font-size: 13px;">
+          <span style="color: #94a3b8; font-size: 11px;">Eskalasi</span><br>
+          <strong>{{ ticket.escalation_level or "—" }}</strong>
+        </span>
+      </div>
+
+      {% if ticket.classification_reasoning %}
+      <h3 style="font-size: 12px; color: #4b7a56; text-transform: uppercase; letter-spacing: .6px; margin: 0 0 8px;">Reasoning Klasifikasi</h3>
+      <p style="font-size: 13px; color: #475569; background: #f8fafc; padding: 10px 12px; border-radius: 6px; margin-bottom: 20px;">{{ ticket.classification_reasoning }}</p>
+      {% endif %}
+
+      <h3 style="font-size: 12px; color: #4b7a56; text-transform: uppercase; letter-spacing: .6px; margin: 0 0 8px;">Deskripsi (sanitized)</h3>
+      <pre style="background: #f1f5f9; padding: 12px; border-radius: 6px; white-space: pre-wrap; font-size: 13px; margin: 0 0 20px;">{{ ticket.description_sanitized }}</pre>
+
+      {% if ticket.mitigation_recommendation %}
+      <h3 style="font-size: 12px; color: #4b7a56; text-transform: uppercase; letter-spacing: .6px; margin: 0 0 8px;">Rekomendasi Mitigasi</h3>
+      <div style="background: #f0fdf4; padding: 12px 16px; border-left: 3px solid #16a34a; border-radius: 4px; font-size: 13px; margin-bottom: 20px; color: #1a2e1c;">
+        {{ ticket.mitigation_recommendation }}
+      </div>
+      {% endif %}
+
+      {% if ticket.citations %}
+      <h3 style="font-size: 12px; color: #4b7a56; text-transform: uppercase; letter-spacing: .6px; margin: 0 0 8px;">Sitasi RAG
+        {% if ticket.rag_confidence %}<span style="color: #16a34a; font-weight: 700; font-size: 11px; margin-left: 6px;">conf {{ ticket.rag_confidence }}</span>{% endif %}
+      </h3>
+      <ul style="font-size: 12px; color: #475569; margin: 0 0 20px; padding-left: 18px;">
+        {% for c in ticket.citations %}
+        <li>{{ c.source if c.source is defined else c }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+
+    </div>
+
+    {# ── Tab: Lampiran ── #}
+    <div id="tab-attach" style="padding: 20px 24px 24px; display: none;">
+      {% if attachments %}
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        {% for att in attachments %}
+        {% set is_image = att.mime_type and att.mime_type.startswith("image/") %}
+        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px;
+                    background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 10px;">
+          <span style="font-size: 28px; flex-shrink: 0;">{% if is_image %}🖼{% else %}📄{% endif %}</span>
+          <div style="flex: 1; min-width: 0;">
+            <p style="font-size: 13px; font-weight: 600; color: #14532d; margin: 0 0 2px;
+                      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+              {{ att.original_filename }}
+            </p>
+            <p style="font-size: 11px; color: #4b7a56; margin: 0;">
+              {{ att.mime_type }} · {{ (att.size_bytes / 1024) | round(1) }} KB
+            </p>
+          </div>
+          {% if is_image %}
+          <a href="/admin/tiket/{{ ticket.ticket_id }}/attachment/{{ att.id }}"
+             target="_blank"
+             style="padding: 6px 14px; background: #dcfce7; color: #166534;
+                    border: 1px solid #86efac; border-radius: 7px; font-size: 12px;
+                    font-weight: 600; text-decoration: none; white-space: nowrap;">
+            Lihat
+          </a>
+          {% else %}
+          <a href="/admin/tiket/{{ ticket.ticket_id }}/attachment/{{ att.id }}"
+             download="{{ att.original_filename }}"
+             style="padding: 6px 14px; background: linear-gradient(135deg, #16a34a, #15803d);
+                    color: white; border-radius: 7px; font-size: 12px;
+                    font-weight: 600; text-decoration: none; white-space: nowrap;
+                    box-shadow: 0 2px 6px rgba(22,163,74,.3);">
+            ↓ Download
+          </a>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div style="text-align: center; color: #9eb8a2; padding: 48px 0; font-size: 14px;">
+        <div style="font-size: 36px; margin-bottom: 10px;">📎</div>
+        Tidak ada lampiran untuk tiket ini.
+      </div>
+      {% endif %}
+    </div>
+
+    {# ── Tab: Agent Trace ── #}
+    <div id="tab-trace" style="padding: 20px 24px 24px; display: none;">
+
+      {% if ticket.agent_trace %}
+
+      {# Pipeline header #}
+      <div style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap;
+                  background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;
+                  padding: 10px 14px; margin-bottom: 20px; font-size: 11px; font-family: monospace;">
+        {% for step in ticket.agent_trace %}
+        <span style="padding: 3px 8px; border-radius: 4px; font-weight: 700;
+                     background: {% if step.status == 'success' %}#dcfce7; color:#166534
+                     {% elif step.status == 'fallback' %}#ffedd5; color:#9a3412
+                     {% elif step.status in ['blocked','issues_found'] %}#fee2e2; color:#991b1b
+                     {% else %}#f1f5f9; color:#475569{% endif %};">
+          {{ step.agent }}
+        </span>
+        {% if not loop.last %}
+        <span style="color: #cbd5e1;">→</span>
+        {% endif %}
+        {% endfor %}
+      </div>
+
+      {# Timeline #}
+      <div style="position: relative; padding-left: 20px;">
+        {# Vertical line #}
+        <div style="position: absolute; left: 7px; top: 12px; bottom: 12px; width: 2px; background: #e2e8f0;"></div>
+
+        {% for step in ticket.agent_trace %}
+        {% set status_color = '#22c55e' if step.status == 'success' else ('#f59e0b' if step.status == 'fallback' else ('#ef4444' if step.status in ['blocked','issues_found'] else '#94a3b8')) %}
+        {% set status_bg = '#f0fdf4' if step.status == 'success' else ('#fff7ed' if step.status == 'fallback' else ('#fef2f2' if step.status in ['blocked','issues_found'] else '#f8fafc')) %}
+
+        <div style="display: flex; gap: 12px; align-items: flex-start; margin-bottom: 10px; position: relative;">
+          {# Dot #}
+          <div style="position: absolute; left: -17px; top: 11px; width: 10px; height: 10px;
+                      border-radius: 50%; background: {{ status_color }};
+                      border: 2px solid white; box-shadow: 0 0 0 2px {{ status_color }}33; flex-shrink: 0;"></div>
+
+          {# Card #}
+          <div style="flex: 1; background: {{ status_bg }}; border: 1px solid #e2e8f0;
+                      border-left: 3px solid {{ status_color }};
+                      border-radius: 0 8px 8px 0; padding: 10px 14px;">
+
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap;">
+              <span style="font-family: monospace; font-weight: 700; font-size: 13px; color: #0f172a;">
+                {{ step.agent }}
+              </span>
+              <span style="padding: 1px 7px; border-radius: 4px; font-size: 10px; font-weight: 700;
+                           background: {% if step.status == 'success' %}#dcfce7; color:#166534{% elif step.status == 'fallback' %}#ffedd5; color:#9a3412{% elif step.status in ['blocked','issues_found'] %}#fee2e2; color:#991b1b{% else %}#f1f5f9; color:#475569{% endif %};">
+                {{ step.status | upper }}
+              </span>
+              {% if step.timestamp %}
+              <span style="font-size: 11px; color: #94a3b8; font-family: monospace;">
+                {{ step.timestamp[11:19] }} UTC
+              </span>
+              {% endif %}
+            </div>
+
+            {# Extra key-value pairs #}
+            {% set skip = ['agent','status','timestamp'] %}
+            {% set extras = [] %}
+            {% for k, v in step.items() %}{% if k not in skip %}{% set _ = extras.append((k, v)) %}{% endif %}{% endfor %}
+            {% if extras %}
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              {% for k, v in extras %}
+              <span style="font-size: 11px; background: white; border: 1px solid #e2e8f0;
+                           border-radius: 4px; padding: 2px 8px; color: #475569;">
+                <span style="color: #94a3b8;">{{ k }}:</span>
+                <strong style="color: #0f172a;">{{ v }}</strong>
+              </span>
+              {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      {% else %}
+      <div style="text-align: center; color: #94a3b8; padding: 40px 0; font-size: 14px;">
+        Tidak ada agent trace tersimpan untuk tiket ini.
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+
+  {# ── Right: action panel ── #}
+  <div>
+    <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px;">
+
+      <h3 style="font-size: 12px; color: #94a3b8; text-transform: uppercase;
+                 letter-spacing: .6px; margin: 0 0 16px;">Tindakan</h3>
+
+      {# Status Chips #}
+      <p style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;
+                letter-spacing: .5px; margin: 0 0 10px;">Status</p>
+      {% set chip_cfg = {
+        'PENDING_REVIEW': {'label': '⏳ Menunggu',     'bg': '#fef3c7', 'color': '#92400e'},
+        'IN_PROGRESS':    {'label': '▶ Ditangani',     'bg': '#dbeafe', 'color': '#1d4ed8'},
+        'RESOLVED':       {'label': '✓ Terselesaikan', 'bg': '#dcfce7', 'color': '#166534'},
+        'CLOSED':         {'label': '🔒 Ditutup',      'bg': '#f1f5f9', 'color': '#475569'},
+        'REJECTED':       {'label': '✕ Ditolak',       'bg': '#fee2e2', 'color': '#991b1b'},
+      } %}
+      <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;">
+        {% for s in statuses %}
+          {% set cfg = chip_cfg.get(s, {'label': s, 'bg': '#f1f5f9', 'color': '#475569'}) %}
+          {% set is_active = (s == ticket.status) %}
+          <form hx-post="/admin/tiket/{{ ticket.ticket_id }}/status"
+                hx-target="#status-badge" hx-swap="innerHTML"
+                hx-headers='{"X-CSRF-Token": "{{ csrf_token }}"}'
+                style="display: inline;">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <input type="hidden" name="status" value="{{ s }}">
+            <button type="submit"
+                    class="status-chip {% if is_active %}active{% endif %}"
+                    data-status="{{ s }}"
+                    onclick="activateChip(this)">
+              {{ cfg.label }}
+            </button>
+          </form>
+        {% endfor %}
+      </div>
+
+      <hr style="border: none; border-top: 1px solid #f1f5f9; margin: 0 0 20px;">
+
+      {# Assign — custom dropdown #}
+      <p style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;
+                letter-spacing: .5px; margin: 0 0 8px;">Penugasan</p>
+      <form hx-post="/admin/tiket/{{ ticket.ticket_id }}/assign"
+            hx-target="#assign-msg-{{ ticket.ticket_id }}" hx-swap="innerHTML"
+            hx-headers='{"X-CSRF-Token": "{{ csrf_token }}"}'
+            hx-trigger="assign-pick"
+            style="margin-bottom: 6px;">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <input type="hidden" name="assignee" id="assignee-val-{{ ticket.ticket_id }}"
+               value="{{ ticket.assigned_to or '' }}">
+        <div class="adm-wrap" id="adm-wrap-{{ ticket.ticket_id }}">
+          <button type="button" class="adm-trigger"
+                  onclick="toggleAdmDrop('{{ ticket.ticket_id }}')">
+            {% set cur = ticket.assigned_to %}
+            {% if cur %}
+              {% for a in admins %}{% if a.username == cur %}
+              <span class="adm-avatar">{{ a.full_name[0] }}</span>
+              <span class="adm-trigger-name">{{ a.full_name }}</span>
+              <span class="adm-trigger-user">@{{ a.username }}</span>
+              {% endif %}{% endfor %}
+            {% else %}
+              <span style="color:#94a3b8; flex:1;">— Pilih Admin —</span>
+            {% endif %}
+            <span class="adm-caret">▾</span>
+          </button>
+          <div class="adm-list" id="adm-list-{{ ticket.ticket_id }}">
+            <div class="adm-opt adm-opt-none" onclick="pickAdm('{{ ticket.ticket_id }}','','')">
+              <span style="color:#94a3b8; font-size:13px;">— Tidak ada —</span>
+            </div>
+            {% for a in admins %}
+            <div class="adm-opt {% if a.username == ticket.assigned_to %}adm-selected{% endif %}"
+                 onclick="pickAdm('{{ ticket.ticket_id }}','{{ a.username }}','{{ a.full_name }}')">
+              <span class="adm-avatar">{{ a.full_name[0] }}</span>
+              <span class="adm-info">
+                <span class="adm-name">{{ a.full_name }}</span>
+                <span class="adm-user">@{{ a.username }}</span>
+              </span>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </form>
+      <div id="assign-msg-{{ ticket.ticket_id }}" class="action-feedback" style="margin-bottom:14px;"></div>
+
+      {# Escalation — range slider #}
+      {% set esc_idx = {'LOW': 0, 'MEDIUM': 1, 'HIGH': 2, 'CRITICAL': 3} %}
+      {% set esc_cur = esc_idx.get(ticket.escalation_level or 'LOW', 0) %}
+      <p style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;
+                letter-spacing: .5px; margin: 0 0 10px;">Eskalasi</p>
+      <form hx-post="/admin/tiket/{{ ticket.ticket_id }}/escalation"
+            hx-target="#esc-msg-{{ ticket.ticket_id }}" hx-swap="innerHTML"
+            hx-headers='{"X-CSRF-Token": "{{ csrf_token }}"}'
+            hx-trigger="esc-change"
+            style="margin-bottom: 6px;">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <input type="hidden" name="level" id="esc-val-{{ ticket.ticket_id }}"
+               value="{{ ticket.escalation_level or 'LOW' }}">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+          <span class="esc-badge" id="esc-badge-{{ ticket.ticket_id }}"
+                data-idx="{{ esc_cur }}"></span>
+          <span style="font-size:11px; color:#94a3b8;">geser untuk ubah</span>
+        </div>
+        <input type="range" min="0" max="3" step="1" value="{{ esc_cur }}"
+               class="esc-range" id="esc-range-{{ ticket.ticket_id }}"
+               oninput="updateEsc('{{ ticket.ticket_id }}', this.value)"
+               onchange="submitEsc('{{ ticket.ticket_id }}')">
+        <div style="display:flex; justify-content:space-between; margin-top:6px;">
+          <span class="esc-tick">LOW</span>
+          <span class="esc-tick">MED</span>
+          <span class="esc-tick">HIGH</span>
+          <span class="esc-tick">CRIT</span>
+        </div>
+      </form>
+      <div id="esc-msg-{{ ticket.ticket_id }}" class="action-feedback" style="margin-bottom:14px;"></div>
+
+      <hr style="border: none; border-top: 1px solid #f1f5f9; margin: 0 0 16px;">
+
+      {# CIA Triad #}
+      <p style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;
+                letter-spacing: .5px; margin: 0 0 10px;">Triase CIA</p>
+      <form hx-post="/admin/tiket/{{ ticket.ticket_id }}/cia"
+            hx-target="#cia-msg-{{ ticket.ticket_id }}" hx-swap="innerHTML"
+            hx-headers='{"X-CSRF-Token": "{{ csrf_token }}"}'
+            style="margin-bottom: 6px;">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:10px;">
+          {% for key, label, desc in [
+            ('cia_confidentiality', 'C — Kerahasiaan', 'Data sensitif terekspos'),
+            ('cia_integrity',       'I — Integritas',  'Data berubah/dimanipulasi'),
+            ('cia_availability',    'A — Ketersediaan','Layanan terganggu/down')
+          ] %}
+          {% set checked = ticket | attr(key) %}
+          <input type="hidden" name="{{ key }}" value="0">
+          <label class="cia-toggle-wrap">
+            <input type="checkbox" name="{{ key }}" value="1" class="cia-cb"
+                   {% if checked %}checked{% endif %}>
+            <span class="cia-slider"></span>
+            <span class="cia-label">
+              <strong>{{ label }}</strong>
+              <span>{{ desc }}</span>
+            </span>
+          </label>
+          {% endfor %}
+        </div>
+        <button type="submit" class="btn"
+                style="width:100%; font-size:12px; background:#f8fafc;
+                       border:1.5px solid #e2e8f0; color:#475569; padding:7px;">
+          Simpan CIA
+        </button>
+      </form>
+      <div id="cia-msg-{{ ticket.ticket_id }}" class="action-feedback" style="margin-bottom:14px;"></div>
+
+      <hr style="border: none; border-top: 1px solid #f1f5f9; margin: 0 0 16px;">
+
+      {# Containment & Recovery #}
+      <p style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;
+                letter-spacing: .5px; margin: 0 0 10px;">Penanganan</p>
+      <form hx-post="/admin/tiket/{{ ticket.ticket_id }}/containment"
+            hx-target="#cont-msg-{{ ticket.ticket_id }}" hx-swap="innerHTML"
+            hx-headers='{"X-CSRF-Token": "{{ csrf_token }}"}'
+            style="margin-bottom: 6px;">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <label style="display:block; font-size:12px; font-weight:600;
+                      color:#64748b; margin-bottom:5px;">Tindakan Penahanan (Containment)</label>
+        <textarea name="containment_action" rows="3"
+                  style="width:100%; padding:8px 10px; border:1.5px solid #e2e8f0;
+                         border-radius:7px; font-size:12px; font-family:inherit;
+                         resize:vertical; outline:none; box-sizing:border-box;
+                         transition:border-color .15s; margin-bottom:10px;"
+                  onfocus="this.style.borderColor='#3b82f6'"
+                  onblur="this.style.borderColor='#e2e8f0'"
+                  placeholder="Langkah isolasi, blokir, dsb…">{{ ticket.containment_action or '' }}</textarea>
+        <label style="display:block; font-size:12px; font-weight:600;
+                      color:#64748b; margin-bottom:5px;">Tindakan Pemulihan (Recovery)</label>
+        <textarea name="recovery_action" rows="3"
+                  style="width:100%; padding:8px 10px; border:1.5px solid #e2e8f0;
+                         border-radius:7px; font-size:12px; font-family:inherit;
+                         resize:vertical; outline:none; box-sizing:border-box;
+                         transition:border-color .15s; margin-bottom:10px;"
+                  onfocus="this.style.borderColor='#3b82f6'"
+                  onblur="this.style.borderColor='#e2e8f0'"
+                  placeholder="Restore data, patch sistem, dsb…">{{ ticket.recovery_action or '' }}</textarea>
+        <button type="submit" class="btn"
+                style="width:100%; font-size:12px; background:#f8fafc;
+                       border:1.5px solid #e2e8f0; color:#475569; padding:7px;">
+          Simpan Penanganan
+        </button>
+      </form>
+      <div id="cont-msg-{{ ticket.ticket_id }}" class="action-feedback" style="margin-bottom:14px;"></div>
+
+      <hr style="border: none; border-top: 1px solid #f1f5f9; margin: 0 0 16px;">
+
+      {# Notifikasi #}
+      <form hx-post="/admin/tiket/{{ ticket.ticket_id }}/notify"
+            hx-target="#notify-msg-{{ ticket.ticket_id }}" hx-swap="innerHTML"
+            hx-headers='{"X-CSRF-Token": "{{ csrf_token }}"}'
+            style="margin-bottom: 10px;">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <button type="submit" class="btn btn-primary"
+                style="width: 100%; font-size: 13px;">
+          🔔 Kirim Update Status ke Pelapor
+        </button>
+      </form>
+      <div id="notify-msg-{{ ticket.ticket_id }}" class="action-feedback" style="margin-bottom:14px;"></div>
+
+      {# Generate Laporan #}
+      <button type="button"
+              onclick="var f=document.getElementById('laporan-form');f.style.display=f.style.display==='none'?'block':'none';"
+              class="btn"
+              style="width: 100%; font-size: 13px; background: #f8fafc;
+                     border: 1.5px solid #e2e8f0; color: #475569;">
+        📄 Generate Laporan PDF
+      </button>
+      <div id="laporan-form"
+           style="display: none; margin-top: 10px; padding: 14px;
+                  background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
+        <form method="post" action="/admin/report/generate">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+          <input type="hidden" name="ticket_id" value="{{ ticket.ticket_id }}">
+          <label style="display: block; font-size: 12px; font-weight: 600;
+                        color: #64748b; margin-bottom: 6px;">Disiapkan oleh</label>
+          <input type="text" name="prepared_by" value="Tim Keamanan Siber Pusdatin"
+                 class="form-control" style="font-size: 13px; margin-bottom: 10px;">
+          <button type="submit" class="btn btn-primary" style="width: 100%; font-size: 13px;">
+            ⬇ Download
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+function switchTab(name) {
+  ['info', 'trace', 'attach'].forEach(function(t) {
+    document.getElementById('tab-' + t).style.display = t === name ? 'block' : 'none';
+    var btn = document.getElementById('tab-btn-' + t);
+    btn.style.color = t === name ? '#16a34a' : '#64748b';
+    btn.style.borderBottomColor = t === name ? '#16a34a' : 'transparent';
+    btn.style.fontWeight = t === name ? '700' : '600';
+  });
+}
+</script>
+
+<style>
+.status-chip {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1.5px solid #e2e8f0;
+  background: #f8fafc;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all .15s;
+  font-family: inherit;
+}
+.status-chip[data-status="PENDING_REVIEW"].active { background: #fef3c7; color: #92400e; border-color: #92400e; }
+.status-chip[data-status="IN_PROGRESS"].active    { background: #dbeafe; color: #1d4ed8; border-color: #1d4ed8; }
+.status-chip[data-status="RESOLVED"].active       { background: #dcfce7; color: #166534; border-color: #166534; }
+.status-chip[data-status="CLOSED"].active         { background: #f1f5f9; color: #475569; border-color: #475569; }
+.status-chip[data-status="REJECTED"].active       { background: #fee2e2; color: #991b1b; border-color: #991b1b; }
+
+/* ── Custom Admin Dropdown ── */
+.adm-wrap { position: relative; }
+.adm-trigger {
+  display: flex; align-items: center; gap: 9px; width: 100%;
+  padding: 9px 12px; background: white;
+  border: 1.5px solid #e2e8f0; border-radius: 8px;
+  cursor: pointer; font-family: inherit; text-align: left;
+  transition: border-color .15s;
+}
+.adm-trigger:hover { border-color: #94a3b8; }
+.adm-trigger.open  { border-color: #16a34a; box-shadow: 0 0 0 3px #f0fdf4; }
+.adm-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: linear-gradient(135deg, #16a34a, #15803d);
+  color: white; font-size: 12px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.adm-trigger-name { font-size: 13px; color: #0f172a; font-weight: 500; flex: 1; }
+.adm-trigger-user { font-size: 11px; color: #94a3b8; }
+.adm-caret { color: #64748b; font-size: 18px; line-height: 1; margin-left: auto; }
+.adm-list {
+  display: none; position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+  background: white; border: 1.5px solid #e2e8f0; border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.1); z-index: 50; overflow: hidden;
+}
+.adm-list.open { display: block; }
+.adm-opt {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; cursor: pointer; transition: background .1s;
+}
+.adm-opt:hover { background: #f8fafc; }
+.adm-selected  { background: #f0fdf4; }
+.adm-info { display: flex; flex-direction: column; }
+.adm-name { font-size: 13px; color: #0f172a; font-weight: 500; }
+.adm-user { font-size: 11px; color: #94a3b8; }
+.adm-opt-none .adm-avatar { background: #f1f5f9; }
+
+/* ── Escalation Slider ── */
+.esc-badge {
+  display: inline-flex; align-items: center;
+  padding: 4px 12px; border-radius: 20px;
+  font-size: 12px; font-weight: 700; letter-spacing: .3px;
+}
+.esc-range {
+  width: 100%; height: 6px; border-radius: 3px; appearance: none;
+  -webkit-appearance: none; cursor: pointer; outline: none;
+  background: linear-gradient(to right, #22c55e 0%, #eab308 33%, #f97316 66%, #ef4444 100%);
+}
+.esc-range::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%;
+  background: white; border: 2.5px solid #64748b;
+  box-shadow: 0 2px 6px rgba(0,0,0,.18); cursor: pointer; transition: border-color .15s;
+}
+.esc-range::-moz-range-thumb {
+  width: 22px; height: 22px; border-radius: 50%; background: white;
+  border: 2.5px solid #64748b; box-shadow: 0 2px 6px rgba(0,0,0,.18); cursor: pointer;
+}
+.esc-tick { font-size: 10px; color: #94a3b8; font-weight: 600; letter-spacing: .3px; }
+
+/* ── CIA Toggle Switches ── */
+.cia-toggle-wrap {
+  display: flex; align-items: center; gap: 10px; cursor: pointer;
+}
+.cia-cb { display: none; }
+.cia-slider {
+  width: 36px; height: 20px; border-radius: 10px;
+  background: #cbd5e1; flex-shrink: 0;
+  position: relative; transition: background .2s;
+}
+.cia-slider::after {
+  content: ''; position: absolute; top: 3px; left: 3px;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: white; transition: transform .2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,.2);
+}
+.cia-cb:checked + .cia-slider { background: #16a34a; }
+.cia-cb:checked + .cia-slider::after { transform: translateX(16px); }
+.cia-label { display: flex; flex-direction: column; line-height: 1.3; }
+.cia-label strong { font-size: 13px; color: #0f172a; }
+.cia-label span   { font-size: 11px; color: #94a3b8; }
+
+/* ── Action feedback toast ── */
+.action-feedback { min-height: 18px; }
+.action-flash {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 12px; color: #16a34a; font-weight: 500;
+  opacity: 1; transition: opacity 0.8s ease;
+}
+.action-flash.fade-out { opacity: 0; }
+</style>
+
+<script>
+function activateChip(btn) {
+  document.querySelectorAll('.status-chip').forEach(function(c) { c.classList.remove('active'); });
+  btn.classList.add('active');
+}
+
+/* ── Escalation Slider ── */
+var ESC_LEVELS = ['LOW','MEDIUM','HIGH','CRITICAL'];
+var ESC_LABELS = ['🟢 LOW','🟡 MEDIUM','🟠 HIGH','🔴 CRITICAL'];
+var ESC_BG     = ['#dcfce7','#fef9c3','#ffedd5','#fee2e2'];
+var ESC_COL    = ['#166534','#854d0e','#9a3412','#991b1b'];
+var ESC_BORDER = ['#16a34a','#ca8a04','#ea580c','#dc2626'];
+
+function updateEsc(id, val) {
+  var idx   = parseInt(val);
+  var badge = document.getElementById('esc-badge-' + id);
+  badge.textContent        = ESC_LABELS[idx];
+  badge.style.background   = ESC_BG[idx];
+  badge.style.color        = ESC_COL[idx];
+  badge.style.border       = '1.5px solid ' + ESC_BORDER[idx];
+  var thumb = document.getElementById('esc-range-' + id);
+  thumb.style.setProperty('--tw', ESC_COL[idx]);
+  document.getElementById('esc-val-' + id).value = ESC_LEVELS[idx];
+}
+
+function submitEsc(id) {
+  var form = document.getElementById('esc-range-' + id).closest('form');
+  htmx.trigger(form, 'esc-change');
+}
+
+/* ── Custom Admin Dropdown ── */
+function toggleAdmDrop(id) {
+  var wrap = document.getElementById('adm-wrap-' + id);
+  var list = document.getElementById('adm-list-' + id);
+  var btn  = wrap.querySelector('.adm-trigger');
+  var open = list.classList.toggle('open');
+  btn.classList.toggle('open', open);
+  if (open) {
+    function outsideClick(e) {
+      if (!wrap.contains(e.target)) {
+        list.classList.remove('open');
+        btn.classList.remove('open');
+        document.removeEventListener('click', outsideClick);
+      }
+    }
+    setTimeout(function() { document.addEventListener('click', outsideClick); }, 0);
+  }
+}
+
+function pickAdm(id, username, fullname) {
+  var list = document.getElementById('adm-list-' + id);
+  var btn  = document.getElementById('adm-wrap-' + id).querySelector('.adm-trigger');
+  document.getElementById('assignee-val-' + id).value = username;
+  list.querySelectorAll('.adm-opt').forEach(function(o) { o.classList.remove('adm-selected'); });
+  event.currentTarget.classList.add('adm-selected');
+  if (username) {
+    btn.innerHTML = '<span class="adm-avatar">' + fullname.charAt(0) + '</span>' +
+      '<span class="adm-trigger-name">' + fullname + '</span>' +
+      '<span class="adm-trigger-user">@' + username + '</span>' +
+      '<span class="adm-caret">▾</span>';
+  } else {
+    btn.innerHTML = '<span style="color:#94a3b8;flex:1;">— Pilih Admin —</span>' +
+      '<span class="adm-caret">▾</span>';
+  }
+  list.classList.remove('open');
+  btn.classList.remove('open');
+  var form = document.getElementById('adm-wrap-' + id).closest('form');
+  htmx.trigger(form, 'assign-pick');
+}
+
+/* ── Action feedback fade-out ── */
+document.body.addEventListener('htmx:afterSwap', function(e) {
+  var target = e.detail.target;
+  if (!target.classList.contains('action-feedback')) return;
+  var flash = target.querySelector('.action-flash');
+  if (!flash) return;
+  clearTimeout(target._fadeTimer);
+  flash.classList.remove('fade-out');
+  target._fadeTimer = setTimeout(function() {
+    flash.classList.add('fade-out');
+  }, 2000);
+});
+
+/* ── Init badge state on load ── */
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.esc-badge[data-idx]').forEach(function(badge) {
+    var idx = parseInt(badge.getAttribute('data-idx'));
+    badge.textContent      = ESC_LABELS[idx];
+    badge.style.background = ESC_BG[idx];
+    badge.style.color      = ESC_COL[idx];
+    badge.style.border     = '1.5px solid ' + ESC_BORDER[idx];
+  });
+});
+</script>
+{% endblock %}

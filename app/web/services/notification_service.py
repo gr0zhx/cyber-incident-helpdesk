@@ -28,7 +28,7 @@ class NotificationService:
             if reporter_id.startswith("web:") and reporter_access_token:
                 return {
                     "ok": True,
-                    "channel": "web_link",
+                    "channel": "web_inbox",
                     "link": self.build_reporter_status_link(reporter_access_token),
                 }
             logger.info("Notifikasi dilewati: channel non-telegram untuk reporter %s", reporter_id)

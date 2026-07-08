@@ -25,15 +25,20 @@
       {% if reporter.reporter_unit %}
       <p class="cs-card-meta">{{ reporter.reporter_unit }}</p>
       {% endif %}
-      {% if reporter.reporter_contact %}
+    {% if reporter.reporter_contact %}
       <p class="cs-card-meta" style="color:#4b7a56;">{{ reporter.reporter_contact }}</p>
       {% endif %}
-      {% if resume_link %}
-      <p class="cs-card-meta" style="margin-top:10px;color:#86efac;word-break:break-all;">
-        Tautan aman: {{ resume_link }}
-      </p>
-      {% endif %}
     </div>
+
+    {% if reporter.reporter_access_token %}
+    <div id="reporter-updates"
+         class="cs-card"
+         hx-get="/lapor/notifikasi"
+         hx-trigger="load, every 15s"
+         hx-swap="innerHTML">
+      {% include "pelapor/_updates_feed.html" %}
+    </div>
+    {% endif %}
 
     {# Incident info (if filled in identitas) #}
     {% if reporter.affected_asset or reporter.incident_time %}

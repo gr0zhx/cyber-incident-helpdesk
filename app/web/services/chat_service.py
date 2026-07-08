@@ -86,6 +86,45 @@ class ChatService:
             self._redis.delete(f"web:reporter_tickets:{access_token}")
             return []
 
+    def get_reporter_updates(self, access_token: str) -> list[dict]:
+        raw = self._redis.get(f"web:reporter_updates:{access_token}")
+        if not raw:
+            return []
+        try:
+            data = json.loads(raw)
+            return data if isinstance(data, list) else []
+        except (json.JSONDecodeError, ValueError):
+            logger.warning("Corrupt reporter_updates access_token=%s, reset", access_token[:8])
+            self._redis.delete(f"web:reporter_updates:{access_token}")
+            return []
+
+    def add_reporter_update(
+        self,
+        access_token: str,
+        *,
+        ticket_id: str,
+        title: str,
+        message: str,
+        kind: str = "info",
+        ts: str = "",
+    ) -> None:
+        if not access_token:
+            return
+        payload = self.get_reporter_updates(access_token)
+        payload.insert(0, {
+            "ticket_id": ticket_id,
+            "title": title,
+            "message": message,
+            "kind": kind,
+            "ts": ts or datetime.now(timezone.utc).isoformat(),
+        })
+        payload = payload[:20]
+        self._redis.setex(
+            f"web:reporter_updates:{access_token}",
+            _HISTORY_TTL * 30,
+            json.dumps(payload).encode(),
+        )
+
     def _set_session_ticket(self, session_id: str, ticket_id: str, access_token: str = "") -> None:
         self._redis.setex(f"web:session_ticket:{session_id}", _HISTORY_TTL, ticket_id.encode())
         if access_token:
@@ -131,6 +170,7 @@ class ChatService:
             self._redis.delete(f"web:chat_token:{access_token}")
             self._redis.delete(f"web:reporter_ticket:{access_token}")
             self._redis.delete(f"web:reporter_tickets:{access_token}")
+            self._redis.delete(f"web:reporter_updates:{access_token}")
 
     # ------------------------------------------------------------------
     # Message handling

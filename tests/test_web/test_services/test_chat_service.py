@@ -190,3 +190,22 @@ def test_clear_history(tmp_path):
     svc = _make_service(r)
     svc.clear_history("sess-1")
     assert svc.get_history("sess-1") == []
+
+
+def test_reporter_updates_roundtrip():
+    r = fakeredis.FakeStrictRedis(decode_responses=False)
+    svc = _make_service(r)
+    svc.add_reporter_update(
+        "token-1",
+        ticket_id="INC-1",
+        title="Pembaruan Status Tiket",
+        message="Status tiket diperbarui ke IN_PROGRESS.",
+        kind="status",
+        ts="2026-07-08T10:00:00Z",
+    )
+    updates = svc.get_reporter_updates("token-1")
+    assert len(updates) == 1
+    assert updates[0]["ticket_id"] == "INC-1"
+    assert updates[0]["kind"] == "status"
+    svc.clear_history("sess-1", "token-1")
+    assert svc.get_reporter_updates("token-1") == []

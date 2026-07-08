@@ -39,7 +39,7 @@ def test_notify_returns_secure_link_for_web_reporter(monkeypatch):
         )
     assert ok == {
         "ok": True,
-        "channel": "web_link",
+        "channel": "web_inbox",
         "link": "https://cyber-helpdesk.plutolab.my.id/lapor/akses/token123",
     }
     mock.assert_not_called()

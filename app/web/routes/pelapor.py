@@ -272,6 +272,7 @@ def chat_page(
     db: Session = Depends(get_db_session),
 ):
     svc = ChatService(redis=_redis_client())
+    access_token = reporter.get("reporter_access_token", "")
     history = svc.get_history(reporter["session_id"], reporter.get("reporter_access_token", ""))
     session_ticket_id = (
         svc.get_session_ticket(reporter["session_id"])
@@ -289,6 +290,7 @@ def chat_page(
             .order_by(IncidentTicket.created_at.desc())
             .all()
         )
+    reporter_updates = svc.get_reporter_updates(access_token) if access_token else []
     return templates.TemplateResponse(
         "pelapor/chat.html",
         {
@@ -297,6 +299,7 @@ def chat_page(
             "history": history,
             "session_ticket": session_ticket,
             "reporter_tickets": reporter_tickets,
+            "reporter_updates": reporter_updates,
             "csrf_token": request.session.get("csrf_token", ""),
         },
     )
@@ -343,6 +346,25 @@ async def send_message(
     return templates.TemplateResponse(
         "pelapor/_message.html",
         {"request": request, **result},
+    )
+
+
+@router.get("/notifikasi", response_class=HTMLResponse)
+def reporter_notifications(
+    request: Request,
+    reporter: dict = Depends(get_reporter_session),
+):
+    access_token = reporter.get("reporter_access_token", "")
+    updates = []
+    if access_token:
+        svc = ChatService(redis=_redis_client())
+        updates = svc.get_reporter_updates(access_token)
+    return templates.TemplateResponse(
+        "pelapor/_updates_feed.html",
+        {
+            "request": request,
+            "updates": updates,
+        },
     )
 
 

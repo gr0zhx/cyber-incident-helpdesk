@@ -298,3 +298,43 @@ def test_track_session_ticket_home_uses_tracked_ticket_session(client):
     r = client.get("/lapor/tiket-saya")
     assert r.status_code == 200
     assert "TICKET-2026-0020" in r.text
+
+
+def test_reporter_notifications_endpoint_renders_updates(client):
+    db = next(client.app.dependency_overrides[get_db_session]())
+    access_token = "c" * 64
+    db.add(
+        IncidentTicket(
+            ticket_id="TICKET-2026-0030",
+            reporter_id="web:notify",
+            reporter_access_token=access_token,
+            reporter_name="Sari",
+            reporter_contact="sari@test.id",
+            reporter_department="IT",
+            incident_type="Phishing",
+            severity="Tinggi",
+            description_raw="x",
+            description_sanitized="x",
+        )
+    )
+    db.commit()
+
+    client.post("/lapor/track", data={
+        "ticket_id": "TICKET-2026-0030",
+        "reporter_contact": "sari@test.id",
+        "csrf_token": "x",
+    })
+    import app.web.routes.pelapor as pelapor_mod
+    svc = pelapor_mod.ChatService(redis=pelapor_mod._redis_client())
+    svc.add_reporter_update(
+        access_token,
+        ticket_id="TICKET-2026-0030",
+        title="Pembaruan Status Tiket",
+        message="Status tiket diperbarui ke IN_PROGRESS.",
+        kind="status",
+        ts="2026-07-08T10:00:00Z",
+    )
+    r = client.get("/lapor/notifikasi")
+    assert r.status_code == 200
+    assert "Pembaruan Status" in r.text
+    assert "IN_PROGRESS" in r.text

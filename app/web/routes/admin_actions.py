@@ -2,6 +2,7 @@
 import html
 import logging
 import os
+from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, Form, HTTPException, Request
 from fastapi.responses import FileResponse, HTMLResponse
@@ -9,7 +10,9 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
 from app.database.models import Admin
+from app.telegram.templates import format_status_update
 from app.web.dependencies import get_current_admin, get_db_session
+from app.web.services.chat_service import ChatService
 from app.web.services.notification_service import NotificationService
 from app.web.services.ticket_service import TicketService
 
@@ -18,6 +21,12 @@ router = APIRouter(prefix="/admin/tiket", tags=["admin-actions"])
 templates = Jinja2Templates(directory="app/web/templates")
 
 UPLOAD_ROOT = os.path.abspath(os.environ.get("WEB_UPLOAD_DIR", "web_uploads"))
+
+
+def _redis_client():
+    import redis as _redis_lib
+    url = os.getenv("REDIS_URL", "redis://localhost:6379")
+    return _redis_lib.from_url(url, decode_responses=False)
 
 
 def _get_ticket_or_404(db: Session, ticket_id: str):
@@ -117,17 +126,29 @@ async def notify_reporter(
     )
     if ok.get("ok") and ok.get("channel") == "telegram":
         return HTMLResponse(
-            '<p style="color: #16a34a; font-size: 13px; margin-top: 8px;">Notifikasi berhasil dikirim ke pelapor.</p>'
+            '<span class="action-flash">✓ Notifikasi berhasil dikirim ke pelapor.</span>'
         )
-    if ok.get("ok") and ok.get("channel") == "web_link":
+    if ok.get("ok") and ok.get("channel") == "web_inbox":
+        if ticket.reporter_access_token:
+            inbox = ChatService(redis=_redis_client())
+            inbox.add_reporter_update(
+                ticket.reporter_access_token,
+                ticket_id=ticket.ticket_id,
+                title="Pembaruan Status Tiket",
+                message=format_status_update(
+                    ticket.ticket_id,
+                    ticket.status,
+                    datetime.now(timezone.utc).strftime("%d %b %Y %H:%M UTC"),
+                ),
+                kind="status",
+            )
         link = html.escape(ok.get("link", ""))
         return HTMLResponse(
-            '<p style="color: #166534; font-size: 13px; margin-top: 8px;">'
-            'Pelapor web tidak punya push notification otomatis. '
-            f'Bagikan tautan aman ini bila perlu: <code>{link}</code></p>'
+            '<span class="action-flash">✓ Pembaruan status masuk ke inbox pelapor web. '
+            f'Cadangan: <code>{link}</code></span>'
         )
     return HTMLResponse(
-        '<p style="color: #dc2626; font-size: 13px; margin-top: 8px;">Notifikasi gagal (channel non-telegram atau error bot).</p>'
+        '<span class="action-flash" style="color:#dc2626;">✗ Notifikasi gagal (channel non-telegram atau error bot).</span>'
     )
 
 

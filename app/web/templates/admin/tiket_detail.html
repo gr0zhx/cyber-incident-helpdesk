@@ -452,7 +452,7 @@
 
       {# Notifikasi #}
       <form hx-post="/admin/tiket/{{ ticket.ticket_id }}/notify"
-            hx-target="this" hx-swap="afterend"
+            hx-target="#notify-msg-{{ ticket.ticket_id }}" hx-swap="innerHTML"
             hx-headers='{"X-CSRF-Token": "{{ csrf_token }}"}'
             style="margin-bottom: 10px;">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
@@ -461,6 +461,7 @@
           🔔 Kirim Update Status ke Pelapor
         </button>
       </form>
+      <div id="notify-msg-{{ ticket.ticket_id }}" class="action-feedback" style="margin-bottom:14px;"></div>
 
       {# Generate Laporan #}
       <button type="button"

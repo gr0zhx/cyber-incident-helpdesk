@@ -15,6 +15,7 @@ from app.web.dependencies import get_current_admin, get_db_session
 from app.web.services.chat_service import ChatService
 from app.web.services.notification_service import NotificationService
 from app.web.services.ticket_service import TicketService
+from app.utils.datetime_utils import format_system_wib
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/admin/tiket", tags=["admin-actions"])
@@ -120,6 +121,12 @@ async def notify_reporter(
         new_status=ticket.status,
         reporter_access_token=ticket.reporter_access_token or "",
     )
+    if isinstance(ok, bool):
+        ok = {
+            "ok": ok,
+            "channel": "telegram" if ticket.reporter_id.startswith("tg:") else "unsupported",
+            "link": "",
+        }
     logger.info(
         "NOTIFICATION_SENT ticket=%s admin=%s success=%s",
         ticket_id, admin.username, ok.get("ok"),
@@ -138,7 +145,7 @@ async def notify_reporter(
                 message=format_status_update(
                     ticket.ticket_id,
                     ticket.status,
-                    datetime.now(timezone.utc).strftime("%d %b %Y %H:%M UTC"),
+                    format_system_wib(datetime.now(timezone.utc)),
                 ),
                 kind="status",
             )

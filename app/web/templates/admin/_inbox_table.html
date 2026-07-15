@@ -48,8 +48,8 @@
 
         {# Waktu #}
         <td style="padding:14px 16px;">
-          <span style="font-size:13px;color:#0f172a;">{{ t.created_at.strftime("%d %b %Y") }}</span><br>
-          <span style="font-size:11px;color:#94a3b8;">{{ t.created_at.strftime("%H:%M") }} UTC</span>
+          <span style="font-size:13px;color:#0f172a;">{{ t.created_at|fmt_wib("%d %b %Y") }}</span><br>
+          <span style="font-size:11px;color:#94a3b8;">{{ t.created_at|fmt_wib("%H:%M WIB") }}</span>
         </td>
 
         {# Pelapor #}

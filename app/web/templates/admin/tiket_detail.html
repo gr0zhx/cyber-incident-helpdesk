@@ -11,7 +11,7 @@
     <div style="padding: 20px 24px 0; display: flex; justify-content: space-between; align-items: center;">
       <div>
         <div style="font-family: monospace; font-size: 20px; color: #14532d; font-weight: 800;">{{ ticket.ticket_id }}</div>
-        <div style="color: #4b7a56; font-size: 13px;">{{ ticket.created_at.strftime("%d %b %Y %H:%M UTC") }}</div>
+        <div style="color: #4b7a56; font-size: 13px;">{{ ticket.created_at|fmt_wib }}</div>
       </div>
       <div id="status-badge">
         {% include "admin/_status_badge.html" %}
@@ -66,7 +66,7 @@
         {% endif %}
         {% if ticket.incident_time %}
         <span style="background:#f1f5f9;border:1px solid #e2e8f0;border-radius:6px;padding:4px 10px;font-size:12px;">
-          <span style="color:#94a3b8;">Waktu Insiden</span>&nbsp;<strong>{{ ticket.incident_time.strftime("%d %b %Y %H:%M") }}</strong>
+          <span style="color:#94a3b8;">Waktu Insiden</span>&nbsp;<strong>{{ ticket.incident_time|fmt_input_time }}</strong>
         </span>
         {% endif %}
         {% if ticket.affected_asset %}
@@ -224,7 +224,7 @@
               </span>
               {% if step.timestamp %}
               <span style="font-size: 11px; color: #94a3b8; font-family: monospace;">
-                {{ step.timestamp[11:19] }} UTC
+                {{ step.timestamp|fmt_wib }}
               </span>
               {% endif %}
             </div>

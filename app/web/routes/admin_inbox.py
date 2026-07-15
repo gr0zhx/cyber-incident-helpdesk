@@ -12,9 +12,12 @@ from app.database.models import Admin, TicketAttachment
 from app.web.constants import ESCALATION_LEVELS, TICKET_STATUSES
 from app.web.dependencies import get_current_admin, get_db_session
 from app.web.services.ticket_service import TicketFilters, TicketService
+from app.utils.datetime_utils import format_input_time, format_system_wib
 
 router = APIRouter(prefix="/admin", tags=["admin-inbox"])
 templates = Jinja2Templates(directory="app/web/templates")
+templates.env.filters["fmt_wib"] = format_system_wib
+templates.env.filters["fmt_input_time"] = format_input_time
 
 
 def _parse_date(value: Optional[str], end_of_day: bool = False) -> Optional[datetime]:

@@ -65,7 +65,7 @@
         <div class="rh-top">
           <div>
             <div class="rh-id">{{ ticket.ticket_id }}</div>
-            <div class="rh-meta">{{ ticket.incident_type }} · {{ ticket.severity or "—" }} · {{ ticket.created_at.strftime("%d %b %Y %H:%M") if ticket.created_at else "—" }}</div>
+            <div class="rh-meta">{{ ticket.incident_type }} · {{ ticket.severity or "—" }} · {{ ticket.created_at|fmt_wib }}</div>
           </div>
           {% set status_label = ticket.status or "PENDING REVIEW" %}
           <span class="rh-pill">{{ status_label.replace("_", " ") }}</span>

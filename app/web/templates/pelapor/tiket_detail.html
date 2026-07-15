@@ -310,7 +310,7 @@
           <div class="tk-info-item">
             <label>Dilaporkan</label>
             <div class="val" style="font-size:13px;">
-              {{ ticket.created_at.strftime("%d %b %Y, %H:%M") if ticket.created_at else "—" }}
+              {{ ticket.created_at|fmt_wib }}
             </div>
           </div>
         </div>
@@ -346,7 +346,7 @@
             <div class="tl-dot done">✓</div>
             <div class="tl-text">
               <strong>Laporan Diterima</strong>
-              <span>{{ ticket.created_at.strftime("%d %b %Y pukul %H:%M WIB") if ticket.created_at else "—" }}</span>
+              <span>{{ ticket.created_at|fmt_wib }}</span>
             </div>
           </div>
           <div class="tl-item">
@@ -369,7 +369,7 @@
             </div>
             <div class="tl-text">
               <strong>Review oleh Analis </strong>
-              <span>{% if ticket.status == 'PENDING_REVIEW' %}Menunggu analis{% elif ticket.reviewed_at %}{{ ticket.reviewed_at.strftime("%d %b %Y pukul %H:%M WIB") }}{% else %}Sedang diproses{% endif %}</span>
+              <span>{% if ticket.status == 'PENDING_REVIEW' %}Menunggu analis{% elif ticket.reviewed_at %}{{ ticket.reviewed_at|fmt_wib }}{% else %}Sedang diproses{% endif %}</span>
             </div>
           </div>
           <div class="tl-item">
@@ -378,7 +378,7 @@
             </div>
             <div class="tl-text">
               <strong>Penanganan &amp; Penutupan</strong>
-              <span>{% if ticket.resolved_at %}{{ ticket.resolved_at.strftime("%d %b %Y pukul %H:%M WIB") }}{% else %}Belum selesai{% endif %}</span>
+              <span>{% if ticket.resolved_at %}{{ ticket.resolved_at|fmt_wib }}{% else %}Belum selesai{% endif %}</span>
             </div>
           </div>
         </div>

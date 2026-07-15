@@ -45,7 +45,7 @@
     <div class="cs-card">
       <p class="cs-card-label">Info Insiden</p>
       {% if reporter.incident_time %}
-      <p class="cs-card-meta"><span style="color:#86efac;">⏱</span> {{ reporter.incident_time }}</p>
+      <p class="cs-card-meta"><span style="color:#86efac;">⏱</span> {{ reporter.incident_time|fmt_input_time }}</p>
       {% endif %}
       {% if reporter.affected_asset %}
       <p class="cs-card-meta"><span style="color:#86efac;">🖥</span> {{ reporter.affected_asset }}</p>

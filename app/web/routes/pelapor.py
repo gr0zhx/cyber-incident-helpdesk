@@ -19,10 +19,13 @@ from app.web.dependencies import get_db_session, get_reporter_session
 from app.web.middleware.rate_limit import limiter
 from app.web.services.chat_service import ChatService
 from app.web.services.upload_service import UploadError, UploadService
+from app.utils.datetime_utils import format_input_time, format_system_wib
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/lapor", tags=["pelapor"])
 templates = Jinja2Templates(directory="app/web/templates")
+templates.env.filters["fmt_wib"] = format_system_wib
+templates.env.filters["fmt_input_time"] = format_input_time
 
 
 def _render_md(text: str) -> str:
